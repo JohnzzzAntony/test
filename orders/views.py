@@ -459,9 +459,9 @@ def stripe_webhook(request):
         if endpoint_secret:
             event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
         else:
-            # Fallback if secret is not set (less secure, only for debugging)
-            import json
-            event = stripe.Event.construct_from(json.loads(payload), stripe.api_key)
+            # In production, this must be set. If not, log error and fail.
+            logger.error("STRIPE_WEBHOOK_SECRET not set. Webhook verification failed.")
+            return HttpResponse(status=400)
     except ValueError:
         # Invalid payload
         return HttpResponse(status=400)

@@ -56,11 +56,15 @@ class DesignSettings(models.Model):
     
     hp_collections_title = models.CharField(max_length=255, default='Exclusive <span class="text-primary">Collections</span>')
     hp_collections_subtitle = models.TextField(default='Handpicked selection of premium medical equipment.', blank=True)
+    hp_collections_badge = models.CharField(max_length=100, default='Curated Theme', blank=True)
     
     hp_categories_title = models.CharField(max_length=255, default='Product <span class="text-primary">Categories</span>')
+    hp_categories_subtitle = models.TextField(default='Browse our extensive range of high-performance products, curated to meet the most demanding standards.', blank=True)
+    hp_categories_badge = models.CharField(max_length=100, default='Discover Excellence', blank=True)
     
     hp_latest_products_title = models.CharField(max_length=255, default='Explore <span class="text-primary">Latest Products</span>')
     hp_latest_products_subtitle = models.TextField(default='Discover our newest medical innovations.', blank=True)
+    hp_latest_products_badge = models.CharField(max_length=100, default='The Premium Standard', blank=True)
     
     hp_partners_title = models.CharField(max_length=255, default="Our Global Partners")
     hp_services_title = models.CharField(max_length=255, default="Maintenance Support")
@@ -92,6 +96,9 @@ class DesignSettings(models.Model):
     show_hp_testimonials = models.BooleanField(default=True, verbose_name="Home Testimonials", choices=((True, 'Show'), (False, 'Hide')))
     show_hp_clients = models.BooleanField(default=True, verbose_name="Home Clients", choices=((True, 'Show'), (False, 'Hide')))
     show_hp_social = models.BooleanField(default=True, verbose_name="Home Social", choices=((True, 'Show'), (False, 'Hide')))
+    show_hp_counters = models.BooleanField(default=True, verbose_name="Home Counters", choices=((True, 'Show'), (False, 'Hide')))
+    hp_counters_title = models.CharField(max_length=255, default='Our <span class="text-primary">Impact</span> in Numbers')
+    hp_counters_subtitle = models.TextField(default="Quantifying our commitment to excellence and global reach.", blank=True)
 
     # ── Product Display Settings ────────────────────────────────────────────
     pd_related_title = models.CharField(max_length=255, default="You May Also Like")

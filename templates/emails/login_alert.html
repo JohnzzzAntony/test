@@ -1,0 +1,31 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<h1>New Login Alert 🔔</h1>
+<p>Dear {{ customer_name }},</p>
+<p>We noticed a new login to your {{ site_name }} account. If this was you, you can safely ignore this email.</p>
+
+<div class="order-card">
+    <h2>Login Details</h2>
+    <div class="order-row">
+        <span class="order-label">Username</span>
+        <span class="order-value">{{ username }}</span>
+    </div>
+    <div class="order-row">
+        <span class="order-label">Time</span>
+        <span class="order-value">{{ time }} (Dubai / UTC+4)</span>
+    </div>
+    <div class="order-row">
+        <span class="order-label">IP Address</span>
+        <span class="order-value">{{ ip }}</span>
+    </div>
+</div>
+
+<p style="color: #d93025; font-weight: 600;">If you don't recognize this activity, please change your password immediately to secure your account.</p>
+
+<div class="button-wrapper">
+    <a href="{{ site_url }}/accounts/password/change/" class="button" style="background-color: #d93025;">Secure My Account</a>
+</div>
+
+<p>Stay safe,<br>The {{ site_name }} Security Team</p>
+{% endblock %}

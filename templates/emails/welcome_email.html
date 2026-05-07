@@ -1,0 +1,25 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<h1>Welcome to {{ site_name }}! 🎉</h1>
+<p>Dear {{ customer_name }},</p>
+<p>We're delighted to have you on board! JKR International is committed to providing you with the finest luxury products and an exceptional shopping experience.</p>
+
+<p>Your account is now active and ready to use. Here's what you can do next:</p>
+
+<div style="background-color: #fbfbfb; border: 1px solid #f0f0f0; border-radius: 8px; padding: 25px; margin: 30px 0;">
+    <ul style="padding-left: 20px; margin: 0; color: #4a4a4a; font-size: 15px;">
+        <li style="margin-bottom: 10px;"><strong>Discover:</strong> Explore our latest collections and exclusive offers.</li>
+        <li style="margin-bottom: 10px;"><strong>Personalize:</strong> Update your profile and shipping preferences.</li>
+        <li style="margin-bottom: 0;"><strong>Track:</strong> Keep an eye on your orders in real-time.</li>
+    </ul>
+</div>
+
+<div class="button-wrapper">
+    <a href="{{ site_url }}/products/" class="button">Start Shopping</a>
+</div>
+
+<p>If you have any questions or need assistance, our concierge team is always here to help.</p>
+
+<p>Warm regards,<br>The {{ site_name }} Team</p>
+{% endblock %}

@@ -84,22 +84,5 @@
     </div>
 </section>
 
-<!-- Values / Stats Section -->
-<section class="py-24 bg-white">
-    <div class="container mx-auto px-6">
-        <div class="grid grid-cols-2 lg:grid-cols-{{ counters|length|default:4 }} gap-12 text-center">
-            {% for counter in counters %}
-            <div class="space-y-2">
-                <h4 class="text-5xl lg:text-7xl font-black text-slate-950 tracking-tighter">{{ counter.value|safe }}</h4>
-                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{{ counter.title }}</p>
-            </div>
-            {% empty %}
-            <div class="space-y-2">
-                <h4 class="text-5xl lg:text-7xl font-black text-slate-950 tracking-tighter">12<span class="text-primary text-3xl">+</span></h4>
-                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Years of Trust</p>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
+{% include 'includes/_premium_counters.html' %}
 {% endblock %}

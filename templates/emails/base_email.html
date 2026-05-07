@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject }}</title>
+    <style>
+        /* Base Reset */
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+        table { border-collapse: collapse !important; }
+        body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #f8f9fa; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1a1a1a; }
+
+        /* Premium Styles */
+        .wrapper { width: 100%; table-layout: fixed; background-color: #f8f9fa; padding-bottom: 40px; }
+        .main { background-color: #ffffff; margin: 0 auto; width: 100%; max-width: 600px; border-spacing: 0; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+        
+        /* Header */
+        .header { background-color: #ffffff; padding: 40px 20px; text-align: center; border-bottom: 1px solid #f0f0f0; }
+        .logo { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: #000000; text-decoration: none; text-transform: uppercase; }
+        .logo span { color: #d4af37; /* Premium Gold Accent */ }
+
+        /* Content */
+        .content { padding: 40px 30px; line-height: 1.6; }
+        h1 { margin: 0 0 20px; font-size: 24px; font-weight: 700; color: #000000; letter-spacing: -0.01em; }
+        p { margin: 0 0 20px; font-size: 16px; color: #4a4a4a; }
+        
+        /* Components */
+        .button-wrapper { padding: 20px 0; text-align: center; }
+        .button { background-color: #000000; color: #ffffff !important; padding: 14px 32px; text-decoration: none; font-weight: 600; border-radius: 6px; display: inline-block; transition: background-color 0.3s ease; }
+        
+        .order-card { background-color: #fbfbfb; border: 1px solid #f0f0f0; border-radius: 8px; padding: 25px; margin: 30px 0; }
+        .order-card h2 { margin: 0 0 15px; font-size: 18px; font-weight: 600; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .order-row { display: table; width: 100%; margin-bottom: 10px; font-size: 14px; }
+        .order-label { display: table-cell; font-weight: 600; color: #888; width: 40%; }
+        .order-value { display: table-cell; color: #1a1a1a; text-align: right; }
+        
+        .divider { border-top: 1px solid #eeeeee; margin: 30px 0; }
+
+        /* Footer */
+        .footer { padding: 30px; text-align: center; font-size: 12px; color: #999999; }
+        .footer a { color: #999999; text-decoration: underline; }
+        .social-links { margin-bottom: 20px; }
+        .social-links a { margin: 0 10px; display: inline-block; }
+
+        /* Responsive */
+        @media screen and (max-width: 600px) {
+            .content { padding: 30px 20px; }
+            .main { border-radius: 0; border: none; }
+        }
+    </style>
+</head>
+<body>
+    <center class="wrapper">
+        <table class="main" width="100%">
+            <!-- Header -->
+            <tr>
+                <td class="header">
+                    <a href="{{ site_url }}" class="logo">
+                        JKR <span>International</span>
+                    </a>
+                </td>
+            </tr>
+
+            <!-- Main Content -->
+            <tr>
+                <td class="content">
+                    {% block content %}
+                    <h1>
+                        {% if notification_type == 'order_placed' %}
+                            Thank you for your order!
+                        {% elif notification_type == 'payment_confirmation' %}
+                            Payment Confirmed
+                        {% else %}
+                            {{ subject_prefix|default:status_display }}
+                        {% endif %}
+                    </h1>
+                    <p>Dear {{ customer_name }},</p>
+                    
+                    {% if notification_type == 'order_placed' %}
+                        <p>We've received your order and it's currently being processed. We'll let you know once your items are on their way.</p>
+                    {% elif notification_type == 'payment_confirmation' %}
+                        <p>Your payment has been successfully processed. Thank you for your purchase!</p>
+                    {% else %}
+                        <p>{{ status_message }}</p>
+                    {% endif %}
+                    
+                    <div class="order-card">
+                        <h2>Order Summary</h2>
+                        <div class="order-row">
+                            <span class="order-label">Order Number</span>
+                            <span class="order-value">#{{ order_id }}</span>
+                        </div>
+                        <div class="order-row">
+                            <span class="order-label">Date</span>
+                            <span class="order-value">{{ date }}</span>
+                        </div>
+                        <div class="order-row">
+                            <span class="order-label">Payment Method</span>
+                            <span class="order-value">{{ payment_method }}</span>
+                        </div>
+                        
+                        {% if items %}
+                        <div class="divider"></div>
+                        <h3 style="font-size: 14px; margin: 0 0 10px; color: #888;">Items</h3>
+                        {% for item in items %}
+                        <div class="order-row">
+                            <span class="order-label" style="width: 70%; color: #1a1a1a;">{{ item.product_name }} × {{ item.quantity }}</span>
+                            <span class="order-value">{{ item.total_price }} {{ currency }}</span>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        <div class="divider"></div>
+                        <div class="order-row" style="font-size: 18px;">
+                            <span class="order-label" style="color: #000;">Total</span>
+                            <span class="order-value" style="color: #000; font-weight: 700;">{{ total_amount }} {{ currency }}</span>
+                        </div>
+                    </div>
+
+                    <div class="button-wrapper">
+                        <a href="{{ track_url }}" class="button">Track Your Order</a>
+                    </div>
+
+                    <p>If you have any questions, simply reply to this email or visit our help center.</p>
+                    <p>Warm regards,<br>The JKR Team</p>
+                    {% endblock %}
+                </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+                <td class="footer">
+                    <div class="social-links">
+                        <!-- Add actual icons/links if available -->
+                        <a href="#">Instagram</a>
+                        <a href="#">Facebook</a>
+                        <a href="#">LinkedIn</a>
+                    </div>
+                    <p>&copy; {{ year }} JKR International. All rights reserved.</p>
+                    <p>Dubai, United Arab Emirates</p>
+                    <p><a href="{{ site_url }}/unsubscribe">Unsubscribe</a> from future updates.</p>
+                </td>
+            </tr>
+        </table>
+    </center>
+</body>
+</html>

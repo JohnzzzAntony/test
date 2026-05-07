@@ -16,7 +16,9 @@ import logging
 import threading
 
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from django.utils import timezone
 
 logger = logging.getLogger(__name__)
@@ -59,7 +61,7 @@ def _from_email():
     return addr
 
 
-def _fire(subject: str, body: str, to: str):
+def _fire(subject: str, body: str, to: str, html_message: str = None):
     """Send an e-mail. In DEBUG mode, this is synchronous to help troubleshoot."""
     if not to:
         logger.warning("Email skipped: No recipient address provided.")
@@ -71,13 +73,16 @@ def _fire(subject: str, body: str, to: str):
     def _worker():
         try:
             logger.info("Attempting to send email to %s | Subject: %s", to, subject)
-            send_mail(
+            msg = EmailMultiAlternatives(
                 subject=subject,
-                message=body,
+                body=body,
                 from_email=_from_email(),
-                recipient_list=[to],
-                fail_silently=False,
+                to=[to]
             )
+            if html_message:
+                msg.attach_alternative(html_message, "text/html")
+            
+            msg.send(fail_silently=False)
             logger.info("✅ Email sent successfully → %s", to)
         except Exception as exc:
             logger.error("❌ Email failed → %s | Error: %s", to, exc)
@@ -151,7 +156,22 @@ Warm regards,
 The {site} Team
 {site_url}
 """
-    _fire(subject, body.strip(), user.email)
+    # ── HTML Context ──────────────────────────────────────────────────────────
+    context = {
+        'subject': subject,
+        'customer_name': name,
+        'site_name': site,
+        'site_url': site_url,
+        'year': timezone.now().year,
+    }
+
+    try:
+        html_content = render_to_string('emails/welcome_email.html', context)
+    except Exception as e:
+        logger.error(f"Failed to render welcome HTML email: {e}")
+        html_content = None
+
+    _fire(subject, body.strip(), user.email, html_message=html_content)
 
 
 # ─── Login alert ──────────────────────────────────────────────────────────────
@@ -190,7 +210,25 @@ Warm regards,
 The {site} Team
 {site_url}
 """
-    _fire(subject, body.strip(), user.email)
+    # ── HTML Context ──────────────────────────────────────────────────────────
+    context = {
+        'subject': subject,
+        'customer_name': name,
+        'username': user.username,
+        'time': now,
+        'ip': ip,
+        'site_name': site,
+        'site_url': site_url,
+        'year': timezone.now().year,
+    }
+
+    try:
+        html_content = render_to_string('emails/login_alert.html', context)
+    except Exception as e:
+        logger.error(f"Failed to render login alert HTML email: {e}")
+        html_content = None
+
+    _fire(subject, body.strip(), user.email, html_message=html_content)
 
 
 # ─── Order e-mails ────────────────────────────────────────────────────────────
@@ -354,4 +392,30 @@ The {site} Team
 {site_url}
 """
 
-    _fire(subject, body.strip(), order.email)
+    # ── HTML Context ──────────────────────────────────────────────────────────
+    context = {
+        'subject': subject,
+        'customer_name': customer,
+        'order_id': order_id,
+        'date': order.created_at.strftime("%Y-%m-%d") if hasattr(order, 'created_at') else timezone.now().strftime("%Y-%m-%d"),
+        'payment_method': order.get_payment_method_display(),
+        'total_amount': order.total_amount,
+        'currency': currency,
+        'track_url': tracking,
+        'site_url': site_url,
+        'year': timezone.now().year,
+        'notification_type': notification_type,
+        'status_display': order.get_status_display(),
+        'status_message': _STATUS_DETAIL.get(order.status, f"Your order status has been updated to: {order.get_status_display()}."),
+    }
+
+    if notification_type == "order_placed":
+        context['items'] = order.items.select_related("product").all()
+
+    try:
+        html_content = render_to_string('emails/base_email.html', context)
+    except Exception as e:
+        logger.error(f"Failed to render HTML email: {e}")
+        html_content = None
+
+    _fire(subject, body.strip(), order.email, html_message=html_content)

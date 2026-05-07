@@ -171,6 +171,7 @@ class CustomerOrder(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__status = self.status
+        self.__payment_status = self.payment_status
 
     def __str__(self):
         return f"Order #{self.pk} — {self.first_name} {self.last_name}"
@@ -191,6 +192,7 @@ class CustomerOrder(models.Model):
     def save(self, *args, **kwargs):
         is_new = self.pk is None
         status_changed = not is_new and self.status != self.__status
+        payment_became_paid = not is_new and self.payment_status == 'paid' and self.__payment_status != 'paid'
 
         super().save(*args, **kwargs)
 
@@ -202,10 +204,14 @@ class CustomerOrder(models.Model):
             from .notifications import send_customer_notification
             if is_new:
                 send_customer_notification(self, notification_type='order_placed')
-            else:
+            elif status_changed:
                 send_customer_notification(self, notification_type='status_change')
+            
+            if payment_became_paid:
+                send_customer_notification(self, notification_type='payment_confirmation')
 
             self.__status = self.status
+            self.__payment_status = self.payment_status
 
 
 class OrderStatusHistory(models.Model):

@@ -104,11 +104,11 @@
     <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
         <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
             <div class="space-y-4">
-                <h2 class="text-xs font-black uppercase tracking-[0.3em] text-primary">Discover Excellence</h2>
+                <h2 class="text-xs font-black uppercase tracking-[0.3em] text-primary">{{ design_settings.hp_categories_badge|default:"Discover Excellence" }}</h2>
                 <h3 class="text-4xl lg:text-5xl font-black text-slate-900 tracking-tighter">{{ design_settings.hp_categories_title|safe }}</h3>
             </div>
             <p class="text-slate-500 max-w-sm font-medium leading-relaxed">
-                Browse our extensive range of high-performance products, curated to meet the most demanding standards.
+                {{ design_settings.hp_categories_subtitle }}
             </p>
         </div>
 
@@ -144,7 +144,7 @@
     <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
         <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
             <div class="space-y-4">
-                <p class="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Handpicked Selections</p>
+                <p class="text-[10px] font-black uppercase tracking-[0.4em] text-primary">{{ design_settings.hp_collections_badge|default:"Handpicked Selections" }}</p>
                 <h3 class="text-4xl lg:text-5xl font-black text-slate-900 tracking-tighter">{{ design_settings.hp_collections_title|safe }}</h3>
             </div>
             <p class="text-slate-500 max-w-sm font-medium leading-relaxed">
@@ -159,7 +159,7 @@
                     <img src="{{ collection.get_image_url }}" alt="{{ collection.name }}" class="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
                     <div class="absolute inset-0 p-8 sm:p-12 flex flex-col justify-end gap-4 transform transition-all duration-700 group-hover:translate-y-[-10px]">
-                        <span class="text-[10px] font-black text-white/50 uppercase tracking-[0.4em]">Curated Theme</span>
+                        <span class="text-[10px] font-black text-white/50 uppercase tracking-[0.4em]">{{ design_settings.hp_collections_badge|default:"Curated Theme" }}</span>
                         <h4 class="text-3xl font-black text-white tracking-tighter font-serif">{{ collection.name }}</h4>
                         <p class="text-sm text-white/70 font-medium line-clamp-2">Premium Selection</p>
                         <div class="pt-6">
@@ -184,7 +184,7 @@
 <section class="py-24 bg-slate-50">
     <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
         <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
-            <p class="text-[10px] font-black uppercase tracking-[0.4em] text-primary">The Premium Standard</p>
+            <p class="text-[10px] font-black uppercase tracking-[0.4em] text-primary">{{ design_settings.hp_latest_products_badge }}</p>
             <h3 class="text-4xl lg:text-6xl font-black text-slate-900 tracking-tighter">{{ design_settings.hp_latest_products_title|safe }}</h3>
             <p class="text-slate-500 font-medium">{{ design_settings.hp_latest_products_subtitle }}</p>
         </div>
@@ -246,6 +246,8 @@
     </section>
     {% endif %}
 {% endfor %}
+
+{% include 'includes/_premium_counters.html' %}
 
 <!-- Premium Services Section -->
 {% if services %}

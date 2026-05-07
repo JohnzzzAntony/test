@@ -37,7 +37,7 @@ else:
 
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-build-placeholder-key")
 DEBUG = env.bool("DEBUG", default=False)
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[".creativegradientz.com", ".up.railway.app", "localhost", "127.0.0.1"])
 IS_PRODUCTION = env.bool("IS_PRODUCTION", default=False)
 
 ADMIN_URL = env("ADMIN_URL", default="admin/")
@@ -118,7 +118,7 @@ MIDDLEWARE = [
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = "SAMEORIGIN"
+X_FRAME_OPTIONS = "DENY"
 
 # Silence known third-party warnings that are not yet actionable
 SILENCED_SYSTEM_CHECKS = [
@@ -268,26 +268,17 @@ WHITENOISE_MANIFEST_STRICT = False
 WHITENOISE_COMPRESS = False
 WHITENOISE_KEEP_ONLY_HASHED_FILES = False
 
-# =============================================================================
-# STORAGE BACKENDS
-# Production:  Cloudinary (media)  +  WhiteNoise (static)
-# Development: Local filesystem
-# =============================================================================
-
+# Modern Django STORAGES dictionary (required by Django 4.2+)
 if IS_PRODUCTION:
-    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-    RAW_FILE_STORAGE = "cloudinary_storage.storage.RawMediaCloudinaryStorage"
-    STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
+    STORAGES = {
+        "default": {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"},
+        "staticfiles": {"BACKEND": "whitenoise.storage.StaticFilesStorage"},
+    }
 else:
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-    RAW_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
-
-# Modern Django STORAGES dictionary (required by Django 5+)
-STORAGES = {
-    "default": {"BACKEND": DEFAULT_FILE_STORAGE},
-    "staticfiles": {"BACKEND": STATICFILES_STORAGE},
-}
+    STORAGES = {
+        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    }
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -456,9 +447,21 @@ LOGGING = {
 }
 
 
-
 # =============================================================================
 # SUPABASE AUTH
 # =============================================================================
 SUPABASE_URL = env("SUPABASE_URL", default="")
 SUPABASE_KEY = env("SUPABASE_KEY", default="")
+
+# =============================================================================
+# AI SERVICES (KIMI)
+# =============================================================================
+NVIDIA_KIMI_API_KEY = env("NVIDIA_KIMI_API_KEY", default=None)
+KIMI_MODEL = env("KIMI_MODEL", default="moonshotai/kimi-k2.6")
+
+NVIDIA_MINIMAX_API_KEY = env("NVIDIA_MINIMAX_API_KEY", default=None)
+MINIMAX_MODEL = env("MINIMAX_MODEL", default="minimaxai/minimax-m2.7")
+
+NVIDIA_GLM_API_KEY = env("NVIDIA_GLM_API_KEY", default=None)
+GLM_MODEL = env("GLM_MODEL", default="z-ai/glm-5.1")
+

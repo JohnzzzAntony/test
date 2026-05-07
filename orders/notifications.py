@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def send_customer_notification(order, is_automated=True, notification_type="status_change"):
+def send_customer_notification(order, notification_type="status_change", is_automated=True):
     """
     Main notification dispatcher for order events.
 
