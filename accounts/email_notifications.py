@@ -60,12 +60,17 @@ def _from_email():
 
 
 def _fire(subject: str, body: str, to: str):
-    """Send an e-mail in a non-blocking daemon thread."""
+    """Send an e-mail. In DEBUG mode, this is synchronous to help troubleshoot."""
     if not to:
+        logger.warning("Email skipped: No recipient address provided.")
         return
+
+    # Check if we should use background threads
+    use_thread = not getattr(settings, "DEBUG", False)
 
     def _worker():
         try:
+            logger.info("Attempting to send email to %s | Subject: %s", to, subject)
             send_mail(
                 subject=subject,
                 message=body,
@@ -73,12 +78,31 @@ def _fire(subject: str, body: str, to: str):
                 recipient_list=[to],
                 fail_silently=False,
             )
-            logger.info("Email sent → %s | %s", to, subject)
+            logger.info("✅ Email sent successfully → %s", to)
         except Exception as exc:
-            logger.error("Email failed → %s | %s | %s", to, subject, exc)
+            logger.error("❌ Email failed → %s | Error: %s", to, exc)
+            if settings.DEBUG:
+                # In debug mode, we want to know why it failed
+                import traceback
+                traceback.print_exc()
 
-    t = threading.Thread(target=_worker, daemon=True)
-    t.start()
+    if use_thread:
+        t = threading.Thread(target=_worker, daemon=True)
+        t.start()
+    else:
+        _worker()
+
+
+def test_email_connection(to_email=None):
+    """Utility to test the SMTP connection and credentials."""
+    site = _site_name()
+    target = to_email or _from_email()
+    subject = f"🔔 Test Email from {site}"
+    body = f"SMTP configuration is working correctly!\n\nHost: {settings.EMAIL_HOST}\nPort: {settings.EMAIL_PORT}\nUser: {settings.EMAIL_HOST_USER}"
+    
+    logger.info("Running SMTP connection test...")
+    _fire(subject, body, target)
+    return f"Test email triggered for {target}. Check your console/logs for results."
 
 
 def _get_client_ip(request):

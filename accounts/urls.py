@@ -25,4 +25,5 @@ urlpatterns = [
     # ── Account pages ──────────────────────────────────────────────────────────
     path("profile/",        views.profile_view,         name="profile"),
     path("orders/",         views.order_history_view,   name="order_history"),
+    path("debug-email/",    views.debug_email_view,     name="debug_email"),
 ]

@@ -25,7 +25,7 @@ except ImportError:
 
 
 from .forms import CustomUserCreationForm
-from .email_notifications import send_welcome_email, send_login_alert
+from .email_notifications import send_welcome_email, send_login_alert, test_email_connection
 
 logger = logging.getLogger(__name__)
 
@@ -332,3 +332,33 @@ def order_history_view(request):
     from orders.models import CustomerOrder
     orders = CustomerOrder.objects.filter(user=request.user).order_by("-created_at")
     return render(request, "accounts/order_history.html", {"orders": orders})
+
+
+@login_required
+def debug_email_view(request):
+    """Admin-only view to test e-mail sending and view configuration."""
+    if not request.user.is_superuser:
+        messages.error(request, "Access denied. Admin only.")
+        return redirect("core:home")
+
+    status_msg = ""
+    if request.GET.get("send") == "1":
+        # Trigger the test e-mail
+        status_msg = test_email_connection(to_email=request.user.email)
+        messages.success(request, f"Test email triggered! Sent to {request.user.email}")
+
+    # Check settings
+    from django.conf import settings
+    email_config = {
+        "EMAIL_BACKEND": settings.EMAIL_BACKEND,
+        "EMAIL_HOST": settings.EMAIL_HOST,
+        "EMAIL_PORT": settings.EMAIL_PORT,
+        "EMAIL_USE_TLS": settings.EMAIL_USE_TLS,
+        "EMAIL_HOST_USER": settings.EMAIL_HOST_USER,
+        "DEFAULT_FROM_EMAIL": settings.DEFAULT_FROM_EMAIL,
+    }
+
+    return render(request, "accounts/debug_email.html", {
+        "email_config": email_config,
+        "status_msg": status_msg,
+    })
