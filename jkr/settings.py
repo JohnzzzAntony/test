@@ -38,7 +38,9 @@ else:
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-build-placeholder-key")
 DEBUG = env.bool("DEBUG", default=False)
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[".creativegradientz.com", ".up.railway.app", "localhost", "127.0.0.1"])
-IS_PRODUCTION = env.bool("IS_PRODUCTION", default=False)
+# Check if we are running in production (Railway/Production)
+# We check IS_PRODUCTION env var, but also fallback to common production indicators
+IS_PRODUCTION = env.bool("IS_PRODUCTION", default=False) or env("DATABASE_URL", default=None) is not None or env("RAILWAY_STATIC_URL", default=None) is not None
 
 ADMIN_URL = env("ADMIN_URL", default="admin/")
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[
@@ -274,9 +276,12 @@ if IS_PRODUCTION:
     DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
     # Static files (WhiteNoise)
     STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
+    # Ensure MEDIA_URL doesn't interfere with Cloudinary URL generation in some cases
+    MEDIA_URL = "https://res.cloudinary.com/%s/" % env("CLOUDINARY_CLOUD_NAME", default="dkhblh1sr")
 else:
     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
     STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+    MEDIA_URL = "/media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
