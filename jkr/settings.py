@@ -268,17 +268,15 @@ WHITENOISE_MANIFEST_STRICT = False
 WHITENOISE_COMPRESS = False
 WHITENOISE_KEEP_ONLY_HASHED_FILES = False
 
-# Modern Django STORAGES dictionary (required by Django 4.2+)
+# Storage configuration
 if IS_PRODUCTION:
-    STORAGES = {
-        "default": {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"},
-        "staticfiles": {"BACKEND": "whitenoise.storage.StaticFilesStorage"},
-    }
+    # Media files (Cloudinary)
+    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+    # Static files (WhiteNoise)
+    STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
 else:
-    STORAGES = {
-        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
-        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
-    }
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
