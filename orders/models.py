@@ -206,12 +206,13 @@ class CustomerOrder(models.Model):
                 send_customer_notification(self, notification_type='order_placed')
             elif status_changed:
                 send_customer_notification(self, notification_type='status_change')
-            
-            if payment_became_paid:
-                send_customer_notification(self, notification_type='payment_confirmation')
 
-            self.__status = self.status
-            self.__payment_status = self.payment_status
+        if payment_became_paid:
+            from .notifications import send_customer_notification
+            send_customer_notification(self, notification_type='payment_confirmation')
+
+        self.__status = self.status
+        self.__payment_status = self.payment_status
 
 
 class OrderStatusHistory(models.Model):

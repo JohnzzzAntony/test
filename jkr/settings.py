@@ -457,14 +457,9 @@ SUPABASE_URL = env("SUPABASE_URL", default="")
 SUPABASE_KEY = env("SUPABASE_KEY", default="")
 
 # =============================================================================
-# AI SERVICES (KIMI)
+# AI SERVICES (NVIDIA NIM)
 # =============================================================================
 NVIDIA_KIMI_API_KEY = env("NVIDIA_KIMI_API_KEY", default=None)
 KIMI_MODEL = env("KIMI_MODEL", default="moonshotai/kimi-k2.6")
 
-NVIDIA_MINIMAX_API_KEY = env("NVIDIA_MINIMAX_API_KEY", default=None)
-MINIMAX_MODEL = env("MINIMAX_MODEL", default="minimaxai/minimax-m2.7")
-
-NVIDIA_GLM_API_KEY = env("NVIDIA_GLM_API_KEY", default=None)
-GLM_MODEL = env("GLM_MODEL", default="z-ai/glm-5.1")
 

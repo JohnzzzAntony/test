@@ -166,6 +166,11 @@
             overflow-x: hidden; 
             opacity: 0; /* Entrance animation */
             transition: opacity 1.2s ease-out;
+            padding-top: 116px; /* Default spacer for fixed header */
+        }
+        body.is-home { padding-top: 0; } /* Hero handles its own padding */
+        @media (max-width: 639px) {
+            body { padding-top: 100px; }
         }
         body.loaded { opacity: 1; }
         h1, h2, h3, h4, h5, h6 { 
@@ -254,7 +259,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
     <!-- Global Premium Styles -->
-    <link rel="stylesheet" href="{% static 'css/header_hero.css' %}?v=1.6">
+    <link rel="stylesheet" href="{% static 'css/header_hero.css' %}?v=1.7">
     
 
     {% block split_css %}{% endblock %}
@@ -275,7 +280,7 @@
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
     <!-- ===== TRANSLUCENT PREMIUM HEADER ===== -->
-    <header id="main-header" class="fixed top-0 left-0 right-0 z-[2000] glass-header-container transition-all duration-500 shadow-header">
+    <header id="main-header" class="fixed top-0 left-0 w-full z-[2000] glass-header-container transition-all duration-500">
         <!-- Premium Announcement Bar (Now integrated into header for seamless scroll) -->
         {% if announcement_bar_list %}
         <div id="announcement-bar" class="w-full bg-primary/95 backdrop-blur-md text-white overflow-hidden relative group">
@@ -404,7 +409,7 @@
                 {% if design_settings.show_header_account %}
                 <div class="group relative block">
                     <button class="flex items-center gap-3 p-2 group" aria-label="Account">
-                        <div class="premium-icon-box w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10 group-hover:bg-primary group-hover:border-primary transition-all shadow-sm">
+                        <div class="premium-icon-box w-10 h-10 rounded-full flex items-center justify-center border border-slate-200 group-hover:bg-primary group-hover:border-primary transition-all shadow-sm">
                             <i class="fas fa-user-circle text-sm sm:text-lg group-hover:scale-110 transition-transform premium-icon"></i>
                         </div>
                         <div class="hidden xl:block text-left">
@@ -435,7 +440,7 @@
 
                 <!-- Wishlist -->
                 {% if design_settings.show_header_wishlist %}
-                <a href="{% url 'products:wishlist' %}" class="premium-icon-box relative w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10 hover:bg-red-500 hover:border-red-500 transition-all group" aria-label="Wishlist">
+                <a href="{% url 'products:wishlist' %}" class="premium-icon-box relative w-10 h-10 rounded-full flex items-center justify-center border border-slate-200 hover:bg-red-500 hover:border-red-500 transition-all group" aria-label="Wishlist">
                     <i class="fas fa-heart text-sm group-hover:scale-110 transition-transform premium-icon"></i>
                     <span class="wishlist-count-badge absolute -top-1 -right-1 w-5 h-5 bg-red-600 rounded-full border-2 border-slate-950 text-[9px] font-black text-white flex items-center justify-center animate-bounce {% if not wishlist_count %}hidden{% endif %}">
                         {{ wishlist_count|default:"0" }}
@@ -682,9 +687,9 @@
             const header = document.getElementById('main-header');
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 40) {
-                    header.classList.add('scrolled');
+                    document.body.classList.add('scrolled');
                 } else {
-                    header.classList.remove('scrolled');
+                    document.body.classList.remove('scrolled');
                 }
             });
 

@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .ai_services import KimiAIService
+
 from django.utils import timezone
 from .models import AnnouncementBar, SiteSettings
 from products.models import Category
@@ -44,9 +45,12 @@ class KimiChatAPIView(APIView):
         
         try:
             service = KimiAIService()
-            # If prompt is small, we might not want streaming for a simple API response 
-            # but the service defaults to streaming.
-            result = service.chat(prompt, system_prompt=system_prompt, stream=False)
-            return Response(result)
+            # result is a ChatCompletion object
+            completion = service.chat(prompt, system_prompt=system_prompt, stream=False)
+            return Response({
+                'content': completion.choices[0].message.content,
+                'reasoning': getattr(completion.choices[0].message, 'reasoning_content', None)
+            })
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

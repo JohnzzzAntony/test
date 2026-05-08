@@ -407,6 +407,8 @@ The {site} Team
         'notification_type': notification_type,
         'status_display': order.get_status_display(),
         'status_message': _STATUS_DETAIL.get(order.status, f"Your order status has been updated to: {order.get_status_display()}."),
+        'site_name': site,
+        'subject_prefix': subject_prefix,
     }
 
     if notification_type == "order_placed":

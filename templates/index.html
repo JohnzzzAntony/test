@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block body_class %}is-home{% endblock %}
+
+
 {% block split_css %}
 <style>
     /* Premium Hero Animations */
@@ -33,7 +36,7 @@
 {% block content %}
 
 {# High-End Hero Section #}
-<section class="relative h-[85vh] min-h-[600px] overflow-hidden bg-slate-50">
+<section class="relative h-screen min-h-[600px] overflow-hidden bg-slate-50">
     <!-- Background: Refined Glass/Mesh Gradient -->
     <div class="absolute inset-0 z-0">
         <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 via-white to-secondary/5"></div>
@@ -47,31 +50,11 @@
             <div class="swiper-slide relative h-full w-full flex items-center">
                 {# BG Media #}
                 <div class="absolute inset-0 z-0">
-                    <img src="{{ slider.get_image_url }}" alt="{{ slider.title|striptags }}" class="w-full h-full object-cover opacity-85 transition-transform duration-[10000ms] ease-linear group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-r from-white/80 via-white/20 to-transparent"></div>
+                    <img src="{{ slider.get_image_url }}" alt="{{ slider.title|striptags }}" class="w-full h-full object-cover transition-transform duration-[10000ms] ease-linear group-hover:scale-110">
                 </div>
                 
-        <div class="max-w-screen-xl mx-auto px-4 sm:px-6 relative z-10 pt-32 sm:pt-40">
-                    <div class="max-w-3xl mx-auto text-center space-y-8 animate-hero flex flex-col items-center">
-                        {% if slider.badge_text %}
-                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full hero-glass text-slate-800/90 text-xs font-black uppercase tracking-[0.2em]">
-                            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                            {{ slider.badge_text|safe }}
-                        </div>
-                        {% endif %}
-                        
-                        {% if slider.title %}
-                        <h2 class="text-3xl sm:text-6xl lg:text-7xl font-black text-slate-900 leading-[0.9] tracking-tighter drop-shadow-sm">
-                            {{ slider.title|safe }}
-                        </h2>
-                        {% endif %}
-                        
-                        {% if slider.description %}
-                        <p class="text-base sm:text-lg text-slate-600 max-w-lg leading-relaxed font-medium">
-                            {{ slider.description|safe|linebreaksbr }}
-                        </p>
-                        {% endif %}
-                    </div>
+        <div class="max-w-screen-xl mx-auto px-4 sm:px-6 relative z-10 pt-32 sm:pt-48">
+
                 </div>
             </div>
             {% empty %}

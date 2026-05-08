@@ -58,7 +58,7 @@
             <tr>
                 <td class="header">
                     <a href="{{ site_url }}" class="logo">
-                        JKR <span>International</span>
+                        {{ site_name }}
                     </a>
                 </td>
             </tr>
@@ -124,7 +124,7 @@
                     </div>
 
                     <p>If you have any questions, simply reply to this email or visit our help center.</p>
-                    <p>Warm regards,<br>The JKR Team</p>
+                    <p>Warm regards,<br>The {{ site_name }} Team</p>
                     {% endblock %}
                 </td>
             </tr>
@@ -138,7 +138,7 @@
                         <a href="#">Facebook</a>
                         <a href="#">LinkedIn</a>
                     </div>
-                    <p>&copy; {{ year }} JKR International. All rights reserved.</p>
+                    <p>&copy; {{ year }} {{ site_name }}. All rights reserved.</p>
                     <p>Dubai, United Arab Emirates</p>
                     <p><a href="{{ site_url }}/unsubscribe">Unsubscribe</a> from future updates.</p>
                 </td>

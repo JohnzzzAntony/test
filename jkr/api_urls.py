@@ -7,3 +7,4 @@ urlpatterns = [
     path('search/', ProductSearchAPIView.as_view(), name='api-search'),
     path('kimi-chat/', KimiChatAPIView.as_view(), name='api-kimi-chat'),
 ]
+
