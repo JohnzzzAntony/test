@@ -109,6 +109,28 @@ class DesignSettings(models.Model):
     counter_animation_style = models.CharField(max_length=50, default='runner')
     counter_animation_speed = models.PositiveIntegerField(default=2000)
 
+    # ── Luxury & 3D Settings ────────────────────────────────────────────────
+    THREEJS_EFFECTS = (
+        ('none', 'None'),
+        ('particles', 'Particle Field'),
+        ('fluid', 'Fluid Geometry'),
+        ('floating_products', 'Floating Product Icons'),
+        ('glass_shard', 'Glass Shards'),
+    )
+    hero_3d_effect = models.CharField(max_length=50, choices=THREEJS_EFFECTS, default='fluid')
+    
+    LUXURY_THEMES = (
+        ('standard', 'Standard Professional'),
+        ('luxury_dark', 'Luxury Midnight (Glassmorphism)'),
+        ('high_tech', 'High-Tech (Glow/Neon)'),
+        ('minimal_art', 'Minimal Artistic'),
+    )
+    ui_theme_variant = models.CharField(max_length=50, choices=LUXURY_THEMES, default='luxury_dark')
+    
+    enable_custom_cursor = models.BooleanField(default=True, help_text="Sleek magnetic follower cursor.")
+    enable_magnetic_hover = models.BooleanField(default=True, help_text="Buttons and icons pull the cursor towards them.")
+    enable_page_transitions = models.BooleanField(default=True, help_text="Smooth fade/slide between pages.")
+
     class Meta:
         verbose_name = "Theme Settings"
         verbose_name_plural = "Theme Settings"
