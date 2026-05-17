@@ -37,18 +37,31 @@ else:
 
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-build-placeholder-key")
 DEBUG = env.bool("DEBUG", default=False)
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
 IS_PRODUCTION = env.bool("IS_PRODUCTION", default=False)
 
+# ALLOWED_HOSTS — includes Railway wildcard and custom domain
+_default_allowed_hosts = [
+    "shop.creativegradientz.com",
+    "ecom.creativegradientz.com",
+    "admin.creativegradientz.com",
+    "creativegradientz.com",
+    ".up.railway.app",
+    "localhost",
+    "127.0.0.1",
+]
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=_default_allowed_hosts)
+
 ADMIN_URL = env("ADMIN_URL", default="admin/")
-CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[
+
+# CSRF_TRUSTED_ORIGINS — must include full https:// scheme for every domain
+_default_csrf_origins = [
     "https://shop.creativegradientz.com",
     "https://ecom.creativegradientz.com",
     "https://admin.creativegradientz.com",
     "https://creativegradientz.com",
-    "https://admin-production-dac3.up.railway.app",
     "https://*.up.railway.app",
-])
+]
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=_default_csrf_origins)
 
 # =============================================================================
 # INSTALLED APPLICATIONS
