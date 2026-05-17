@@ -16,6 +16,10 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Detect if we are running locally (development/management tasks)
+IS_RUNNING_LOCALLY = any(arg in sys.argv for arg in ["runserver", "dev", "shell", "check", "migrate", "makemigrations", "test"])
+HAS_ENV_LOCAL = os.path.exists(os.path.join(BASE_DIR, ".env.local"))
+
 # =============================================================================
 # ENVIRONMENT VARIABLES
 # =============================================================================
@@ -26,7 +30,7 @@ env = environ.Env(
 )
 
 # Load .env.local for development, fall back to .env for production
-if os.path.exists(os.path.join(BASE_DIR, ".env.local")):
+if HAS_ENV_LOCAL:
     environ.Env.read_env(os.path.join(BASE_DIR, ".env.local"), overwrite=True)
 else:
     environ.Env.read_env(os.path.join(BASE_DIR, ".env"), overwrite=True)
@@ -36,8 +40,18 @@ else:
 # =============================================================================
 
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-build-placeholder-key")
-DEBUG = env.bool("DEBUG", default=False)
-IS_PRODUCTION = env.bool("IS_PRODUCTION", default=False)
+
+# Dynamically resolve DEBUG and IS_PRODUCTION for smooth local development
+if IS_RUNNING_LOCALLY:
+    if HAS_ENV_LOCAL:
+        DEBUG = env.bool("DEBUG", default=True)
+        IS_PRODUCTION = env.bool("IS_PRODUCTION", default=False)
+    else:
+        DEBUG = True
+        IS_PRODUCTION = False
+else:
+    DEBUG = env.bool("DEBUG", default=False)
+    IS_PRODUCTION = env.bool("IS_PRODUCTION", default=True)
 
 # ALLOWED_HOSTS — includes Railway wildcard and custom domain
 _default_allowed_hosts = [
@@ -50,6 +64,12 @@ _default_allowed_hosts = [
     "127.0.0.1",
 ]
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=_default_allowed_hosts)
+
+# Force inclusion of local host identifiers during local execution
+if IS_RUNNING_LOCALLY:
+    for host in ["localhost", "127.0.0.1", "[::1]", "*"]:
+        if host not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(host)
 
 ADMIN_URL = env("ADMIN_URL", default="admin/")
 
@@ -156,17 +176,16 @@ if IS_PRODUCTION:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
     # Disable SSL redirect when running manage.py locally
-    is_running_locally = any(arg in sys.argv for arg in ["runserver", "dev"])
-    SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=not is_running_locally)
+    SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=not IS_RUNNING_LOCALLY)
 
-    SESSION_COOKIE_SECURE = not is_running_locally
-    CSRF_COOKIE_SECURE = not is_running_locally
+    SESSION_COOKIE_SECURE = not IS_RUNNING_LOCALLY
+    CSRF_COOKIE_SECURE = not IS_RUNNING_LOCALLY
     SESSION_COOKIE_HTTPONLY = True
     CSRF_COOKIE_HTTPONLY = True
     SECURE_REFERRER_POLICY = "same-origin"
     SECURE_CONTENT_TYPE_NOSNIFF = True
 
-    if not is_running_locally:
+    if not IS_RUNNING_LOCALLY:
         SECURE_HSTS_SECONDS = 31536000
         SECURE_HSTS_INCLUDE_SUBDOMAINS = True
         SECURE_HSTS_PRELOAD = True

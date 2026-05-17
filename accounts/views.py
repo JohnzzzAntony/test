@@ -174,7 +174,7 @@ def social_login(request, provider):
         <a href="{% url 'accounts:social_login' 'github' %}">GitHub</a>
     """
     SUPPORTED_PROVIDERS = {
-        "google", "github", "facebook", "twitter",
+        "github", "facebook", "twitter",
         "discord", "apple", "linkedin", "spotify",
     }
 

@@ -20,6 +20,7 @@
         <!-- Body -->
         <div class="p-12">
             <!-- Social Auth (Supabase Integrated) -->
+            {% comment %}
             {% include 'accounts/social_buttons_snippet.html' %}
 
             <div class="flex items-center gap-4 mb-10">
@@ -27,6 +28,7 @@
                 <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">or register with email</span>
                 <div class="h-px bg-slate-100 flex-1"></div>
             </div>
+            {% endcomment %}
 
             <form method="POST" class="space-y-8">
 
