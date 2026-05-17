@@ -15,6 +15,24 @@ class SubscriptionPlan(models.Model):
     def __str__(self):
         return f"{self.name} ({self.interval})"
 
+    @property
+    def features_list(self):
+        if "Pro" in self.name:
+            return [
+                "Unlimited Premium Actions",
+                "Advanced Real-Time Analytics",
+                "24/7 Priority Support",
+                "Custom Branding & Integrations",
+                "Early access to new features"
+            ]
+        else:
+            return [
+                "Core Actions Access",
+                "Standard Dashboard & Analytics",
+                "Email Support",
+                "1 User Account"
+            ]
+
 class UserSubscription(models.Model):
     STATUS_CHOICES = [
         ('active', 'Active'),

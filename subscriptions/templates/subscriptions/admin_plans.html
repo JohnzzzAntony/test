@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta_title %}Subscription Plans | Admin{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-slate-50/50 min-h-screen">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+        
+        {# Header #}
+        <div class="flex items-center justify-between mb-10">
+            <div>
+                <div class="flex items-center gap-3 mb-2">
+                    <a href="{% url 'admin:index' %}" class="text-xs text-slate-400 hover:text-primary transition-colors">
+                        <i class="fas fa-arrow-left mr-1"></i> Back to Admin
+                    </a>
+                </div>
+                <h1 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+                    Subscription <span class="text-primary">Plans</span>
+                </h1>
+                <p class="text-slate-500 mt-1">Manage your subscription plans and pricing tiers</p>
+            </div>
+            <button onclick="openCreateModal()" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-secondary transition-all shadow-lg shadow-primary/20">
+                <i class="fas fa-plus"></i> New Plan
+            </button>
+        </div>
+
+        {# Messages #}
+        {% if messages %}
+        {% if messages.success %}
+        <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 font-medium">
+            <i class="fas fa-check-circle mr-2"></i> {{ messages.success }}
+        </div>
+        {% elif messages.error %}
+        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 font-medium">
+            <i class="fas fa-exclamation-circle mr-2"></i> {{ messages.error }}
+        </div>
+        {% endif %}
+        {% endif %}
+
+        {# Stats Cards #}
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <i class="fas fa-layer-group text-primary"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Total Plans</p>
+                        <p class="text-2xl font-black text-slate-900">{{ plans.count }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                        <i class="fas fa-check-circle text-emerald-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Active</p>
+                        <p class="text-2xl font-black text-slate-900">{{ plans|length|add:0 }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
+                        <i class="fas fa-clock text-amber-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Monthly</p>
+                        <p class="text-2xl font-black text-slate-900">${{ monthly_total|default:"0" }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                        <i class="fas fa-calendar text-blue-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Yearly</p>
+                        <p class="text-2xl font-black text-slate-900">${{ yearly_total|default:"0" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Plans Grid - ChatGPT Style #}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for plan in plans %}
+            <div class="bg-white rounded-3xl p-8 shadow-sm border {% if plan.is_active %}border-slate-200{% else %}border-slate-100 opacity-60{% endif %} transition-all hover:shadow-xl hover:-translate-y-1">
+                {# Plan Header #}
+                <div class="flex items-start justify-between mb-6">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="px-3 py-1 text-[10px] font-black uppercase tracking-widest {% if plan.is_active %}bg-emerald-100 text-emerald-700{% else %}bg-slate-100 text-slate-500{% endif %} rounded-full">
+                                {% if plan.is_active %}Active{% else %}Inactive{% endif %}
+                            </span>
+                            <span class="px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-primary/10 text-primary rounded-full">
+                                {{ plan.interval|title }}
+                            </span>
+                        </div>
+                        <h3 class="text-2xl font-black text-slate-900 tracking-tight">{{ plan.name }}</h3>
+                        <p class="text-xs text-slate-500 mt-1">{{ plan.currency }} {{ plan.price }} / {{ plan.interval }}</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-3xl font-black text-slate-900">${{ plan.price }}</div>
+                        <div class="text-xs text-slate-400">/{{ plan.interval }}</div>
+                    </div>
+                </div>
+
+                {# Description #}
+                <p class="text-sm text-slate-600 mb-6 line-clamp-2">{{ plan.description|default:"No description provided" }}</p>
+
+                {# Features Preview #}
+                <div class="mb-6 pb-6 border-b border-slate-100">
+                    <ul class="space-y-2">
+                        {% for feature in plan.features_list|slice:":3" %}
+                        <li class="flex items-center gap-2 text-xs text-slate-600">
+                            <i class="fas fa-check text-emerald-500 text-[10px]"></i>
+                            {{ feature }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                {# Actions #}
+                <div class="flex items-center gap-3">
+                    <a href="{% url 'subscriptions:admin_edit_plan' plan.id %}" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-slate-100 text-slate-700 font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-slate-200 transition-all">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <form method="POST" action="{% url 'subscriptions:admin_plans' %}" class="flex-1">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="toggle_active">
+                        <input type="hidden" name="plan_id" value="{{ plan.id }}">
+                        <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 {% if plan.is_active %}bg-amber-50 text-amber-700 hover:bg-amber-100{% else %}bg-emerald-50 text-emerald-700 hover:bg-emerald-100{% endif %} font-bold text-xs uppercase tracking-widest rounded-xl transition-all">
+                            <i class="fas {% if plan.is_active %}fa-pause{% else %}fa-play{% endif %}"></i>
+                            {% if plan.is_active %}Deactivate{% else %}Activate{% endif %}
+                        </button>
+                    </form>
+                </div>
+                
+                {# Delete Link #}
+                <div class="mt-4 pt-4 border-t border-slate-100 text-center">
+                    <a href="{% url 'subscriptions:admin_delete_plan' plan.id %}" class="text-xs text-red-500 hover:text-red-700 font-semibold transition-colors">
+                        <i class="fas fa-trash-alt mr-1"></i> Delete Plan
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-16 bg-white rounded-3xl border-2 border-dashed border-slate-200">
+                <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-layer-group text-2xl text-slate-400"></i>
+                </div>
+                <p class="text-slate-500 font-medium mb-4">No subscription plans yet. Create your first plan to get started.</p>
+                <button onclick="openCreateModal()" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-secondary transition-all">
+                    <i class="fas fa-plus"></i> Create First Plan
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+{# Create Plan Modal #}
+<div id="createModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onclick="closeCreateModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 w-full max-w-lg shadow-2xl">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-black text-slate-900">Create New Plan</h2>
+                <button onclick="closeCreateModal()" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 transition-all">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form method="POST" action="{% url 'subscriptions:admin_plans' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="create">
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">Plan Name *</label>
+                        <input type="text" name="name" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="e.g., Pro Plan">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">Description</label>
+                        <textarea name="description" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none" placeholder="Brief description of this plan..."></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">Stripe Price ID *</label>
+                        <input type="text" name="stripe_price_id" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-mono text-sm" placeholder="price_xxxxxxxxxxxx">
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">Price *</label>
+                            <input type="number" name="price" step="0.01" min="0" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="29.99">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">Currency</label>
+                            <select name="currency" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="GBP">GBP</option>
+                                <option value="AED">AED</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2">Interval</label>
+                            <select name="interval" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+                                <option value="month">Monthly</option>
+                                <option value="year">Yearly</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mt-8">
+                    <button type="button" onclick="closeCreateModal()" class="flex-1 px-6 py-4 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 px-6 py-4 bg-primary text-white font-bold rounded-xl hover:bg-secondary transition-all shadow-lg shadow-primary/20">
+                        Create Plan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openCreateModal() {
+    document.getElementById('createModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCreateModal() {
+    document.getElementById('createModal').classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeCreateModal();
+});
+</script>
+{% endblock %}

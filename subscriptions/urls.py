@@ -9,5 +9,10 @@ urlpatterns = [
     path('success/', views.checkout_success, name='success'),
     path('cancel/', views.checkout_cancel, name='cancel'),
     path('webhook/', views.stripe_webhook, name='webhook'),
-    path('portal/', views.create_portal_session, name='portal'),
+    path('portal/', views.create_portal_session, name='create_portal_session'),
+    path('admin/metrics/', views.admin_subscription_metrics, name='admin_metrics'),
+    path('admin/plans/', views.admin_subscription_plans, name='admin_plans'),
+    path('admin/plans/create/', views.admin_edit_plan, name='admin_create_plan'),
+    path('admin/plans/<int:plan_id>/edit/', views.admin_edit_plan, name='admin_edit_plan'),
+    path('admin/plans/<int:plan_id>/delete/', views.admin_delete_plan, name='admin_delete_plan'),
 ]
