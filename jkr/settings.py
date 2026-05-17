@@ -491,31 +491,15 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "formatter": "simple",
         },
-        "file": {
-            "level": "INFO",
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs" / "django.log",
-            "maxBytes": 10485760,
-            "backupCount": 5,
-            "formatter": "verbose",
-        },
-        "error_file": {
-            "level": "ERROR",
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs" / "django_errors.log",
-            "maxBytes": 10485760,
-            "backupCount": 5,
-            "formatter": "verbose",
-        },
     },
     "loggers": {
         "django": {
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "level": "INFO",
             "propagate": True,
         },
         "django.request": {
-            "handlers": ["console", "error_file"],
+            "handlers": ["console"],
             "level": "INFO",
             "propagate": False,
         },
@@ -525,22 +509,26 @@ LOGGING = {
             "propagate": False,
         },
         "orders": {
-            "handlers": ["console", "file", "error_file"],
+            "handlers": ["console"],
             "level": "INFO",
             "propagate": False,
         },
         "products": {
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "level": "INFO",
             "propagate": False,
         },
     },
 }
 
-# Create logs directory if it doesn't exist
-logs_dir = BASE_DIR / "logs"
-if not logs_dir.exists():
-    logs_dir.mkdir(mode=0o755, exist_ok=True)
+# Create logs directory if it doesn't exist (Only attempt if local)
+if not IS_PRODUCTION:
+    try:
+        logs_dir = BASE_DIR / "logs"
+        if not logs_dir.exists():
+            logs_dir.mkdir(mode=0o755, exist_ok=True)
+    except Exception:
+        pass
 
 
 
