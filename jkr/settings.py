@@ -228,17 +228,29 @@ else:
 REDIS_URL = env("REDIS_URL", default=None)
 
 if REDIS_URL:
-    CACHES = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": REDIS_URL,
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            },
-            "KEY_PREFIX": "jkr",
-            "TIMEOUT": 300,
+    try:
+        import django_redis  # noqa: F401 - verify package is installed
+        CACHES = {
+            "default": {
+                "BACKEND": "django_redis.cache.RedisCache",
+                "LOCATION": REDIS_URL,
+                "OPTIONS": {
+                    "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                    "SOCKET_CONNECT_TIMEOUT": 5,
+                    "SOCKET_TIMEOUT": 5,
+                    "IGNORE_EXCEPTIONS": True,  # Don't crash if Redis is unavailable
+                },
+                "KEY_PREFIX": "jkr",
+                "TIMEOUT": 300,
+            }
         }
-    }
+    except ImportError:
+        CACHES = {
+            "default": {
+                "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+                "LOCATION": "jkr-fallback",
+            }
+        }
 else:
     CACHES = {
         "default": {
