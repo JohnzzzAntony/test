@@ -1,0 +1,25 @@
+{% extends "emails/base_email.html" %}
+{% block subject %}New Contact Form Submission – {{ site_name }}{% endblock %}
+{% block content %}
+<h2>New Contact Form Submission</h2>
+<p>A new message has been submitted through the contact form on <strong>{{ site_name }}</strong>.</p>
+
+<hr class="divider">
+<table class="info-table">
+  <tr><td>Name</td><td><strong>{{ name }}</strong></td></tr>
+  <tr><td>Email</td><td><a href="mailto:{{ email }}" style="color:#0a0a0a;">{{ email }}</a></td></tr>
+  <tr><td>Phone</td><td>{{ phone }}</td></tr>
+  {% if subject %}<tr><td>Subject</td><td>{{ subject }}</td></tr>{% endif %}
+  <tr><td>Submitted At</td><td>{{ submitted_at }}</td></tr>
+</table>
+
+<hr class="divider">
+<h3 style="color:#0a0a0a; font-size:16px; margin-bottom:12px;">Message</h3>
+<div style="background:#f8f8f8; border-left:4px solid #0a0a0a; padding:16px 20px; border-radius:4px; color:#333; font-size:14px; line-height:1.7;">
+  {{ message }}
+</div>
+
+<div style="text-align:center; margin-top:30px;">
+  <a href="{{ admin_url }}" class="btn">View in Admin Panel →</a>
+</div>
+{% endblock %}

@@ -1,0 +1,97 @@
+<!-- Promo Banner Section Partial -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row">
+            {% if section.data.layout == '1_col' %}
+                {% for item in section.data.items.all %}
+                <div class="col-12 mb-4" data-aos="fade-up">
+                    <a href="{{ item.link }}" class="promo-banner-item shape-{{ section.data.shape }}">
+                        <img src="{{ item.get_image_url }}" alt="{{ item.title }}">
+                        {% if item.title %}
+                        <div class="banner-overlay">
+                            <h3 class="font-weight-bold">{{ item.title }}</h3>
+                            <p class="mb-0">{{ item.subtitle }}</p>
+                        </div>
+                        {% endif %}
+                    </a>
+                </div>
+                {% endfor %}
+            {% elif section.data.layout == '2_col' %}
+                {% for item in section.data.items.all|slice:":2" %}
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+                    <a href="{{ item.link }}" class="promo-banner-item shape-{{ section.data.shape }}" style="height: 350px;">
+                        <img src="{{ item.get_image_url }}" alt="{{ item.title }}">
+                        {% if item.title %}
+                        <div class="banner-overlay">
+                            <h4 class="font-weight-bold">{{ item.title }}</h4>
+                            <p class="mb-0">{{ item.subtitle }}</p>
+                        </div>
+                        {% endif %}
+                    </a>
+                </div>
+                {% endfor %}
+            {% elif section.data.layout == '3_col' %}
+                {% for item in section.data.items.all|slice:":3" %}
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+                    <a href="{{ item.link }}" class="promo-banner-item shape-{{ section.data.shape }}" style="height: 300px;">
+                        <img src="{{ item.get_image_url }}" alt="{{ item.title }}">
+                        {% if item.title %}
+                        <div class="banner-overlay">
+                            <h5 class="font-weight-bold" style="font-size: 1rem;">{{ item.title }}</h5>
+                        </div>
+                        {% endif %}
+                    </a>
+                </div>
+                {% endfor %}
+            {% elif section.data.layout == 'mosaic' %}
+                <div class="col-lg-7 mb-4" data-aos="fade-right">
+                    {% with item=section.data.items.all.0 %}
+                    <a href="{{ item.link }}" class="promo-banner-item shape-{{ section.data.shape }}" style="height: 520px;">
+                        <img src="{{ item.get_image_url }}" alt="{{ item.title }}">
+                        {% if item.title %}
+                        <div class="banner-overlay">
+                            <h3 class="font-weight-bold">{{ item.title }}</h3>
+                            <p class="mb-0">{{ item.subtitle }}</p>
+                        </div>
+                        {% endif %}
+                    </a>
+                    {% endwith %}
+                </div>
+                <div class="col-lg-5">
+                    <div class="row h-100">
+                        <div class="col-12 mb-4" data-aos="fade-down" style="height: 250px;">
+                            {% with item=section.data.items.all.1 %}
+                            <a href="{{ item.link }}" class="promo-banner-item shape-{{ section.data.shape }}" style="height: 100%;">
+                                <img src="{{ item.get_image_url }}" alt="{{ item.title }}">
+                                {% if item.title %}
+                                <div class="banner-overlay p-3">
+                                    <h6 class="font-weight-bold mb-0 text-white">{{ item.title }}</h6>
+                                </div>
+                                {% endif %}
+                            </a>
+                            {% endwith %}
+                        </div>
+                        <div class="col-12">
+                            <div class="row no-gutters">
+                                {% for item in section.data.items.all|slice:"2:5" %}
+                                <div class="col-4 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
+                                    <div class="{% if not forloop.first %}pl-2{% endif %}" style="height: 150px;">
+                                        <a href="{{ item.link }}" class="promo-banner-item shape-{{ section.data.shape }}" style="height: 100%;">
+                                            <img src="{{ item.get_image_url }}" alt="{{ item.title }}">
+                                            {% if item.title %}
+                                            <div class="banner-overlay p-2" style="padding: 10px !important;">
+                                                <span class="small font-weight-bold text-white" style="font-size: 0.65rem;">{{ item.title }}</span>
+                                            </div>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>

@@ -1,0 +1,47 @@
+{% extends "emails/base_email.html" %}
+{% block subject %}Order Confirmed – #{{ order_id }}{% endblock %}
+{% block content %}
+<h2>Order Confirmed! 🎉</h2>
+<p>Dear <strong>{{ customer_name }}</strong>,</p>
+<p>Thank you for your order. We've received it and it is now being processed. You'll receive updates at every step of the journey.</p>
+
+<hr class="divider">
+<h3 style="color:#0a0a0a; font-size:16px; margin-bottom:12px;">Order Details</h3>
+<table class="info-table">
+  <tr><td>Order Number</td><td><strong>#{{ order_id }}</strong></td></tr>
+  <tr><td>Payment Method</td><td>{{ payment_method }}</td></tr>
+  <tr><td>Status</td><td><span class="badge badge-pending">{{ status }}</span></td></tr>
+  <tr><td>Date</td><td>{{ order_date }}</td></tr>
+</table>
+
+<hr class="divider">
+<h3 style="color:#0a0a0a; font-size:16px; margin-bottom:12px;">Items Ordered</h3>
+{% for item in items %}
+<div class="item-row">
+  <span>{{ item.product_name }} × {{ item.quantity }}</span>
+  <span><strong>{{ item.total_price }} {{ currency }}</strong></span>
+</div>
+{% endfor %}
+
+<hr class="divider">
+<table class="info-table">
+  <tr><td>Subtotal</td><td>{{ subtotal }} {{ currency }}</td></tr>
+  {% if shipping_amount > 0 %}<tr><td>Shipping</td><td>{{ shipping_amount }} {{ currency }}</td></tr>{% endif %}
+  {% if tax_amount > 0 %}<tr><td>VAT (5%)</td><td>{{ tax_amount }} {{ currency }}</td></tr>{% endif %}
+  <tr><td><strong>Total</strong></td><td><strong>{{ total_amount }} {{ currency }}</strong></td></tr>
+</table>
+
+<hr class="divider">
+<h3 style="color:#0a0a0a; font-size:16px; margin-bottom:12px;">Shipping Address</h3>
+<p style="margin:0; color:#444; font-size:14px; line-height:1.8;">
+  {{ first_name }} {{ last_name }}<br>
+  {{ street }}{% if street2 %}, {{ street2 }}{% endif %}<br>
+  {{ city }}, {{ emirates }}<br>
+  {{ country }}<br>
+  Phone: {{ phone }}
+</p>
+
+<div style="text-align:center; margin-top:30px;">
+  <a href="{{ tracking_url }}" class="btn">Track Your Order →</a>
+</div>
+{% endblock %}

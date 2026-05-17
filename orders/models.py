@@ -167,11 +167,16 @@ class CustomerOrder(models.Model):
         ordering = ['-created_at']
         verbose_name = "Customer Order"
         verbose_name_plural = "Customer Orders"
+        indexes = [
+            models.Index(fields=['user', '-created_at'], name='order_user_created'),
+            models.Index(fields=['payment_status', 'status'], name='order_payment_status'),
+            models.Index(fields=['email', '-created_at'], name='order_email_created'),
+            models.Index(fields=['stripe_session_id'], name='order_stripe_session'),
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__status = self.status
-        self.__payment_status = self.payment_status
 
     def __str__(self):
         return f"Order #{self.pk} — {self.first_name} {self.last_name}"
@@ -192,7 +197,6 @@ class CustomerOrder(models.Model):
     def save(self, *args, **kwargs):
         is_new = self.pk is None
         status_changed = not is_new and self.status != self.__status
-        payment_became_paid = not is_new and self.payment_status == 'paid' and self.__payment_status != 'paid'
 
         super().save(*args, **kwargs)
 
@@ -204,15 +208,10 @@ class CustomerOrder(models.Model):
             from .notifications import send_customer_notification
             if is_new:
                 send_customer_notification(self, notification_type='order_placed')
-            elif status_changed:
+            else:
                 send_customer_notification(self, notification_type='status_change')
 
-        if payment_became_paid:
-            from .notifications import send_customer_notification
-            send_customer_notification(self, notification_type='payment_confirmation')
-
-        self.__status = self.status
-        self.__payment_status = self.payment_status
+            self.__status = self.status
 
 
 class OrderStatusHistory(models.Model):

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta_title %}Pricing Plans | {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="py-24 relative overflow-hidden">
+    {# Decorative Background Elements #}
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none -z-10 overflow-hidden">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px] animate-pulse"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent/5 blur-[120px] animate-pulse" style="animation-delay: 2s;"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+            <h1 class="text-4xl md:text-6xl font-heading font-black tracking-tight mb-6">
+                Simple, <span class="text-primary">Transparent</span> Pricing
+            </h1>
+            <p class="text-lg text-slate-600 leading-relaxed">
+                Choose the perfect plan for your business. All plans include our core features with premium support and advanced analytics.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+            {% for plan in plans %}
+            <div class="flex flex-col h-full premium-card p-8 group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+                <div class="mb-8">
+                    <h3 class="text-2xl font-heading font-bold mb-2">{{ plan.name }}</h3>
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-4xl font-black text-primary">${{ plan.price }}</span>
+                        <span class="text-slate-500 font-medium">/month</span>
+                    </div>
+                </div>
+
+                <div class="flex-grow">
+                    <p class="text-slate-600 mb-8">{{ plan.description|default:"Get started with our premium features." }}</p>
+                    
+                    <ul class="space-y-4 mb-8">
+                        {% if plan.features %}
+                            {% for feature in plan.features_list %}
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check text-[10px] text-primary"></i>
+                                </div>
+                                <span class="text-slate-600">{{ feature }}</span>
+                            </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check text-[10px] text-primary"></i>
+                                </div>
+                                <span class="text-slate-600">Premium Support</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check text-[10px] text-primary"></i>
+                                </div>
+                                <span class="text-slate-600">Advanced Analytics</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="mt-auto pt-8 border-t border-slate-100">
+                    {% if user.is_authenticated %}
+                        {% if user.usersubscription.plan == plan and user.usersubscription.status == 'active' %}
+                        <button disabled class="w-full py-4 px-6 rounded-btn-custom bg-slate-100 text-slate-400 font-bold cursor-not-allowed">
+                            Current Plan
+                        </button>
+                        {% else %}
+                        <a href="{% url 'subscriptions:create_checkout' plan.id %}" class="w-full inline-flex items-center justify-center py-4 px-6 rounded-btn-custom bg-primary text-white font-bold hover:bg-secondary transition-all shadow-lg shadow-primary/20 group-hover:scale-[1.02]">
+                            Get Started
+                            <i class="fas fa-arrow-right ml-2 text-sm transition-transform group-hover:translate-x-1"></i>
+                        </a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}?next={% url 'subscriptions:pricing' %}" class="w-full inline-flex items-center justify-center py-4 px-6 rounded-btn-custom bg-primary text-white font-bold hover:bg-secondary transition-all shadow-lg shadow-primary/20 group-hover:scale-[1.02]">
+                            Sign In to Subscribe
+                            <i class="fas fa-arrow-right ml-2 text-sm transition-transform group-hover:translate-x-1"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-12 premium-card">
+                <p class="text-slate-500 italic">No pricing plans are currently available.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

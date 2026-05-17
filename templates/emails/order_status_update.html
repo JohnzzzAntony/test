@@ -1,0 +1,23 @@
+{% extends "emails/base_email.html" %}
+{% block subject %}Order Update – #{{ order_id }}{% endblock %}
+{% block content %}
+<h2>Order Status Update</h2>
+<p>Dear <strong>{{ customer_name }}</strong>,</p>
+<p>{{ status_message }}</p>
+
+<hr class="divider">
+<h3 style="color:#0a0a0a; font-size:16px; margin-bottom:12px;">Order Details</h3>
+<table class="info-table">
+  <tr><td>Order Number</td><td><strong>#{{ order_id }}</strong></td></tr>
+  <tr><td>Current Status</td><td><span class="badge badge-info">{{ status_display }}</span></td></tr>
+  <tr><td>Total Amount</td><td>{{ total_amount }} {{ currency }}</td></tr>
+</table>
+
+<div style="text-align:center; margin-top:30px;">
+  <a href="{{ tracking_url }}" class="btn">Track Your Order →</a>
+</div>
+
+<p style="color:#888; font-size:13px; text-align:center; margin-top:20px;">
+  Questions? Contact us at <a href="mailto:{{ support_email }}" style="color:#555;">{{ support_email }}</a>
+</p>
+{% endblock %}

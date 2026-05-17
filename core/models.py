@@ -67,10 +67,13 @@ class SiteSettings(models.Model):
 
     @property
     def get_image_url(self):
-        try:
-            if self.logo: return self.logo.url
-            if self.logo_url: return self.logo_url
-        except Exception: pass
+        if self.logo:
+            try:
+                return self.logo.url
+            except (ValueError, AttributeError):
+                pass
+        if self.logo_url:
+            return self.logo_url
         return "/static/assets/logo.png"
 
     def __str__(self): return "Global Site Settings"
@@ -97,10 +100,13 @@ class Testimonial(models.Model):
     def __str__(self): return f"Testimonial from {self.client_name}"
     @property
     def get_image_url(self):
-        try:
-            if self.image: return self.image.url
-            if self.image_url: return self.image_url
-        except Exception: pass
+        if self.image:
+            try:
+                return self.image.url
+            except (ValueError, AttributeError):
+                pass
+        if self.image_url:
+            return self.image_url
         return "https://via.placeholder.com/100"
 
 class Client(models.Model):
@@ -122,10 +128,13 @@ class Client(models.Model):
     def __str__(self): return self.name
     @property
     def get_image_url(self):
-        try:
-            if self.logo: return self.logo.url
-            if self.logo_url: return self.logo_url
-        except Exception: pass
+        if self.logo:
+            try:
+                return self.logo.url
+            except (ValueError, AttributeError):
+                pass
+        if self.logo_url:
+            return self.logo_url
         return "https://via.placeholder.com/150x60"
 
 class SocialPost(models.Model):
@@ -143,10 +152,13 @@ class SocialPost(models.Model):
     class Meta: ordering = ['order']
     @property
     def get_image_url(self):
-        try:
-            if self.image: return self.image.url
-            if self.image_url: return self.image_url
-        except Exception: pass
+        if self.image:
+            try:
+                return self.image.url
+            except (ValueError, AttributeError):
+                pass
+        if self.image_url:
+            return self.image_url
         return "https://via.placeholder.com/400"
 
 class StoreLocation(models.Model):
@@ -171,10 +183,13 @@ class StoreLocation(models.Model):
 
     @property
     def get_image_url(self):
-        try:
-            if self.image: return self.image.url
-            if self.image_url: return self.image_url
-        except Exception: pass
+        if self.image:
+            try:
+                return self.image.url
+            except (ValueError, AttributeError):
+                pass
+        if self.image_url:
+            return self.image_url
         return "https://via.placeholder.com/600x400"
 
     def __str__(self):

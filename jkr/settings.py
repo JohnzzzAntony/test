@@ -37,10 +37,8 @@ else:
 
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-build-placeholder-key")
 DEBUG = env.bool("DEBUG", default=False)
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[".creativegradientz.com", ".up.railway.app", "localhost", "127.0.0.1"])
-# Check if we are running in production (Railway/Production)
-# We check IS_PRODUCTION env var, but also fallback to common production indicators
-IS_PRODUCTION = env.bool("IS_PRODUCTION", default=False) or env("DATABASE_URL", default=None) is not None or env("RAILWAY_STATIC_URL", default=None) is not None
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+IS_PRODUCTION = env.bool("IS_PRODUCTION", default=False)
 
 ADMIN_URL = env("ADMIN_URL", default="admin/")
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[
@@ -77,6 +75,7 @@ INSTALLED_APPS = [
     "rest_framework",
 
     # Project apps
+    "subscriptions.apps.SubscriptionsConfig",
     "accounts",
     "core",
     "products",
@@ -120,7 +119,7 @@ MIDDLEWARE = [
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = "DENY"
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # Silence known third-party warnings that are not yet actionable
 SILENCED_SYSTEM_CHECKS = [
@@ -226,12 +225,27 @@ else:
 # =============================================================================
 # CACHING
 # =============================================================================
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "jkr-unique-snowflake",
+REDIS_URL = env("REDIS_URL", default=None)
+
+if REDIS_URL:
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": REDIS_URL,
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            },
+            "KEY_PREFIX": "jkr",
+            "TIMEOUT": 300,
+        }
     }
-}
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "jkr-unique-snowflake",
+        }
+    }
 
 # =============================================================================
 # PASSWORD VALIDATION
@@ -270,18 +284,24 @@ WHITENOISE_MANIFEST_STRICT = False
 WHITENOISE_COMPRESS = False
 WHITENOISE_KEEP_ONLY_HASHED_FILES = False
 
-# Storage configuration
+# =============================================================================
+# STORAGE BACKENDS
+# Production:  Cloudinary (media)  +  WhiteNoise (static)
+# Development: Local filesystem
+# =============================================================================
+
 if IS_PRODUCTION:
-    # Media files (Cloudinary)
-    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-    # Static files (WhiteNoise)
-    STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
-    # Ensure MEDIA_URL doesn't interfere with Cloudinary URL generation in some cases
-    MEDIA_URL = "https://res.cloudinary.com/%s/" % env("CLOUDINARY_CLOUD_NAME", default="dkhblh1sr")
+    MEDIA_STORAGE_BACKEND = "cloudinary_storage.storage.MediaCloudinaryStorage"
+    STATIC_STORAGE_BACKEND = "whitenoise.storage.StaticFilesStorage"
 else:
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
-    MEDIA_URL = "/media/"
+    MEDIA_STORAGE_BACKEND = "django.core.files.storage.FileSystemStorage"
+    STATIC_STORAGE_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage"
+
+# Modern Django STORAGES dictionary (required by Django 5+)
+STORAGES = {
+    "default": {"BACKEND": MEDIA_STORAGE_BACKEND},
+    "staticfiles": {"BACKEND": STATIC_STORAGE_BACKEND},
+}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -309,55 +329,88 @@ JAZZMIN_SETTINGS = {
     "site_title": "JKR Administration",
     "site_header": "JKR Admin",
     "site_brand": "JKR International",
+    "site_logo": None,
+    "login_logo": None,
     "welcome_sign": "Welcome to JKR International Management System",
+    "copyright": "JKR International",
     "search_model": ["products.Product"],
-    "show_ui_builder": False,
-    "show_recent_actions": False,
-    "actions_sticky": True,
-    "edit_id_fields": True,
-    "related_modal_active": True,
-    "changeform_format": "horizontal_tabs",
+    "user_avatar": None,
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
         {"name": "View Site", "url": "/", "new_window": True},
     ],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
     "order_with_respect_to": [
         "products", "sliders", "orders", "core", "accounts", "blog", "pages", "contact", "auth",
     ],
     "icons": {
-        # Auth & Users
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
-        # Store Management
         "products.Product": "fas fa-box",
         "products.Category": "fas fa-tags",
         "products.Collection": "fas fa-layer-group",
         "products.Offer": "fas fa-percent",
         "products.Brand": "fas fa-copyright",
         "products.TrustBadge": "fas fa-shield-alt",
-        # Orders & Customers
         "orders.CustomerOrder": "fas fa-shopping-cart",
         "core.Client": "fas fa-users",
-        # Content Management
         "blog.Post": "fas fa-file-alt",
         "pages.Page": "fas fa-copy",
         "core.Testimonial": "fas fa-comment-dots",
-        # Website Design
         "sliders.HeroSlider": "fas fa-image",
         "sliders.PromoBanner": "fas fa-ad",
         "core.AnnouncementBar": "fas fa-bullhorn",
         "core.DesignSettings": "fas fa-paint-brush",
-        # Communication
         "contact.ContactFormSubmission": "fas fa-envelope",
         "contact.NewsletterSubscriber": "fas fa-paper-plane",
-        # Settings
         "core.SiteSettings": "fas fa-cog",
         "core.StoreLocation": "fas fa-map-marker-alt",
         "core.SocialPost": "fas fa-share-alt",
     },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "related_modal_active": True,
     "custom_css": "admin/css/admin_premium.css",
     "custom_js": "admin/js/admin_ux.js",
+    "show_ui_builder": False,
+    "changeform_format": "horizontal_tabs",
+    "show_recent_actions": True,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-dark",
+    "accent": "accent-primary",
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": False,
+    "navbar_fixed": False,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "default",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
 }
 
 # =============================================================================
@@ -427,27 +480,68 @@ LOGGING = {
             "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
             "style": "{",
         },
+        "simple": {
+            "format": "{levelname} {asctime} {module} {message}",
+            "style": "{",
+        },
     },
     "handlers": {
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": BASE_DIR / "logs" / "django.log",
+            "maxBytes": 10485760,
+            "backupCount": 5,
+            "formatter": "verbose",
+        },
+        "error_file": {
+            "level": "ERROR",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": BASE_DIR / "logs" / "django_errors.log",
+            "maxBytes": 10485760,
+            "backupCount": 5,
             "formatter": "verbose",
         },
     },
     "loggers": {
         "django": {
-            "handlers": ["console"],
+            "handlers": ["console", "file"],
             "level": "INFO",
             "propagate": True,
         },
         "django.request": {
+            "handlers": ["console", "error_file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.template": {
             "handlers": ["console"],
-            "level": "ERROR",
+            "level": "INFO",
+            "propagate": False,
+        },
+        "orders": {
+            "handlers": ["console", "file", "error_file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "products": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
             "propagate": False,
         },
     },
 }
+
+# Create logs directory if it doesn't exist
+logs_dir = BASE_DIR / "logs"
+if not logs_dir.exists():
+    logs_dir.mkdir(mode=0o755, exist_ok=True)
+
 
 
 # =============================================================================
@@ -455,11 +549,3 @@ LOGGING = {
 # =============================================================================
 SUPABASE_URL = env("SUPABASE_URL", default="")
 SUPABASE_KEY = env("SUPABASE_KEY", default="")
-
-# =============================================================================
-# AI SERVICES (NVIDIA NIM)
-# =============================================================================
-NVIDIA_KIMI_API_KEY = env("NVIDIA_KIMI_API_KEY", default=None)
-KIMI_MODEL = env("KIMI_MODEL", default="moonshotai/kimi-k2.6")
-
-

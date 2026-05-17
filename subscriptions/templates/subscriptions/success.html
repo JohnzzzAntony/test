@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta_title %}Subscription Successful | {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="py-24 flex items-center justify-center min-h-[70vh]">
+    <div class="max-w-md w-full px-6 text-center" data-aos="zoom-in">
+        <div class="w-24 h-24 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-8 shadow-xl shadow-green-100/50">
+            <i class="fas fa-check text-4xl text-green-600 animate-bounce"></i>
+        </div>
+        
+        <h1 class="text-3xl md:text-4xl font-heading font-black mb-4">Subscription Activated!</h1>
+        <p class="text-slate-600 mb-10 leading-relaxed">
+            Thank you for choosing {{ site_settings.site_name }}. Your subscription has been successfully activated and you now have full access to your premium features.
+        </p>
+
+        <div class="space-y-4">
+            <a href="/" class="w-full inline-flex items-center justify-center py-4 px-6 rounded-btn-custom bg-primary text-white font-bold hover:bg-secondary transition-all shadow-lg shadow-primary/20">
+                Go to Dashboard
+            </a>
+            <p class="text-sm text-slate-400">
+                A confirmation email has been sent to your registered address.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

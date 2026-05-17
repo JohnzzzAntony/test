@@ -1,47 +1,56 @@
 /* Premium Glass-Hero Header System */
 
 .glass-header-container {
-    background: #ffffff !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border-bottom: 1px solid #e2e8f0 !important;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.4s ease;
 }
 
 .scrolled .glass-header-container,
 body:not(.is-home) .glass-header-container {
-    background: #ffffff !important;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05) !important;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
 }
 
-.glass-header-container .premium-icon,
-.glass-header-container .nav-link,
-.glass-header-container .quick-nav-link,
-.glass-header-container .categories-trigger span,
-.glass-header-container .categories-trigger i,
-.logo-text-main {
-    color: #0f172a !important;
+.shadow-header {
+    text-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
-.header-logo {
-    filter: brightness(0) !important;
+.scrolled .glass-header-container .premium-icon,
+.scrolled .glass-header-container .nav-link,
+body:not(.is-home) .glass-header-container .premium-icon,
+body:not(.is-home) .glass-header-container .nav-link,
+.scrolled .logo-text-main,
+body:not(.is-home) .logo-text-main {
+    color: #0f172a;
+}
+
+.scrolled .header-logo,
+body:not(.is-home) .header-logo {
+    filter: brightness(0);
 }
 
 .is-home .glass-header-container:not(.scrolled) {
-    background: #ffffff !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: none;
 }
 
 /* Category Search Component */
 .category-search-bar {
     display: flex;
     align-items: center;
-    background: rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50px;
     overflow: visible; /* Important for dropdown */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .scrolled .category-search-bar,
@@ -66,8 +75,8 @@ body:not(.is-home) .category-search-bar {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #334155;
-    border-right: 1px solid rgba(0, 0, 0, 0.08);
+    color: white;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -181,7 +190,7 @@ body:not(.is-home) .categories-trigger {
     background: transparent;
     border: none;
     padding: 12px 24px;
-    color: #1e293b;
+    color: white;
     font-size: 14px;
     font-weight: 600;
 }
@@ -192,17 +201,12 @@ body:not(.is-home) .search-input {
 }
 
 .search-input::placeholder {
-    color: #94a3b8;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .scrolled .search-input::placeholder,
 body:not(.is-home) .search-input::placeholder {
     color: #64748b;
-}
-
-.premium-icon-box {
-    background: rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .scrolled .premium-icon-box,
@@ -238,12 +242,17 @@ body:not(.is-home) .premium-icon-text {
 }
 
 .quick-nav-link {
-    color: #475569;
+    color: rgba(255, 255, 255, 0.7);
     transition: all 0.2s;
 }
 
 .quick-nav-link:hover {
-    color: var(--primary);
+    color: white;
+}
+
+.scrolled .quick-nav-link,
+body:not(.is-home) .quick-nav-link {
+    color: #64748b;
 }
 
 .scrolled .quick-nav-link:hover,
@@ -259,8 +268,8 @@ body:not(.is-home) .quick-nav-link:hover {
 .quick-nav-link,
 .categories-trigger,
 .premium-icon-text-small {
-    color: #0f172a;
-    text-shadow: none;
+    color: white !important;
+    text-shadow: 0 1px 15px rgba(0,0,0,0.3);
 }
 
 /* Scrolled/Non-home explicit overrides - HIGHER SPECIFICITY */
@@ -278,7 +287,7 @@ body:not(.is-home) .quick-nav-link,
 body:not(.is-home) .categories-trigger,
 .scrolled .search-input,
 body:not(.is-home) .search-input {
-    color: #0f172a;
+    color: #0f172a !important;
 }
 
 .scrolled .premium-icon-text-small,
@@ -310,8 +319,8 @@ body:not(.is-home) .search-input::placeholder {
 
 /* Mobile Hamburger Color */
 #hamburger-icon {
-    color: #0f172a !important;
-    text-shadow: none;
+    color: white !important;
+    text-shadow: 0 1px 15px rgba(0,0,0,0.3);
 }
 
 .scrolled #hamburger-icon,

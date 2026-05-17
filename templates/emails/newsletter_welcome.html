@@ -1,0 +1,20 @@
+{% extends "emails/base_email.html" %}
+{% block subject %}You're subscribed to {{ site_name }}! 🎉{% endblock %}
+{% block content %}
+<h2>You're Subscribed! 🎉</h2>
+<p>Thank you for subscribing to the <strong>{{ site_name }}</strong> newsletter.</p>
+<p>You'll be the first to know about:</p>
+<ul style="color:#444; font-size:14px; line-height:2;">
+  <li>New product launches</li>
+  <li>Exclusive offers and promotions</li>
+  <li>Company news and updates</li>
+</ul>
+
+<div style="text-align:center; margin-top:30px;">
+  <a href="{{ site_url }}/products/" class="btn">Shop Now →</a>
+</div>
+
+<p style="color:#bbb; font-size:12px; text-align:center; margin-top:20px;">
+  You can unsubscribe at any time by contacting us at <a href="mailto:{{ support_email }}" style="color:#aaa;">{{ support_email }}</a>
+</p>
+{% endblock %}

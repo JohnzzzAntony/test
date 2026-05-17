@@ -18,7 +18,9 @@ def home(request):
     homepage_sections_raw = Category.objects.filter(show_on_homepage=True, is_active=True)
     
     # Categories for the circular slider (Top)
-    categories_circles = Category.objects.filter(parent__isnull=True, is_active=True).order_by('homepage_order')
+    categories_circles = homepage_sections_raw
+    if not categories_circles.exists():
+        categories_circles = Category.objects.filter(parent__isnull=True, is_active=True)[:10]
     
     # ─── Homepage Interleaving Logic ──────────────────────────────────────────
     # Interleaving Pattern: Category -> Banner -> Category -> Banner
@@ -38,7 +40,7 @@ def home(request):
             category_id__in=all_cat_ids,
             is_active=True,
             quantity__gt=0
-        ).select_related('category', 'brand').prefetch_related('offers', 'images').distinct().order_by('-id')[:4]
+        ).select_related('category', 'brand').prefetch_related('offers', 'images').distinct().order_by('-id')[:8]
         
         # Attach aggregated products to the category object for template access
         cat.aggregated_products = cat_products

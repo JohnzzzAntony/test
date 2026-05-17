@@ -30,4 +30,3 @@ pytest-django>=4.8.0
 # Security & Rate Limiting
 django-csp>=3.8
 django-ratelimit>=4.1.0
-openai>=1.50.0

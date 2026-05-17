@@ -130,21 +130,15 @@ class DesignSettingsAdmin(admin.ModelAdmin):
                 'hp_hero_subtitle',
                 'hp_collections_title', 
                 'hp_collections_subtitle',
-                'hp_collections_badge',
                 'hp_categories_title',
-                'hp_categories_subtitle',
-                'hp_categories_badge',
                 'hp_latest_products_title', 
                 'hp_latest_products_subtitle',
-                'hp_latest_products_badge',
                 'hp_partners_title', 
                 'hp_services_title',
                 'hp_gallery_title',
                 'hp_testimonials_title',
                 'hp_clients_title',
                 'hp_social_title',
-                'hp_counters_title',
-                'hp_counters_subtitle',
             ),
             'classes': ('collapse',),
             'description': 'Edit section headings and subheadings for the landing page.'
@@ -174,7 +168,6 @@ class DesignSettingsAdmin(admin.ModelAdmin):
                 'show_hp_testimonials', 
                 'show_hp_clients', 
                 'show_hp_social',
-                'show_hp_counters',
                 'pd_show_related', 
                 'pd_related_title', 
                 'pd_related_count',
@@ -201,7 +194,6 @@ class DesignSettingsAdmin(admin.ModelAdmin):
         "show_hp_testimonials": admin.HORIZONTAL,
         "show_hp_clients": admin.HORIZONTAL,
         "show_hp_social": admin.HORIZONTAL,
-        "show_hp_counters": admin.HORIZONTAL,
     }
 
     def save_model(self, request, obj, form, change):

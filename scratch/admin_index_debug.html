@@ -1,0 +1,1353 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en-us" >
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    
+    <meta name="robots" content="none, noarchive">
+
+    <title>Site administration | JKR Administration</title>
+
+    
+    <link rel="stylesheet" href="/static/vendor/fontawesome-free/css/all.min.css">
+
+    
+    <link rel="stylesheet" href="/static/vendor/adminlte/css/adminlte.min.css" id="adminlte-css">
+
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="/static/jazzmin/css/main.css">
+
+    
+    
+    <link rel="stylesheet" href="/static/admin/css/admin_premium.css">
+    
+
+    
+    <link rel="shortcut icon" href="/static/vendor/adminlte/img/AdminLTELogo.png" type="image/png">
+    <link rel="icon" href="/static/vendor/adminlte/img/AdminLTELogo.png" sizes="32x32" type="image/png">
+
+    
+    
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    
+
+     
+     
+</head>
+<body class="hold-transition sidebar-mini   dashboard accent-primary    layout-fixed theme-default " data-admin-utc-offset="14400">
+
+<div class="wrapper">
+
+    
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light" id="jazzy-navbar">
+            <ul class="navbar-nav">
+
+                
+                    <li class="nav-item">
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    </li>
+                
+
+                
+                
+                    <li class="nav-item d-none d-sm-inline-block">
+                        
+                            <a href="/admin/" class="nav-link" >Home</a>
+                        
+                    </li>
+                
+                    <li class="nav-item d-none d-sm-inline-block">
+                        
+                            <a href="/" class="nav-link" target="_blank">View Site</a>
+                        
+                    </li>
+                
+            </ul>
+
+            
+                
+                    <form action="/admin/products/product/" method="GET" class="form-inline ml-3">
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-navbar" name="q" type="search" placeholder="Search Products..." aria-label="Search Products...">
+                            <div class="input-group-append">
+                                <button class="btn btn-navbar" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                
+            
+
+            <ul class="navbar-nav ml-auto">
+
+                
+                
+
+                
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link btn" data-toggle="dropdown" href="#" title="debug_admin">
+                        <i class="far fa-user" aria-hidden="true"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left" id="jazzy-usermenu">
+                        <span class="dropdown-header">Account</span>
+                        <div class="dropdown-divider"></div>
+                        <a href="/admin/password_change/" class="dropdown-item">
+                            <i class="fas fa-key mr-2"></i> Change password
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/admin/logout/" class="dropdown-item">
+                            <i class="fas fa-users mr-2"></i> Log out
+                        </a>
+                        
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                            <a href="/admin/auth/user/24/change/" class="dropdown-item dropdown-footer">See Profile</a>
+                        
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        
+        
+            
+
+            <aside class="main-sidebar elevation-4 sidebar-dark-primary" id="jazzy-sidebar">
+                <a href="/admin/" class="brand-link navbar-dark" id="jazzy-logo">
+                    <img src="/static/vendor/adminlte/img/AdminLTELogo.png" alt="JKR Admin Logo" class="img-circle brand-image elevation-3" style="opacity: .8">
+                    <span class="brand-text font-weight-light">JKR International</span>
+                </a>
+
+                <div class="sidebar">
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                        <div class="image">
+                            
+                                <i class="fas fa-inverse user-profile fa-user-circle"></i>
+                            
+                        </div>
+                        <div class="info">
+                            
+                                <a href="/admin/auth/user/24/change/" class="d-block">debug_admin</a>
+                            
+                        </div>
+                    </div>
+
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column " data-widget="treeview" role="menu" data-collapsible="false">
+
+                            <li class="nav-item">
+                                <a href="/admin/" class="nav-link">
+                                    <i class="nav-icon fas fa-th-large"></i>
+                                    <p>Dashboard</p>
+                                </a>
+                            </li>
+
+                            
+                                
+                                    <li class="nav-header">🛍️ Store Management</li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/products/brand/" class="nav-link">
+                                                <i class="nav-icon fas fa-copyright"></i> <p>Brands</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/products/category/" class="nav-link">
+                                                <i class="nav-icon fas fa-tags"></i> <p>Categories</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/products/collection/" class="nav-link">
+                                                <i class="nav-icon fas fa-layer-group"></i> <p>Collections</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/products/offer/" class="nav-link">
+                                                <i class="nav-icon fas fa-percent"></i> <p>Offers</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/products/product/" class="nav-link">
+                                                <i class="nav-icon fas fa-box"></i> <p>Products</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/products/trustbadge/" class="nav-link">
+                                                <i class="nav-icon fas fa-shield-alt"></i> <p>Trust Badges</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/products/wishlist/" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i> <p>Wishlist Items</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                
+                                    <li class="nav-header">🎨 Website Design</li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/sliders/heroslider/" class="nav-link">
+                                                <i class="nav-icon fas fa-image"></i> <p>Banners</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/sliders/promobanner/" class="nav-link">
+                                                <i class="nav-icon fas fa-ad"></i> <p>Promo Sections</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                
+                                    <li class="nav-header">📦 Orders &amp; Customers</li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/orders/customerorder/" class="nav-link">
+                                                <i class="nav-icon fas fa-shopping-cart"></i> <p>Customer Orders</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                
+                                    <li class="nav-header">⚙️ Settings</li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/core/client/" class="nav-link">
+                                                <i class="nav-icon fas fa-users"></i> <p>Clients</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/core/socialpost/" class="nav-link">
+                                                <i class="nav-icon fas fa-share-alt"></i> <p>Social posts</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/core/storelocation/" class="nav-link">
+                                                <i class="nav-icon fas fa-map-marker-alt"></i> <p>Store locations</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/core/testimonial/" class="nav-link">
+                                                <i class="nav-icon fas fa-comment-dots"></i> <p>Testimonials</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/core/designsettings/" class="nav-link">
+                                                <i class="nav-icon fas fa-paint-brush"></i> <p>Theme Settings</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/core/announcementbar/" class="nav-link">
+                                                <i class="nav-icon fas fa-bullhorn"></i> <p>Top Bar Messages</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/core/sitesettings/" class="nav-link">
+                                                <i class="nav-icon fas fa-cog"></i> <p>Website Settings</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                
+                                    <li class="nav-header">📝 Content Management</li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/blog/post/" class="nav-link">
+                                                <i class="nav-icon fas fa-file-alt"></i> <p>Blog Posts</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                
+                                    <li class="nav-header">Pages</li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/pages/aboutus/" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i> <p>About Us Settings</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/pages/contactpage/" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i> <p>Contact Page Settings</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/pages/counter/" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i> <p>Counters</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/pages/galleryitem/" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i> <p>Gallery items</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/pages/missionvision/" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i> <p>Mission visions</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/pages/pagehero/" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i> <p>Page Hero Settings</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/pages/partner/" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i> <p>Partners</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/pages/service/" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i> <p>Services</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/pages/whyuscard/" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i> <p>Why us cards</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                
+                                    <li class="nav-header">📩 Communication</li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/contact/contactformsubmission/" class="nav-link">
+                                                <i class="nav-icon fas fa-envelope"></i> <p>Contact form submissions</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/contact/newslettersubscriber/" class="nav-link">
+                                                <i class="nav-icon fas fa-paper-plane"></i> <p>Newsletter subscribers</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                
+                                    <li class="nav-header">Authentication and Authorization</li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/auth/group/" class="nav-link">
+                                                <i class="nav-icon fas fa-users"></i> <p>Groups</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/auth/user/" class="nav-link">
+                                                <i class="nav-icon fas fa-user"></i> <p>Users</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                
+                                    <li class="nav-header">Subscriptions</li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/subscriptions/subscriptionplan/" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i> <p>Subscription plans</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                        <li class="nav-item">
+                                            
+                                            <a href="/admin/subscriptions/usersubscription/" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i> <p>User subscriptions</p>
+                                            </a>
+                                        
+                                        </li>
+                                    
+                                
+                            
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+        
+        
+    
+
+    <div class="content-wrapper" >
+        
+            
+            <div class="content border-bottom mb-2">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12 col-md-auto d-flex flex-grow-1 align-items-center">
+                            <h1 class="h4 m-0 pr-3 mr-3 border-right"> Dashboard </h1>
+                            
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/">Home</a></li>
+        <li class="breadcrumb-item">Dashboard</li>
+    </ol>
+
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="content">
+                <div class="container-fluid">
+                    <section id="content" class="content">
+                        
+                            
+                        
+                        <div class="row">
+                            
+    
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>5</h3>
+                        <p>Total Orders</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>0.00 <small style="font-size: 15px;">AED</small></h3>
+                        <p>Total Revenue</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>395</h3>
+                        <p>Total Products</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>0</h3>
+                        <p>New Messages</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+    
+    
+    
+        
+    
+
+    <div class="col-lg-9 col-12">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="m-0">🛍️ Store Management</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tbody>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/products/brand/">Brands</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/products/brand/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/products/brand/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/products/category/">Categories</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/products/category/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/products/category/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/products/collection/">Collections</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/products/collection/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/products/collection/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/products/offer/">Offers</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/products/offer/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/products/offer/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/products/product/">Products</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/products/product/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/products/product/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/products/trustbadge/">Trust Badges</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/products/trustbadge/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/products/trustbadge/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/products/wishlist/">Wishlist Items</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/products/wishlist/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/products/wishlist/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+
+                
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="m-0">🎨 Website Design</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tbody>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/sliders/heroslider/">Banners</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/sliders/heroslider/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/sliders/heroslider/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/sliders/promobanner/">Promo Sections</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/sliders/promobanner/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/sliders/promobanner/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+
+                
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="m-0">📦 Orders &amp; Customers</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tbody>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/orders/customerorder/">Customer Orders</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/orders/customerorder/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/orders/customerorder/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+
+                
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="m-0">⚙️ Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tbody>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/core/client/">Clients</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/core/client/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/core/client/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/core/socialpost/">Social posts</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/core/socialpost/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/core/socialpost/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/core/storelocation/">Store locations</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/core/storelocation/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/core/storelocation/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/core/testimonial/">Testimonials</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/core/testimonial/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/core/testimonial/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/core/designsettings/">Theme Settings</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/core/designsettings/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/core/designsettings/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/core/announcementbar/">Top Bar Messages</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/core/announcementbar/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/core/announcementbar/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/core/sitesettings/">Website Settings</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/core/sitesettings/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/core/sitesettings/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                    
+
+                
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="m-0">📝 Content Management</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tbody>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/blog/post/">Blog Posts</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/blog/post/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/blog/post/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+
+                
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="m-0">Pages</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tbody>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/pages/aboutus/">About Us Settings</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/pages/aboutus/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/pages/contactpage/">Contact Page Settings</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/pages/contactpage/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/pages/contactpage/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/pages/counter/">Counters</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/pages/counter/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/pages/counter/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/pages/galleryitem/">Gallery items</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/pages/galleryitem/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/pages/galleryitem/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/pages/missionvision/">Mission visions</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/pages/missionvision/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/pages/missionvision/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/pages/pagehero/">Page Hero Settings</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/pages/pagehero/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/pages/pagehero/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/pages/partner/">Partners</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/pages/partner/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/pages/partner/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/pages/service/">Services</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/pages/service/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/pages/service/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/pages/whyuscard/">Why us cards</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/pages/whyuscard/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/pages/whyuscard/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+
+                
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="m-0">📩 Communication</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tbody>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/contact/contactformsubmission/">Contact form submissions</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/contact/contactformsubmission/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/contact/contactformsubmission/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/contact/newslettersubscriber/">Newsletter subscribers</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/contact/newslettersubscriber/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/contact/newslettersubscriber/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+
+                
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="m-0">Authentication and Authorization</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tbody>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/auth/group/">Groups</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/auth/group/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/auth/group/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/auth/user/">Users</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/auth/user/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/auth/user/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+
+                
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="m-0">Subscriptions</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tbody>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/subscriptions/subscriptionplan/">Subscription plans</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/subscriptions/subscriptionplan/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/subscriptions/subscriptionplan/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/subscriptions/usersubscription/">User subscriptions</a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group float-right">
+                                                
+                                                    <a href="/admin/subscriptions/usersubscription/add/" class="btn btn-xs btn-success addlink">Add</a>
+                                                
+                                                
+                                                    
+                                                        <a href="/admin/subscriptions/usersubscription/" class="btn btn-xs btn-info changelink">Change</a>
+                                                    
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+
+                
+                </div>
+        </div>
+
+    </div>
+    <div class="col-lg-3 col-12">
+        <div id="content-related">
+            <div class="module" id="recent-actions-module">
+                <h4 class="mb-3">Recent actions</h4>
+                
+                
+                
+                    <p>None available</p>
+                
+            </div>
+        </div>
+    </div>
+
+
+
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+
+        
+    </div>
+
+
+    
+        <footer class="main-footer ">
+            <div class="float-right d-none d-sm-inline">
+                <b>Jazzmin version</b> 2.6.0
+            </div>
+            
+                <strong>Copyright &copy; 2026 JKR International.</strong> All rights reserved.
+            
+        </footer>
+        
+    
+
+
+</div>
+
+
+
+
+<script src="/static/admin/js/vendor/jquery/jquery.js"></script>
+
+<script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<script src="/static/vendor/adminlte/js/adminlte.min.js"></script>
+
+<script src="/static/jazzmin/js/main.js"></script>
+
+
+<script src="/static/admin/js/admin_ux.js"></script>
+
+
+
+
+
+
+</body>
+</html>

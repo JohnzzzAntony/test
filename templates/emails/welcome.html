@@ -1,0 +1,31 @@
+{% extends "emails/base_email.html" %}
+{% block subject %}Welcome to {{ site_name }}! 🎉{% endblock %}
+{% block content %}
+<h2>Welcome to {{ site_name }}! 🎉</h2>
+<p>Dear <strong>{{ name }}</strong>,</p>
+<p>We're thrilled to have you on board. Your account is now active and ready to use.</p>
+
+<hr class="divider">
+<h3 style="color:#0a0a0a; font-size:16px; margin-bottom:12px;">Your Account</h3>
+<table class="info-table">
+  <tr><td>Username</td><td>{{ username }}</td></tr>
+  <tr><td>Email</td><td>{{ email }}</td></tr>
+</table>
+
+<hr class="divider">
+<h3 style="color:#0a0a0a; font-size:16px; margin-bottom:12px;">Get Started</h3>
+<p>Here are a few things you can do right now:</p>
+<ul style="color:#444; font-size:14px; line-height:2;">
+  <li><a href="{{ site_url }}/products/" style="color:#0a0a0a;">Browse our products</a></li>
+  <li><a href="{{ site_url }}/accounts/profile/" style="color:#0a0a0a;">Complete your profile</a></li>
+  <li><a href="{{ site_url }}/accounts/orders/" style="color:#0a0a0a;">View your orders</a></li>
+</ul>
+
+<div style="text-align:center; margin-top:30px;">
+  <a href="{{ site_url }}/products/" class="btn">Start Shopping →</a>
+</div>
+
+<p style="color:#bbb; font-size:12px; text-align:center; margin-top:20px;">
+  If you did not create this account, please ignore this email.
+</p>
+{% endblock %}

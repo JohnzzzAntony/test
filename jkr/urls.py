@@ -14,6 +14,7 @@ urlpatterns = [
     path('contact/', include('contact.urls')),
     path('enquiry-cart/', include('orders.urls')),
     path('accounts/', include('accounts.urls')),
+    path('subscriptions/', include('subscriptions.urls')),
     path('api/', include('jkr.api_urls')),
 ]
 

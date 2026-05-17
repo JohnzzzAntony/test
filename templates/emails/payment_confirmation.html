@@ -1,0 +1,35 @@
+{% extends "emails/base_email.html" %}
+{% block subject %}Payment Confirmed ✔ – #{{ order_id }}{% endblock %}
+{% block content %}
+<h2>Payment Confirmed ✔</h2>
+<p>Dear <strong>{{ customer_name }}</strong>,</p>
+<p>Great news! Your payment has been confirmed and your order is now being processed by our team.</p>
+
+<hr class="divider">
+<h3 style="color:#0a0a0a; font-size:16px; margin-bottom:12px;">Payment Details</h3>
+<table class="info-table">
+  <tr><td>Order Number</td><td><strong>#{{ order_id }}</strong></td></tr>
+  <tr><td>Total Amount</td><td><strong>{{ total_amount }} {{ currency }}</strong></td></tr>
+  <tr><td>Payment Method</td><td>{{ payment_method }}</td></tr>
+  <tr><td>Payment Status</td><td><span class="badge badge-success">Paid ✔</span></td></tr>
+  {% if stripe_payment_id %}<tr><td>Transaction ID</td><td style="font-size:12px; color:#888;">{{ stripe_payment_id }}</td></tr>{% endif %}
+</table>
+
+<hr class="divider">
+<h3 style="color:#0a0a0a; font-size:16px; margin-bottom:12px;">Shipping Address</h3>
+<p style="margin:0; color:#444; font-size:14px; line-height:1.8;">
+  {{ first_name }} {{ last_name }}<br>
+  {{ street }}{% if street2 %}, {{ street2 }}{% endif %}<br>
+  {{ city }}, {{ emirates }}<br>
+  {{ country }}<br>
+  Phone: {{ phone }}
+</p>
+
+<div style="text-align:center; margin-top:30px;">
+  <a href="{{ tracking_url }}" class="btn">Track Your Order →</a>
+</div>
+
+<p style="color:#888; font-size:13px; text-align:center; margin-top:20px;">
+  If you have any questions about your order, please contact us at <a href="mailto:{{ support_email }}" style="color:#555;">{{ support_email }}</a>
+</p>
+{% endblock %}

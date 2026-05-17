@@ -1,9 +1,10 @@
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 from django.utils.text import slugify
 from django.utils import timezone
 from ckeditor.fields import RichTextField
 from decimal import Decimal, InvalidOperation
+import uuid
 try:
     from cloudinary_storage.storage import RawMediaCloudinaryStorage
     _raw_storage = RawMediaCloudinaryStorage()
@@ -50,10 +51,13 @@ class Category(models.Model):
     
     @property
     def get_image_url(self):
-        try:
-            if self.image: return self.image.url
-            if self.image_url: return self.image_url
-        except Exception: pass
+        if self.image:
+            try:
+                return self.image.url
+            except (ValueError, AttributeError):
+                pass
+        if self.image_url:
+            return self.image_url
         return "https://via.placeholder.com/512"
 
     def get_all_children(self, include_self=True):
@@ -168,10 +172,13 @@ class Brand(models.Model):
 
     @property
     def get_image_url(self):
-        try:
-            if self.logo: return self.logo.url
-            if self.logo_url: return self.logo_url
-        except Exception: pass
+        if self.logo:
+            try:
+                return self.logo.url
+            except (ValueError, AttributeError):
+                pass
+        if self.logo_url:
+            return self.logo_url
         return "https://via.placeholder.com/300x120?text=Brand"
 
     def __str__(self): return self.name
@@ -204,75 +211,81 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, null=True, blank=True)
     image = models.ImageField(
-        upload_to='products/', 
-        null=True, 
+        upload_to='products/',
+        null=True,
         blank=True,
         help_text="Primary Product Image."
     )
     image_url = models.URLField(blank=True, null=True, help_text="Alternative: Direct link to an externally hosted image.")
 
-    # Inventory & Details
     sku_id = models.CharField(max_length=50, unique=True, blank=True, null=True, verbose_name="SKU ID")
     quantity = models.IntegerField(default=0, verbose_name="In-Stock Quantity", db_index=True)
     unit = models.CharField(max_length=20, choices=[('pcs', 'Pieces'), ('box', 'Box'), ('set', 'Set')], default='pcs')
-    
+
     regular_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     sale_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    
-    shipping_status = models.CharField(max_length=50, choices=[
-        ('available', 'In Stock'), ('out_of_stock', 'Out of Stock'), ('pre_order', 'Pre-Order')
-    ], default='available', db_index=True)
+
+    shipping_status = models.CharField(
+        max_length=50,
+        choices=[('available', 'In Stock'), ('out_of_stock', 'Out of Stock'), ('pre_order', 'Pre-Order')],
+        default='available',
+        db_index=True
+    )
     free_shipping = models.BooleanField(default=False, verbose_name="Free Shipping", choices=((True, 'Enabled'), (False, 'Disabled')))
     additional_shipping_charge = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     delivery_time = models.CharField(max_length=100, blank=True, null=True)
     tax_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=5.00, verbose_name="VAT (%)")
 
-    # Dimensions
     weight = models.FloatField(null=True, blank=True)
     length = models.FloatField(null=True, blank=True)
     width = models.FloatField(null=True, blank=True)
     height = models.FloatField(null=True, blank=True)
 
-    # Simplified Content
     features = models.TextField(help_text="Key features (one per line)", blank=True, null=True)
     avg_rating = models.DecimalField(max_digits=3, decimal_places=1, default=4.5, verbose_name="Average Rating")
     review_count = models.PositiveIntegerField(default=0, verbose_name="Review Count")
-    
-    # UI Enhancements
+
     badge = models.CharField(max_length=20, blank=True, null=True, help_text="Small badge text (e.g. NEW, TRENDING)")
     badge_color = models.CharField(max_length=20, default="blue", choices=[
         ("blue", "Blue"), ("red", "Red"), ("green", "Green"), ("dark", "Dark"), ("gold", "Gold")
     ])
     is_featured = models.BooleanField(default=False, verbose_name="Featured Product", db_index=True)
-    
+
     overview = RichTextField(blank=True, null=True)
     technical_info = RichTextField(blank=True, null=True, verbose_name="Product Characteristics & Specifications")
     shipping_returns = RichTextField(blank=True, null=True, verbose_name="Shipping & Returns Policy")
 
-    # Trust Badges (Dynamic System)
     trust_badges = models.ManyToManyField(TrustBadge, blank=True, related_name="products")
-    
+
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    show_on_homepage = models.BooleanField(default=False, verbose_name="Homepage Display", choices=((True, 'Enabled'), (False, 'Disabled')), db_index=True)
+    is_active = models.BooleanField(default=True, verbose_name="Status", choices=((True, 'Active'), (False, 'Remove')), db_index=True)
+
+    meta_title = models.CharField(max_length=255, blank=True, null=True, verbose_name="Meta Title")
+    meta_description = models.TextField(blank=True, null=True, verbose_name="Meta Description")
+    meta_keywords = models.TextField(blank=True, null=True, verbose_name="Meta Keywords")
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['is_active', 'quantity', 'shipping_status'], name='product_active_qty_status'),
+            models.Index(fields=['is_active', 'show_on_homepage'], name='product_active_homepage'),
+            models.Index(fields=['category', 'is_active', 'quantity'], name='product_cat_active_qty'),
+        ]
+
     @property
     def features_list(self):
         if not self.features: return []
         return [f.strip() for f in self.features.split('\n') if f.strip()]
-    
-    created_at = models.DateTimeField(auto_now_add=True)
-    show_on_homepage = models.BooleanField(default=False, verbose_name="Homepage Display", choices=((True, 'Enabled'), (False, 'Disabled')))
-    is_active = models.BooleanField(default=True, verbose_name="Status", choices=((True, 'Active'), (False, 'Remove')))
 
-    # SEO Fields (Multilingual)
-    # SEO Fields
-    meta_title = models.CharField(max_length=255, blank=True, null=True, verbose_name="Meta Title")
-    meta_description = models.TextField(blank=True, null=True, verbose_name="Meta Description")
-    meta_keywords = models.TextField(blank=True, null=True, verbose_name="Meta Keywords")
-    
     @property
     def get_image_url(self):
-        try:
-            if self.image: return self.image.url
-            if self.image_url: return self.image_url
-        except Exception: pass
+        if self.image:
+            try:
+                return self.image.url
+            except (ValueError, AttributeError):
+                pass
+        if self.image_url:
+            return self.image_url
         return "https://via.placeholder.com/600x400"
 
     def get_best_price_info(self, prefetched_offers=None):
@@ -406,22 +419,24 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-            if not self.slug: # Fallback for non-latin names
+            if not self.slug:
                 self.slug = "product-" + timezone.now().strftime("%Y%m%d%H%M%S")
-        
+
         if not self.sku_id:
-            import random, string, time
             prefix = slugify(self.name)[:10].upper() or "PRO"
-            # Loop to ensure SKU uniqueness
-            while True:
-                timestamp = str(int(time.time()))[-4:]
-                rand_str = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-                new_sku = f"{prefix}-{timestamp}-{rand_str}"
-                if not Product.objects.filter(sku_id=new_sku).exists():
-                    self.sku_id = new_sku
-                    break
-        
-        super().save(*args, **kwargs)
+            unique_id = uuid.uuid4().hex[:8].upper()
+            self.sku_id = f"{prefix}-{unique_id}"
+
+        try:
+            with transaction.atomic():
+                if self.pk is None:
+                    existing = Product.objects.filter(sku_id=self.sku_id).select_for_update(now=True).exists()
+                    if existing:
+                        unique_id = uuid.uuid4().hex[:8].upper()
+                        self.sku_id = f"{prefix}-{unique_id}"
+                super().save(*args, **kwargs)
+        except transaction.TransactionManagementError:
+            super().save(*args, **kwargs)
 
     def __str__(self): return self.name
 
@@ -436,10 +451,13 @@ class ProductImage(models.Model):
         return f"Image for {self.product.name}" if self.product else "Unassigned Product Image"
     @property
     def get_image_url(self):
-        try:
-            if self.image: return self.image.url
-            if self.image_url: return self.image_url
-        except Exception: pass
+        if self.image:
+            try:
+                return self.image.url
+            except (ValueError, AttributeError):
+                pass
+        if self.image_url:
+            return self.image_url
         return "https://via.placeholder.com/300"
 
 class Offer(models.Model):
@@ -483,10 +501,13 @@ class Collection(models.Model):
 
     @property
     def get_image_url(self):
-        try:
-            if self.banner: return self.banner.url
-            if self.banner_url: return self.banner_url
-        except Exception: pass
+        if self.banner:
+            try:
+                return self.banner.url
+            except (ValueError, AttributeError):
+                pass
+        if self.banner_url:
+            return self.banner_url
         return "https://via.placeholder.com/1200x400?text=Collection"
 
     class Meta: ordering = ['display_order']
