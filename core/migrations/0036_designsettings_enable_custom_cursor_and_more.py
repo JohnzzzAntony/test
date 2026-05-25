@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0035_designsettings_hp_categories_badge_and_more'),
+        ('core', '0037_flower_district_theme_redesign'),
     ]
 
     operations = [
