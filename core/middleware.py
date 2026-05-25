@@ -2,6 +2,23 @@ import re
 from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
 
+
+class NoCacheMiddleware(MiddlewareMixin):
+    """
+    Middleware that prevents browser caching of HTML pages.
+    Ensures admin changes appear immediately without stale cache.
+    """
+    def process_response(self, request, response):
+        # Only apply to HTML responses from the main site (not admin)
+        if 'text/html' in response.get('Content-Type', '') and not request.path.startswith('/admin/'):
+            # Prevent browser caching
+            response['Cache-Control'] = 'no-cache, no-store, must-revalidate, max-age=0'
+            response['Pragma'] = 'no-cache'
+            response['Expires'] = '0'
+            response['Vary'] = 'Cookie, Authorization'
+        return response
+
+
 class StripHTMLCommentsMiddleware(MiddlewareMixin):
     """
     Middleware that strips HTML comments from outgoing responses to prevent

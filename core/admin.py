@@ -82,58 +82,91 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
 @admin.register(DesignSettings)
 class DesignSettingsAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'enable_glassmorphism', 'enable_ambient_glow', 'enable_animations')
+    list_display = ('__str__', 'primary_color', 'enable_animations', 'updated_at')
     fieldsets = (
-        ('Branding & Color Theme', {
+        ('Flower District Color Palette (Deep Blue Theme)', {
             'fields': (
-                'primary_color', 
-                'secondary_color', 
-                'accent_glow_color',
-                'text_primary_color', 
-                'text_secondary_color', 
+                'primary_color',
+                'secondary_color',
+                'accent_color',
+                'accent_hover_color',
+                'text_primary_color',
+                'text_secondary_color',
+                'text_accent_color',
                 'text_white_color',
-                'surface_bg_color', 
-                'card_bg_color', 
+                'surface_bg_color',
+                'card_bg_color',
                 'border_color',
-                'header_bg_color', 
+                'border_hover_color',
+                'header_bg_color',
                 'header_text_color',
-                'footer_bg_color', 
+                'header_border_color',
+                'footer_bg_color',
                 'footer_text_color',
+                'footer_heading_color',
             ),
-            'description': 'Master color palette for the entire storefront. Supports Hex codes (e.g., #114084).'
+            'description': 'Core colors for the new Flower District aesthetic (clean white + deep blue #114084). All changes are live immediately.'
+        }),
+        ('Product & Category Colors', {
+            'fields': (
+                'category_bg_color',
+                'price_color',
+                'sale_price_color',
+                'rating_star_color',
+            ),
+            'classes': ('collapse',),
+        }),
+        ('Button System', {
+            'fields': (
+                'button_primary_bg',
+                'button_primary_text',
+                'button_primary_hover_bg',
+                'button_secondary_bg',
+                'button_secondary_text',
+                'button_secondary_border',
+                'button_secondary_hover_bg',
+                'button_secondary_hover_text',
+            ),
+            'classes': ('collapse',),
+            'description': 'Full control over primary and secondary button styling.'
         }),
         ('Typography & Shapes', {
             'fields': (
-                'font_main', 
-                'font_secondary',
-                'container_radius', 
+                'font_main',
+                'font_heading',
+                'font_accent',
+                'container_radius',
                 'card_radius',
-                'button_radius', 
+                'button_radius',
                 'image_radius',
+                'input_radius',
             ),
-            'description': 'Select site-wide fonts and control the "softness" of the UI shapes.'
+            'description': 'Fonts and border radius controls.'
         }),
-        ('Premium Effects', {
+        ('Visual Effects & Spacing', {
             'fields': (
-                'enable_glassmorphism', 
-                'enable_neumorphism', 
-                'enable_ambient_glow', 
-                'enable_animations', 
+                'enable_shadows',
+                'enable_hover_effects',
+                'enable_animations',
                 'global_animation_type',
-                'counter_animation_style', 
-                'counter_animation_speed',
+                'animation_duration',
+                'spacing_unit',
+                'section_padding',
+                'container_padding',
             ),
+            'classes': ('collapse',),
         }),
-        ('Homepage Titles & Content', {
+        ('Homepage Titles & Best Sellers', {
             'fields': (
-                'hp_hero_title', 
+                'hp_hero_title',
                 'hp_hero_subtitle',
-                'hp_collections_title', 
+                'hp_collections_title',
                 'hp_collections_subtitle',
                 'hp_categories_title',
-                'hp_latest_products_title', 
+                'hp_latest_products_title',
                 'hp_latest_products_subtitle',
-                'hp_partners_title', 
+                'hp_bestsellers_title',
+                'hp_partners_title',
                 'hp_services_title',
                 'hp_gallery_title',
                 'hp_testimonials_title',
@@ -141,48 +174,67 @@ class DesignSettingsAdmin(admin.ModelAdmin):
                 'hp_social_title',
             ),
             'classes': ('collapse',),
-            'description': 'Edit section headings and subheadings for the landing page.'
+        }),
+        ('Trust Badges (Homepage)', {
+            'fields': (
+                'show_trust_badges',
+                'trust_badge_1_title',
+                'trust_badge_1_text',
+                'trust_badge_2_title',
+                'trust_badge_2_text',
+                'trust_badge_3_title',
+                'trust_badge_3_text',
+            ),
+            'classes': ('collapse',),
         }),
         ('App-Wide Page Titles', {
             'fields': (
-                'cart_page_title', 
+                'cart_page_title',
                 'wishlist_page_title',
-                'search_page_title', 
+                'search_page_title',
                 'checkout_page_title',
-                'profile_page_title', 
+                'profile_page_title',
                 'orders_page_title',
                 'contact_page_title',
             ),
             'classes': ('collapse',),
-            'description': 'Global control for all internal page headings.'
         }),
         ('Visibility & Display Controls', {
             'fields': (
-                'show_header_search', 
-                'show_header_wishlist', 
-                'show_header_account', 
+                'show_header_search',
+                'show_header_wishlist',
+                'show_header_account',
                 'show_header_cart',
-                'show_hp_categories', 
-                'show_hp_latest_products', 
+                'show_hp_categories',
+                'show_hp_latest_products',
+                'show_hp_bestsellers',
                 'show_hp_brands',
-                'show_hp_testimonials', 
-                'show_hp_clients', 
+                'show_hp_testimonials',
+                'show_hp_clients',
                 'show_hp_social',
-                'pd_show_related', 
-                'pd_related_title', 
+                'pd_show_related',
+                'pd_related_title',
                 'pd_related_count',
             ),
-            'description': 'Enable or disable major features and sections site-wide.'
+            'description': 'Toggle sections and features site-wide.'
+        }),
+        ('Counter Animations', {
+            'fields': (
+                'counter_animation_style',
+                'counter_animation_speed',
+            ),
+            'classes': ('collapse',),
         }),
     )
     radio_fields = {
-        "enable_glassmorphism": admin.HORIZONTAL,
-        "enable_neumorphism": admin.HORIZONTAL,
-        "enable_ambient_glow": admin.HORIZONTAL,
+        "enable_shadows": admin.HORIZONTAL,
+        "enable_hover_effects": admin.HORIZONTAL,
         "enable_animations": admin.HORIZONTAL,
         "pd_show_related": admin.HORIZONTAL,
+        "show_trust_badges": admin.HORIZONTAL,
+        "show_hp_bestsellers": admin.HORIZONTAL,
         "font_main": admin.HORIZONTAL,
-        "font_secondary": admin.HORIZONTAL,
+        "font_heading": admin.HORIZONTAL,
         # Visibility toggles
         "show_header_search": admin.HORIZONTAL,
         "show_header_wishlist": admin.HORIZONTAL,

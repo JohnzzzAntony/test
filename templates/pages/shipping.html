@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta_title %}Shipping & Delivery | {{ site_settings.site_name }}{% endblock %}
+{% block meta_description %}Reliable delivery, installation, and commissioning of medical equipment across the UAE and GCC.{{ site_settings.meta_description }}{% endblock %}
+
+{% block content %}
+<div class="about-page">
+
+  {# Page Hero #}
+  <section class="page-hero" style="min-height:45vh;background:var(--charcoal);">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0D1B2A,#1B263B);opacity:0.75;"></div>
+    <div class="page-hero-content" style="position:relative;z-index:10;">
+      <span class="page-hero-eyebrow">Delivery Info</span>
+      <h1 class="page-hero-title">Shipping & <em>Delivery</em></h1>
+      <p class="page-hero-subtitle">Professional delivery, installation, and commissioning of medical equipment across the UAE and GCC.</p>
+    </div>
+  </section>
+
+  {# Content #}
+  <section class="section">
+    <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div class="about-block" style="grid-template-columns:1fr 1fr;gap:80px;padding:0;">
+
+        <div class="about-block-content">
+          <span class="about-block-eyebrow">Delivery Areas</span>
+          <h2 class="about-block-title" style="font-size:32px;">We Deliver <em>Everywhere</em></h2>
+          <p class="about-block-text">
+            We provide secure, temperature-controlled delivery and on-site installation of medical equipment across all Emirates and the GCC. Our certified engineers ensure every system is fully operational upon handover.
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:16px;margin-top:24px;">
+            <div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-xl);">
+              <div style="width:48px;height:48px;background:rgba(13,27,42,0.15);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;color:var(--primary);flex-shrink:0;">
+                <i class="fas fa-truck text-lg"></i>
+              </div>
+              <div>
+                <div style="font-family:var(--font-heading);font-size:14px;font-weight:800;color:var(--txt-main);margin-bottom:4px;">Express Delivery</div>
+                <div style="font-size:13px;color:var(--text-secondary);">Dubai & Abu Dhabi — 2-5 business days</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-xl);">
+              <div style="width:48px;height:48px;background:rgba(13,27,42,0.1);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;">
+                <i class="fas fa-map-marked-alt text-lg"></i>
+              </div>
+              <div>
+                <div style="font-family:var(--font-heading);font-size:14px;font-weight:800;color:var(--txt-main);margin-bottom:4px;">Standard Delivery</div>
+                <div style="font-size:13px;color:var(--text-secondary);">All Emirates & GCC — 5-10 business days</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;padding:20px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-xl);">
+              <div style="width:48px;height:48px;background:rgba(74,124,89,0.08);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;color:#4A7C59;flex-shrink:0;">
+                <i class="fas fa-cogs text-lg"></i>
+              </div>
+              <div>
+                <div style="font-family:var(--font-heading);font-size:14px;font-weight:800;color:var(--txt-main);margin-bottom:4px;">Full Installation</div>
+                <div style="font-size:13px;color:var(--text-secondary);">On-site commissioning included</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-block-content">
+          <span class="about-block-eyebrow">Delivery Fees</span>
+          <h2 class="about-block-title" style="font-size:32px;">Transparent <em>Pricing</em></h2>
+          <p class="about-block-text">
+            We provide transparent logistics pricing. Installation and commissioning fees are quoted based on equipment type and site requirements. All costs are confirmed before delivery.
+          </p>
+
+          <div style="margin-top:24px;">
+            <table style="width:100%;border-collapse:collapse;font-size:13px;">
+              <thead>
+                <tr>
+                  <th style="text-align:left;padding:12px 16px;background:var(--surface);border-bottom:2px solid var(--border-light);font-family:var(--font-heading);font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-secondary);">Area</th>
+                  <th style="text-align:right;padding:12px 16px;background:var(--surface);border-bottom:2px solid var(--border-light);font-family:var(--font-heading);font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-secondary);">Delivery Fee</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid var(--border-light);">
+                  <td style="padding:14px 16px;color:var(--txt-main);font-weight:500;">Dubai</td>
+                  <td style="padding:14px 16px;text-align:right;color:var(--primary);font-weight:700;">Free*</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-light);">
+                  <td style="padding:14px 16px;color:var(--txt-main);font-weight:500;">Abu Dhabi</td>
+                  <td style="padding:14px 16px;text-align:right;color:var(--text-secondary);font-weight:600;">From 25 AED</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-light);">
+                  <td style="padding:14px 16px;color:var(--txt-main);font-weight:500;">Sharjah</td>
+                  <td style="padding:14px 16px;text-align:right;color:var(--text-secondary);font-weight:600;">From 20 AED</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-light);">
+                  <td style="padding:14px 16px;color:var(--txt-main);font-weight:500;">Other Emirates</td>
+                  <td style="padding:14px 16px;text-align:right;color:var(--text-secondary);font-weight:600;">From 30 AED</td>
+                </tr>
+              </tbody>
+            </table>
+            <p style="font-size:11px;color:var(--text-muted);margin-top:12px;">Installation & training fees are quoted separately. Contact us for project-specific pricing.</p>
+          </div>
+
+          <div style="margin-top:28px;padding:20px;background:rgba(13,27,42,0.08);border-radius:var(--radius-lg);border:1px solid rgba(13,27,42,0.15);">
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <i class="fas fa-info-circle" style="color:var(--primary);margin-top:2px;flex-shrink:0;"></i>
+              <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+                Lead times vary by equipment complexity. Large installations (MRI, CT, OR suites) typically require 4–12 weeks for delivery and commissioning.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  {# CTA #}
+  <div class="container" style="padding-bottom:80px;">
+    <div class="newsletter-section" style="background:var(--primary);border-radius:var(--radius-2xl);padding:48px;text-align:center;">
+      <h3 style="font-family:var(--font-heading);font-size:24px;font-weight:800;color:white;margin-bottom:12px;">Ready to discuss your requirements?</h3>
+      <p style="font-size:14px;color:rgba(255,255,255,0.8);margin-bottom:24px;">Contact our team for quotes, demos, or technical specifications.</p>
+      <a href="{% url 'products:product_list' %}" style="display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:white;color:var(--primary);border-radius:9999px;font-family:var(--font-heading);font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;">
+        Shop Now <i class="fas fa-arrow-right text-xs"></i>
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

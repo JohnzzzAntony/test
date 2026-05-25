@@ -300,6 +300,190 @@ class Partner(models.Model):
         except Exception: pass
         return "https://via.placeholder.com/200x80"
 
+class HeroSlide(models.Model):
+    """
+    A single image slide for the homepage hero visual panel.
+    Multiple slides play in an auto-advancing Swiper carousel.
+    """
+    title = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Optional overlay caption (e.g. 'Blush Cascade'). Shown in the floating tag."
+    )
+    image = models.ImageField(
+        upload_to="hero_slides/",
+        null=True,
+        blank=True,
+        help_text="Recommended: 900x1100px (portrait). JPG or WEBP. Max 2MB."
+    )
+    image_url = models.URLField(
+        blank=True,
+        null=True,
+        help_text="External image URL alternative."
+    )
+    alt_text = models.CharField(
+        max_length=255,
+        blank=True,
+        default="Bloom & Petal – Hero Image",
+        help_text="SEO alt text for the image."
+    )
+    order = models.PositiveIntegerField(default=0, help_text="Lower numbers appear first.")
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="Status",
+        choices=((True, 'Active'), (False, 'Hidden'))
+    )
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = "Hero Slide"
+        verbose_name_plural = "Hero Slides"
+
+    def __str__(self):
+        return self.title or f"Hero Slide #{self.order + 1}"
+
+    @property
+    def get_image_url(self):
+        try:
+            if self.image:
+                return self.image.url
+            if self.image_url:
+                return self.image_url
+        except Exception:
+            pass
+        return ""
+
+
+class HomepageSettings(models.Model):
+    """
+    Singleton model — exactly ONE record controls every text label,
+    toggle, and the hero floating-tag on the homepage.
+    """
+    # ── Hero Text ───────────────────────────────────────────
+    hero_eyebrow = models.CharField(
+        max_length=120,
+        default="Dubai's Premier Florist",
+        help_text="Small uppercase label above the hero title."
+    )
+    hero_title_line1 = models.CharField(
+        max_length=120,
+        default="Flowers that",
+        help_text="First line of the large hero title."
+    )
+    hero_title_em = models.CharField(
+        max_length=80,
+        default="speak",
+        help_text="Italic/rose-coloured word in the middle of the hero title."
+    )
+    hero_title_line2 = models.CharField(
+        max_length=120,
+        default="your heart",
+        help_text="Third line of the large hero title."
+    )
+    hero_subtitle = models.TextField(
+        default=(
+            "Handcrafted arrangements for every occasion — from intimate gestures "
+            "to grand celebrations. Delivered fresh across Dubai."
+        ),
+        help_text="Paragraph below the hero title."
+    )
+
+    # ── Hero CTAs ────────────────────────────────────────────
+    hero_btn1_text = models.CharField(max_length=80, default="Shop Collection")
+    hero_btn1_link = models.CharField(
+        max_length=255,
+        default="/products/",
+        help_text="URL or path for the primary hero button."
+    )
+    hero_btn2_text = models.CharField(max_length=80, default="Explore Occasions")
+    hero_btn2_link = models.CharField(
+        max_length=255,
+        default="/products/",
+        help_text="URL or path for the secondary hero button."
+    )
+
+    # ── Hero Floating Tag ───────────────────────────────────
+    hero_tag_label = models.CharField(
+        max_length=80,
+        default="Today's Pick",
+        help_text="Small label in the floating card on the hero image panel."
+    )
+    hero_tag_value = models.CharField(
+        max_length=120,
+        default="Blush Cascade",
+        help_text="Main text in the floating card on the hero image panel."
+    )
+    show_hero_tag = models.BooleanField(
+        default=True,
+        verbose_name="Show Hero Tag",
+        choices=((True, 'Show'), (False, 'Hide'))
+    )
+
+    # ── Section Labels ───────────────────────────────────────
+    featured_eyebrow = models.CharField(max_length=100, default="Curated Selection")
+    featured_title = models.CharField(max_length=200, default="Latest Arrivals")
+    featured_subtitle = models.TextField(
+        default="Each arrangement is crafted by our expert florists using only the freshest blooms",
+        blank=True
+    )
+    bestsellers_eyebrow = models.CharField(max_length=100, default="Most Loved")
+    bestsellers_title = models.CharField(max_length=200, default="Best Sellers")
+    testimonials_eyebrow = models.CharField(max_length=100, default="Happy Customers")
+    testimonials_title = models.CharField(max_length=200, default="What they say")
+
+    # ── Section Visibility ────────────────────────────────────
+    show_category_pills = models.BooleanField(
+        default=True,
+        verbose_name="Category Pills Strip",
+        choices=((True, 'Show'), (False, 'Hide'))
+    )
+    show_featured_products = models.BooleanField(
+        default=True,
+        verbose_name="Latest Arrivals Section",
+        choices=((True, 'Show'), (False, 'Hide'))
+    )
+    show_why_strip = models.BooleanField(
+        default=True,
+        verbose_name="Why Us Strip",
+        choices=((True, 'Show'), (False, 'Hide'))
+    )
+    show_best_sellers = models.BooleanField(
+        default=True,
+        verbose_name="Best Sellers Section",
+        choices=((True, 'Show'), (False, 'Hide'))
+    )
+    show_testimonials = models.BooleanField(
+        default=True,
+        verbose_name="Testimonials Section",
+        choices=((True, 'Show'), (False, 'Hide'))
+    )
+
+    # ── Announcement Bar ─────────────────────────────────────
+    announcement_text = models.CharField(
+        max_length=400,
+        default="🌸 \u00a0 Free delivery on orders over 200 AED \u00a0|\u00a0 Same-day delivery available \u00a0🌸",
+        help_text="Text shown in the top announcement bar. Leave blank to use the dynamic Announcement Bar records."
+    )
+    show_announcement_bar = models.BooleanField(
+        default=True,
+        verbose_name="Announcement Bar",
+        choices=((True, 'Show'), (False, 'Hide'))
+    )
+
+    class Meta:
+        verbose_name = "Homepage Settings"
+        verbose_name_plural = "Homepage Settings"
+
+    def __str__(self):
+        return "Homepage Configuration"
+
+    @classmethod
+    def get_settings(cls):
+        """Always returns the single settings instance, creating it if needed."""
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
 class ContactPage(models.Model):
     badge = models.CharField(max_length=100, default="Get in Touch")
     heading_html = models.CharField(max_length=512, default="Let's Start a <span class='italic text-primary'>Conversation</span>")

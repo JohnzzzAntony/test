@@ -9,17 +9,41 @@ from blog.models import Post
 
 from django.core.cache import cache
 
+SITE_SETTINGS_CACHE_KEY = 'site_wide_settings_v1'
+
+def invalidate_site_settings_cache():
+    """Clear the cached site settings. Call this when SiteSettings or DesignSettings are updated."""
+    cache.delete(SITE_SETTINGS_CACHE_KEY)
+
 def site_settings(request):
     """
     Cached site-wide settings and announcements.
     """
-    # Try to get everything from cache first
-    cache_key = 'site_wide_settings_v1'
-    data = cache.get(cache_key)
+    # Use a versioned cache key based on DesignSettings updated_at for immediate reflection
+    # This ensures that after saving in admin, the next request automatically gets fresh data
+    design_version = "v1"
+    try:
+        latest_design = DesignSettings.objects.only('updated_at', 'id').first()
+        if latest_design and latest_design.updated_at:
+            design_version = f"v1_{int(latest_design.updated_at.timestamp())}"
+    except Exception:
+        pass
+
+    versioned_key = f"{SITE_SETTINGS_CACHE_KEY}_{design_version}"
+    data = cache.get(versioned_key)
     
     if data is None:
         try:
-            settings = SiteSettings.objects.first()
+            # Ensure a SiteSettings record always exists (singleton pattern)
+            settings, created = SiteSettings.objects.get_or_create(
+                id=1,
+                defaults={
+                    'site_name': 'JKR International',
+                    'meta_title': 'JKR International | Advanced Medical Equipment',
+                    'meta_description': 'Precision medical technology and healthcare equipment for hospitals and clinics worldwide.',
+                }
+            )
+
             now = timezone.now()
             announcements = list(AnnouncementBar.objects.filter(is_active=True).filter(
                 Q(start_date__isnull=True) | Q(start_date__lte=now)
@@ -27,7 +51,8 @@ def site_settings(request):
                 Q(end_date__isnull=True) | Q(end_date__gte=now)
             ).order_by('id'))
             
-            design = DesignSettings.objects.first()
+            # Ensure DesignSettings also always exists
+            design, _ = DesignSettings.objects.get_or_create(id=1)
             latest_posts = list(Post.objects.filter(is_published=True).order_by('-created_at')[:3])
             
             data = {
@@ -36,12 +61,15 @@ def site_settings(request):
                 'announcement_bar_list': announcements,
                 'latest_blog_posts': latest_posts,
             }
-            # Cache for 1 hour
-            cache.set(cache_key, data, 3600)
+            # Cache for 5 minutes (signal invalidation + versioned key makes it near real-time)
+            cache.set(versioned_key, data, 300)
         except Exception:
+            # Fallback with safe dummy objects
+            dummy_site = SiteSettings(site_name="Site", meta_title="Site")
+            dummy_design = DesignSettings()
             return {
-                'site_settings': None,
-                'design_settings': None,
+                'site_settings': dummy_site,
+                'design_settings': dummy_design,
                 'announcement_bar_list': [],
                 'latest_blog_posts': [],
             }

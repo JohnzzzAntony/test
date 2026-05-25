@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import PageHero, AboutUs, VideoCard, MissionVision, Service, Counter, WhyUsCard, GalleryItem, Partner, ContactPage
+from .models import (
+    PageHero, AboutUs, VideoCard, MissionVision, Service, Counter,
+    WhyUsCard, GalleryItem, Partner, ContactPage,
+    HeroSlide, HomepageSettings,
+)
 from django.utils.html import format_html
 
 @admin.register(PageHero)
@@ -452,3 +456,100 @@ class ContactPageAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False if self.model.objects.count() > 0 else super().has_add_permission(request)
+
+
+# ── Hero Slides ─────────────────────────────────────────────────────────────
+
+@admin.register(HeroSlide)
+class HeroSlideAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'order', 'is_active', 'slide_preview')
+    list_editable = ('order', 'is_active')
+    list_per_page = 20
+    radio_fields = {'is_active': admin.HORIZONTAL}
+
+    fieldsets = (
+        ('Slide Content', {
+            'fields': (('title', 'order'), 'is_active', 'alt_text'),
+        }),
+        ('Image', {
+            'fields': (('image', 'image_url'),),
+            'description': (
+                'Upload a portrait-oriented image (900 × 1100 px recommended) or paste an '
+                'external URL. The image fills the right half of the homepage hero.'
+            ),
+        }),
+    )
+
+    def slide_preview(self, obj):
+        url = obj.get_image_url
+        if url:
+            return format_html(
+                '<img src="{}" style="height:60px;width:50px;object-fit:cover;'
+                'border-radius:6px;border:1px solid #eee;" />',
+                url
+            )
+        return '—'
+    slide_preview.short_description = 'Preview'
+
+
+# ── Homepage Settings ────────────────────────────────────────────────────────
+
+@admin.register(HomepageSettings)
+class HomepageSettingsAdmin(admin.ModelAdmin):
+    """
+    Singleton admin — only one record is allowed.
+    The admin hides the Add button when a record already exists.
+    """
+
+    fieldsets = (
+        ('📢 Announcement Bar', {
+            'fields': ('show_announcement_bar', 'announcement_text'),
+            'description': 'Controls the slim dark bar at the top of the page.',
+        }),
+        ('🌸 Hero — Text & CTAs', {
+            'fields': (
+                'hero_eyebrow',
+                'hero_title_line1', 'hero_title_em', 'hero_title_line2',
+                'hero_subtitle',
+                ('hero_btn1_text', 'hero_btn1_link'),
+                ('hero_btn2_text', 'hero_btn2_link'),
+            ),
+            'description': (
+                'Controls the text on the LEFT side of the hero. '
+                'Add images on the RIGHT via <b>Hero Slides</b> above.'
+            ),
+        }),
+        ('🏷️ Hero — Floating Tag', {
+            'fields': ('show_hero_tag', 'hero_tag_label', 'hero_tag_value'),
+            'description': 'The small glass card overlaid on the hero image.',
+        }),
+        ('📋 Section Labels', {
+            'fields': (
+                ('featured_eyebrow', 'featured_title'),
+                'featured_subtitle',
+                ('bestsellers_eyebrow', 'bestsellers_title'),
+                ('testimonials_eyebrow', 'testimonials_title'),
+            ),
+        }),
+        ('👁️ Section Visibility', {
+            'fields': (
+                'show_category_pills',
+                'show_featured_products',
+                'show_why_strip',
+                'show_best_sellers',
+                'show_testimonials',
+            ),
+            'description': 'Toggle individual sections on or off without deleting content.',
+        }),
+    )
+
+    def has_add_permission(self, request):
+        return False if self.model.objects.count() > 0 else super().has_add_permission(request)
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def get_object(self, request, object_id, from_field=None):
+        # Auto-create the singleton if it doesn't exist yet
+        HomepageSettings.get_settings()
+        return super().get_object(request, object_id, from_field)

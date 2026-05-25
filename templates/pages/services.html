@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block meta_title %}{% if page_heroes.services.meta_title %}{{ page_heroes.services.meta_title }}{% elif page_heroes.services.title %}{{ page_heroes.services.title }} | {{ site_settings.site_name }}{% else %}Specialized Healthcare Solutions | {{ site_settings.site_name }}{% endif %}{% endblock %}
-{% block meta_description %}{% if page_heroes.services.meta_description %}{{ page_heroes.services.meta_description }}{% else %}Discover our range of professional healthcare services, from equipment installation to staff training and preventive maintenance.{% endif %}{% endblock %}
+{% block split_css %}
+<style>
+  /* Flower District Theme - Services */
+  .bg-slate-50 { background: var(--surface-light) !important; }
+  .text-slate-900 { color: var(--text-primary) !important; }
+  .border-slate-100 { border-color: var(--border-custom) !important; }
+</style>
+{% endblock %}
 
 {% block content %}
 <main class="min-h-screen bg-white">

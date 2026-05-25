@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block meta_title %}{% if page_heroes.gallery.meta_title %}{{ page_heroes.gallery.meta_title }}{% elif page_heroes.gallery.title %}{{ page_heroes.gallery.title }} | {{ site_settings.site_name }}{% else %}Gallery | {{ site_settings.site_name }}{% endif %}{% endblock %}
-{% block meta_description %}{% if page_heroes.gallery.meta_description %}{{ page_heroes.gallery.meta_description }}{% else %}{{ site_settings.meta_description }}{% endif %}{% endblock %}
-{% block meta_keywords %}{% if page_heroes.gallery.meta_keywords %}{{ page_heroes.gallery.meta_keywords }}{% else %}{{ site_settings.meta_keywords }}{% endif %}{% endblock %}
-
-{% block og_title %}{% if page_heroes.gallery.title %}{{ page_heroes.gallery.title }}{% else %}Gallery{% endif %} - {{ site_settings.site_name }}{% endblock %}
-{% block og_description %}{% if page_heroes.gallery.meta_description %}{{ page_heroes.gallery.meta_description }}{% else %}{{ site_settings.meta_description }}{% endif %}{% endblock %}
+{% block split_css %}
+<style>
+  /* Flower District Theme - Gallery */
+  .bg-slate-50 { background: var(--surface-light) !important; }
+  .text-slate-900 { color: var(--text-primary) !important; }
+</style>
+{% endblock %}
 
 {% block content %}
     <!-- Hero Header -->

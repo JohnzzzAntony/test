@@ -1,120 +1,185 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block meta_title %}{{ page_heroes.contact.meta_title|default:contact_settings.badge|default:"Contact Us" }} | {{ site_settings.site_name }}{% endblock %}
+{% block meta_title %}{{ page_heroes.contact.meta_title|default:"Contact Us" }} | {{ site_settings.site_name }}{% endblock %}
 {% block meta_description %}{{ page_heroes.contact.meta_description|default:site_settings.meta_description }}{% endblock %}
 {% block meta_keywords %}{{ page_heroes.contact.meta_keywords|default:site_settings.meta_keywords }}{% endblock %}
 
-{% block og_title %}{{ contact_settings.badge|default:"Contact Us" }} - {{ site_settings.site_name }}{% endblock %}
-{% block og_description %}{{ page_heroes.contact.meta_description|default:site_settings.meta_description }}{% endblock %}
+{% block og_title %}Contact Us - {{ site_settings.site_name }}{% endblock %}
+
+{% block split_css %}
+<style>
+  /* Flower District Inspired Contact Page */
+  :root {
+    --fd-primary: #114084;
+    --fd-primary-light: #1a5cb8;
+    --fd-primary-hover: #0d3a6e;
+    --fd-accent: #0081ff;
+    --fd-text: #1a1a1a;
+    --fd-muted: #666666;
+    --fd-border: #e5e5e5;
+    --fd-surface: #ffffff;
+    --fd-surface-light: #f8f9fa;
+    --fd-card: #ffffff;
+    --fd-success: #4A7C59;
+    --fd-error: #C0392B;
+    --fd-warning: #D4A017;
+  }
+  
+  .contact-page { background: var(--fd-surface); }
+</style>
+{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-slate-900">
-    <div class="absolute inset-0 opacity-40">
-        <img src="{{ page_heroes.contact.get_image_url|default:'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070' }}" alt="{{ page_heroes.contact.title|default:'Contact JKR International' }}" class="w-full h-full object-cover">
+<div class="contact-page min-h-screen">
+
+  {# ══════════════════════════════════════
+     PAGE HERO
+  ══════════════════════════════════════ #}
+  <section class="page-hero" style="min-height:50vh;background:#114084;">
+    {% if page_heroes.contact and page_heroes.contact.display_image %}
+    <img src="{{ page_heroes.contact.display_image }}" alt="Contact" class="page-hero-img">
+    <div class="page-hero-overlay"></div>
+    {% else %}
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#114084,#1a5cb8,#000000);opacity:0.75;"></div>
+    {% endif %}
+    <div class="page-hero-content" style="position:relative;z-index:10;">
+      <span class="page-hero-eyebrow">Get in Touch</span>
+      <h1 class="page-hero-title">Contact <em>Us</em></h1>
+      <p class="page-hero-subtitle">Reach out for product inquiries, technical support, partnerships, or to discuss your healthcare technology needs.</p>
     </div>
-    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-    
-    <div class="container mx-auto px-6 relative z-10 text-center animate__animated animate__fadeInUp">
-        <span class="inline-block py-2 px-4 bg-primary text-white rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-6">{{ contact_settings.badge|default:"Get in Touch" }}</span>
-        <h1 class="text-5xl lg:text-8xl font-black text-white tracking-tighter mb-4 leading-none">
-            {% if page_heroes.contact.title_html %}{{ page_heroes.contact.title_html|safe }}{% else %}{{ page_heroes.contact.title|default:contact_settings.heading_html|safe|default:"Let's Start a <span class='italic text-primary'>Conversation</span>" }}{% endif %}
-        </h1>
-        <p class="text-slate-300 text-lg lg:text-xl font-medium max-w-2xl mx-auto italic">{{ page_heroes.contact.subtitle|default:contact_settings.subtitle|default:"We are here to provide excellence and support for your every inquiry." }}</p>
-    </div>
-</section>
+  </section>
 
-<!-- Contact Info Grid -->
-<section class="py-24 bg-white relative z-20 -mt-20">
-    <div class="container mx-auto px-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Box 1 -->
-            <div class="group bg-white p-10 rounded-[40px] shadow-2xl shadow-slate-200/50 border border-slate-100 flex flex-col items-center text-center transition-all hover:-translate-y-2">
-                <div class="w-20 h-20 bg-primary/10 text-primary rounded-3xl flex items-center justify-center mb-8 text-2xl group-hover:bg-primary group-hover:text-white transition-all">
-                    <i class="fas fa-phone-alt"></i>
-                </div>
-                <h3 class="text-xl font-black text-slate-900 mb-2 uppercase tracking-tighter">Call Excellence</h3>
-                <p class="text-slate-500 font-medium mb-4">Direct line to our support team</p>
-                <a href="tel:{{ site_settings.phone }}" class="text-lg font-black text-primary">{{ site_settings.phone|default:"+971 4 251 5383" }}</a>
-            </div>
-
-            <!-- Box 2 -->
-            <div class="group bg-white p-10 rounded-[40px] shadow-2xl shadow-slate-200/50 border border-slate-100 flex flex-col items-center text-center transition-all hover:-translate-y-2">
-                <div class="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-3xl flex items-center justify-center mb-8 text-2xl group-hover:bg-emerald-500 group-hover:text-white transition-all">
-                    <i class="far fa-envelope"></i>
-                </div>
-                <h3 class="text-xl font-black text-slate-900 mb-2 uppercase tracking-tighter">Email Inquiries</h3>
-                <p class="text-slate-500 font-medium mb-4">Fast response for all requests</p>
-                <a href="mailto:{{ site_settings.email }}" class="text-lg font-black text-emerald-500">{{ site_settings.email|default:"info@jkrintl.com" }}</a>
-            </div>
-
-            <!-- Box 3 -->
-            <div class="group bg-white p-10 rounded-[40px] shadow-2xl shadow-slate-200/50 border border-slate-100 flex flex-col items-center text-center transition-all hover:-translate-y-2">
-                <div class="w-20 h-20 bg-amber-50 text-amber-500 rounded-3xl flex items-center justify-center mb-8 text-2xl group-hover:bg-amber-500 group-hover:text-white transition-all">
-                    <i class="far fa-clock"></i>
-                </div>
-                <h3 class="text-xl font-black text-slate-900 mb-2 uppercase tracking-tighter">Operation Hours</h3>
-                <p class="text-slate-500 font-medium mb-4">{{ contact_settings.hours_label|default:"Monday - Friday" }}</p>
-                <span class="text-lg font-black text-amber-600">{{ contact_settings.hours_value|default:"08:30 AM — 05:00 PM" }}</span>
-            </div>
+  {# ══════════════════════════════════════
+     CONTACT INFO CARDS
+  ══════════════════════════════════════ #}
+  <section style="padding:80px 0 -40px;position:relative;z-index:20;margin-top:-60px;">
+    <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div class="trust-badges" style="grid-template-columns:repeat(3,1fr);gap:24px;padding:0;background:transparent;border:none;margin-bottom:48px;">
+        <div class="contact-card">
+          <div class="contact-card-icon"><i class="fas fa-phone-alt"></i></div>
+          <h3 class="contact-card-title">Call Us</h3>
+          <p class="contact-card-value">
+            {% if site_settings.phone %}
+            <a href="tel:{{ site_settings.phone }}">{{ site_settings.phone }}</a>
+            {% else %}
+            <a href="tel:+971565474028">+971 565 474 028</a>
+            {% endif %}
+          </p>
         </div>
-    </div>
-</section>
-
-<!-- Contact Form Section -->
-<section class="py-24 bg-slate-50">
-    <div class="container mx-auto px-6">
-        <div class="flex flex-col lg:flex-row gap-20 items-center">
-            <!-- Form Area -->
-            <div class="lg:w-1/2 w-full">
-                <div class="space-y-4 mb-12">
-                    <h2 class="text-4xl lg:text-6xl font-black text-slate-900 tracking-tighter">{{ contact_settings.form_title_html|safe|default:"Have a <span class='italic text-primary'>Question?</span>" }}</h2>
-                    <p class="text-slate-500 font-medium text-lg">{{ contact_settings.form_subtitle|default:"Send us a message and our specialists will reach out to you within 24 business hours." }}</p>
-                </div>
-
-                <form action="{% url 'contact:contact_submit' %}" method="POST" class="space-y-8">
-                    {% csrf_token %}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Full Identity</label>
-                            <input type="text" name="name" placeholder="John Doe" class="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 text-sm font-medium focus:outline-none focus:border-primary transition-all shadow-sm" required>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Digital Mail</label>
-                            <input type="email" name="email" placeholder="john@example.com" class="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 text-sm font-medium focus:outline-none focus:border-primary transition-all shadow-sm" required>
-                        </div>
-                        <div class="space-y-2 md:col-span-2">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Direct Contact (Optional)</label>
-                            <input type="text" name="phone" placeholder="+971..." class="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 text-sm font-medium focus:outline-none focus:border-primary transition-all shadow-sm">
-                        </div>
-                        <div class="space-y-2 md:col-span-2">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Inquiry Detail</label>
-                            <textarea name="message" rows="5" placeholder="Tell us about your requirements..." class="w-full bg-white border border-slate-200 rounded-[30px] px-6 py-5 text-sm font-medium focus:outline-none focus:border-primary transition-all shadow-sm" required></textarea>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="w-full bg-slate-950 text-white py-6 rounded-[32px] font-black text-[11px] uppercase tracking-[0.3em] flex items-center justify-center gap-4 group hover:bg-slate-900 transition-all shadow-2xl shadow-slate-950/20 active:scale-95">
-                        Transmit Message <i class="fas fa-paper-plane text-xs transition-transform group-hover:translate-x-2 group-hover:-translate-y-1"></i>
-                    </button>
-                </form>
-            </div>
-
-            <!-- Image Area -->
-            <div class="lg:w-1/2 w-full">
-                <div class="relative group">
-                    <div class="absolute -inset-4 bg-primary/5 rounded-[60px] blur-2xl transform rotate-3 group-hover:rotate-0 transition-transform duration-700"></div>
-                    <div class="relative rounded-[50px] overflow-hidden shadow-2xl border-8 border-white">
-                        <img src="{{ contact_settings.get_support_image }}" alt="Excellence Support" class="w-full aspect-[4/5] object-cover transform scale-105 group-hover:scale-100 transition-transform duration-1000">
-                    </div>
-                </div>
-            </div>
+        <div class="contact-card">
+          <div class="contact-card-icon" style="background:rgba(17,64,132,0.08);color:var(--fd-primary);"><i class="far fa-envelope"></i></div>
+          <h3 class="contact-card-title">Email Us</h3>
+          <p class="contact-card-value" style="color:var(--fd-primary);">
+            {% if site_settings.email %}
+            <a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a>
+            {% else %}
+             <a href="mailto:{{ site_settings.email|default:'info@jkr-international.com' }}">info@jkr-international.com</a>
+            {% endif %}
+          </p>
         </div>
+        <div class="contact-card">
+          <div class="contact-card-icon" style="background:rgba(74,124,89,0.08);color:#4A7C59;"><i class="far fa-clock"></i></div>
+          <h3 class="contact-card-title">Working Hours</h3>
+          <p class="contact-card-value" style="color:#4A7C59;font-size:13px;">Monday – Saturday<br>9:00 AM – 10:00 PM</p>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<!-- Location Section -->
-<section class="h-[500px] w-full relative grayscale hover:grayscale-0 transition-all duration-1000">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3608.12!2d55.38!3d25.27!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDE2JzA0LjgiTiA1NcKwMjInNDguMCJF!5e0!3m2!1sen!2sae!4v123456789" class="w-full h-full border-0 absolute inset-0" allowfullscreen="" loading="lazy"></iframe>
-</section>
+  {# ══════════════════════════════════════
+     CONTACT FORM + INFO
+  ══════════════════════════════════════ #}
+  <section class="section" style="padding-top:48px;">
+    <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div class="about-block" style="grid-template-columns:1fr 1fr;gap:80px;padding:0;">
+
+        <!-- Form -->
+        <div class="about-block-content" style="padding:48px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-2xl);">
+          <span class="about-block-eyebrow" style="color:var(--primary);">Send a Message</span>
+          <h2 class="about-block-title" style="font-size:32px;margin-bottom:8px;">How Can We <em>Help?</em></h2>
+          <p class="about-block-text" style="margin-bottom:32px;">Tell us about your requirements — our team will respond within 24 business hours.</p>
+
+          <form action="{% url 'contact:contact_submit' %}" method="POST" class="space-y-6">
+            {% csrf_token %}
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+              <div class="form-group">
+                <label class="form-label">Your Name *</label>
+                <input type="text" name="name" placeholder="Full Name" required class="form-input" style="border-radius:var(--radius-lg);padding:13px 16px;border:1px solid var(--border-light);font-size:14px;width:100%;background:var(--surface);color:var(--txt-main);outline:none;transition:border-color 0.2s;">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Address *</label>
+                <input type="email" name="email" placeholder="your@email.com" required class="form-input" style="border-radius:var(--radius-lg);padding:13px 16px;border:1px solid var(--border-light);font-size:14px;width:100%;background:var(--surface);color:var(--txt-main);outline:none;transition:border-color 0.2s;">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" name="phone" placeholder="+971..." class="form-input" style="border-radius:var(--radius-lg);padding:13px 16px;border:1px solid var(--border-light);font-size:14px;width:100%;background:var(--surface);color:var(--txt-main);outline:none;transition:border-color 0.2s;">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Message *</label>
+              <textarea name="message" rows="5" placeholder="Tell us how we can help..." required class="form-textarea" style="border-radius:var(--radius-xl);padding:16px;border:1px solid var(--border-light);font-size:14px;width:100%;background:var(--surface);color:var(--txt-main);outline:none;resize:vertical;min-height:140px;font-family:var(--font-body);transition:border-color 0.2s;"></textarea>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <input type="checkbox" id="privacy" name="privacy" required style="accent-color:var(--primary);width:18px;height:18px;margin-top:2px;flex-shrink:0;">
+              <label for="privacy" style="font-size:12px;color:var(--text-secondary);line-height:1.6;">
+                I agree that my data may be stored and processed to handle my inquiry.
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="background:var(--primary);border-color:var(--primary);border-radius:var(--radius-full);padding:16px 40px;font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:white;width:100%;justify-content:center;cursor:pointer;transition:all 0.25s;display:flex;gap:8px;align-items:center;">
+              Send Message <i class="fas fa-paper-plane text-xs"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="about-block-content" style="display:flex;flex-direction:column;justify-content:center;gap:32px;">
+          {% if site_settings.dubai_address %}
+          <div>
+            <h3 class="about-block-title" style="font-size:24px;margin-bottom:16px;">Our <em>Location</em></h3>
+            <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:20px;">
+              <div style="width:40px;height:40px;background:rgba(139,69,87,0.08);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;color:var(--primary);flex-shrink:0;">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div>
+                <p style="font-family:var(--font-heading);font-size:13px;font-weight:800;color:var(--txt-main);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Head Office</p>
+                <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;">{{ site_settings.dubai_address }}</p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Store Locations -->
+          <div>
+            <h3 class="about-block-title" style="font-size:24px;margin-bottom:16px;">Store <em>Locations</em></h3>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-lg);">
+                <i class="fas fa-store" style="color:var(--primary);width:16px;text-align:center;"></i>
+                <span style="font-size:13px;font-weight:600;color:var(--txt-main);">Dubai — Al Warqa City Mall</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-lg);">
+                <i class="fas fa-store" style="color:var(--primary);width:16px;text-align:center;"></i>
+                <span style="font-size:13px;font-weight:600;color:var(--txt-main);">Abu Dhabi — Forsan Central Mall</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-lg);">
+                <i class="fas fa-store" style="color:var(--primary);width:16px;text-align:center;"></i>
+                <span style="font-size:13px;font-weight:600;color:var(--txt-main);">Sharjah — Rahmania Mall</span>
+              </div>
+            </div>
+            <a href="{% url 'core:store_locations' %}" class="btn btn-outline" style="margin-top:20px;border-radius:9999px;padding:12px 24px;font-size:11px;font-weight:700;display:inline-flex;gap:8px;">
+              View All Locations <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
 {% endblock %}

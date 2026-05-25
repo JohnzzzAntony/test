@@ -1,159 +1,179 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block meta_title %}{% if page_heroes.stores.meta_title %}{{ page_heroes.stores.meta_title }}{% elif page_heroes.stores.title %}{{ page_heroes.stores.title }} | {{ site_settings.site_name }}{% else %}Store Locations | {{ site_settings.site_name }}{% endif %}{% endblock %}
-{% block meta_description %}{% if page_heroes.stores.meta_description %}{{ page_heroes.stores.meta_description }}{% else %}{{ site_settings.meta_description }}{% endif %}{% endblock %}
-{% block meta_keywords %}{% if page_heroes.stores.meta_keywords %}{{ page_heroes.stores.meta_keywords }}{% else %}{{ site_settings.meta_keywords }}{% endif %}{% endblock %}
+{% block meta_title %}{% if page_heroes.stores.meta_title %}{{ page_heroes.stores.meta_title }}{% else %}Store Locations | {{ site_settings.site_name }}{% endif %}{% endblock %}
+{% block meta_description %}{{ page_heroes.stores.meta_description|default:site_settings.meta_description }}{% endblock %}
 
-{% block og_title %}{% if page_heroes.stores.title %}{{ page_heroes.stores.title }}{% else %}Store Locations{% endif %} - {{ site_settings.site_name }}{% endblock %}
-{% block og_description %}{% if page_heroes.stores.meta_description %}{{ page_heroes.stores.meta_description }}{% else %}{{ site_settings.meta_description }}{% endif %}{% endblock %}
+{% block split_css %}
+<style>
+  /* Flower District Inspired Stores Page */
+  :root {
+    --fd-primary: #114084;
+    --fd-primary-light: #1a5cb8;
+    --fd-primary-hover: #0d3a6e;
+    --fd-accent: #0081ff;
+    --fd-text: #1a1a1a;
+    --fd-muted: #666666;
+    --fd-border: #e5e5e5;
+    --fd-surface: #ffffff;
+    --fd-surface-light: #f8f9fa;
+    --fd-card: #ffffff;
+  }
+  
+  .stores-hero {
+    position: relative;
+    min-height: 45vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--fd-primary);
+    overflow: hidden;
+  }
+  
+  .city-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  
+  .city-filter-btn {
+    padding: 10px 24px;
+    background: var(--fd-card);
+    border: 1px solid var(--fd-border);
+    border-radius: 9999px;
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fd-muted);
+    text-decoration: none;
+    transition: all 0.25s;
+  }
+  
+  .city-filter-btn:hover {
+    border-color: var(--fd-primary);
+    color: var(--fd-primary);
+  }
+  
+  .city-filter-btn.active {
+    background: var(--fd-primary);
+    border-color: var(--fd-primary);
+    color: white;
+  }
+  
+  .store-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  
+  @media (max-width: 1024px) { .store-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .store-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
 
 {% block content %}
-<section class="py-12 bg-surface min-h-screen">
-    <div class="max-w-screen-xl mx-auto px-6">
-        
-        <!-- Premium Header Area -->
-        <div class="mb-16">
-            <nav class="flex mb-8 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
-                <a href="{% url 'core:home' %}" class="hover:text-primary transition-colors">Home</a>
-                <span class="mx-3 opacity-30">/</span>
-                <span class="text-slate-900">Experience JKR</span>
-            </nav>
+<div>
 
-            <div class="relative h-64 lg:h-96 rounded-[40px] overflow-hidden bg-slate-900 group shadow-2xl">
-                <img src="{{ page_heroes.stores.display_image }}" alt="{{ page_heroes.stores.display_title|striptags }}" class="w-full h-full object-cover opacity-50 transition-transform duration-1000 group-hover:scale-105">
-                
-                <div class="absolute inset-0 flex flex-col justify-center p-8 text-{{ page_heroes.stores.alignment|default:'center' }} {% if page_heroes.stores.alignment == 'center' %}items-center{% elif page_heroes.stores.alignment == 'right' %}items-end{% else %}items-start{% endif %}">
-                    <span class="px-5 py-2 bg-secondary/20 backdrop-blur-md rounded-full text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6 animate__animated animate__fadeInDown">Network</span>
-                    <h1 class="text-5xl lg:text-7xl font-black text-white tracking-tighter mb-4 animate__animated animate__fadeInUp">
-                        {{ page_heroes.stores.display_title|safe }}
-                    </h1>
-                    <p class="text-slate-300 max-w-2xl font-medium leading-relaxed animate__animated animate__fadeInUp animate__delay-1s">
-                        {{ page_heroes.stores.display_subtitle }}
-                    </p>
-                    {% if page_heroes.stores.button_text or page_heroes.stores.button_2_text %}
-                    <div class="mt-8 flex {% if page_heroes.stores.alignment == 'left' %}justify-start{% elif page_heroes.stores.alignment == 'right' %}justify-end{% else %}justify-center{% endif %} gap-4 animate__animated animate__fadeInUp animate__delay-1s">
-                        {% if page_heroes.stores.button_text %}
-                        <a href="{{ page_heroes.stores.button_link }}" class="px-8 py-4 bg-primary text-white rounded-full font-bold uppercase tracking-widest text-sm hover:bg-white hover:text-slate-900 transition-all shadow-lg">{{ page_heroes.stores.button_text }}</a>
-                        {% endif %}
-                        {% if page_heroes.stores.button_2_text %}
-                        <a href="{{ page_heroes.stores.button_2_link }}" class="px-8 py-4 border-2 border-white/50 text-white rounded-full font-bold uppercase tracking-widest text-sm hover:bg-white hover:text-slate-900 transition-all shadow-lg">{{ page_heroes.stores.button_2_text }}</a>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        <!-- Filter Navigation -->
-        <div class="flex flex-wrap items-center justify-center gap-4 mb-16">
-            <a href="?city=all" class="filter-tab {% if selected_city == 'all' %}active{% endif %}">Across UAE</a>
-            {% for city in cities %}
-            <a href="?city={{ city }}" class="filter-tab {% if selected_city == city %}active{% endif %}">{{ city }}</a>
-            {% endfor %}
-        </div>
-
-        <!-- Locations Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-16" id="stores-grid">
-            {% for store in stores %}
-            <div class="store-card group">
-                <div class="h-full bg-white rounded-[40px] border border-slate-100 p-4 hover:border-primary/20 hover:shadow-2xl transition-all duration-500 flex flex-col">
-                    <div class="relative aspect-[4/3] rounded-[32px] overflow-hidden mb-8">
-                        <img src="{{ store.get_image_url }}" alt="{{ store.name }}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                        <div class="absolute top-6 right-6">
-                            <span class="px-4 py-2 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl text-white text-[9px] font-black uppercase tracking-widest">{{ store.city }}</span>
-                        </div>
-                    </div>
-
-                    <div class="px-6 pb-6 flex-1 flex flex-col">
-                        <h3 class="text-2xl font-black text-slate-900 tracking-tight mb-6">{{ store.name }}</h3>
-                        
-                        <div class="space-y-6 mb-10">
-                            <div class="flex items-start gap-5">
-                                <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-map-marker-alt text-primary text-sm"></i>
-                                </div>
-                                <p class="text-slate-500 text-sm font-medium leading-relaxed">{{ store.address }}</p>
-                            </div>
-                            <div class="flex items-center gap-5">
-                                <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-phone text-primary text-sm"></i>
-                                </div>
-                                <a href="tel:{{ store.phone }}" class="text-slate-950 text-sm font-bold hover:text-primary transition-colors">{{ store.phone }}</a>
-                            </div>
-                        </div>
-
-                        <div class="mt-auto">
-                            <a href="{{ store.map_url }}" target="_blank" class="flex items-center justify-center gap-3 w-full py-5 bg-slate-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-primary transition-all group/btn shadow-lg shadow-slate-900/10">
-                                Get Directions <i class="fas fa-location-arrow text-[9px] group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-span-full py-32 text-center bg-white rounded-[40px] border border-dashed border-slate-200">
-                <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-200">
-                    <i class="fas fa-map-marked-alt text-3xl"></i>
-                </div>
-                <h3 class="text-xl font-black text-slate-900 mb-2">Expansion in progress...</h3>
-                <p class="text-slate-400 font-medium">We are currently mapping out our new boutique locations.</p>
-            </div>
-            {% endfor %}
-        </div>
-
-        <!-- Pagination Controls -->
-        {% if stores.has_other_pages %}
-        <div class="flex justify-center items-center gap-2 mt-8">
-            {% if stores.has_previous %}
-                <a href="?city={{ selected_city }}&page={{ stores.previous_page_number }}" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white border border-slate-100 text-slate-900 hover:bg-primary hover:text-white transition-all shadow-sm">
-                    <i class="fas fa-chevron-left text-[10px]"></i>
-                </a>
-            {% endif %}
-
-            <div class="px-6 h-12 flex items-center justify-center rounded-2xl bg-white border border-slate-100 text-[10px] font-black tracking-widest text-slate-400 uppercase">
-                Page <span class="text-slate-900 mx-2">{{ stores.number }}</span> of {{ stores.paginator.num_pages }}
-            </div>
-
-            {% if stores.has_next %}
-                <a href="?city={{ selected_city }}&page={{ stores.next_page_number }}" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white border border-slate-100 text-slate-900 hover:bg-primary hover:text-white transition-all shadow-sm">
-                    <i class="fas fa-chevron-right text-[10px]"></i>
-                </a>
-            {% endif %}
-        </div>
-        {% endif %}
+  {# Page Hero #}
+  <section class="stores-hero">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(17,64,132,0.7),rgba(0,129,255,0.4));opacity:0.5;"></div>
+    <div style="position:relative;z-index:10;text-align:center;padding:60px 48px;">
+      <span class="page-hero-eyebrow">Our Network</span>
+      <h1 class="page-hero-title">Store <em>Locations</em></h1>
+      <p class="page-hero-subtitle">Visit us at one of our 5 boutique locations across the UAE.</p>
     </div>
-</section>
+  </section>
 
-<style>
-    .filter-tab {
-        padding: 1rem 2.5rem;
-        background: white;
-        border: 1px solid #f1f5f9;
-        border-radius: 9999px;
-        font-size: 10px;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 0.25em;
-        color: #64748b;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        display: inline-block;
-    }
-    .filter-tab:hover {
-        color: #1e293b;
-        border-color: #e2e8f0;
-        transform: translateY(-2px);
-    }
-    .filter-tab.active {
-        background: #1e293b;
-        color: white;
-        border-color: #1e293b;
-        box-shadow: 0 10px 20px -5px rgba(30, 41, 59, 0.3);
-    }
-    
-    .store-card {
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-</style>
+  {# City Filter + Grid #}
+  <section class="section">
+    <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+
+      {# City Filter #}
+      <div class="city-filter">
+        <a href="?city=all" class="city-filter-btn {% if selected_city == 'all' %}active{% endif %}">All UAE</a>
+        {% for city in cities %}
+        <a href="?city={{ city }}" class="city-filter-btn {% if selected_city == city %}active{% endif %}">{{ city }}</a>
+        {% endfor %}
+      </div>
+
+      {# Store Grid #}
+      <div class="store-grid">
+        {% for store in stores %}
+        <div class="store-card">
+          <div class="store-card-image">
+            {% if store.get_image_url %}
+            <img src="{{ store.get_image_url }}" alt="{{ store.name }}">
+            {% else %}
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#8B4557,#C9A96E);display:flex;align-items:center;justify-content:center;">
+              <i class="fas fa-store text-4xl text-white opacity-40"></i>
+            </div>
+            {% endif %}
+            <div style="position:absolute;top:16px;right:16px;">
+              <span style="padding:6px 14px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);border-radius:9999px;font-family:var(--font-heading);font-size:9px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:white;">
+                {{ store.city }}
+              </span>
+            </div>
+          </div>
+          <div class="store-card-body">
+            <h3 class="store-card-name">{{ store.name }}</h3>
+            <div class="store-card-info">
+              <div class="store-info-row">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>{{ store.address }}</span>
+              </div>
+              <div class="store-info-row">
+                <i class="fas fa-phone"></i>
+                <a href="tel:{{ store.phone }}" style="color:inherit;text-decoration:none;">{{ store.phone }}</a>
+              </div>
+            </div>
+            {% if store.map_url %}
+            <a href="{{ store.map_url }}" target="_blank"
+               style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:var(--primary);color:white;border-radius:var(--radius-full);font-family:var(--font-heading);font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;margin-top:4px;">
+              Get Directions <i class="fas fa-location-arrow text-xs"></i>
+            </a>
+            {% endif %}
+          </div>
+        </div>
+        {% empty %}
+        <div style="grid-column:1/-1;text-align:center;padding:80px 40px;background:var(--card);border:1px dashed var(--border);border-radius:var(--radius-2xl);">
+          <div style="width:80px;height:80px;background:var(--surface);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--text-muted);font-size:28px;">
+            <i class="fas fa-map-marked-alt"></i>
+          </div>
+          <h3 style="font-family:var(--font-heading);font-size:20px;font-weight:800;color:var(--text-primary);margin-bottom:8px;">Expansion in Progress</h3>
+          <p style="font-size:14px;color:var(--text-secondary);">New store locations are coming soon. Stay tuned!</p>
+        </div>
+        {% endfor %}
+      </div>
+
+      {# Pagination #}
+      {% if stores.has_other_pages %}
+      <div class="pagination" style="margin-top:48px;">
+        {% if stores.has_previous %}
+        <a href="?city={{ selected_city }}&page={{ stores.previous_page_number }}"
+           style="display:flex;align-items:center;gap:8px;padding:0 20px;height:44px;border-radius:var(--radius-lg);background:var(--card);border:1px solid var(--border-light);color:var(--text-secondary);font-family:var(--font-heading);font-size:13px;font-weight:700;transition:all 0.2s;text-decoration:none;">
+          <i class="fas fa-arrow-left text-xs"></i> Prev
+        </a>
+        {% endif %}
+
+        <span style="display:flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 12px;border-radius:var(--radius-lg);background:var(--primary);color:white;font-family:var(--font-heading);font-size:13px;font-weight:700;">
+          {{ stores.number }}
+        </span>
+
+        {% if stores.has_next %}
+        <a href="?city={{ selected_city }}&page={{ stores.next_page_number }}"
+           style="display:flex;align-items:center;gap:8px;padding:0 20px;height:44px;border-radius:var(--radius-lg);background:var(--card);border:1px solid var(--border-light);color:var(--text-secondary);font-family:var(--font-heading);font-size:13px;font-weight:700;transition:all 0.2s;text-decoration:none;">
+          Next <i class="fas fa-arrow-right text-xs"></i>
+        </a>
+        {% endif %}
+      </div>
+      {% endif %}
+
+    </div>
+  </section>
+
+</div>
 {% endblock %}

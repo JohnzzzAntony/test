@@ -293,8 +293,8 @@ class Product(models.Model):
             return self.price_info
         from django.utils import timezone
         # Safely handle None prices - use Decimal for consistency
-        reg = self.regular_price if self.regular_price is not None else Decimal('0.00')
-        sale = self.sale_price if self.sale_price is not None else reg
+        reg = Decimal(str(self.regular_price)) if self.regular_price is not None else Decimal('0.00')
+        sale = Decimal(str(self.sale_price)) if self.sale_price is not None else reg
 
         # Check for active offers
         now = timezone.now()
@@ -391,8 +391,7 @@ class Product(models.Model):
         discount_pct = 0
         if reg > 0:
             discount_pct = (discount_amount / reg) * 100
-
-        ship = (self.additional_shipping_charge or 0) if not self.free_shipping else 0
+        ship = Decimal(str(self.additional_shipping_charge)) if (self.additional_shipping_charge is not None and not self.free_shipping) else Decimal('0.00')
 
         return {
             'has_offer': final_price < reg,
@@ -430,7 +429,7 @@ class Product(models.Model):
         try:
             with transaction.atomic():
                 if self.pk is None:
-                    existing = Product.objects.filter(sku_id=self.sku_id).select_for_update(now=True).exists()
+                    existing = Product.objects.filter(sku_id=self.sku_id).select_for_update(nowait=True).exists()
                     if existing:
                         unique_id = uuid.uuid4().hex[:8].upper()
                         self.sku_id = f"{prefix}-{unique_id}"

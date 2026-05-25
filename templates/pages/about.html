@@ -3,103 +3,294 @@
 
 {% block meta_title %}{% if page_heroes.about.meta_title %}{{ page_heroes.about.meta_title }}{% elif about_us.title %}{{ about_us.title }} | {{ site_settings.site_name }}{% else %}About Us | {{ site_settings.site_name }}{% endif %}{% endblock %}
 {% block meta_description %}{% if page_heroes.about.meta_description %}{{ page_heroes.about.meta_description }}{% else %}{{ site_settings.meta_description }}{% endif %}{% endblock %}
-{% block meta_keywords %}{% if page_heroes.about.meta_keywords %}{{ page_heroes.about.meta_keywords }}{% else %}{{ site_settings.meta_keywords }}{% endif %}{% endblock %}
 
-{% block og_title %}{% if about_us.title %}{{ about_us.title }}{% else %}About Us{% endif %} - {{ site_settings.site_name }}{% endblock %}
-{% block og_description %}{% if page_heroes.about.meta_description %}{{ page_heroes.about.meta_description }}{% else %}{{ site_settings.meta_description }}{% endif %}{% endblock %}
+{% block split_css %}
+<style>
+  /* Flower District Inspired About Page */
+  :root {
+    --fd-primary: #114084;
+    --fd-primary-light: #1a5cb8;
+    --fd-primary-hover: #0d3a6e;
+    --fd-accent: #0081ff;
+    --fd-text: #1a1a1a;
+    --fd-muted: #666666;
+    --fd-border: #e5e5e5;
+    --fd-surface: #ffffff;
+    --fd-surface-light: #f8f9fa;
+    --fd-card: #ffffff;
+  }
+  
+  .about-page-hero {
+    position: relative;
+    min-height: 55vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--fd-primary);
+  }
+  
+  .about-page-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(17,64,132,0.85) 0%, rgba(0,0,0,0.6) 100%);
+    opacity: 0.7;
+  }
+  
+  .about-hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+  }
+  
+  .about-hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 80px 48px;
+  }
+  
+  .stat-card {
+    background: var(--fd-card);
+    border: 1px solid var(--fd-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-7);
+    text-align: center;
+    transition: all 0.3s;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--fd-primary);
+  }
+  
+  .stat-value {
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--fd-primary);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  
+  .stat-label {
+    font-size: 11px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--fd-muted);
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<!-- Cinematic Hero Section -->
-<section class="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-slate-900">
-    <div class="absolute inset-0 scale-110">
-        <img src="{{ page_heroes.about.display_image }}" alt="{{ page_heroes.about.display_title|striptags }}" class="w-full h-full object-cover">
+<div class="about-page">
+
+  {# ══════════════════════════════════════
+     PAGE HERO
+  ══════════════════════════════════════ #}
+  <section class="about-page-hero">
+    {% if page_heroes.about and page_heroes.about.display_image %}
+    <img src="{{ page_heroes.about.display_image }}" alt="About Us" class="about-hero-img">
+    {% endif %}
+    <div class="about-hero-content">
+      <span class="page-hero-eyebrow">Our Story</span>
+      <h1 class="page-hero-title">
+        About <em>{{ site_settings.site_name|default:"JKR International" }}</em>
+      </h1>
+      <p class="page-hero-subtitle">
+        Delivering world-class medical technology and precision equipment to healthcare institutions worldwide.
+      </p>
     </div>
-    <div class="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px]"></div>
-    <div class="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-slate-50 to-transparent"></div>
-    
-    <div class="container mx-auto px-6 relative z-10 text-{{ page_heroes.about.alignment|default:'center' }} animate__animated animate__fadeIn">
-        <h1 class="text-6xl lg:text-9xl font-black text-white tracking-tighter leading-none mb-6">
-            {{ page_heroes.about.display_title|safe }}
-        </h1>
-        <p class="text-xl lg:text-2xl text-slate-200 font-medium max-w-3xl mx-auto italic opacity-80 leading-relaxed">
-            {{ page_heroes.about.display_subtitle }}
-        </p>
-        {% if page_heroes.about.button_text or page_heroes.about.button_2_text %}
-        <div class="mt-8 flex {% if page_heroes.about.alignment == 'left' %}justify-start{% elif page_heroes.about.alignment == 'right' %}justify-end{% else %}justify-center{% endif %} gap-4">
-            {% if page_heroes.about.button_text %}
-            <a href="{{ page_heroes.about.button_link }}" class="px-8 py-4 bg-primary text-white rounded-full font-bold uppercase tracking-widest text-sm hover:bg-white hover:text-slate-900 transition-all shadow-lg">{{ page_heroes.about.button_text }}</a>
-            {% endif %}
-            {% if page_heroes.about.button_2_text %}
-            <a href="{{ page_heroes.about.button_2_link }}" class="px-8 py-4 border-2 border-white/50 text-white rounded-full font-bold uppercase tracking-widest text-sm hover:bg-white hover:text-slate-900 transition-all shadow-lg">{{ page_heroes.about.button_2_text }}</a>
-            {% endif %}
+  </section>
+
+  {# ══════════════════════════════════════
+     STORY BLOCK
+  ══════════════════════════════════════ #}
+  <section class="section">
+    <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div class="about-block" style="padding:80px 0;">
+        <div class="about-block-image">
+          <div style="width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#114084 0%,#1a5cb8 100%);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-2xl);overflow:hidden;">
+            <i class="fas fa-store text-8xl text-white opacity-30"></i>
+          </div>
         </div>
-        {% endif %}
-    </div>
-</section>
-
-<!-- Story Section -->
-<section class="py-24 bg-slate-50 relative overflow-hidden">
-    <div class="container mx-auto px-6">
-        <div class="flex flex-col lg:flex-row gap-20 items-center">
-            <div class="lg:w-1/2 relative group">
-                <div class="absolute -inset-4 bg-primary/10 rounded-[60px] blur-3xl transform -rotate-3 group-hover:rotate-0 transition-transform duration-1000"></div>
-                <div class="relative rounded-[50px] overflow-hidden shadow-2xl border-8 border-white">
-                    <img src="{{ about_us.get_image_url }}" alt="{{ about_us.image_alt }}" class="w-full aspect-[4/5] object-cover grayscale group-hover:grayscale-0 transition-all duration-1000">
-                </div>
-                <div class="absolute bottom-10 -right-10 w-48 h-48 bg-primary rounded-[40px] flex flex-col items-center justify-center text-white shadow-2xl animate__animated animate__pulse animate__infinite">
-                    <span class="text-4xl font-black">{{ about_us.experience_value|default:"12+" }}</span>
-                    <span class="text-[10px] uppercase font-black tracking-widest">{{ about_us.experience_label|default:"Years of Trust" }}</span>
-                </div>
-            </div>
-
-            <div class="lg:w-1/2 space-y-10">
-                <div class="space-y-4">
-                    <span class="text-[11px] font-black uppercase tracking-[0.4em] text-primary">The JKR Philosophy</span>
-                    <h2 class="text-4xl lg:text-6xl font-black text-slate-900 tracking-tighter">{{ about_us.heading|default:"Uncompromising Standard of Global Trade." }}</h2>
-                </div>
-                
-                <div class="text-slate-500 text-lg leading-relaxed space-y-6 font-medium italic">
-                    {{ about_us.content|safe|default:"JKR International LLC stands as a beacon of reliability and innovation in the global marketplace. We don't just trade; we curate excellence and build lasting partnerships across borders." }}
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
-                    {% if mission %}
-                    <div class="p-8 bg-slate-950 text-white rounded-[40px] shadow-xl hover:-translate-y-2 transition-all">
-                        <div class="w-12 h-12 bg-primary/20 rounded-2xl flex items-center justify-center mb-6 text-primary"><i class="fas fa-rocket"></i></div>
-                        <h3 class="text-xl font-black mb-4 italic">Mission</h3>
-                        <p class="text-xs text-slate-400 leading-relaxed font-bold uppercase tracking-widest">{{ mission.content }}</p>
-                    </div>
-                    {% endif %}
-                    
-                    {% if vision %}
-                    <div class="p-8 bg-white text-slate-900 rounded-[40px] shadow-xl border border-slate-100 hover:-translate-y-2 transition-all">
-                        <div class="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center mb-6 text-primary"><i class="fas fa-eye"></i></div>
-                        <h3 class="text-xl font-black mb-4 italic">Vision</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed font-bold uppercase tracking-widest">{{ vision.content }}</p>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
+        <div class="about-block-content">
+          <span class="about-block-eyebrow">Our Philosophy</span>
+          <h2 class="about-block-title">
+            Precision in Every <em>Device</em>
+          </h2>
+          <p class="about-block-text">
+            JKR International has been a trusted partner to hospitals, clinics, and healthcare systems for over 25 years. We deliver integrated medical technology solutions that enhance diagnostic accuracy, surgical outcomes, and operational efficiency across the globe.
+          </p>
+          <p class="about-block-text">
+            Every system we supply is engineered to the highest regulatory standards. As a leading provider of advanced medical equipment in the region, we understand that every clinical environment is unique — our goal is to deliver solutions that truly advance patient care.
+          </p>
+          <div style="margin-top:32px;display:flex;gap:16px;flex-wrap:wrap;">
+            <a href="{% url 'products:product_list' %}" class="btn btn-primary" style="background:var(--primary);border-color:var(--primary);border-radius:9999px;padding:14px 32px;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:white;">
+               Explore Solutions
+            </a>
+            <a href="{% url 'contact:contact' %}" class="btn btn-outline" style="border-radius:9999px;padding:14px 32px;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;">
+              Contact Us
+            </a>
+          </div>
         </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<!-- Values / Stats Section -->
-<section class="py-24 bg-white">
-    <div class="container mx-auto px-6">
-        <div class="grid grid-cols-2 lg:grid-cols-{{ counters|length|default:4 }} gap-12 text-center">
-            {% for counter in counters %}
-            <div class="space-y-2">
-                <h4 class="text-5xl lg:text-7xl font-black text-slate-950 tracking-tighter">{{ counter.value|safe }}</h4>
-                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{{ counter.title }}</p>
-            </div>
-            {% empty %}
-            <div class="space-y-2">
-                <h4 class="text-5xl lg:text-7xl font-black text-slate-950 tracking-tighter">12<span class="text-primary text-3xl">+</span></h4>
-                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Years of Trust</p>
-            </div>
-            {% endfor %}
+  {# ══════════════════════════════════════
+     STATS / VALUES
+  ══════════════════════════════════════ #}
+  <section class="section" style="background:white;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);">
+    <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;">
+        <div class="stat-card">
+          <div class="stat-value">5+</div>
+          <div class="stat-label">Store Locations</div>
         </div>
+        <div class="stat-card">
+          <div class="stat-value">10K+</div>
+          <div class="stat-label">Happy Customers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">500+</div>
+          <div class="stat-label">Installations</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">24/7</div>
+          <div class="stat-label">Support</div>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
+
+  {# ══════════════════════════════════════
+     WHY CHOOSE US FEATURES
+  ══════════════════════════════════════ #}
+  <section class="section">
+    <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div class="section-header">
+        <span class="section-eyebrow">Why Choose Us</span>
+        <h2 class="section-title">The JKR <em>Difference</em></h2>
+      </div>
+      <div class="feature-grid" style="grid-template-columns:repeat(3,1fr);gap:32px;">
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-cogs"></i></div>
+          <div class="feature-title">Engineering Excellence</div>
+          <div class="feature-desc">Precision-engineered medical systems manufactured to the highest international standards.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-globe"></i></div>
+          <div class="feature-title">Global Reach</div>
+          <div class="feature-desc">Installed in over 40 countries — trusted by leading hospitals and clinics worldwide.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-flask"></i></div>
+          <div class="feature-title">Clinical Validation</div>
+          <div class="feature-desc">Solutions rigorously tested and validated in top-tier medical institutions.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+          <div class="feature-title">Regulatory Compliance</div>
+          <div class="feature-desc">FDA, CE, and ISO certified equipment meeting the strictest global standards.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-tools"></i></div>
+          <div class="feature-title">Full Lifecycle Support</div>
+          <div class="feature-desc">Comprehensive installation, training, maintenance, and technical support programs.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-headset"></i></div>
+          <div class="feature-title">24/7 Clinical Support</div>
+          <div class="feature-desc">Dedicated engineering and clinical specialists available around the clock.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ══════════════════════════════════════
+     PRODUCTS OVERVIEW
+  ══════════════════════════════════════ #}
+  <section class="section" style="background:var(--surface);">
+    <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div class="section-header">
+        <span class="section-eyebrow">What We Offer</span>
+        <h2 class="section-title">Our <em>Collections</em></h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;">
+        {% for cat in categories|slice:":8" %}
+        <a href="{{ cat.get_absolute_url }}" class="category-card" style="text-decoration:none;">
+          <div class="category-card-image" style="aspect-ratio:1;border-radius:var(--radius-lg);overflow:hidden;background:var(--primary);">
+            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;font-size:32px;">
+              <i class="fas fa-microscope"></i>
+            </div>
+          </div>
+          <span class="category-card-name">{{ cat.name }}</span>
+        </a>
+        {% endfor %}
+      </div>
+      <div style="text-align:center;margin-top:40px;">
+        <a href="{% url 'products:product_list' %}" class="btn btn-primary" style="background:var(--primary);border-color:var(--primary);border-radius:9999px;padding:14px 40px;font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:white;display:inline-flex;gap:8px;align-items:center;">
+          Explore All Products <i class="fas fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {# ══════════════════════════════════════
+     STORE LOCATIONS TEASER
+  ══════════════════════════════════════ #}
+  <section class="section">
+    <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div class="about-block" style="grid-template-columns:1fr 1fr;gap:80px;padding:0;direction:ltr;">
+        <div class="about-block-content" style="direction:ltr;">
+          <span class="about-block-eyebrow">Visit Us</span>
+          <h2 class="about-block-title">
+            Our Presence Across the <em>Region</em>
+          </h2>
+          <p class="about-block-text">
+            With strategic hubs across the UAE and the wider region, we deliver world-class medical technology with local expertise and responsive service. Every facility benefits from the same rigorous standards and dedicated support.
+          </p>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:24px;">
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-lg);">
+                <div style="width:8px;height:8px;background:var(--primary);border-radius:50%;flex-shrink:0;"></div>
+                <span style="font-size:13px;font-weight:600;color:var(--txt-main);">Dubai — JKR Technology Center</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-lg);">
+                <div style="width:8px;height:8px;background:var(--primary);border-radius:50%;flex-shrink:0;"></div>
+                <span style="font-size:13px;font-weight:600;color:var(--txt-main);">Abu Dhabi — Healthcare Solutions Hub</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-lg);">
+                <div style="width:8px;height:8px;background:var(--accent);border-radius:50%;flex-shrink:0;"></div>
+                <span style="font-size:13px;font-weight:600;color:var(--txt-main);">Sharjah — Clinical Equipment Center</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-lg);">
+                <div style="width:8px;height:8px;background:var(--accent);border-radius:50%;flex-shrink:0;"></div>
+                <span style="font-size:13px;font-weight:600;color:var(--txt-main);">DAMAC Hills — Regional Support Facility</span>
+              </div>
+          </div>
+          <a href="{% url 'core:store_locations' %}" class="btn btn-primary" style="margin-top:28px;background:var(--primary);border-color:var(--primary);border-radius:9999px;padding:14px 32px;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:white;">
+            View All Locations
+          </a>
+        </div>
+        <div class="about-block-image" style="direction:ltr;">
+          <div style="width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#1A1A1A,#2D2D2D);border-radius:var(--radius-2xl);display:flex;align-items:center;justify-content:center;">
+            <div style="text-align:center;color:white/30;">
+              <i class="fas fa-map-marked-alt text-6xl mb-4"></i>
+              <p style="font-family:var(--font-heading);font-size:13px;font-weight:700;">UAE Store Map</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
 {% endblock %}

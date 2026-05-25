@@ -86,10 +86,10 @@
     <link rel="icon" type="image/png" href="{{ site_settings.favicon.url }}" />
     {% endif %}
 
-    <!-- Fonts Cache -->
+    <!-- Fonts Cache - Updated Typography Hierarchy -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700;800&family=Oswald:wght@500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -120,16 +120,18 @@
               card: cardBg,
               'border-custom': borderCol,
               'txt-main': textPrimary,
+              'jk-accent': '#415A77',
+              'jk-surface': '#0D1B2A',
             },
             fontFamily: {
                 sans: [mainFont],
                 heading: [headingFont],
             },
             borderRadius: {
-                'container': "{{ design_settings.container_radius|default:'40px' }}",
-                'card-custom': "{{ design_settings.card_radius|default:'24px' }}",
+                'container': "{{ design_settings.container_radius|default:'12px' }}",
+                'card-custom': "{{ design_settings.card_radius|default:'12px' }}",
                 'btn-custom': "{{ design_settings.button_radius|default:'9999px' }}",
-                'img-custom': "{{ design_settings.image_radius|default:'20px' }}",
+                'img-custom': "{{ design_settings.image_radius|default:'12px' }}",
             }
           }
         }
@@ -138,52 +140,97 @@
 
     <style type="text/css">
         :root {
+            /* ── Flower District Color Palette (Dark Blue Variant) ─── */
             --primary: {{ design_settings.primary_color|default:"#114084" }};
-            --secondary: {{ design_settings.secondary_color|default:"#1E293B" }};
-            --accent: {{ design_settings.accent_glow_color|default:"#0081ff" }};
-            
-            --surface: {{ design_settings.surface_bg_color|default:"#f8fafc" }};
+            --primary-light: {{ design_settings.secondary_color|default:"#1a5cb8" }};
+            --primary-hover: {{ design_settings.accent_color|default:"#0081ff" }};
+            --accent: {{ design_settings.accent_color|default:"#0081ff" }};
+            --accent-light: #4da8ff;
+
+            --surface: {{ design_settings.surface_bg_color|default:"#ffffff" }};
+            --surface-light: #f8f9fa;
             --card: {{ design_settings.card_bg_color|default:"#ffffff" }};
-            --border-custom: {{ design_settings.border_color|default:"#e2e8f0" }};
-            --txt-main: {{ design_settings.text_primary_color|default:"#1e293b" }};
 
-            --font-sans: {{ design_settings.font_main|safe|default:"'Inter', sans-serif" }};
-            --font-heading: {{ design_settings.font_secondary|safe|default:"'Outfit', sans-serif" }};
+            --border-custom: {{ design_settings.border_color|default:"#e5e5e5" }};
+            --border-light: #f0f0f0;
+            --border-hover: #cccccc;
 
-            --radius-container: {{ design_settings.container_radius|default:"40px" }};
-            --radius-card: {{ design_settings.card_radius|default:"24px" }};
-            --radius-btn: {{ design_settings.button_radius|default:"9999px" }};
-            --radius-img: {{ design_settings.image_radius|default:"20px" }};
+            --txt-main: {{ design_settings.text_primary_color|default:"#1a1a1a" }};
+            --txt-secondary: {{ design_settings.text_secondary_color|default:"#4a4a4a" }};
+            --txt-muted: #888888;
+            --txt-inverse: #ffffff;
+
+            --font-ui: {{ design_settings.font_main|safe|default:"'Inter', sans-serif" }};
+            --font-display: {{ design_settings.font_heading|safe|default:"'Montserrat', sans-serif" }};
+            --font-accent: {{ design_settings.font_accent|safe|default:"'Playfair Display', serif" }};
+
+            /* Fallbacks for older references */
+            --font-sans: var(--font-ui);
+            --font-heading: var(--font-display);
+
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-2xl: 24px;
+            --radius-full: 9999px;
+
+            --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --shadow-card: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-card-hover: 0 8px 24px rgba(0,0,0,0.1);
+            --shadow-btn: 0 2px 4px rgba(17, 64, 132, 0.12);
+            --shadow-btn-hover: 0 4px 12px rgba(17, 64, 132, 0.18);
+
+            --success: #4A7C59;
+            --error: #C0392B;
+            --warning: #D4A017;
+
+            /* Global UI Scale */
+            --site-scale: {{ design_settings.site_scale|default:"1.00" }};
+        }
+
+        /* Apply scale at 100% browser zoom */
+        html {
+            zoom: var(--site-scale);
         }
 
         html { overflow-x: hidden; }
-        body { 
-            font-family: var(--font-sans);
+        body {
+            font-family: var(--font-ui);
             background-color: var(--surface);
             color: var(--txt-main);
-            -webkit-font-smoothing: antialiased; 
+            -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            overflow-x: hidden; 
-            opacity: 0; /* Entrance animation */
-            transition: opacity 1.2s ease-out;
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 0.8s ease-out;
         }
         body.loaded { opacity: 1; }
-        h1, h2, h3, h4, h5, h6 { 
-            font-family: var(--font-heading);
+
+        h1, h2, h3, h4, h5, h6,
+        .section-title, .hero-title, .page-hero-title {
+            font-family: var(--font-display);
             font-weight: 700;
-            letter-spacing: -0.025em;
+            letter-spacing: -0.02em;
+        }
+
+        .brand, .logo, .accent-serif, .premium-brand {
+            font-family: var(--font-accent);
+            font-weight: 700;
         }
 
         .glass-morph {
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        /* Silencing glass if disabled via body class */
         body.no-glass .glass-morph {
             background-color: white;
-            border: 1px solid #f1f5f9;
+            border: 1px solid #f0f0f0;
             backdrop-filter: none;
             -webkit-backdrop-filter: none;
         }
@@ -191,61 +238,118 @@
         .premium-card {
             background-color: var(--card);
             border: 1px solid var(--border-custom);
-            border-radius: var(--radius-card);
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-card);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .premium-card:hover {
+            box-shadow: var(--shadow-card-hover);
+            transform: translateY(-4px);
         }
         .premium-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            padding: 1rem 2rem;
-            font-weight: 700;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: var(--radius-btn);
+            padding: 12px 28px;
+            font-family: var(--font-heading);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .premium-btn-primary {
+            background: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+        }
+        .premium-btn-primary:hover {
+            background: var(--primary-hover, #0d3a6e);
+            border-color: var(--primary-hover, #0d3a6e);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-btn-hover);
+        }
+        .premium-btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .premium-btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
         }
         .premium-toast {
             position: fixed;
-            bottom: 2.5rem;
-            right: 2.5rem;
+            bottom: 2rem;
+            right: 2rem;
             z-index: 3000;
-            padding: 1rem 2rem;
-            background-color: rgba(15, 23, 42, 0.95);
+            padding: 0.875rem 1.5rem;
+            background: var(--txt-main);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             color: white;
-            border-radius: 1rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
             transform: translateY(5rem);
             opacity: 0;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 360px;
+            font-size: 14px;
         }
         .premium-toast.show {
             transform: translateY(0);
             opacity: 1;
         }
-        .glass-header { 
+        .glass-header {
             background-color: white;
-            border-bottom: 1px solid #e2e8f0;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--border-custom);
+            box-shadow: var(--shadow-sm);
         }
-        .premium-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .premium-shadow { box-shadow: var(--shadow-md); }
+
+        /* ── Header scroll state ── */
+        #main-header.scrolled {
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        }
+
+        /* ── Mega Menu hover bridge ── */
+        .nav-item-mega {
+            position: relative;
+        }
+        .nav-item-mega::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: transparent;
+        }
 
         /* Mobile-Specific Premium Refinements */
         @media (max-width: 639px) {
-            :root {
-                --radius-container: 32px;
-                --radius-card: 20px;
-                --radius-img: 16px;
-            }
             .header-logo { height: 1.75rem !important; }
             .logo-text-main { font-size: 1.25rem !important; }
             h1 { font-size: 2.25rem !important; line-height: 1.1 !important; }
             h3 { font-size: 1.75rem !important; }
-            .premium-toast { right: 1rem; left: 1rem; bottom: 1rem; padding: 0.75rem 1rem; }
-            .premium-btn { padding: 0.85rem 1.5rem !important; font-size: 11px !important; }
+            .premium-toast {
+                right: 1rem;
+                left: 1rem;
+                bottom: 5rem;
+                padding: 0.75rem 1rem;
+            }
+            .premium-btn {
+                padding: 0.85rem 1.5rem !important;
+                font-size: 11px !important;
+            }
         }
     </style>
 
@@ -253,8 +357,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <!-- Global Premium Styles -->
-    <link rel="stylesheet" href="{% static 'css/header_hero.css' %}?v=1.6">
+    <!-- Global Premium Styles - Flower District Theme -->
+    <link rel="stylesheet" href="{% static 'css/flower-district-new.css' %}?v=1.0"> {# Theme styles (Flower District aesthetic - clean white/deep blue) #}
+    <link rel="stylesheet" href="{% static 'css/header_hero.css' %}?v=1.8">
     
 
     {% block split_css %}{% endblock %}
@@ -274,161 +379,95 @@
     <!-- CSRF Helper -->
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
-    <!-- ===== TRANSLUCENT PREMIUM HEADER ===== -->
-    <header id="main-header" class="fixed top-0 left-0 right-0 z-[2000] glass-header-container transition-all duration-500 shadow-header">
-        <!-- Premium Announcement Bar (Now integrated into header for seamless scroll) -->
-        {% if announcement_bar_list %}
-        <div id="announcement-bar" class="w-full bg-primary/95 backdrop-blur-md text-white overflow-hidden relative group">
-            <div class="swiper announcement-swiper h-9">
-                <div class="swiper-wrapper">
-                    {% for bar in announcement_bar_list %}
-                    <div class="swiper-slide flex items-center justify-center text-[10px] font-black uppercase tracking-[0.2em]">
-                        {{ bar.text }}
+    <!-- ===== FLOWER DISTRICT STYLE HEADER ===== -->
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-[2000] bg-white border-b border-[var(--border-custom)] transition-all duration-300">
+        <!-- Tier 1: Announcement & Social Bar -->
+        <div class="border-b border-[var(--border-light)] bg-[var(--surface-light)]">
+            <div class="container h-10 flex items-center justify-between text-xs text-[var(--text-secondary)]">
+                <div class="flex items-center gap-1.5 truncate">
+                    <span class="font-bold text-[var(--primary)]">Enjoy Free Shipping!</span>
+                    {% if announcement_bar_list %}
+                        {% for bar in announcement_bar_list %}
+                            {% if forloop.first %}
+                                <span class="text-[var(--text-muted)]">- {{ bar.text }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <span class="text-[var(--text-muted)]">- Minimum order value varies by location.</span>
+                    {% endif %}
+                </div>
+                <div class="flex items-center gap-4 sm:gap-6 flex-shrink-0">
+                    <div class="flex items-center gap-2 sm:gap-3">
+                        <a href="#" class="font-medium hover:text-[var(--primary)] transition-colors text-[var(--text-secondary)]">En</a>
+                        <span class="text-[var(--border-hover)]">|</span>
+                        <a href="#" class="font-medium hover:text-[var(--primary)] transition-colors text-[var(--text-secondary)]">Ar</a>
                     </div>
-                    {% endfor %}
+                    <div class="flex items-center gap-3 sm:gap-4 text-sm border-l border-[var(--border)] pl-4 sm:pl-6 h-4">
+                        {% if site_settings.instagram %}
+                        <a href="{{ site_settings.instagram }}" target="_blank" class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        {% endif %}
+                        {% if site_settings.whatsapp %}
+                        <a href="https://wa.me/{{ site_settings.whatsapp }}" target="_blank" class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        {% elif site_settings.phone %}
+                        <a href="https://wa.me/{{ site_settings.phone }}" target="_blank" class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        {% endif %}
+                        <a href="#" class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    </div>
                 </div>
             </div>
-            <!-- Close Button -->
-            <button id="dismiss-announcement" class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-all z-10 opacity-0 group-hover:opacity-100">
-                <i class="fas fa-times text-[10px]"></i>
-            </button>
         </div>
-        {% endif %}
 
-        <div class="max-w-screen-xl mx-auto px-4 sm:px-6 py-4 grid grid-cols-[auto_1fr_auto] items-center gap-6 sm:gap-10">
-            
-            <!-- 1. LEFT: AUTHENTIC BRANDING -->
+        <!-- Tier 2: Main Branding, Search & Utilities -->
+        <div class="container py-4 flex items-center justify-between gap-6">
+            <!-- Left: Logo -->
             <div class="flex-shrink-0">
                 <a href="{% url 'core:home' %}" class="block group">
                     {% if site_settings.logo %}
-                        <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="h-8 sm:h-10 w-auto group-hover:scale-105 transition-transform header-logo">
+                        <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
                     {% else %}
-                        <span class="text-2xl font-black tracking-tighter group-hover:text-primary transition-colors logo-text-main">{{ site_settings.site_name|default:"JKR" }}</span>
+                         <div class="logo-box border-2 border-[var(--text-primary)] px-4 py-1.5 text-center relative inline-block transition-transform group-hover:scale-105">
+                             <div class="text-[13px] font-bold tracking-[0.3em] uppercase leading-none text-[var(--text-primary)]">JKR</div>
+                             <div class="text-[9px] font-medium tracking-[0.2em] text-[var(--text-secondary)] mt-0.5">INTERNATIONAL</div>
+                         </div>
                     {% endif %}
                 </a>
             </div>
 
-            <!-- 2. CENTER: AMAZON-STYLE CATEGORY + SEARCH (DESKTOP HIDDEN ON MOBILE) -->
-            {% if design_settings.show_header_search %}
-                <div class="flex-1 max-w-4xl hidden lg:flex flex-col gap-2 items-center">
-                    <div class="category-search-bar group relative w-full h-12 flex items-center">
-                        
-                        <!-- Categories Dropdown Trigger -->
-                        <div class="categories-trigger group/label h-full">
-                            <span class="font-black text-[11px] tracking-widest uppercase">Categories</span>
-                            <i class="fas fa-chevron-down text-[9px] opacity-40 group-hover/label:rotate-180 transition-transform"></i>
+            <!-- Center: Search Input (desktop-only) -->
+            <div class="hidden lg:block flex-grow max-w-lg mx-auto">
+                <form action="{% url 'products:product_list' %}" method="GET" class="relative">
+                    <input type="text"
+                           name="q"
+                           placeholder="What are you looking for?"
+                           class="w-full h-11 pl-4 pr-12 bg-[var(--card)] border border-[var(--border)] rounded-sm text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)] transition-colors">
+                    <button type="submit" class="absolute right-0 top-0 h-11 w-12 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--primary)] transition-colors">
+                        <i class="fas fa-search text-base"></i>
+                    </button>
+                </form>
+            </div>
 
-                            <!-- MEGA MENU (The Powerhouse) -->
-                            {% load cache %}
-                            {% cache 3600 mega_menu categories.count all_brands_count %}
-                            <div class="mega-menu">
-                                <!-- Category Sidebar -->
-                                <div class="category-list h-full overflow-y-auto">
-                                    {% for cat in categories %}
-                                    <div class="category-item group/item transition-colors" data-category-id="{{ cat.id }}">
-                                        <a href="{{ cat.get_absolute_url }}" class="flex items-center justify-between w-full h-full px-6 py-4 text-slate-600 hover:text-primary no-underline">
-                                            <span class="font-bold uppercase tracking-wider text-xs">{{ cat.name }}</span>
-                                            <i class="fas fa-chevron-right text-[10px] opacity-20 transition-transform group-hover/item:translate-x-1"></i>
-                                        </a>
-                                        
-                                        <!-- Dynamic Panel (Flyout to the right) -->
-                                        <div class="subcategory-panel absolute left-[100%] ml-2 top-0 min-h-full w-[560px] bg-white rounded-2xl p-8 overflow-y-auto transition-all shadow-2xl border border-slate-100 z-10 invisible opacity-0 translate-x-[-10px] group-hover/item:visible group-hover/item:opacity-100 group-hover/item:translate-x-0">
-                                            <div class="space-y-6">
-                                                <h4 class="text-xl font-black text-slate-900 border-b pb-4">{{ cat.name }}</h4>
-                                                
-                                                {% if cat.active_subcategories %}
-                                                    <div class="grid grid-cols-2 gap-x-12 gap-y-6">
-                                                        {% for sub in cat.active_subcategories %}
-                                                        <div class="space-y-3">
-                                                            <!-- Subcategory (No bullet) -->
-                                                            <a href="{{ sub.get_absolute_url }}" class="text-sm font-black text-primary uppercase tracking-widest hover:translate-x-1 transition-transform block">{{ sub.name }}</a>
-                                                            <!-- Products under subcategory (Now using denormalized count or showing all if small) -->
-                                                            <div class="flex flex-col gap-2 pl-3 border-l border-slate-100 ml-0.5">
-                                                                {% for prod in sub.products.all|slice:":3" %}
-                                                                <a href="{{ prod.get_absolute_url }}" class="flex items-center gap-2 text-[13px] font-semibold text-slate-600 hover:text-secondary transition-colors">
-                                                                    <span class="w-1 h-1 rounded-full bg-slate-300 flex-shrink-0"></span>
-                                                                    {{ prod.name }}
-                                                                </a>
-                                                                {% endfor %}
-                                                            </div>
-                                                        </div>
-                                                        {% endfor %}
-                                                    </div>
-                                                {% else %}
-                                                    <div class="grid grid-cols-2 gap-4">
-                                                        {% for prod in cat.products.all|slice:":6" %}
-                                                        <!-- Category Products with bullet -->
-                                                        <a href="{{ prod.get_absolute_url }}" class="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100 group/prod">
-                                                            <span class="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/prod:bg-primary transition-colors flex-shrink-0"></span>
-                                                            <img src="{{ prod.get_image_url }}" class="w-12 h-12 rounded-lg object-cover shadow-sm">
-                                                            <span class="text-[13px] font-bold text-slate-600 group-hover/prod:text-secondary transition-colors">{{ prod.name }}</span>
-                                                        </a>
-                                                        {% endfor %}
-                                                    </div>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            {% endcache %}
-                        </div>
-
-                        <!-- Search Input Wrapper -->
-                        <form action="{% url 'products:product_list' %}" method="GET" class="flex-1 h-full flex items-center">
-                            <input type="text" 
-                                   name="q" 
-                                   placeholder="What are you looking for today?" 
-                                   class="search-input h-full w-full bg-transparent focus:outline-none focus:ring-0">
-                            <button type="submit" class="h-full px-6 hover:text-primary transition-all flex items-center justify-center premium-icon">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="flex items-center justify-center gap-6 px-4">
-                        <a href="{% url 'core:home' %}" class="quick-nav-link text-[10px] font-black uppercase tracking-[0.2em]">Home</a>
-                        <a href="{% url 'products:product_list' %}" class="quick-nav-link text-[10px] font-black uppercase tracking-[0.2em]">Collections</a>
-                        <a href="{% url 'products:brand_list' %}" class="quick-nav-link text-[10px] font-black uppercase tracking-[0.2em]">Brands</a>
-                        <a href="{% url 'core:services' %}" class="quick-nav-link text-[10px] font-black uppercase tracking-[0.2em]">Services</a>
-                        <a href="{% url 'core:about_us' %}" class="quick-nav-link text-[10px] font-black uppercase tracking-[0.2em]">About Us</a>
-                        <a href="{% url 'core:store_locations' %}" class="quick-nav-link text-[10px] font-black uppercase tracking-[0.2em]">Store Locations</a>
-                        <a href="{% url 'contact:contact' %}" class="quick-nav-link text-[10px] font-black uppercase tracking-[0.2em]">Contact</a>
-                    </div>
-                </div>
-            {% endif %}
-
-            <div class="flex items-center gap-3 sm:gap-6">
+            <!-- Right: Utilities (desktop-only) -->
+            <div class="hidden lg:flex items-center gap-8 text-[var(--text-primary)]">
                 <!-- User Account -->
                 {% if design_settings.show_header_account %}
-                <div class="group relative block">
-                    <button class="flex items-center gap-3 p-2 group" aria-label="Account">
-                        <div class="premium-icon-box w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10 group-hover:bg-primary group-hover:border-primary transition-all shadow-sm">
-                            <i class="fas fa-user-circle text-sm sm:text-lg group-hover:scale-110 transition-transform premium-icon"></i>
-                        </div>
-                        <div class="hidden xl:block text-left">
-                            <p class="premium-icon-text-small text-[9px] font-black uppercase tracking-widest opacity-50">My Account</p>
-                            <p class="premium-icon-text text-xs font-bold font-sans">{% if user.is_authenticated %}{{ user.username|truncatechars:10 }}{% else %}Login / Join{% endif %}</p>
-                        </div>
-                    </button>
+                <div class="group relative">
+                    <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center">
+                        <i class="far fa-user text-xl"></i>
+                        <span class="text-[11px] font-medium tracking-wide">Account</span>
+                    </a>
                     <!-- Account Dropdown -->
-                    <div class="dropdown-menu right-0 left-auto origin-top-right p-2 w-56 !rounded-2xl bg-white shadow-2xl overflow-hidden border-none transition-all duration-300">
+                    <div class="absolute right-0 top-full mt-2 hidden group-hover:block w-48 bg-white border border-[var(--border)] shadow-[var(--shadow-md)] rounded-sm py-1 z-50">
+                        <div class="absolute -top-2 left-0 right-0 h-2 bg-transparent"></div>
                         {% if user.is_authenticated %}
-                        <div class="p-4 bg-slate-50/50 rounded-xl mb-1">
-                             <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Signed in as</p>
-                             <p class="text-xs font-black text-slate-900 truncate">{{ user.username }}</p>
-                        </div>
-                        <a href="{% url 'accounts:profile' %}" class="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 text-xs font-black text-slate-600 hover:text-primary transition-all"><i class="fas fa-id-card opacity-30 text-base"></i> Profile</a>
-                        <a href="{% url 'accounts:order_history' %}" class="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 text-xs font-black text-slate-600 hover:text-primary transition-all"><i class="fas fa-history opacity-30 text-base"></i> Orders</a>
-                        <a href="{% url 'accounts:profile' %}?tab=billing" class="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 text-xs font-black text-slate-600 hover:text-primary transition-all"><i class="fas fa-credit-card opacity-30 text-base"></i> Billing & Plans</a>
-                        <div class="h-px bg-slate-100 my-1"></div>
-                        <a href="{% url 'accounts:logout' %}" class="flex items-center gap-3 p-3 rounded-xl bg-red-50 text-red-600 text-xs font-black hover:bg-red-100 transition-all"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            <div class="px-4 py-2 text-xs font-bold text-[var(--text-primary)] truncate border-b border-[var(--border-light)] mb-1">
+                                Hi, {{ user.username }}
+                            </div>
+                            <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Profile</a>
+                            <a href="{% url 'accounts:order_history' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Orders</a>
+                            <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-xs text-[var(--error)] hover:bg-[var(--surface-light)]">Logout</a>
                         {% else %}
-                        <div class="p-4 space-y-3">
-                            <a href="{% url 'accounts:login' %}" class="block w-full py-4 primary-accent-btn text-center rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20">Sign In</a>
-                            <a href="{% url 'accounts:register' %}" class="block w-full py-4 border-2 border-slate-100 text-slate-950 text-center rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-primary transition-all">Create Account</a>
-                        </div>
+                            <a href="{% url 'accounts:login' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Login</a>
+                            <a href="{% url 'accounts:register' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Register</a>
                         {% endif %}
                     </div>
                 </div>
@@ -436,216 +475,352 @@
 
                 <!-- Wishlist -->
                 {% if design_settings.show_header_wishlist %}
-                <a href="{% url 'products:wishlist' %}" class="premium-icon-box relative w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10 hover:bg-red-500 hover:border-red-500 transition-all group" aria-label="Wishlist">
-                    <i class="fas fa-heart text-sm group-hover:scale-110 transition-transform premium-icon"></i>
-                    <span class="wishlist-count-badge absolute -top-1 -right-1 w-5 h-5 bg-red-600 rounded-full border-2 border-slate-950 text-[9px] font-black text-white flex items-center justify-center animate-bounce {% if not wishlist_count %}hidden{% endif %}">
-                        {{ wishlist_count|default:"0" }}
+                <a href="{% url 'products:wishlist' %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center relative">
+                    <div class="relative">
+                        <i class="far fa-heart text-xl"></i>
+                        <span class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center {% if not wishlist_count %}hidden{% endif %}">
+                            {{ wishlist_count|default:"0" }}
+                        </span>
+                    </div>
+                    <span class="text-[11px] font-medium tracking-wide">Wishlist</span>
+                </a>
+                {% endif %}
+
+                <!-- Shopping Cart -->
+                {% if design_settings.show_header_cart %}
+                <a href="{% url 'orders:enquiry_cart' %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center relative">
+                    <div class="relative">
+                        <i class="far fa-shopping-bag text-xl"></i>
+                        <span class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center {% if not cart_count %}hidden{% endif %}">
+                            {{ cart_count|default:"0" }}
+                        </span>
+                    </div>
+                    <span class="text-[11px] font-medium tracking-wide">Cart</span>
+                </a>
+                {% endif %}
+
+                <!-- Store Locations -->
+                <a href="{% url 'core:store_locations' %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center">
+                    <i class="far fa-map-marker-alt text-xl"></i>
+                    <span class="text-[11px] font-medium tracking-wide">Stores</span>
+                </a>
+            </div>
+
+            <!-- Mobile utility icons (visible on mobile, hidden on lg) -->
+            <div class="flex lg:hidden items-center gap-3 text-[var(--text-primary)]">
+                {% if design_settings.show_header_cart %}
+                <a href="{% url 'orders:enquiry_cart' %}" class="relative hover:text-[var(--primary)] transition-colors p-2">
+                    <i class="far fa-shopping-bag text-xl"></i>
+                    <span class="cart-count-badge absolute top-1 right-1 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center {% if not cart_count %}hidden{% endif %}">
+                        {{ cart_count|default:"0" }}
                     </span>
                 </a>
                 {% endif %}
-
-                <!-- Cart -->
-                {% if design_settings.show_header_cart %}
-                <a href="{% url 'orders:enquiry_cart' %}" class="w-10 h-10 sm:w-auto sm:px-5 sm:h-12 rounded-full primary-accent-btn flex items-center justify-center gap-3 transition-all shadow-lg shadow-primary/20 group" aria-label="Cart">
-                    <i class="fas fa-shopping-basket text-sm sm:text-lg text-white group-hover:rotate-12 transition-transform"></i>
-                    <div class="hidden sm:block text-left border-l border-white/20 pl-3">
-                         <p class="text-[9px] font-black text-white/50 uppercase tracking-widest leading-none mb-1">Cart</p>
-                         <p class="text-xs font-black text-white"><span class="cart-count-val">{{ cart_count|default:"0" }}</span> items</p>
-                    </div>
-                </a>
-                {% endif %}
-
-                <!-- Mobile Hamburger -->
-                <button id="mobile-menu-trigger" class="premium-icon-box lg:hidden w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10 text-white" aria-label="Menu">
-                    <i class="fas fa-bars text-lg" id="hamburger-icon"></i>
+                <button id="mobile-menu-trigger" class="hover:text-[var(--primary)] transition-colors p-2" aria-label="Menu">
+                    <i class="fas fa-bars text-xl" id="hamburger-icon"></i>
                 </button>
             </div>
         </div>
 
+        <!-- Tier 3: Scrollable Category Navigation (Desktop Only) -->
+        <div class="border-t border-[var(--border)] bg-white hidden lg:block">
+            <div class="container relative">
+                <nav id="header-category-nav" class="flex items-center py-3 overflow-x-hidden">
+                    <!-- Left Arrow -->
+                    <button id="cat-scroll-left"
+                            class="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 bg-white border border-[var(--border)] rounded-full flex items-center justify-center shadow-sm hover:bg-[var(--surface-light)] transition-all"
+                            aria-label="Scroll categories left">
+                        <i class="fas fa-chevron-left text-sm text-[var(--text-muted)]"></i>
+                    </button>
+
+                    <div id="header-category-scroll"
+                         class="flex items-center gap-8 whitespace-nowrap overflow-x-auto no-scrollbar scroll-smooth flex-1 mx-10">
+                        {% for cat in categories %}
+                        <div class="relative nav-item-mega group/nav-item flex-shrink-0">
+                            <a href="{{ cat.get_absolute_url }}" class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-1">
+                                {{ cat.name }}
+                                {% if cat.active_subcategories %}
+                                <i class="fas fa-chevron-down text-[8px] text-[var(--text-muted)] opacity-60 group-hover/nav-item:rotate-180 transition-transform duration-200"></i>
+                                {% endif %}
+                            </a>
+
+                            {% if cat.active_subcategories %}
+                            <div class="absolute left-1/2 -translate-x-1/2 top-full mt-3 hidden group-hover/nav-item:block w-[800px] bg-white border border-[var(--border)] shadow-[var(--shadow-lg)] rounded-xl z-50 transition-all duration-200" style="opacity:0;transform:translateX(-50%) translateY(8px);">
+                                <div class="absolute -top-3 left-0 right-0 h-3 bg-transparent"></div>
+                                <div class="grid grid-cols-4 gap-0 p-6">
+                                    {% for sub in cat.active_subcategories %}
+                                    <div>
+                                        <a href="{{ sub.get_absolute_url }}" class="block group">
+                                             <h5 class="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--primary)] mb-3 pb-2 border-b border-[var(--border)]">
+                                                {{ sub.name }}
+                                            </h5>
+                                            {% if sub.active_subcategories %}
+                                            <div class="space-y-2">
+                                                {% for subsub in sub.active_subcategories %}
+                                                 <a href="{{ subsub.get_absolute_url }}" class="block text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--primary)] hover:pl-2 transition-all">
+                                                    {{ subsub.name }}
+                                                </a>
+                                                {% endfor %}
+                                            </div>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                 <div class="border-t border-[var(--border)] px-6 py-4 bg-[var(--surface-light)] rounded-b-xl">
+                                     <a href="{{ cat.get_absolute_url }}" class="flex items-center justify-between text-xs font-bold text-[var(--primary)] hover:text-[var(--primary-light)] transition-colors">
+                                        <span>View All {{ cat.name }}</span>
+                                        <i class="fas fa-arrow-right text-[10px]"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Right Arrow -->
+                    <button id="cat-scroll-right"
+                            class="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 bg-white border border-[var(--border)] rounded-full flex items-center justify-center shadow-sm hover:bg-[var(--surface-light)] transition-all"
+                            aria-label="Scroll categories right">
+                        <i class="fas fa-chevron-right text-sm text-[var(--text-muted)]"></i>
+                    </button>
+                </nav>
+            </div>
+         </div>
+
         <!-- MOBILE SEARCH & NAV (Slide Down) -->
-        <div id="mobile-menu" class="hidden lg:hidden border-t border-white/10 bg-slate-950 max-h-[85vh] overflow-y-auto">
-            <div class="p-6 space-y-8">
+        <div id="mobile-menu" class="hidden lg:hidden" style="border-top:1px solid var(--border);background:var(--card);max-height:85vh;overflow-y:auto;">
+            <div style="padding:28px 24px;display:flex;flex-direction:column;gap:28px;">
                 <!-- Mobile Search -->
-                <form action="{% url 'products:product_list' %}" method="GET" class="relative group">
-                    <input type="text" name="q" placeholder="Explore our store..." class="w-full bg-white/5 border border-white/10 rounded-2xl py-5 px-6 text-sm text-white focus:outline-none focus:border-primary transition-all">
-                    <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 group-hover:text-primary transition-colors">
-                        <i class="fas fa-search text-lg"></i>
+                <form action="{% url 'products:product_list' %}" method="GET" class="relative">
+                    <input type="text" name="q" placeholder="What are you looking for?"
+                           style="width:100%;padding:13px 16px 13px 48px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-main);font-size:14px;color:var(--txt-main);outline:none;transition:border-color 0.2s;">
+                    <button type="submit" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;">
+                        <i class="fas fa-search text-sm"></i>
                     </button>
                 </form>
 
                 <!-- Navigation Accordion -->
-                <nav class="space-y-2">
-                    <p class="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] ml-2 mb-4">Shop Categories</p>
+                <nav style="display:flex;flex-direction:column;gap:8px;">
+                    <p style="font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;padding-left:8px;">Shop Categories</p>
                     {% for cat in categories %}
-                    <div class="rounded-2xl border border-white/5 bg-white/[0.02] mobile-accordion">
-                        <button class="w-full flex items-center justify-between p-5 text-sm font-black text-white hover:text-primary transition-all accordion-trigger">
-                            {{ cat.name }}
-                            <i class="fas fa-chevron-down text-[10px] opacity-40 chevron transition-transform"></i>
-                        </button>
-                        <div class="hidden px-5 pb-5 space-y-3 border-t border-white/5 pt-4">
-                            {% for sub in cat.active_subcategories %}
-                            <a href="{{ sub.get_absolute_url }}" class="block text-xs font-bold text-slate-400 hover:text-white transition-all pl-2 border-l-2 border-primary/20 hover:border-primary">{{ sub.name }}</a>
-                            {% endfor %}
-                            <a href="{{ cat.get_absolute_url }}" class="block text-[10px] font-black text-primary uppercase tracking-widest pt-2">View All {{ cat.name }}</a>
+                    <div class="mobile-accordion-item" style="border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);overflow:hidden;">
+                        <div style="display:flex;align-items:center;padding:16px;gap:12px;">
+                            <a href="{{ cat.get_absolute_url }}" style="flex:1;font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--txt-main);text-decoration:none;">{{ cat.name }}</a>
+                            {% if cat.active_subcategories %}
+                            <button class="accordion-trigger" style="background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-chevron-down text-[10px] chevron" style="transition:transform 0.25s;"></i>
+                            </button>
+                            {% endif %}
                         </div>
+                        {% if cat.active_subcategories %}
+                        <div class="mobile-sub" style="display:none;padding:0 16px 16px;border-top:1px solid var(--border);">
+                            {% for sub in cat.active_subcategories %}
+                            <a href="{{ sub.get_absolute_url }}" style="display:block;padding:8px 0;font-size:12px;font-weight:600;color:var(--text-secondary);border-left:2px solid var(--border);padding-left:12px;margin-top:8px;transition:all 0.15s;text-decoration:none;"
+                               onmouseover="this.style.color='var(--primary)';this.style.borderLeftColor='var(--primary)'"
+                               onmouseout="this.style.color='var(--text-secondary)';this.style.borderLeftColor='var(--border)'">
+                                {{ sub.name }}
+                            </a>
+                            {% endfor %}
+                            <a href="{{ cat.get_absolute_url }}" style="display:block;padding:10px 0 0;font-size:10px;font-family:var(--font-heading);font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--primary);text-decoration:none;">
+                                View All {{ cat.name }} →
+                            </a>
+                        </div>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </nav>
 
                 <!-- Mobile Account Actions -->
-                <div class="pt-6 border-t border-white/10 space-y-4">
-                    <p class="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] ml-2 mb-4">Account & Support</p>
+                <div style="padding-top:20px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:12px;">
+                    <p style="font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;padding-left:8px;">Account & Support</p>
                     {% if user.is_authenticated %}
-                        <div class="flex items-center gap-4 p-5 rounded-2xl bg-white/5 border border-white/5">
-                            <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-black text-xl">
+                        <div style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);">
+                            <div style="width:40px;height:40px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-family:var(--font-heading);font-size:16px;font-weight:800;flex-shrink:0;">
                                 {{ user.username|first|upper }}
                             </div>
                             <div>
-                                <p class="text-[10px] font-black text-white/40 uppercase tracking-widest leading-none mb-1">Signed in as</p>
-                                <p class="text-sm font-black text-white">{{ user.username }}</p>
+                                <p style="font-size:9px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px;">Signed in as</p>
+                                <p style="font-size:13px;font-weight:700;color:var(--txt-main);">{{ user.username }}</p>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-3 mb-3">
-                            <a href="{% url 'accounts:profile' %}" class="flex items-center justify-center gap-2 p-4 rounded-xl bg-white/5 text-xs font-black text-white hover:bg-white/10 transition-all border border-white/5">
-                                <i class="fas fa-id-card text-primary opacity-50"></i> Profile
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                            <a href="{% url 'accounts:profile' %}" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-heading);font-size:11px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:all 0.2s;">
+                                <i class="fas fa-id-card" style="color:var(--primary);"></i> Profile
                             </a>
-                            <a href="{% url 'accounts:order_history' %}" class="flex items-center justify-center gap-2 p-4 rounded-xl bg-white/5 text-xs font-black text-white hover:bg-white/10 transition-all border border-white/5">
-                                <i class="fas fa-history text-primary opacity-50"></i> Orders
+                            <a href="{% url 'accounts:order_history' %}" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-heading);font-size:11px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:all 0.2s;">
+                                <i class="fas fa-history" style="color:var(--primary);"></i> Orders
                             </a>
                         </div>
-<a href="{% url 'accounts:profile' %}?tab=billing" class="block w-full mb-3 p-4 rounded-xl bg-white/5 text-center text-xs font-black text-white hover:bg-white/10 transition-all border border-white/5">
-                                <i class="fas fa-credit-card text-primary opacity-50 mr-2"></i> Billing & Plans
-                            </a>
-                        <a href="{% url 'accounts:logout' %}" class="block w-full p-4 rounded-xl bg-red-500/10 text-red-500 text-center text-xs font-black hover:bg-red-500/20 transition-all border border-red-500/20">
+                        <a href="{% url 'accounts:logout' %}" style="display:block;padding:12px;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.12);border-radius:var(--radius-sm);text-align:center;font-family:var(--font-heading);font-size:11px;font-weight:800;color:var(--error);text-decoration:none;transition:all 0.2s;">
                             Sign Out
                         </a>
                     {% else %}
-                        <div class="grid grid-cols-2 gap-4">
-                            <a href="{% url 'accounts:login' %}" class="flex items-center justify-center py-4 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20">Sign In</a>
-                            <a href="{% url 'accounts:register' %}" class="flex items-center justify-center py-4 border border-white/10 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition-all">Register</a>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                            <a href="{% url 'accounts:login' %}" style="display:flex;align-items:center;justify-content:center;padding:14px;background:var(--primary);color:white;border-radius:var(--radius-sm);font-family:var(--font-heading);font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;">
+                                Sign In
+                            </a>
+                            <a href="{% url 'accounts:register' %}" style="display:flex;align-items:center;justify-content:center;padding:14px;background:var(--card);border:1px solid var(--border);color:var(--txt-main);border-radius:var(--radius-sm);font-family:var(--font-heading);font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;">
+                                Register
+                            </a>
                         </div>
                     {% endif %}
+
+                    <a href="{% url 'core:store_locations' %}" style="display:flex;align-items:center;gap:10px;padding:12px 0;font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:color 0.2s;">
+                        <i class="far fa-map-marker-alt text-lg" style="color:var(--primary);"></i> Store Locations
+                    </a>
+                    <a href="{% url 'core:faq' %}" style="display:flex;align-items:center;gap:10px;padding:12px 0;font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:color 0.2s;">
+                        <i class="far fa-question-circle text-lg" style="color:var(--primary);"></i> FAQs
+                    </a>
                 </div>
-
-
             </div>
         </div>
     </header>
 
-    <!-- Main Content (Added pt-20 to compensate fixed header for subpages) -->
-    <main class="min-h-[70vh] {% if request.path != '/' %}pt-32{% endif %}">
+    <!-- Main Content -->
+    <main class="min-h-[70vh] pt-[120px] lg:pt-[160px]">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Premium Footer (Condensed for better flow) -->
-    <footer class="bg-slate-950 pt-24 pb-12 text-white">
-        <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
-                <!-- 1. Brand & Description -->
-                <div class="space-y-10">
+    <!-- Premium Footer — JKR International -->
+    <footer class="bg-[#1A1A1A] pt-20 pb-10 text-white">
+        <div class="container">
+            <!-- Main Footer Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Column 1: Brand & Contact -->
+                <div class="space-y-8">
                     <a href="{% url 'core:home' %}" class="block group">
-                        <div class="flex items-center gap-4">
-                            {% if site_settings.logo %}
-                                <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="h-10 w-auto group-hover:scale-105 transition-transform">
-                            {% else %}
-                                <span class="text-3xl font-black text-white logo-text-main group-hover:text-primary transition-colors tracking-tighter">{{ site_settings.site_name|default:"JKR" }}</span>
-                            {% endif %}
-                        </div>
+                        {% if site_settings.logo %}
+                            <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="h-10 w-auto brightness-0 invert">
+                        {% else %}
+                            <span class="text-2xl font-black text-white tracking-tight">{{ site_settings.site_name|default:"JKR International" }}</span>
+                        {% endif %}
                     </a>
 
-                    <div class="space-y-8 text-xs text-slate-500 font-bold uppercase tracking-widest">
+                    <p class="text-sm text-white/45 leading-relaxed">
+                        Delivering world-class medical equipment and integrated healthcare technology solutions globally.
+                    </p>
+
+                    <div class="space-y-4 text-sm text-white/55">
                         {% if site_settings.dubai_address %}
-                        <div class="space-y-2">
-                            <h5 class="text-primary text-[10px] font-black tracking-[0.2em]">{{ site_settings.branch1_name|default:"Dubai" }}</h5>
-                            <div class="flex items-start gap-4">
-                                <i class="fas fa-map-marker-alt text-primary/60 mt-0.5"></i>
-                                <span class="leading-relaxed opacity-80">{{ site_settings.dubai_address }}</span>
-                            </div>
+                        <div class="flex items-start gap-3">
+                             <i class="fas fa-map-marker-alt text-[var(--accent)] mt-1 flex-shrink-0"></i>
+                            <span class="leading-relaxed">{{ site_settings.dubai_address }}</span>
                         </div>
                         {% endif %}
-                        <div class="pt-2 space-y-4">
-                            {% if site_settings.phone %}
-                            <div class="flex items-center gap-4">
-                                <i class="fas fa-phone-alt text-primary/60"></i>
-                                <span class="opacity-80">{{ site_settings.phone }}</span>
-                            </div>
-                            {% endif %}
+                        {% if site_settings.email %}
+                        <div class="flex items-center gap-3">
+                             <i class="fas fa-envelope text-[var(--accent)] flex-shrink-0"></i>
+                            <a href="mailto:{{ site_settings.email }}" class="hover:text-white transition-colors">{{ site_settings.email }}</a>
                         </div>
+                        {% endif %}
+                        {% if site_settings.phone %}
+                        <div class="flex items-center gap-3">
+                             <i class="fas fa-phone text-[var(--accent)] flex-shrink-0"></i>
+                            <a href="tel:{{ site_settings.phone }}" class="hover:text-white transition-colors">{{ site_settings.phone }}</a>
+                        </div>
+                        {% endif %}
                     </div>
 
-                    <div class="flex gap-4">
+                    <!-- Social Links -->
+                    <div class="flex items-center gap-3">
                         {% if site_settings.instagram %}
-                        <a href="{{ site_settings.instagram }}" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-all"><i class="fab fa-instagram"></i></a>
-                        {% endif %}
-                        {% if site_settings.facebook %}
-                        <a href="{{ site_settings.facebook }}" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-all"><i class="fab fa-facebook-f"></i></a>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="space-y-8">
-                    <h4 class="text-[11px] font-black uppercase tracking-[0.3em] text-primary">Quick Navigation</h4>
-                    <nav class="flex flex-col gap-4">
-                        <a href="{% url 'core:home' %}" class="text-slate-400 hover:text-white transition-colors text-sm font-bold">Home</a>
-                        <a href="{% url 'products:product_list' %}" class="text-slate-400 hover:text-white transition-colors text-sm font-bold">Collections</a>
-                        {% if user.is_authenticated %}
-                        <a href="{% url 'accounts:profile' %}?tab=billing" class="text-slate-400 hover:text-white transition-colors text-sm font-bold">Billing & Plans</a>
-                        {% endif %}
-                        <a href="{% url 'core:services' %}" class="text-slate-400 hover:text-white transition-colors text-sm font-bold">Services</a>
-                        <a href="{% url 'blog:post_list' %}" class="text-slate-400 hover:text-white transition-colors text-sm font-bold">Blog</a>
-                        <a href="{% url 'core:about_us' %}" class="text-slate-400 hover:text-white transition-colors text-sm font-bold">About Us</a>
-                        <a href="{% url 'core:store_locations' %}" class="text-slate-400 hover:text-white transition-colors text-sm font-bold">Store Locations</a>
-                        <a href="{% url 'contact:contact' %}" class="text-slate-400 hover:text-white transition-colors text-sm font-bold">Contact</a>
-                    </nav>
-                </div>
-
-                <div class="space-y-8">
-                    <h4 class="text-[11px] font-black uppercase tracking-[0.3em] text-primary">Our Expertise</h4>
-                    <nav class="flex flex-col gap-4">
-                        {% for cat in categories|slice:":5" %}
-                        <a href="{{ cat.get_absolute_url }}" class="text-slate-400 hover:text-white transition-colors text-sm font-bold">{{ cat.name }}</a>
-                        {% endfor %}
-                    </nav>
-                </div>
-
-                <div class="space-y-8">
-                    <h4 class="text-[11px] font-black uppercase tracking-[0.3em] text-primary">Latest News</h4>
-                    <div class="flex flex-col gap-6">
-                        {% for post in latest_blog_posts %}
-                        <a href="{% url 'blog:post_detail' post.slug %}" class="group/post flex items-center gap-4">
-                            <div class="relative w-12 h-12 flex-shrink-0 overflow-hidden rounded-lg">
-                                <img src="{{ post.get_image_url }}" class="w-full h-full object-cover opacity-60 group-hover/post:opacity-100 group-hover/post:scale-110 transition-all duration-500">
-                            </div>
-                            <div class="flex-1">
-                                <p class="text-[9px] font-black uppercase text-primary/70 tracking-widest mb-1">{{ post.created_at|date:"M d" }}</p>
-                                <h5 class="text-[12px] font-bold text-slate-400 group-hover/post:text-white transition-colors line-clamp-2 leading-tight">{{ post.title }}</h5>
-                            </div>
+                         <a href="{{ site_settings.instagram }}" target="_blank" class="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/50 hover:bg-[var(--primary)] hover:text-white transition-all" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
                         </a>
-                        {% empty %}
-                        <p class="text-xs text-slate-500 italic font-medium">Coming soon.</p>
-                        {% endfor %}
+                        {% endif %}
+                        {% if site_settings.whatsapp or site_settings.phone %}
+                         <a href="https://wa.me/{{ site_settings.whatsapp|default:site_settings.phone }}" target="_blank" class="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/50 hover:bg-[var(--primary)] hover:text-white transition-all" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        {% endif %}
+                         <a href="#" class="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/50 hover:bg-[var(--primary)] hover:text-white transition-all" aria-label="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
                     </div>
                 </div>
 
-                <div class="space-y-8">
-                    <h4 class="text-[11px] font-black uppercase tracking-[0.3em] text-primary">Newsletter</h4>
-                    <p class="text-slate-400 text-sm font-medium">Subscribe for the latest industry updates and curated offers.</p>
-                    <form class="relative">
-                        <input type="email" placeholder="Your Email" class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm focus:outline-none focus:border-primary transition-all">
-                        <button class="absolute right-2 top-2 bottom-2 px-4 bg-primary text-white rounded-xl text-[10px] font-black uppercase">Join</button>
+                <!-- Column 2: Categories -->
+                <div class="space-y-6">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--accent)]">Categories</h4>
+                    <nav class="flex flex-col gap-3">
+                        {% for cat in categories|slice:":8" %}
+                        <a href="{{ cat.get_absolute_url }}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">
+                            {{ cat.name }}
+                        </a>
+                        {% endfor %}
+                    </nav>
+                </div>
+
+                <!-- Column 3: Information -->
+                <div class="space-y-6">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--accent)]">Information</h4>
+                    <nav class="flex flex-col gap-3">
+                        <a href="{% url 'core:store_locations' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Store Locations</a>
+                        <a href="{% url 'accounts:profile' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">My Account</a>
+                        <a href="{% url 'core:about_us' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">About Us</a>
+                        <a href="{% url 'contact:contact' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Contact Us</a>
+                        <a href="{% url 'blog:post_list' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Blog</a>
+                        <a href="#" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Return & Refund Policy</a>
+                        <a href="#" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Terms & Conditions</a>
+                        <a href="#" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Privacy Policy</a>
+                        <a href="{% url 'core:shipping_info' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Shipping & Delivery</a>
+                        <a href="{% url 'core:faq' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">FAQs</a>
+                    </nav>
+                </div>
+
+                <!-- Column 4: Newsletter -->
+                <div class="space-y-6">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--accent)]">Newsletter</h4>
+                    <p class="text-sm text-white/45 leading-relaxed">Subscribe to receive updates, access to exclusive deals, and more.</p>
+
+                    <form class="relative" action="#" method="POST">
+                        {% csrf_token %}
+                         <input type="email" name="email" placeholder="Your email address" required class="w-full bg-white/8 border border-white/10 rounded-full py-3.5 px-5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-[var(--accent)] transition-all pr-14">
+                         <button type="submit" class="absolute right-2 top-1.5 bottom-1.5 px-4 bg-[var(--primary)] text-white rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary-dark)] transition-all">
+                            Subscribe
+                        </button>
                     </form>
+
+                    <!-- Payment Methods -->
+                    <div class="pt-4 border-t border-white/8">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-white/30 mb-4">We Accept</p>
+                        <div class="flex items-center gap-4 flex-wrap">
+                            <div class="flex items-center gap-2 opacity-40 hover:opacity-70 transition-opacity">
+                                <i class="fab fa-cc-visa text-2xl text-white"></i>
+                            </div>
+                            <div class="flex items-center gap-2 opacity-40 hover:opacity-70 transition-opacity">
+                                <i class="fab fa-cc-mastercard text-2xl text-white"></i>
+                            </div>
+                            <div class="text-white/40 text-xs font-bold">COD</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between gap-6">
-                <p class="text-slate-500 text-[10px] uppercase font-black tracking-widest">© 2024 {{ site_settings.site_name|default:"JKR International" }} LLC. All Rights Reserved.</p>
-                <div class="flex gap-8">
-                    <a href="#" class="text-slate-500 hover:text-white text-[10px] uppercase font-black tracking-widest transition-colors">Privacy Policy</a>
-                    <a href="#" class="text-slate-500 hover:text-white text-[10px] uppercase font-black tracking-widest transition-colors">Terms of Service</a>
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-white/8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[11px] text-white/30 font-bold uppercase tracking-widest">
+                    © 2026 {{ site_settings.site_name|default:"JKR International" }}. All rights reserved.
+                </p>
+                <div class="flex items-center gap-6">
+                    <a href="#" class="text-[11px] text-white/30 hover:text-white font-bold uppercase tracking-widest transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-[11px] text-white/30 hover:text-white font-bold uppercase tracking-widest transition-colors">Terms</a>
                 </div>
             </div>
         </div>
     </footer>
+
+    <!-- Floating WhatsApp Button -->
+    {% if site_settings.whatsapp or site_settings.phone %}
+    <a href="https://wa.me/{{ site_settings.whatsapp|default:site_settings.phone|slice:'1:' }}"
+       target="_blank"
+       class="floating-whatsapp"
+       aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    {% endif %}
 
     <!-- Vendor Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
@@ -720,11 +895,18 @@
 
             // 4. Mobile Accordion Logic
             document.querySelectorAll('.accordion-trigger').forEach(trigger => {
-                trigger.addEventListener('click', () => {
-                    const panel = trigger.nextElementSibling;
+                trigger.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const item = trigger.closest('.mobile-accordion-item, .mobile-accordion');
+                    const panel = item ? item.querySelector('.mobile-sub') : null;
                     const chevron = trigger.querySelector('.chevron');
-                    panel.classList.toggle('hidden');
-                    if (chevron) chevron.classList.toggle('rotate-180');
+                    if (panel) {
+                        const isHidden = panel.style.display === 'none' || panel.style.display === '';
+                        panel.style.display = isHidden ? 'block' : 'none';
+                        if (chevron) {
+                            chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+                        }
+                    }
                 });
             });
 
@@ -743,6 +925,32 @@
                     document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
                 });
+            });
+
+            // 7. Scroll Animation Observer for staggered children
+            const animateObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                        animateObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            document.querySelectorAll('.stagger-children > *').forEach((el, i) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = `opacity 0.5s ease ${i * 80}ms, transform 0.5s ease ${i * 80}ms`;
+                animateObserver.observe(el);
+            });
+
+            // 8. Intersection Observer for general scroll animations
+            document.querySelectorAll('[data-animate]').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(16px)';
+                el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                animateObserver.observe(el);
             });
         });
 
@@ -895,6 +1103,47 @@
             setInterval(() => {
                 // console.clear(); // Uncomment if you want to keep console clean
             }, 1000);
+        })();
+
+        // ===== Header Category Horizontal Scroller with Infinite Loop =====
+        (function() {
+            const scrollContainer = document.getElementById('header-category-scroll');
+            const btnLeft = document.getElementById('cat-scroll-left');
+            const btnRight = document.getElementById('cat-scroll-right');
+
+            if (!scrollContainer || !btnLeft || !btnRight) return;
+
+            const scrollAmount = 200; // pixels per click
+
+            function scrollLeft() {
+                if (scrollContainer.scrollLeft <= 0) {
+                    // Infinite loop: jump to end
+                    scrollContainer.scrollLeft = scrollContainer.scrollWidth;
+                }
+                scrollContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            }
+
+            function scrollRight() {
+                const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+                if (scrollContainer.scrollLeft >= maxScroll - 10) {
+                    // Infinite loop: jump to start
+                    scrollContainer.scrollLeft = 0;
+                }
+                scrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+
+            btnLeft.addEventListener('click', scrollLeft);
+            btnRight.addEventListener('click', scrollRight);
+
+            // Optional: Hide arrows if content doesn't overflow
+            function checkOverflow() {
+                const isOverflowing = scrollContainer.scrollWidth > scrollContainer.clientWidth + 10;
+                btnLeft.style.display = isOverflowing ? 'flex' : 'none';
+                btnRight.style.display = isOverflowing ? 'flex' : 'none';
+            }
+
+            window.addEventListener('resize', checkOverflow);
+            setTimeout(checkOverflow, 300); // initial check after render
         })();
     </script>
 

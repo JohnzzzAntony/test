@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block split_css %}
+<style>
+  /* Flower District Theme - Checkout Success */
+  .bg-slate-50 { background: var(--surface-light) !important; }
+  .text-slate-900 { color: var(--text-primary) !important; }
+</style>
+{% endblock %}
+
 {% block content %}
 <section class="py-12 lg:py-24 bg-slate-50 min-h-screen flex items-center">
     <div class="container mx-auto px-6">

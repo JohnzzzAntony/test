@@ -6,80 +6,24 @@ from .models import SiteSettings, Testimonial, Client, SocialPost, StoreLocation
 from django.db import models
 from products.models import Category, Product, Collection, Brand, Offer
 from sliders.models import HeroSlider, PromoBanner
-from pages.models import AboutUs, MissionVision, Service, Counter, WhyUsCard, Partner, GalleryItem
+from pages.models import AboutUs, MissionVision, Service, Counter, WhyUsCard, Partner, GalleryItem, HomepageSettings, HeroSlide
 from .models import Testimonial, Client, SocialPost, StoreLocation
 
 def home(request):
     """Homepage aggregation view."""
+    # Hero image slides (right panel)
+    hero_slides = HeroSlide.objects.filter(is_active=True).order_by('order')
+
+    # Homepage text / toggle settings (singleton)
+    hp_settings = HomepageSettings.get_settings()
+
     sliders = HeroSlider.objects.filter(is_active=True).order_by('order')
-    
-    # Homepage Interleaving Logic
-    # Homepage sections logic
-    homepage_sections_raw = Category.objects.filter(show_on_homepage=True, is_active=True)
-    
-    # Categories for the circular slider (Top)
-    categories_circles = homepage_sections_raw
-    if not categories_circles.exists():
-        categories_circles = Category.objects.filter(parent__isnull=True, is_active=True)[:10]
-    
-    # ─── Homepage Interleaving Logic ──────────────────────────────────────────
-    # Interleaving Pattern: Category -> Banner -> Category -> Banner
-    
-    # 1. Prepare Categories
-    category_sections = []
-    # Optimization: Prefetch subcategories to speed up logic
-    homepage_sections_raw_prefetched = homepage_sections_raw.prefetch_related('subcategories')
-    
-    # Pre-fetch all active category relations once for efficient descendant lookup
-    all_cats_lookup = list(Category.objects.filter(is_active=True).values('id', 'parent_id'))
-    
-    for cat in homepage_sections_raw_prefetched:
-        # Aggregated products for this category and all its children
-        all_cat_ids = cat.get_descendant_ids(include_self=True, all_cats_prefetched=all_cats_lookup)
-        cat_products = Product.objects.filter(
-            category_id__in=all_cat_ids,
-            is_active=True,
-            quantity__gt=0
-        ).select_related('category', 'brand').prefetch_related('offers', 'images').distinct().order_by('-id')[:8]
-        
-        # Attach aggregated products to the category object for template access
-        cat.aggregated_products = cat_products
-        
-        if cat_products.exists():
-            category_sections.append({
-                'type': 'category', 
-                'data': cat, 
-                'order': cat.homepage_order
-            })
-    
-    # Sort categories by their defined order
-    category_sections.sort(key=lambda x: x['order'])
-    
-    # 2. Prepare Banners
-    banner_sections = []
-    banners = PromoBanner.objects.filter(is_active=True).prefetch_related('items')
-    for banner in banners:
-        banner_sections.append({
-            'type': 'banner', 
-            'data': banner, 
-            'order': banner.homepage_order
-        })
-    
-    # Sort banners by their defined order
-    banner_sections.sort(key=lambda x: x['order'])
 
-    # 3. Interleave and Sort Globally
-    # Combine and sort by homepage_order to allow flexible positioning
-    homepage_sections = category_sections + banner_sections
-    homepage_sections.sort(key=lambda x: x.get('order', 0))
-    
-    # Apply display index for category labeling (e.g. "Section 1")
-    cat_display_count = 1
-    for section in homepage_sections:
-        if section['type'] == 'category':
-            section['display_index'] = cat_display_count
-            cat_display_count += 1
+    # Promo Banners / Promo Sections from admin (sliders app)
+    promo_sections = PromoBanner.objects.filter(is_active=True).prefetch_related('items').order_by('homepage_order')
 
+    # Categories for homepage - top-level only (no parent)
+    categories = Category.objects.filter(parent__isnull=True, is_active=True).order_by('homepage_order', 'name')[:12]
 
     about_us = AboutUs.objects.filter(is_active=True).first()
     
@@ -99,7 +43,7 @@ def home(request):
     private_clients = Client.objects.filter(category='Private', is_active=True).order_by('order')
     social_posts = SocialPost.objects.all().order_by('order')[:6]
     
-    # Optimized latest_products
+    # Optimized latest_products (fallback)
     latest_products = Product.objects.filter(
         quantity__gt=0,
         is_active=True
@@ -115,16 +59,12 @@ def home(request):
         models.Q(sale_price__isnull=False, sale_price__lt=models.F('regular_price'))
     ).distinct().select_related('category', 'brand').prefetch_related('offers', 'images')
 
-    # Premium Featured Products
+    # Featured Products - Only products explicitly marked as featured via admin
     featured_products = Product.objects.filter(
         is_featured=True,
         is_active=True,
         quantity__gt=0
-    ).select_related('category', 'brand').prefetch_related('offers', 'images').order_by('-id')[:8]
-    
-    # Fallback to latest if none featured
-    if not featured_products.exists():
-        featured_products = latest_products
+    ).select_related('category', 'brand').prefetch_related('offers', 'images').order_by('-id')
     
     # Pre-fetch all active offers for price calculation optimization
     all_active_offers = list(Offer.objects.filter(
@@ -140,9 +80,6 @@ def home(request):
     attach_price_info(latest_products)
     attach_price_info(featured_products)
     attach_price_info(active_offers_products)
-    for section in category_sections:
-        if section['type'] == 'category':
-            attach_price_info(section['data'].aggregated_products)
 
     # Homepage Collections: Filter active ones and prefetch related Products.
     collections = Collection.objects.filter(is_active=True).prefetch_related(
@@ -158,8 +95,11 @@ def home(request):
     brands = Brand.objects.filter(show_on_homepage=True, is_active=True).order_by('order')
 
     context = {
+        'hp_settings': hp_settings,
+        'hero_slides': hero_slides,
         'sliders': sliders,
-        'categories': categories_circles,
+        'promo_sections': promo_sections,
+        'categories': categories,
         'collections': collections,
         'active_offers_products': active_offers_products,
         'about_us': about_us,
@@ -175,8 +115,6 @@ def home(request):
         'social_posts': social_posts,
         'latest_products': latest_products,
         'featured_products': featured_products,
-        'promo_banners': banners,
-        'homepage_sections': homepage_sections,
         'brands': brands,
     }
     return render(request, 'index.html', context)
@@ -226,6 +164,14 @@ def store_locations_view(request):
 def health_check(request):
     """Simple health check endpoint for monitoring."""
     return JsonResponse({'status': 'healthy', 'timestamp': timezone.now().isoformat()})
+
+def faq_view(request):
+    """FAQ / Help Center page."""
+    return render(request, 'pages/faq.html', {})
+
+def shipping_info_view(request):
+    """Shipping & Delivery Information page."""
+    return render(request, 'pages/shipping.html', {})
 def robots_txt_view(request):
     """Serve dynamic robots.txt content from SiteSettings."""
     settings = SiteSettings.objects.first()

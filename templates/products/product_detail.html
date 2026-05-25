@@ -1,96 +1,41 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
-
 {% block meta_title %}{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.name }} | {{ site_settings.site_name }}{% endif %}{% endblock %}
 {% block meta_description %}{% if product.meta_description %}{{ product.meta_description }}{% else %}{{ product.overview|striptags|truncatewords:30 }}{% endif %}{% endblock %}
-{% block meta_keywords %}{% if product.meta_keywords %}{{ product.meta_keywords }}{% else %}{{ site_settings.meta_keywords }}{% endif %}{% endblock %}
-
-{% block og_title %}{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.name }} - {{ site_settings.site_name }}{% endif %}{% endblock %}
-{% block og_description %}{% if product.meta_description %}{{ product.meta_description }}{% else %}{{ product.overview|striptags|truncatewords:30 }}{% endif %}{% endblock %}
-{% block og_image %}{{ product.get_image_url }}{% endblock %}
-
-{% block extra_json_ld %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "Product",
-  "name": "{{ product.name }}",
-  "image": [
-    "{{ request.scheme }}://{{ request.get_host }}{{ product.get_image_url }}"
-    {% for pimg in product.images.all %}
-    ,"{{ request.scheme }}://{{ request.get_host }}{{ pimg.image.url }}"
-    {% endfor %}
-  ],
-  "description": "{{ product.meta_description|default:product.overview|striptags|truncatewords:50 }}",
-  "sku": "{{ product.sku_id }}",
-  "brand": {
-    "@type": "Brand",
-    "name": "{{ product.brand.name|default:site_settings.site_name }}"
-  },
-  "offers": {
-    "@type": "Offer",
-    "url": "{{ request.build_absolute_uri }}",
-    "priceCurrency": "AED",
-    "price": "{{ product.sale_price|default:product.regular_price }}",
-    "availability": "https://schema.org/{% if product.quantity > 0 %}InStock{% else %}OutOfStock{% endif %}",
-    "itemCondition": "https://schema.org/NewCondition"
-  }
-}
-</script>
-{% endblock %}
 
 {% block split_css %}
 <style>
-    .product-gallery-thumb.active { border-color: var(--primary); }
-    .tab-btn.active { background-color: var(--primary); color: white; box-shadow: 0 20px 25px -5px rgba(var(--primary-rgb), 0.2), 0 10px 10px -5px rgba(var(--primary-rgb), 0.1); }
-    .tab-content-panel { display: none; }
-    .tab-content-panel.active { display: block; animation: fadeIn 0.5s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    
-    /* Fix for oversized trust badge and product badge SVGs */
-    .trust-badge-icon svg, .product-badge-container svg {
-        width: 100% !important;
-        height: 100% !important;
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-    }
-    .product-badge-container {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-    }
-
-    /* Swiper Custom Styles */
-    .swiper-main {
-        width: 100%;
-        height: 100%;
-    }
-    .swiper-thumbs {
-        width: 100%;
-        padding-top: 10px;
-    }
-    .swiper-thumbs .swiper-slide {
-        opacity: 0.4;
-        transition: opacity 0.3s;
-        cursor: pointer;
-    }
-    .swiper-thumbs .swiper-slide-thumb-active {
-        opacity: 1;
-    }
-    .gallery-thumb-btn.active {
-        border-color: var(--primary) !important;
-    }
+  /* Flower District Inspired Product Detail Page */
+  :root {
+    --fd-primary: #114084;
+    --fd-primary-light: #1a5cb8;
+    --fd-primary-hover: #0d3a6e;
+    --fd-accent: #0081ff;
+    --fd-text: #1a1a1a;
+    --fd-muted: #666666;
+    --fd-border: #e5e5e5;
+    --fd-surface: #ffffff;
+    --fd-surface-light: #f8f9fa;
+    --fd-card: #ffffff;
+    --fd-success: #4A7C59;
+    --fd-error: #C0392B;
+    --fd-warning: #D4A017;
+  }
+  
+  .product-gallery-thumb.active { border-color: var(--fd-primary); }
+  .tab-btn.active { background-color: var(--fd-primary); color: var(--fd-surface); }
+  .tab-content-panel { display: none; }
+  .tab-content-panel.active { display: block; animation: fadeIn 0.5s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .swiper-main, .swiper-thumbs { width: 100%; }
+  .gallery-thumb-btn.active { border-color: var(--fd-primary) !important; }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 {% endblock %}
 
 {% block content %}
-<section class="py-8 lg:py-12 bg-white">
+<section class="py-8 lg:py-12 bg-surface">
     <div class="container mx-auto px-4 lg:px-6">
         <!-- Breadcrumb -->
         <nav class="flex mb-10 text-[11px] font-black uppercase tracking-widest text-slate-400">
@@ -110,22 +55,17 @@
                     <!-- Main Swiper -->
                     <div class="swiper swiper-main aspect-square bg-slate-50 rounded-3xl lg:rounded-[40px] overflow-hidden border border-slate-100 relative group">
                         <div class="swiper-wrapper">
-                            <!-- Primary Image -->
                             <div class="swiper-slide p-6 lg:p-12">
                                 <img src="{{ product.get_image_url }}" alt="{{ product.name }}" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110">
                             </div>
-                            <!-- Gallery Images -->
                             {% for pimg in product.images.all %}
                             <div class="swiper-slide p-6 lg:p-12">
                                 <img src="{{ pimg.image.url }}" alt="{{ product.name }} - Gallery Image {{ forloop.counter }}" class="w-full h-full object-contain">
                             </div>
                             {% endfor %}
                         </div>
-                        
-                        <!-- Navigation Arrows (Desktop Only) -->
                         <div class="swiper-button-next !text-primary !hidden lg:!flex opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="swiper-button-prev !text-primary !hidden lg:!flex opacity-0 group-hover:opacity-100 transition-opacity"></div>
-
                         {% if product.badge %}
                         <div class="absolute top-8 left-8 bg-{{ product.badge_color|default:'primary' }}/90 text-white px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl z-20 product-badge-container max-w-[140px] truncate">
                             {{ product.badge }}
@@ -133,16 +73,14 @@
                         {% endif %}
                     </div>
 
-                    <!-- Thumbnails Swiper -->
+                    <!-- Thumbnails -->
                     <div class="swiper swiper-thumbs mt-4 lg:mt-6" id="product-gallery">
                         <div class="swiper-wrapper">
-                            <!-- Primary Thumbnail -->
                             <div class="swiper-slide">
                                 <div class="gallery-thumb-btn w-16 lg:w-24 h-16 lg:h-24 rounded-2xl border-2 bg-slate-50 p-2 transition-all">
                                     <img src="{{ product.get_image_url }}" alt="{{ product.name }}" class="w-full h-full object-contain">
                                 </div>
                             </div>
-                            <!-- Gallery Thumbnails -->
                             {% for pimg in product.images.all %}
                             <div class="swiper-slide">
                                 <div class="gallery-thumb-btn w-16 lg:w-24 h-16 lg:h-24 rounded-2xl border-2 border-transparent bg-slate-50 p-2 transition-all">
@@ -262,38 +200,27 @@
                 {% with price_info=product.get_best_price_info %}
                 <div class="space-y-3 py-6 border-t border-slate-100">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <!-- Tabby -->
-                        <a href="{% url 'orders:buy_now' product_id=product.id %}?method=tabby&qty=1" 
-                           id="tabby-link" 
-                           class="payment-box-link flex items-center justify-between p-4 rounded-2xl border border-slate-200 hover:border-emerald-500 transition-all group">
+                        <a href="{% url 'orders:buy_now' product_id=product.id %}?method=tabby&qty=1" class="payment-box-link flex items-center justify-between p-4 rounded-2xl border border-slate-200 hover:border-emerald-500 transition-all group">
                             <div class="space-y-1">
                                 <div class="flex items-center gap-2">
                                     <img src="{% static 'assets/logos/tabby.png' %}" alt="Tabby" class="h-6 object-contain">
                                     <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-emerald-500 transition-colors">Installments</span>
                                 </div>
                                 <p class="text-xs font-bold text-slate-900 leading-none">
-                                    <span class="installment-amount text-emerald-600" data-unit-price="{{ price_info.final_price }}" data-divisor="4">
-                                        {{ price_info.tabby_payment|floatformat:2 }}
-                                    </span> 
+                                    <span class="installment-amount text-emerald-600" data-unit-price="{{ price_info.final_price }}" data-divisor="4">{{ price_info.tabby_payment|floatformat:2 }}</span> 
                                     <span class="text-[8px] text-slate-400 font-medium">AED x 4</span>
                                 </p>
                             </div>
                             <i class="fas fa-chevron-right text-[10px] text-slate-200 group-hover:text-emerald-500 transform group-hover:translate-x-1 transition-all"></i>
                         </a>
-
-                        <!-- Tamara -->
-                        <a href="{% url 'orders:buy_now' product_id=product.id %}?method=tamara&qty=1" 
-                           id="tamara-link" 
-                           class="payment-box-link flex items-center justify-between p-4 rounded-2xl border border-slate-200 hover:border-amber-500 transition-all group">
+                        <a href="{% url 'orders:buy_now' product_id=product.id %}?method=tamara&qty=1" class="payment-box-link flex items-center justify-between p-4 rounded-2xl border border-slate-200 hover:border-amber-500 transition-all group">
                             <div class="space-y-1">
                                 <div class="flex items-center gap-2">
                                     <img src="{% static 'assets/logos/tamara.png' %}" alt="Tamara" class="h-6 object-contain">
                                     <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-amber-600 transition-colors">Split Pay</span>
                                 </div>
                                 <p class="text-xs font-bold text-slate-900 leading-none">
-                                    <span class="installment-amount text-amber-600" data-unit-price="{{ price_info.final_price }}" data-divisor="3">
-                                        {{ price_info.tamara_payment|floatformat:2 }}
-                                    </span> 
+                                    <span class="installment-amount text-amber-600" data-unit-price="{{ price_info.final_price }}" data-divisor="3">{{ price_info.tamara_payment|floatformat:2 }}</span> 
                                     <span class="text-[8px] text-slate-400 font-medium">AED x 3</span>
                                 </p>
                             </div>
@@ -380,15 +307,11 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                                 <div class="space-y-6">
                                     <h4 class="text-xl font-black text-slate-900">Dispatch & Delivery</h4>
-                                    <p class="text-sm font-medium text-slate-500 leading-relaxed">
-                                        All orders are processed within 24 hours. We offer express shipping across all UAE Emirates with a standard delivery time of 2-3 business days.
-                                    </p>
+                                    <p class="text-sm font-medium text-slate-500 leading-relaxed">All orders are processed within 24 hours. We offer express shipping across all UAE Emirates with a standard delivery time of 2-3 business days.</p>
                                 </div>
                                 <div class="space-y-6">
                                     <h4 class="text-xl font-black text-slate-900">Secure Packaging</h4>
-                                    <p class="text-sm font-medium text-slate-500 leading-relaxed">
-                                        Our products are professionally packaged in temperature-controlled environments to ensure they reach you in perfect condition.
-                                    </p>
+                                    <p class="text-sm font-medium text-slate-500 leading-relaxed">Our products are professionally packaged in temperature-controlled environments to ensure they reach you in perfect condition.</p>
                                 </div>
                             </div>
                         {% endif %}
@@ -397,7 +320,7 @@
             </div>
         </div>
 
-        <!-- Related Masterpieces -->
+        <!-- Related Products -->
         {% if design_settings.pd_show_related and related_products %}
         <div class="mt-32">
             <div class="flex flex-col items-center justify-center text-center mb-16 space-y-4">
@@ -419,38 +342,25 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // 1. Swiper Gallery Initialization
+        // Swiper Gallery
         const swiperThumbs = new Swiper(".swiper-thumbs", {
             spaceBetween: 16,
             slidesPerView: 4,
             freeMode: true,
             watchSlidesProgress: true,
-            breakpoints: {
-                320: { slidesPerView: 3 },
-                640: { slidesPerView: 4 }
-            }
+            breakpoints: { 320: { slidesPerView: 3 }, 640: { slidesPerView: 4 } }
         });
 
         const swiperMain = new Swiper(".swiper-main", {
             spaceBetween: 0,
             loop: true,
             grabCursor: true,
-            autoplay: {
-                delay: 4000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true
-            },
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-            thumbs: {
-                swiper: swiperThumbs,
-            },
-            // Touch & Slide are enabled by default in Swiper
+            autoplay: { delay: 4000, disableOnInteraction: false, pauseOnMouseEnter: true },
+            navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+            thumbs: { swiper: swiperThumbs }
         });
 
-        // 2. Quantity Logic
+        // Quantity Logic
         document.querySelectorAll('.qty-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const delta = parseInt(btn.dataset.qtyDelta);
@@ -461,7 +371,6 @@
                 if (val > max) val = max;
                 input.value = val;
 
-                // Update Installment Amounts
                 document.querySelectorAll('.installment-amount').forEach(el => {
                     const unitPrice = parseFloat(el.dataset.unitPrice);
                     const divisor = parseInt(el.dataset.divisor) || 4;
@@ -469,7 +378,6 @@
                     el.textContent = (total / divisor).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
                 });
 
-                // Update Payment Links
                 document.querySelectorAll('.payment-box-link').forEach(link => {
                     const url = new URL(link.href, window.location.origin);
                     url.searchParams.set('qty', val);
@@ -478,7 +386,7 @@
             });
         });
 
-        // 3. Tab Logic
+        // Tab Logic
         document.querySelectorAll('[data-tab-trigger]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const tabId = btn.dataset.tabTrigger;
@@ -489,7 +397,7 @@
             });
         });
 
-        // 4. Add to Cart Logic
+        // Add to Cart
         const addToCartBtn = document.getElementById('add-to-cart-main');
         if (addToCartBtn) {
             addToCartBtn.addEventListener('click', () => {
@@ -501,4 +409,3 @@
     });
 </script>
 {% endblock %}
-

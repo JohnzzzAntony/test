@@ -133,6 +133,7 @@ LOGOUT_REDIRECT_URL = "core:home"
 
 MIDDLEWARE = [
     "core.security_middleware.SecurityShieldMiddleware",  # Bot/Probe blocking
+    "core.middleware.NoCacheMiddleware",  # Prevent browser caching of HTML
     "django.middleware.security.SecurityMiddleware",
     "csp.middleware.CSPMiddleware",  # Content Security Policy protection
     "whitenoise.middleware.WhiteNoiseMiddleware",  # Serve static files in prod

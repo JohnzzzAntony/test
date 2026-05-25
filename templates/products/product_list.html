@@ -35,164 +35,463 @@
     {% else %}{{ site_settings.meta_description }}{% endif %}
 {% endblock %}
 
-{% block extra_json_ld %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "{% if current_category %}{{ current_category.name }}{% elif current_brand %}{{ current_brand.name }}{% else %}Products{% endif %}",
-  "itemListElement": [
-    {% for product in products %}
-    {
-      "@type": "ListItem",
-      "position": {{ forloop.counter }},
-      "url": "{{ request.scheme }}://{{ request.get_host }}{{ product.get_absolute_url }}"
-    }{% if not forloop.last %},{% endif %}
-    {% endfor %}
-  ]
-}
-</script>
+{% block split_css %}
+<style>
+  /* Flower District Inspired Catalog Page */
+  :root {
+    --fd-primary: #114084;
+    --fd-primary-light: #1a5cb8;
+    --fd-primary-hover: #0d3a6e;
+    --fd-accent: #0081ff;
+    --fd-text: #1a1a1a;
+    --fd-muted: #666666;
+    --fd-border: #e5e5e5;
+    --fd-surface: #ffffff;
+    --fd-surface-light: #f8f9fa;
+    --fd-card: #ffffff;
+  }
+  
+  /* Catalog Layout */
+  .catalog-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-7);
+    align-items: start;
+  }
+  
+  .catalog-sidebar {
+    position: sticky;
+    top: 140px;
+  }
+  
+  .filter-sidebar {
+    background: var(--fd-card);
+    border: 1px solid var(--fd-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+  }
+  
+  .filter-section {
+    padding-bottom: var(--space-5);
+    margin-bottom: var(--space-5);
+    border-bottom: 1px solid var(--fd-border);
+  }
+  
+  .filter-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  
+  .filter-title {
+    font-size: var(--font-size-base);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fd-text);
+    margin-bottom: var(--space-4);
+  }
+  
+  .filter-option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 6px 0;
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    color: var(--fd-muted);
+    transition: color var(--transition-base);
+  }
+  
+  .filter-option:hover { color: var(--fd-primary); }
+  .filter-option input[type="checkbox"] {
+    accent-color: var(--fd-primary);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+  
+  .filter-option .count {
+    margin-left: auto;
+    font-size: var(--font-size-sm);
+    color: var(--fd-muted);
+  }
+  
+  .category-nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--fd-muted);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+  
+  .category-nav-item:hover {
+    background: var(--fd-surface-light);
+    color: var(--fd-primary);
+  }
+  
+  .category-nav-item.active {
+    background: var(--fd-primary);
+    color: var(--fd-surface);
+  }
+  
+  .sub-category-link {
+    display: block;
+    padding: var(--space-2) var(--space-4) var(--space-2) var(--space-6);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--fd-muted);
+    text-decoration: none;
+    transition: all var(--transition-base);
+    border-left: 2px solid var(--fd-border);
+    margin-bottom: var(--space-1);
+  }
+  
+  .sub-category-link:hover,
+  .sub-category-link.active {
+    color: var(--fd-primary);
+    border-left-color: var(--fd-primary);
+    padding-left: var(--space-6);
+  }
+  
+  .catalog-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-5);
+    background: var(--fd-card);
+    border: 1px solid var(--fd-border);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-7);
+  }
+  
+  .catalog-count {
+    font-size: var(--font-size-base);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--fd-muted);
+  }
+  
+  .sort-select {
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--fd-border);
+    border-radius: var(--radius-full);
+    font-family: var(--font-main);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--fd-text);
+    background: var(--fd-card);
+    cursor: pointer;
+    outline: none;
+    transition: border-color var(--transition-base);
+    min-width: 180px;
+  }
+  
+  .sort-select:focus { border-color: var(--fd-primary); }
+  
+  .catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-5);
+    justify-items: center;
+  }
+  
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--space-8) var(--space-5);
+    background: var(--fd-card);
+    border: 1px dashed var(--fd-border);
+    border-radius: var(--radius-xl);
+  }
+  
+  .empty-state-icon {
+    width: var(--space-8);
+    height: var(--space-8);
+    background: var(--fd-surface-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-4);
+    color: var(--fd-muted);
+    font-size: 32px;
+  }
+  
+  .empty-state-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    font-weight: 800;
+    color: var(--fd-text);
+    margin-bottom: var(--space-2);
+  }
+  
+  .empty-state-desc {
+    font-size: var(--font-size-base);
+    color: var(--fd-muted);
+    margin-bottom: var(--space-6);
+  }
+  
+  .category-banner {
+    position: relative;
+    height: 320px;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    margin-bottom: var(--space-8);
+    background: var(--fd-surface-light);
+  }
+  
+  .category-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.55;
+    transition: transform 0.8s ease;
+  }
+  
+  .category-banner:hover .category-banner-img { transform: scale(1.04); }
+  
+  .category-banner-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-6);
+  }
+  
+  .category-banner-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-2xl);
+    font-weight: 800;
+    color: var(--fd-text);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-3);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .category-banner-desc {
+    font-size: var(--font-size-base);
+    color: var(--fd-muted);
+    max-width: 480px;
+  }
+  
+  .mobile-filter-btn {
+    display: none;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: var(--fd-card);
+    border: 1px solid var(--fd-border);
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--fd-text);
+    cursor: pointer;
+    transition: all var(--transition-base);
+  }
+  
+  .mobile-filter-btn:hover {
+    border-color: var(--fd-primary);
+    color: var(--fd-primary);
+  }
+  
+  @media (max-width: 1024px) {
+    .catalog-layout { grid-template-columns: 1fr; }
+    .catalog-sidebar { position: static; display: none; }
+    .catalog-sidebar.open { display: block; }
+    .mobile-filter-btn { display: flex; }
+    .catalog-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  }
+  
+  @media (max-width: 640px) {
+    .catalog-grid { grid-template-columns: 1fr; }
+    .category-banner { height: 240px; }
+    .category-banner-title { font-size: var(--font-size-xl); }
+    .catalog-toolbar { flex-direction: column; gap: var(--space-3); align-items: stretch; }
+  }
+</style>
 {% endblock %}
 
 {% block content %}
-<section class="py-12 bg-surface min-h-screen">
-    <div class="max-w-screen-xl mx-auto px-6">
-        
-        <!-- Header Section -->
-        <div class="mb-12">
-            <!-- Breadcrumbs -->
-            <nav class="flex mb-8 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                <a href="{% url 'core:home' %}" class="hover:text-primary transition-colors">Frontier</a>
-                <span class="mx-3 opacity-30">/</span>
-                <span class="text-slate-900">
-                    {% if current_category %}{{ current_category.name }}
-                    {% elif collection %}{{ collection.name }} Collection
-                    {% elif current_brand %}{{ current_brand.name }}
-                    {% else %}All Masterpieces{% endif %}
-                </span>
-            </nav>
+<div class="py-10 bg-surface min-h-screen">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
 
-            <!-- Banner -->
-            <div class="relative h-64 lg:h-80 rounded-[40px] overflow-hidden bg-slate-900 group">
-                {% if current_category and current_category.image %}
-                    <img src="{{ current_category.get_image_url }}" alt="{{ current_category.name }}" class="w-full h-full object-cover opacity-50 transition-transform duration-1000 group-hover:scale-110">
-                {% elif collection and collection.cover_image %}
-                    <img src="{{ collection.get_image_url }}" alt="{{ collection.name }}" class="w-full h-full object-cover opacity-50 transition-transform duration-1000 group-hover:scale-110">
-                {% else %}
-                    <div class="w-full h-full bg-gradient-to-br from-slate-950 to-primary/20"></div>
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="{% url 'core:home' %}">Home</a>
+            <span>/</span>
+            {% if current_category %}
+                {% if current_category.parent %}
+                <a href="{{ current_category.parent.get_absolute_url }}">{{ current_category.parent.name }}</a>
+                <span>/</span>
                 {% endif %}
-                
-                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-                    <h1 class="text-5xl lg:text-7xl font-black text-white tracking-tighter mb-4 animate__animated animate__fadeInUp">
-                        {% if current_category %}{{ current_category.name }}
-                        {% elif collection %}{{ collection.name }}
-                        {% elif current_brand %}{{ current_brand.name }}
-                        {% else %}Our Collection{% endif %}
-                    </h1>
-                    <p class="text-slate-300 max-w-2xl font-medium leading-relaxed animate__animated animate__fadeInUp animate__delay-1s">
-                        {% if current_category.description %}{{ current_category.description }}
-                        {% else %}Exquisite craftsmanship meets unparalleled quality in every piece.{% endif %}
-                    </p>
-                </div>
+                <span>{{ current_category.name }}</span>
+            {% elif collection %}
+                <span>{{ collection.name }}</span>
+            {% elif current_brand %}
+                <span>{{ current_brand.name }}</span>
+            {% else %}
+                <span>Shop</span>
+            {% endif %}
+        </nav>
+
+        <!-- Category Banner -->
+        <div class="category-banner">
+            {% if current_category and current_category.image %}
+                <img src="{{ current_category.get_image_url }}" alt="{{ current_category.name }}" class="category-banner-img">
+            {% else %}
+                <div style="position:absolute;inset:0;background:linear-gradient(135deg,#8B4557,#C9A96E);"></div>
+            {% endif %}
+            <div class="category-banner-content">
+                <h1 class="category-banner-title">
+                    {% if current_category %}{{ current_category.name }}
+                    {% elif collection %}{{ collection.name }}
+                    {% elif current_brand %}{{ current_brand.name }}
+                    {% else %}Our Shop{% endif %}
+                </h1>
+                {% if current_category.description %}
+                <p class="category-banner-desc">{{ current_category.description|striptags|truncatewords:20 }}</p>
+                {% endif %}
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <!-- Sidebar: Categories -->
-            <aside class="lg:col-span-3 space-y-10">
-                <div class="space-y-6">
-                    <h3 class="text-xs font-black uppercase tracking-[0.3em] text-primary">Browse Categories</h3>
-                    <div class="space-y-1">
-                        <a href="{% url 'products:product_list' %}" class="flex items-center justify-between p-4 rounded-2xl text-sm font-bold {% if not current_category %}bg-primary text-white shadow-xl shadow-primary/20{% else %}text-slate-500 hover:bg-slate-50{% endif %} transition-all">
-                            <span>All Collection</span>
-                            <span class="text-[10px] opacity-60">{{ products.paginator.count }}</span>
-                        </a>
-                        {% for cat in categories %}{% if not cat.parent %}
-                            <a href="{{ cat.get_absolute_url }}" class="flex items-center justify-between p-4 rounded-2xl text-sm font-bold {% if current_category.slug == cat.slug %}bg-primary text-white shadow-xl shadow-primary/20{% else %}text-slate-500 hover:bg-slate-50{% endif %} transition-all">
-                                <span>{{ cat.name }}</span>
-                                <i class="fas fa-arrow-right text-[10px] opacity-30"></i>
-                            </a>
-                            {% if current_category.slug == cat.slug or current_category.parent.slug == cat.slug %}
-                                <div class="pl-4 py-2 space-y-1">
-                                    {% for sub in cat.active_subcategories %}
-                                    <a href="{{ sub.get_absolute_url }}" class="flex items-center justify-between p-3 rounded-xl text-xs font-black uppercase tracking-widest {% if current_category.slug == sub.slug %}text-primary bg-primary/5{% else %}text-slate-400 hover:text-slate-600{% endif %} transition-all">
-                                        {{ sub.name }}
-                                    </a>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        {% endif %}{% endfor %}
-                    </div>
-                </div>
+        <!-- Mobile Filter Button -->
+        <button class="mobile-filter-btn mb-8" id="mobile-filter-toggle">
+            <i class="fas fa-sliders-h"></i> Filters
+        </button>
 
-                <!-- Price Filter Mockup -->
-                <div class="p-8 bg-slate-950 rounded-[40px] text-white">
-                    <h4 class="text-sm font-black uppercase tracking-widest mb-4">Support</h4>
-                    <p class="text-xs font-medium text-slate-400 mb-6">Need help finding the right product?</p>
-                    <a href="{% url 'contact:contact' %}" class="block py-4 bg-white/10 hover:bg-white/20 text-white text-center rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all">Contact Specialist</a>
+        <div class="catalog-layout">
+            <!-- Sidebar: Filters & Categories -->
+            <aside class="catalog-sidebar" id="filter-sidebar">
+                <div class="filter-sidebar">
+                    <!-- Categories -->
+                    <div class="filter-section">
+                        <h3 class="filter-title">Categories</h3>
+                        <a href="{% url 'products:product_list' %}"
+                           class="category-nav-item {% if not current_category %}active{% endif %}">
+                            <span>All Products</span>
+                            {% if products %}<span class="count">{{ products.paginator.count }}</span>{% endif %}
+                        </a>
+                        {% for cat in categories %}
+                            {% if not cat.parent %}
+                            <a href="{{ cat.get_absolute_url }}"
+                               class="category-nav-item {% if current_category.slug == cat.slug %}active{% endif %}">
+                                <span>{{ cat.name }}</span>
+                            </a>
+                            {% if current_category.slug == cat.slug and cat.active_subcategories %}
+                            <div style="margin-top:8px;">
+                                {% for sub in cat.active_subcategories %}
+                                <a href="{{ sub.get_absolute_url }}"
+                                   class="sub-category-link {% if current_category.slug == sub.slug %}active{% endif %}">
+                                    {{ sub.name }}
+                                </a>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Price Filter -->
+                    <div class="filter-section">
+                        <h3 class="filter-title">Price Range</h3>
+                        <form method="GET" action="" class="space-y-3">
+                            {% if request.GET.q %}<input type="hidden" name="q" value="{{ request.GET.q }}">{% endif %}
+                            <div class="price-range">
+                                <input type="number" name="min_price" placeholder="Min" min="0" value="{{ request.GET.min_price|default:'' }}">
+                                <span style="color:var(--text-muted);">—</span>
+                                <input type="number" name="max_price" placeholder="Max" min="0" value="{{ request.GET.max_price|default:'' }}">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm" style="width:100%;border-radius:9999px;padding:10px;background:var(--primary);color:white;border:none;font-size:11px;font-weight:700;">
+                                Apply
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Support Box -->
+                    <div class="filter-section" style="background:var(--surface);border-radius:var(--radius-lg);padding:20px;margin:0;">
+                        <h3 class="filter-title" style="color:var(--primary);">Need Help?</h3>
+                        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6;">Can't find what you're looking for? Our team is ready to assist.</p>
+                        <a href="{% url 'contact:contact' %}" class="btn btn-primary btn-sm" style="width:100%;border-radius:9999px;padding:12px;background:var(--primary);color:white;border:none;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;justify-content:center;">
+                            Contact Us
+                        </a>
+                    </div>
                 </div>
             </aside>
 
-            <!-- Main Grid -->
-            <div class="lg:col-span-9">
+            <!-- Main Catalog Area -->
+            <div class="catalog-main">
                 <!-- Toolbar -->
-                <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 p-6 bg-slate-50 rounded-[32px] border border-slate-100">
-                    <div class="flex items-center gap-4">
-                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Displaying {{ products.paginator.count }} Results</span>
-                    </div>
-                    
-                    <div class="flex items-center gap-4">
-                        <div class="flex bg-white rounded-xl p-1 shadow-sm border border-slate-200">
-                            <button class="w-10 h-10 flex items-center justify-center text-primary"><i class="fas fa-grid-2"></i></button>
-                            <button class="w-10 h-10 flex items-center justify-center text-slate-300 hover:text-slate-900 transition-colors"><i class="fas fa-list"></i></button>
-                        </div>
-                        <select id="product-sort-select" class="bg-white border border-slate-200 rounded-xl px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-600 focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer">
-                            <option value="?sort=featured" {% if request.GET.sort == 'featured' %}selected{% endif %}>Featured</option>
-                            <option value="?sort=price_low" {% if request.GET.sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
-                            <option value="?sort=price_high" {% if request.GET.sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
-                            <option value="?sort=newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Newest arrivals</option>
+                <div class="catalog-toolbar">
+                    <span class="catalog-count">
+                        Showing {{ products.paginator.count }} product{{ products.paginator.count|pluralize }}
+                    </span>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <select id="product-sort-select" class="sort-select">
+                            <option value="?sort=featured{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" {% if request.GET.sort == 'featured' %}selected{% endif %}>Featured</option>
+                            <option value="?sort=price_low{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" {% if request.GET.sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                            <option value="?sort=price_high{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" {% if request.GET.sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                            <option value="?sort=newest{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" {% if request.GET.sort == 'newest' %}selected{% endif %}>Newest</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-8">
+                <!-- Product Grid -->
+                <div class="catalog-grid">
                     {% for product in products %}
                         {% include 'includes/_premium_product_card.html' with product=product %}
                     {% empty %}
-                    <div class="col-span-full py-24 text-center">
-                        <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-8 text-slate-200">
-                            <i class="fas fa-search-minus text-4xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-black text-slate-900 tracking-tighter mb-4">No Masterpieces Found</h3>
-                        <p class="text-slate-500 font-medium max-w-xs mx-auto mb-8">Refine your search or explore other exquisite categories in our collection.</p>
-                        <a href="{% url 'products:product_list' %}" class="inline-block py-4 px-10 bg-primary text-white rounded-2xl font-black text-[10px] uppercase tracking-widest">Reset Collection</a>
+                    <div class="empty-state">
+                        <div class="empty-state-icon"><i class="far fa-sad-tear"></i></div>
+                        <h3 class="empty-state-title">No Products Found</h3>
+                        <p class="empty-state-desc">Try adjusting your filters or browse our full collection.</p>
+                        <a href="{% url 'products:product_list' %}" class="btn btn-primary" style="background:var(--primary);color:white;border:none;border-radius:9999px;padding:14px 32px;display:inline-flex;font-size:12px;font-weight:700;">
+                            View All Products
+                        </a>
                     </div>
                     {% endfor %}
                 </div>
 
                 <!-- Pagination -->
                 {% if products.has_other_pages %}
-                <div class="mt-16 flex justify-center items-center gap-4">
+                <div class="pagination">
                     {% if products.has_previous %}
-                    <a href="?page={{ products.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="flex items-center gap-3 px-8 py-4 bg-slate-50 hover:bg-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-600 transition-all">
-                        <i class="fas fa-arrow-left"></i> Previous
+                    <a href="?page={{ products.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="pagination-prev" style="display:flex;align-items:center;gap:8px;padding:0 20px;height:44px;border-radius:var(--radius-lg);background:var(--card);border:1px solid var(--border-light);color:var(--text-secondary);font-family:var(--font-heading);font-size:13px;font-weight:700;transition:all 0.2s;">
+                        <i class="fas fa-arrow-left text-xs"></i> Prev
                     </a>
                     {% endif %}
-                    
-                    <div class="flex gap-2">
-                        {% for num in products.paginator.page_range %}
-                            {% if products.number == num %}
-                            <span class="w-12 h-12 flex items-center justify-center bg-primary text-white rounded-2xl font-black text-sm shadow-xl shadow-primary/20">{{ num }}</span>
-                            {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
-                            <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="w-12 h-12 flex items-center justify-center bg-slate-50 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-2xl font-black text-sm transition-all">{{ num }}</a>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
+
+                    {% for num in products.paginator.page_range %}
+                        {% if products.number == num %}
+                        <span class="current" style="display:flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 12px;border-radius:var(--radius-lg);background:var(--primary);color:white;font-family:var(--font-heading);font-size:13px;font-weight:700;">
+                            {{ num }}
+                        </span>
+                        {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                        <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" style="display:flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 12px;border-radius:var(--radius-lg);background:var(--card);border:1px solid var(--border-light);color:var(--text-secondary);font-family:var(--font-heading);font-size:13px;font-weight:700;transition:all 0.2s;">
+                            {{ num }}
+                        </a>
+                        {% endif %}
+                    {% endfor %}
 
                     {% if products.has_next %}
-                    <a href="?page={{ products.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="flex items-center gap-3 px-8 py-4 bg-slate-50 hover:bg-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-600 transition-all">
-                        Next <i class="fas fa-arrow-right"></i>
+                    <a href="?page={{ products.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="pagination-next" style="display:flex;align-items:center;gap:8px;padding:0 20px;height:44px;border-radius:var(--radius-lg);background:var(--card);border:1px solid var(--border-light);color:var(--text-secondary);font-family:var(--font-heading);font-size:13px;font-weight:700;transition:all 0.2s;">
+                        Next <i class="fas fa-arrow-right text-xs"></i>
                     </a>
                     {% endif %}
                 </div>
@@ -200,20 +499,42 @@
             </div>
         </div>
     </div>
-</section>
+</div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const sortSelect = document.getElementById('product-sort-select');
-        if (sortSelect) {
-            sortSelect.addEventListener('change', function() {
-                if (this.value) {
-                    window.location = this.value;
-                }
-            });
+  document.addEventListener('DOMContentLoaded', function() {
+    // Sort select
+    const sortSelect = document.getElementById('product-sort-select');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', function() {
+        if (this.value) { window.location = this.value; }
+      });
+    }
+
+    // Mobile filter toggle
+    const filterToggle = document.getElementById('mobile-filter-toggle');
+    const filterSidebar = document.getElementById('filter-sidebar');
+    if (filterToggle && filterSidebar) {
+      filterToggle.addEventListener('click', () => {
+        filterSidebar.classList.toggle('open');
+      });
+    }
+
+    // Add hover styles for sidebar nav items
+    document.querySelectorAll('.category-nav-item').forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        if (!item.classList.contains('active')) {
+          item.style.background = 'var(--surface)';
         }
+      });
+      item.addEventListener('mouseleave', () => {
+        if (!item.classList.contains('active')) {
+          item.style.background = '';
+        }
+      });
     });
+  });
 </script>
 {% endblock %}

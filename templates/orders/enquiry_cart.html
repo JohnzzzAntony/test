@@ -1,6 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block split_css %}
+<style>
+  /* Flower District Theme Overrides for Cart */
+  .bg-slate-50 { background-color: var(--surface-light) !important; }
+  .text-slate-900 { color: var(--text-primary) !important; }
+  .text-slate-500 { color: var(--text-muted) !important; }
+  .border-slate-100, .border-slate-200 { border-color: var(--border-custom) !important; }
+  .bg-white { background: var(--card) !important; }
+  .shadow-slate-200\/50 { box-shadow: var(--shadow-lg) !important; }
+  .divide-slate-100 > * { border-color: var(--border-light) !important; }
+</style>
+{% endblock %}
+
 {% block content %}
 <section class="py-12 lg:py-24 bg-slate-50 min-h-screen">
     <div class="container mx-auto px-6">
