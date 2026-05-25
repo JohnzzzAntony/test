@@ -130,9 +130,9 @@
             effects: {
                 glass: true,
                 glow: true,
-                animations: {{ design_settings.enable_animations| yesno: "true,false" }},
-        threejs: "{{ design_settings.hero_3d_effect|default:'fluid' }}",
-            cursor: { { design_settings.enable_custom_cursor | yesno: "true,false" } },
+                animations: {{ design_settings.enable_animations|yesno:"true,false" }},
+                threejs: "{{ design_settings.hero_3d_effect|default:'fluid' }}",
+                cursor: {{ design_settings.enable_custom_cursor|yesno:"true,false" }},
             },
         };
     </script>
@@ -141,107 +141,24 @@
         :root {
 
             /* ── Flower District Color Palette (Dark Blue Variant) ─── */
-            --primary: {
-                    {
-                    design_settings.primary_color|default: "#114084"
-                }
-            }
-
-            ;
-
-            --primary-light: {
-                    {
-                    design_settings.secondary_color|default: "#1a5cb8"
-                }
-            }
-
-            ;
-
-            --primary-hover: {
-                    {
-                    design_settings.accent_color|default: "#0081ff"
-                }
-            }
-
-            ;
-
-            --accent: {
-                    {
-                    design_settings.accent_color|default: "#0081ff"
-                }
-            }
-
-            ;
+            --primary: {{ design_settings.primary_color|default:"#114084" }};
+            --primary-light: {{ design_settings.secondary_color|default:"#1a5cb8" }};
+            --primary-hover: {{ design_settings.accent_color|default:"#0081ff" }};
+            --accent: {{ design_settings.accent_color|default:"#0081ff" }};
             --accent-light: #4da8ff;
-
-            --surface: {
-                    {
-                    design_settings.surface_bg_color|default: "#ffffff"
-                }
-            }
-
-            ;
+            --surface: {{ design_settings.surface_bg_color|default:"#ffffff" }};
             --surface-light: #f8f9fa;
-
-            --card: {
-                    {
-                    design_settings.card_bg_color|default: "#ffffff"
-                }
-            }
-
-            ;
-
-            --border-custom: {
-                    {
-                    design_settings.border_color|default: "#e5e5e5"
-                }
-            }
-
-            ;
+            --card: {{ design_settings.card_bg_color|default:"#ffffff" }};
+            --border-custom: {{ design_settings.border_color|default:"#e5e5e5" }};
             --border-light: #f0f0f0;
             --border-hover: #cccccc;
-
-            --txt-main: {
-                    {
-                    design_settings.text_primary_color|default: "#1a1a1a"
-                }
-            }
-
-            ;
-
-            --txt-secondary: {
-                    {
-                    design_settings.text_secondary_color|default: "#4a4a4a"
-                }
-            }
-
-            ;
+            --txt-main: {{ design_settings.text_primary_color|default:"#1a1a1a" }};
+            --txt-secondary: {{ design_settings.text_secondary_color|default:"#4a4a4a" }};
             --txt-muted: #888888;
             --txt-inverse: #ffffff;
-
-            --font-ui: {
-                    {
-                    design_settings.font_main|safe|default: "'Inter', sans-serif"
-                }
-            }
-
-            ;
-
-            --font-display: {
-                    {
-                    design_settings.font_heading|safe|default: "'Montserrat', sans-serif"
-                }
-            }
-
-            ;
-
-            --font-accent: {
-                    {
-                    design_settings.font_accent|safe|default: "'Playfair Display', serif"
-                }
-            }
-
-            ;
+            --font-ui: {{ design_settings.font_main|safe|default:"'Inter', sans-serif" }};
+            --font-display: {{ design_settings.font_heading|safe|default:"'Montserrat', sans-serif" }};
+            --font-accent: {{ design_settings.font_accent|safe|default:"'Playfair Display', serif" }};
 
             /* Fallbacks for older references */
             --font-sans: var(--font-ui);
