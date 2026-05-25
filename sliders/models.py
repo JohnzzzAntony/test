@@ -21,6 +21,11 @@ class HeroSlider(models.Model):
     )
     video_url = models.URLField(blank=True, null=True, help_text="External URL for background video (YouTube/Vimeo not supported for direct background).")
     
+    # ── 3D Visuals ────────────────────────────────────────────────────────
+    threejs_model_path = models.CharField(max_length=500, blank=True, null=True, help_text="Path to GLTF/GLB model in static files.")
+    enable_3d_overlay = models.BooleanField(default=False, help_text="Overlay an interactive 3D scene on this banner.")
+    threejs_intensity = models.FloatField(default=1.0, help_text="Opacity/Brightness of the 3D effect.")
+    
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True, verbose_name="Status", choices=((True, 'Active'), (False, 'Removed')))
 

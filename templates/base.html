@@ -94,48 +94,37 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
-    <!-- Tailwind Engine (Production Robustness) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Premium Design System (Compiled Tailwind) -->
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}?v=1.0">
+    
+    <!-- Modern UI Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
     <script>
-      // Sanitize design settings for JS config
-      const primaryColor = "{{ design_settings.primary_color|default:'#114084' }}";
-      const secondaryColor = "{{ design_settings.secondary_color|default:'#005CB9' }}";
-      const accentGlow = "{{ design_settings.accent_glow_color|default:'#0081ff' }}";
-      const surfaceBg = "{{ design_settings.surface_bg_color|default:'#f8fafc' }}";
-      const cardBg = "{{ design_settings.card_bg_color|default:'#ffffff' }}";
-      const borderCol = "{{ design_settings.border_color|default:'#e2e8f0' }}";
-      const textPrimary = "{{ design_settings.text_primary_color|default:'#1e293b' }}";
-      
-      const mainFont = "{{ design_settings.font_main|safe|default:'Inter, sans-serif' }}";
-      const headingFont = "{{ design_settings.font_secondary|safe|default:'Outfit, sans-serif' }}";
-
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: primaryColor,
-              secondary: secondaryColor,
-              accent: accentGlow,
-              surface: surfaceBg,
-              card: cardBg,
-              'border-custom': borderCol,
-              'txt-main': textPrimary,
-              'jk-accent': '#415A77',
-              'jk-surface': '#0D1B2A',
-            },
-            fontFamily: {
-                sans: [mainFont],
-                heading: [headingFont],
-            },
-            borderRadius: {
-                'container': "{{ design_settings.container_radius|default:'12px' }}",
-                'card-custom': "{{ design_settings.card_radius|default:'12px' }}",
-                'btn-custom': "{{ design_settings.button_radius|default:'9999px' }}",
-                'img-custom': "{{ design_settings.image_radius|default:'12px' }}",
-            }
-          }
+      // Global Design Tokens from Django
+      const designTokens = {
+        primary: "{{ design_settings.primary_color|default:'#114084' }}",
+        secondary: "{{ design_settings.secondary_color|default:'#005CB9' }}",
+        accent: "{{ design_settings.accent_color|default:'#0081ff' }}",
+        surface: "{{ design_settings.surface_bg_color|default:'#f8fafc' }}",
+        card: "{{ design_settings.card_bg_color|default:'#ffffff' }}",
+        border: "{{ design_settings.border_color|default:'#e2e8f0' }}",
+        text: "{{ design_settings.text_primary_color|default:'#1e293b' }}",
+        radius: {
+          container: "{{ design_settings.container_radius|default:'40px' }}",
+          card: "{{ design_settings.card_radius|default:'24px' }}",
+          btn: "{{ design_settings.button_radius|default:'9999px' }}",
+        },
+        effects: {
+          glass: true,
+          glow: true,
+          animations: {{ design_settings.enable_animations|yesno:"true,false" }},
+          threejs: "{{ design_settings.hero_3d_effect|default:'fluid' }}",
+          cursor: {{ design_settings.enable_custom_cursor|yesno:"true,false" }},
         }
-      }
+      };
     </script>
 
     <style type="text/css">
@@ -366,6 +355,11 @@
 </head>
 
 <body class="{% if request.path == '/' %}is-home{% endif %} {% if not design_settings.enable_glassmorphism %}no-glass{% endif %} antialiased">
+    <!-- Luxury 3D Canvas -->
+    {% if request.path == '/' %}
+    <div id="hero-canvas"></div>
+    {% endif %}
+
     <!-- Premium Toast Notification -->
     <div id="premium-toast" class="premium-toast flex items-center gap-4">
         <div id="toast-icon" class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
@@ -825,75 +819,25 @@
     <!-- Vendor Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     
+    <!-- Core Logic -->
+    <script src="{% static 'js/main.js' %}?v=1.0"></script>
+    
     <script>
-        // Global commerce functionality
-        const Commerce = {
-            toggleMobileMenu: () => {
-                const menu = document.getElementById('mobile-menu');
-                const icon = document.getElementById('hamburger-icon');
-                const isHidden = menu.classList.contains('hidden');
-                
-                menu.classList.toggle('hidden', !isHidden);
-                if (isHidden) {
-                    icon.classList.replace('fa-bars', 'fa-times');
-                    menu.style.animation = 'slideDownFade 0.4s ease forwards';
-                } else {
-                    icon.classList.replace('fa-times', 'fa-bars');
-                }
-            },
-            dismissAnnouncement: () => {
-                const bar = document.getElementById('announcement-bar');
-                if (bar) bar.remove();
-            },
-            showToast: (message, type = 'success') => {
-                const toast = document.getElementById('premium-toast');
-                const toastMsg = document.getElementById('toast-message');
-                const toastTitle = document.getElementById('toast-title');
-                
-                toastMsg.innerText = message;
-                toastTitle.innerText = type === 'success' ? 'Success' : 'Attention';
-                
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 4000);
-            }
-        };
-
         // Premium Core Interface Logic
         document.addEventListener('DOMContentLoaded', () => {
             // 1. Unified Scroll Handler
             const header = document.getElementById('main-header');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 40) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
-            });
-
-            // 2. Announcement Swiper (Premium Transitions)
-            const announcementSwiper = document.querySelector('.announcement-swiper');
-            if (announcementSwiper) {
-                new Swiper(announcementSwiper, {
-                    autoplay: { delay: 4000, disableOnInteraction: false },
-                    loop: true,
-                    effect: 'fade',
-                    fadeEffect: { crossFade: true },
-                    speed: 800
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 40) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
                 });
             }
 
-            // 3. Mobile Menu Handlers
-            const menuTrigger = document.getElementById('mobile-menu-trigger');
-            if (menuTrigger) {
-                menuTrigger.addEventListener('click', Commerce.toggleMobileMenu);
-            }
-
-            const dismissTrigger = document.getElementById('dismiss-announcement');
-            if (dismissTrigger) {
-                dismissTrigger.addEventListener('click', Commerce.dismissAnnouncement);
-            }
-
-            // 4. Mobile Accordion Logic
+            // 2. Mobile Accordion Logic (Overrides/Fixes broken nextElementSibling logic for redesign HTML)
             document.querySelectorAll('.accordion-trigger').forEach(trigger => {
                 trigger.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -910,24 +854,7 @@
                 });
             });
 
-            // 5. Close mobile menu on outside click
-            document.addEventListener('click', (e) => {
-                const menu = document.getElementById('mobile-menu');
-                const trigger = document.getElementById('mobile-menu-trigger');
-                if (menu && !menu.contains(e.target) && trigger && !trigger.contains(e.target) && !menu.classList.contains('hidden')) {
-                    Commerce.toggleMobileMenu();
-                }
-            });
-
-            // 6. Smart Category Selection
-            document.querySelectorAll('.category-item').forEach(item => {
-                item.addEventListener('mouseenter', () => {
-                    document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
-                    item.classList.add('active');
-                });
-            });
-
-            // 7. Scroll Animation Observer for staggered children
+            // 3. Scroll Animation Observer for staggered children
             const animateObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -945,7 +872,7 @@
                 animateObserver.observe(el);
             });
 
-            // 8. Intersection Observer for general scroll animations
+            // 4. Intersection Observer for general scroll animations
             document.querySelectorAll('[data-animate]').forEach(el => {
                 el.style.opacity = '0';
                 el.style.transform = 'translateY(16px)';
@@ -953,157 +880,6 @@
                 animateObserver.observe(el);
             });
         });
-
-        // Global Toast Helper
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('premium-toast');
-            const toastMsg = document.getElementById('toast-message');
-            const toastTitle = document.getElementById('toast-title');
-            const toastIcon = document.getElementById('toast-icon');
-
-            toastMsg.innerText = message;
-            toastTitle.innerText = type === 'success' ? 'Success' : 'Attention';
-            
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 4000);
-        }
-
-        // Global Wishlist Toggle Function
-        async function toggleWishlist(productId, btn) {
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-            const url = `/products/wishlist/toggle/${productId}/`;
-            
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRFToken': csrfToken
-                    }
-                });
-                
-                if (response.status === 401 || response.url.includes('/login')) {
-                    window.location.href = `/accounts/login/?next=${window.location.pathname}`;
-                    return;
-                }
-
-                const data = await response.json();
-                
-                if (data.status === 'added' || data.status === 'removed') {
-                    const icon = btn.querySelector('i');
-                    const wishCountBadge = document.querySelector('.wishlist-count-badge');
-                    
-                    // Update UI State
-                    if (data.status === 'added') {
-                        if (icon) icon.classList.replace('far', 'fas');
-                        btn.classList.add('bg-red-500', 'text-white', 'border-red-500');
-                        btn.classList.remove('bg-slate-900/40');
-                        showToast('Added to wishlist');
-                    } else {
-                        if (icon) icon.classList.replace('fas', 'far');
-                        btn.classList.remove('bg-red-500', 'text-white', 'border-red-500');
-                        btn.classList.add('bg-slate-900/40');
-                        showToast('Removed from wishlist');
-                        
-                        // If we are on the wishlist page, remove the item card
-                        if (window.location.pathname.includes('/wishlist/')) {
-                            const itemCard = btn.closest('[data-item-id]');
-                            if (itemCard) {
-                                itemCard.style.opacity = '0';
-                                itemCard.style.transform = 'scale(0.9)';
-                                setTimeout(() => {
-                                    itemCard.remove();
-                                    // Check if wishlist is now empty
-                                    const remainingItems = document.querySelectorAll('[data-item-id]');
-                                    if (remainingItems.length === 0) {
-                                        location.reload(); // Reload to show empty state
-                                    }
-                                }, 300);
-                            }
-                        }
-                    }
-
-                    // Update Badge
-                    if (wishCountBadge) {
-                        if (data.count > 0) {
-                            wishCountBadge.classList.remove('hidden');
-                            wishCountBadge.innerText = data.count;
-                        } else {
-                            wishCountBadge.classList.add('hidden');
-                        }
-                    }
-                }
-            } catch (err) {
-                console.error('Wishlist failed:', err);
-            }
-        }
-
-        // Global Commerce AJAX Handlers
-        document.addEventListener('click', async (e) => {
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-            // 1. Add to Cart Logic
-            if (e.target.closest('.cart-action-btn')) {
-                e.preventDefault();
-                const btn = e.target.closest('.cart-action-btn');
-                const url = btn.getAttribute('data-url');
-                
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRFToken': csrfToken
-                        }
-                    });
-                    if (response.ok) {
-                        showToast('Item added to your cart!');
-                        const cartCounters = document.querySelectorAll('.cart-count-val');
-                        cartCounters.forEach(cartCounter => {
-                            let curr = parseInt(cartCounter.innerText) || 0;
-                            cartCounter.innerText = curr + 1;
-                        });
-                    }
-                } catch (err) {
-                    // Failover
-                    window.location.href = url;
-                }
-            }
-
-        // 2. Wishlist Toggle Logic (Legacy support for purely class-based triggers)
-            if (e.target.closest('.wishlist-btn') && !e.target.closest('[onclick]')) {
-                e.preventDefault();
-                const btn = e.target.closest('.wishlist-btn');
-                const productId = btn.getAttribute('data-product-id');
-                if (productId) toggleWishlist(productId, btn);
-            }
-        });
-
-        // ===== Premium Security & Experience =====
-        (function() {
-            // 1. Entrance Animation
-            window.addEventListener('load', () => {
-                document.body.classList.add('loaded');
-            });
-
-
-
-            // 3. Security Deterrents (Requested by User)
-            // Note: These are deterrents, not absolute protection
-            document.addEventListener('contextmenu', (e) => e.preventDefault());
-            document.onkeydown = function(e) {
-                if (e.keyCode == 123) return false; // F12
-                if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; // Ctrl+Shift+I
-                if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false; // Ctrl+Shift+C
-                if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; // Ctrl+Shift+J
-                if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; // Ctrl+U
-            };
-            
-            // Console clearing as a simple deterrent
-            setInterval(() => {
-                // console.clear(); // Uncomment if you want to keep console clean
-            }, 1000);
-        })();
 
         // ===== Header Category Horizontal Scroller with Infinite Loop =====
         (function() {
@@ -1117,7 +893,6 @@
 
             function scrollLeft() {
                 if (scrollContainer.scrollLeft <= 0) {
-                    // Infinite loop: jump to end
                     scrollContainer.scrollLeft = scrollContainer.scrollWidth;
                 }
                 scrollContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
@@ -1126,7 +901,6 @@
             function scrollRight() {
                 const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
                 if (scrollContainer.scrollLeft >= maxScroll - 10) {
-                    // Infinite loop: jump to start
                     scrollContainer.scrollLeft = 0;
                 }
                 scrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
@@ -1135,7 +909,6 @@
             btnLeft.addEventListener('click', scrollLeft);
             btnRight.addEventListener('click', scrollRight);
 
-            // Optional: Hide arrows if content doesn't overflow
             function checkOverflow() {
                 const isOverflowing = scrollContainer.scrollWidth > scrollContainer.clientWidth + 10;
                 btnLeft.style.display = isOverflowing ? 'flex' : 'none';
@@ -1143,10 +916,13 @@
             }
 
             window.addEventListener('resize', checkOverflow);
-            setTimeout(checkOverflow, 300); // initial check after render
+            setTimeout(checkOverflow, 300);
         })();
     </script>
 
     {% block scripts %}{% endblock %}
+    <!-- Luxury UI Scripts -->
+    <script src="{% static 'js/premium_ui.js' %}"></script>
+
 </body>
 </html>

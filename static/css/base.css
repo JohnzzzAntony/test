@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* These are defaults, will be overridden by inline styles from Django DesignSettings */
+        --primary: #114084;
+        --secondary: #1E293B;
+        --accent: #0081ff;
+        --surface: #f8fafc;
+        --card: #ffffff;
+        --border-custom: #e2e8f0;
+        --txt-main: #1e293b;
+        --font-sans: 'Inter', sans-serif;
+        --font-heading: 'Outfit', sans-serif;
+        --radius-container: 40px;
+        --radius-card: 24px;
+        --radius-btn: 9999px;
+        --radius-img: 20px;
+    }
+
+    body {
+        @apply font-sans bg-surface text-txt-main antialiased selection:bg-primary/20 selection:text-primary;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-heading font-bold tracking-tight;
+    }
+}
+
+@layer components {
+    .glass-card {
+        @apply backdrop-blur-xl bg-white/70 border border-white/20 shadow-xl;
+    }
+    
+    .glass-card-dark {
+        @apply backdrop-blur-xl bg-slate-900/70 border border-white/10 shadow-2xl;
+    }
+
+    .luxury-shadow {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-luxury {
+        @apply flex items-center justify-center gap-2 px-8 py-4 font-bold rounded-btn-custom transition-all duration-500 hover:scale-[1.02] active:scale-[0.98];
+    }
+
+    .btn-luxury-primary {
+        @apply btn-luxury bg-primary text-white shadow-lg shadow-primary/20 hover:shadow-primary/40;
+    }
+
+    .premium-input {
+        @apply w-full bg-white/50 border border-border-custom rounded-card-custom px-6 py-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300;
+    }
+}
+
+/* Three.js Canvas Container */
+#hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Custom Cursor */
+.custom-cursor {
+    @apply fixed w-8 h-8 border-2 border-primary rounded-full pointer-events-none z-[9999] transition-transform duration-100 ease-out hidden lg:block;
+    mix-blend-mode: difference;
+}
+
+.custom-cursor-dot {
+    @apply fixed w-1.5 h-1.5 bg-primary rounded-full pointer-events-none z-[9999] hidden lg:block;
+}
+
+/* Legacy Premium Styles */
+.glass-morph {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.premium-card {
+    background-color: var(--card);
+    border: 1px solid var(--border-custom);
+    border-radius: var(--radius-card);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-toast {
+    @apply fixed bottom-10 right-10 z-[3000] px-8 py-4 bg-slate-900/95 backdrop-blur-2xl text-white rounded-2xl shadow-2xl border border-white/10 transition-all duration-500 translate-y-20 opacity-0;
+}
+
+.premium-toast.show {
+    @apply translate-y-0 opacity-100;
+}
+
+.glass-header { 
+    background-color: white;
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.premium-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }

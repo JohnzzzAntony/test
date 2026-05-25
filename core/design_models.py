@@ -139,7 +139,6 @@ class DesignSettings(models.Model):
     # ── Counter Animations ──────────────────────────────────────────────────
     counter_animation_style = models.CharField(max_length=50, default='fade')
     counter_animation_speed = models.PositiveIntegerField(default=2000)
-
     # ── Trust Badge Icons (Homepage) ────────────────────────────────────────
     show_trust_badges = models.BooleanField(default=True, verbose_name="Trust Badges", choices=((True, 'Show'), (False, 'Hide')))
     trust_badge_1_title = models.CharField(max_length=100, default="Fast Delivery")
@@ -148,6 +147,28 @@ class DesignSettings(models.Model):
     trust_badge_2_text = models.CharField(max_length=200, default="VISA, Mastercard and Cash on Delivery")
     trust_badge_3_title = models.CharField(max_length=100, default="Customer Support")
     trust_badge_3_text = models.CharField(max_length=200, default="We are here 24/7 for your queries")
+
+    # ── Luxury & 3D Settings ────────────────────────────────────────────────
+    THREEJS_EFFECTS = (
+        ('none', 'None'),
+        ('particles', 'Particle Field'),
+        ('fluid', 'Fluid Geometry'),
+        ('floating_products', 'Floating Product Icons'),
+        ('glass_shard', 'Glass Shards'),
+    )
+    hero_3d_effect = models.CharField(max_length=50, choices=THREEJS_EFFECTS, default='fluid')
+    
+    LUXURY_THEMES = (
+        ('standard', 'Standard Professional'),
+        ('luxury_dark', 'Luxury Midnight (Glassmorphism)'),
+        ('high_tech', 'High-Tech (Glow/Neon)'),
+        ('minimal_art', 'Minimal Artistic'),
+    )
+    ui_theme_variant = models.CharField(max_length=50, choices=LUXURY_THEMES, default='luxury_dark')
+    
+    enable_custom_cursor = models.BooleanField(default=True, help_text="Sleek magnetic follower cursor.")
+    enable_magnetic_hover = models.BooleanField(default=True, help_text="Buttons and icons pull the cursor towards them.")
+    enable_page_transitions = models.BooleanField(default=True, help_text="Smooth fade/slide between pages.")
 
     updated_at = models.DateTimeField(auto_now=True)
 
