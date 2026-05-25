@@ -30,9 +30,9 @@
             <div class="row">
                 {% for category in categories %}
                 <div class="col-lg-3 col-md-4 col-sm-6 mb-5">
-                    <div class="card border-0 text-center h-100 category-card transition-all p-3 shadow-sm rounded-4 bg-white hover-up">
+                    <div class="card border text-center h-100 category-card transition-all p-3 rounded-0 bg-white hover-up" style="border: 1px solid #e5e5e5 !important; border-radius: 0px !important; box-shadow: none !important;">
                         <a href="{{ category.get_absolute_url }}" class="text-decoration-none h-100 d-flex flex-column">
-                            <div class="overflow-hidden rounded-lg mb-3" style="height: 180px;">
+                            <div class="overflow-hidden rounded-0 mb-3" style="height: 180px;">
                                 <img src="{{ category.get_image_url }}" alt="{{ category.name }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
                             </div>
                             <h5 class="text-dark font-weight-bold mb-2 text-uppercase letter-spacing-1" style="font-size: 1rem;">{{ category.name }}</h5>

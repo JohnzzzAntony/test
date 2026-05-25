@@ -76,10 +76,10 @@
   --space-9: 96px;
 
   /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
   --radius-full: 9999px;
 
   /* Shadows */
@@ -1574,4 +1574,61 @@ h6 { font-size: 15px; font-weight: 600; }
 
 /* ===== MISC ===== */
 .visually-hidden {
-  position: absolute;\n  width: 1px;\n  height: 1px;\n  padding: 0;\n  margin: -1px;\n  overflow: hidden;\n  clip: rect(0, 0, 0, 0);\n  white-space: nowrap;\n  border: 0;\n}\n\n/* Selection color */\n::selection {\n  background: rgba(17, 64, 132, 0.15);\n  color: var(--text-primary);\n}\n\n/* Focus visible for accessibility */\n:focus-visible {\n  outline: 2px solid var(--primary);\n  outline-offset: 2px;\n}\n\n/* Smooth scroll for anchor links */\nhtml {\n  scroll-behavior: smooth;\n}\n\n/* ===== THEME OVERRIDES ===== */\n/* Add any site-specific overrides here */\n
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(17, 64, 132, 0.15);
+  color: var(--text-primary);
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Smooth scroll for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== THEME OVERRIDES ===== */
+/* Card Shape Overrides to align all site cards to the design */
+.card, 
+.premium-card, 
+.product-card, 
+.product-card-ref, 
+.store-card, 
+.testimonial-card, 
+.contact-card, 
+.promo-card, 
+.promo-single, 
+.stat-card {
+  border-radius: 0px !important;
+  border: 1px solid #e5e5e5 !important;
+  box-shadow: none !important;
+}
+
+.card:hover, 
+.premium-card:hover, 
+.product-card:hover, 
+.product-card-ref:hover, 
+.store-card:hover, 
+.testimonial-card:hover, 
+.contact-card:hover, 
+.promo-card:hover, 
+.promo-single:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important;
+  transform: translateY(-4px) !important;
+  border-color: #cccccc !important;
+}

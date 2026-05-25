@@ -1,106 +1,78 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block split_css %}
-<style>
-  /* Flower District Theme - Wishlist */
-  .bg-slate-50 { background: var(--surface-light) !important; }
-  .text-slate-900 { color: var(--text-primary) !important; }
-  .border-slate-100 { border-color: var(--border-custom) !important; }
-  .bg-white { background: var(--card) !important; }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="wishlist-page">
-    <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
+<section class="py-12 lg:py-24 bg-slate-50 min-h-screen">
+    <div class="container mx-auto px-6">
+        
+        <div class="flex flex-col lg:flex-row gap-12">
+            <!-- Sidebar Navigation -->
+            <div class="lg:w-1/4">
+                <div class="bg-white rounded-[40px] p-8 shadow-2xl shadow-slate-200/50 border border-slate-100 sticky top-32">
+                    <div class="text-center mb-10">
+                        <div class="w-24 h-24 bg-primary/10 text-primary rounded-[32px] flex items-center justify-center mx-auto mb-6 text-3xl font-black">
+                            {{ user.username|first|upper }}
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 tracking-tighter">{{ user.username }}</h3>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1 member-since">Member since {{ user.date_joined|date:"Y" }}</p>
+                    </div>
 
-        <div class="wishlist-layout">
+                    <nav class="space-y-2">
+                        <a href="{% url 'accounts:profile' %}" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 text-slate-600 text-xs font-black uppercase tracking-widest transition-all">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="{% url 'accounts:order_history' %}" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 text-slate-600 text-xs font-black uppercase tracking-widest transition-all">
+                            <i class="fas fa-box"></i> Order History
+                        </a>
+                        <a href="{% url 'products:wishlist' %}" class="flex items-center gap-4 p-4 rounded-2xl bg-primary text-white text-xs font-black uppercase tracking-widest shadow-lg shadow-primary/20 transition-all">
+                            <i class="fas fa-heart"></i> My Wishlist
+                        </a>
+                        <div class="pt-4 border-t border-slate-100 mt-4">
+                            <a href="{% url 'accounts:logout' %}" class="flex items-center gap-4 p-4 rounded-2xl bg-red-50 text-red-600 text-xs font-black uppercase tracking-widest hover:bg-red-100 transition-all">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+            </div>
 
-            {# Sidebar Nav #}
-            <aside class="wishlist-sidebar">
-                <nav style="display:flex;flex-direction:column;gap:4px;">
-                    <a href="{% url 'accounts:profile' %}" class="wishlist-sidebar-link">
-                        <i class="fas fa-th-large" style="width:16px;text-align:center;"></i> Dashboard
-                    </a>
-                    <a href="{% url 'accounts:order_history' %}" class="wishlist-sidebar-link">
-                        <i class="fas fa-box" style="width:16px;text-align:center;"></i> Order History
-                    </a>
-                    <a href="{% url 'products:wishlist' %}" class="wishlist-sidebar-link active">
-                        <i class="fas fa-heart" style="width:16px;text-align:center;"></i> My Wishlist
-                    </a>
-                    <div style="height:1px;background:var(--border-light);margin:16px 0;"></div>
-                    <a href="{% url 'accounts:logout' %}" class="wishlist-sidebar-link" style="color:#C0392B;">
-                        <i class="fas fa-sign-out-alt" style="width:16px;text-align:center;"></i> Logout
-                    </a>
-                </nav>
-            </aside>
+            <!-- Main Content -->
+            <div class="lg:w-3/4 space-y-12">
+                <div class="bg-white rounded-[40px] p-8 lg:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100">
 
-            {# Main Content #}
-            <main>
-                <div style="background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-2xl);padding:40px;">
-
-                    <div class="wishlist-page-title">
-                        <div style="width:56px;height:56px;background:rgba(139,69,87,0.08);border-radius:var(--radius-xl);display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:22px;flex-shrink:0;">
+                    <div class="flex items-center gap-6 mb-10">
+                        <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-xl">
                             <i class="fas fa-heart"></i>
                         </div>
                         <div>
-                            <h1>My Wishlist</h1>
-                            <p>{{ wishlist_count|default:0 }} saved item{{ wishlist_count|default:0|pluralize|default:"s" }}</p>
+                            <h3 class="text-2xl font-black text-slate-900 tracking-tighter">My <span class="italic text-primary">Wishlist</span></h3>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">{{ products|length }} saved item{{ products|length|pluralize }}</p>
                         </div>
                     </div>
 
                     {% if products %}
-                    <div class="wishlist-grid">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {% for product in products %}
-                        <div class="wishlist-item-card" data-item-id="{{ product.id }}">
-                            <div class="wishlist-item-image">
-                                <a href="{{ product.get_absolute_url }}">
-                                    <img src="{{ product.get_image_url }}" alt="{{ product.name }}">
-                                </a>
-                                <button class="wishlist-item-remove wishlist-btn"
-                                        data-product-id="{{ product.id }}"
-                                        aria-label="Remove from wishlist"
-                                        title="Remove">
-                                    <i class="fas fa-trash-alt text-xs"></i>
-                                </button>
-                            </div>
-                            <div class="wishlist-item-body">
-                                {% if product.category %}
-                                <div class="wishlist-item-category">{{ product.category.name }}</div>
-                                {% endif %}
-                                <h3 class="wishlist-item-name">
-                                    <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-                                </h3>
-                                {% with price_info=product.get_best_price_info %}
-                                <div class="wishlist-item-price">
-                                    {{ price_info.final_price }} <span class="currency">AED</span>
-                                </div>
-                                {% endwith %}
-                                <a href="{% url 'orders:add_to_cart' product_id=product.id %}"
-                                   class="wishlist-add-btn">
-                                    <i class="fas fa-shopping-bag text-xs"></i> Add to Cart
-                                </a>
-                            </div>
-                        </div>
+                            {% include 'includes/_premium_product_card.html' with product=product %}
                         {% endfor %}
                     </div>
                     {% else %}
-                    <div class="wishlist-empty">
-                        <div class="wishlist-empty-icon"><i class="far fa-heart"></i></div>
-                        <h3 class="wishlist-empty-title">Your Wishlist is Empty</h3>
-                        <p class="wishlist-empty-desc">Save your favorite medical equipment and solutions here for easy access and future inquiries.</p>
+                    <div class="py-16 bg-slate-50 rounded-[30px] border-2 border-dashed border-slate-200 text-center flex flex-col items-center justify-center p-8">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md mb-6 text-slate-300">
+                            <i class="far fa-heart text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">Your Wishlist is Empty</h3>
+                        <p class="text-slate-400 font-medium text-sm max-w-md mb-6">Save your favorite medical equipment and solutions here for easy access and future inquiries.</p>
                         <a href="{% url 'products:product_list' %}"
-                           class="btn btn-primary"
-                           style="background:var(--primary);border-color:var(--primary);border-radius:9999px;padding:14px 32px;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:white;text-decoration:none;display:inline-flex;gap:8px;align-items:center;">
+                           class="inline-flex items-center gap-3 px-8 py-4 bg-primary text-white rounded-[9999px] text-[10px] font-black uppercase tracking-widest hover:shadow-lg transition-all">
                             Explore Collection <i class="fas fa-arrow-right text-xs"></i>
                         </a>
                     </div>
                     {% endif %}
 
                 </div>
-            </main>
+            </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}
