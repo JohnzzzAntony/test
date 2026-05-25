@@ -9,6 +9,20 @@ from sliders.models import HeroSlider, PromoBanner
 from pages.models import AboutUs, MissionVision, Service, Counter, WhyUsCard, Partner, GalleryItem, HomepageSettings, HeroSlide
 from .models import Testimonial, Client, SocialPost, StoreLocation
 
+class MockCategory:
+    def __init__(self, slug, name):
+        self.slug = slug
+        self.name = name
+    @property
+    def get_image_url(self):
+        return None
+    def get_absolute_url(self):
+        from django.urls import reverse
+        try:
+            return reverse('products:category_detail', kwargs={'slug': self.slug})
+        except Exception:
+            return f"/products/category/{self.slug}/"
+
 def home(request):
     """Homepage aggregation view."""
     # Hero image slides (right panel)
@@ -24,6 +38,25 @@ def home(request):
 
     # Categories for homepage - top-level only (no parent)
     categories = Category.objects.filter(parent__isnull=True, is_active=True).order_by('homepage_order', 'name')[:12]
+
+    # Specific 8 shop-by-categories in exact order
+    category_slugs = [
+        ('wheelchairs', 'Wheelchairs'),
+        ('walking-standing-aids', 'Walking & Standing Aids'),
+        ('seating-positioning-system', 'Seating & Positioning Systems'),
+        ('prosthetics-orthotics-services', 'Prosthetics & Orthotics Services'),
+        ('physiotherapy-rehabilitation-product', 'Physiotherapy & Rehabilitation Products'),
+        ('orthopedic-products', 'Orthopedic Products'),
+        ('hospital-equipment-furniture', 'Hospital Equipment & Furniture'),
+        ('homecare', 'Homecare')
+    ]
+    db_cats = {c.slug: c for c in Category.objects.filter(slug__in=[s[0] for s in category_slugs], is_active=True)}
+    shop_by_categories = []
+    for slug, default_name in category_slugs:
+        if slug in db_cats:
+            shop_by_categories.append(db_cats[slug])
+        else:
+            shop_by_categories.append(MockCategory(slug, default_name))
 
     about_us = AboutUs.objects.filter(is_active=True).first()
     
@@ -100,6 +133,7 @@ def home(request):
         'sliders': sliders,
         'promo_sections': promo_sections,
         'categories': categories,
+        'shop_by_categories': shop_by_categories,
         'collections': collections,
         'active_offers_products': active_offers_products,
         'about_us': about_us,
