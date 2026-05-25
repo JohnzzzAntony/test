@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import AnnouncementBar, SiteSettings
+from .design_models import DesignSettings
 
 class AnnouncementBarSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,3 +16,9 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
 
     def get_logo_url(self, obj):
         return obj.get_logo_url()
+
+class DesignSettingsSerializer(serializers.ModelSerializer):
+    """Serializer for real-time theme preview - exposes all design tokens"""
+    class Meta:
+        model = DesignSettings
+        fields = '__all__'

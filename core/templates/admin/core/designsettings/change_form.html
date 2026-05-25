@@ -1,0 +1,378 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    /* Theme Preview Panel Styles */
+    .theme-preview-panel {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 380px;
+        max-height: 80vh;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        z-index: 9999;
+        overflow: hidden;
+        display: none;
+        flex-direction: column;
+    }
+
+    .theme-preview-panel.active {
+        display: flex;
+    }
+
+    .preview-header {
+        background: linear-gradient(135deg, #114084 0%, #1a5cb8 100%);
+        color: white;
+        padding: 16px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .preview-header h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+    }
+
+    .preview-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 4px;
+        line-height: 1;
+    }
+
+    .preview-close:hover {
+        opacity: 0.8;
+    }
+
+    .preview-body {
+        padding: 20px;
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    .preview-toggle-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #114084 0%, #1a5cb8 100%);
+        color: white;
+        border: none;
+        padding: 14px 24px;
+        border-radius: 30px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(17, 64, 132, 0.35);
+        z-index: 9998;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .preview-toggle-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(17, 64, 132, 0.45);
+    }
+
+    .preview-toggle-btn.hidden {
+        display: none;
+    }
+
+    .preview-iframe-container {
+        background: #f0f0f0;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 16px;
+    }
+
+    .preview-iframe {
+        width: 100%;
+        height: 200px;
+        border: none;
+        background: white;
+    }
+
+    .preview-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        background: #f0f9f0;
+        border-radius: 6px;
+        font-size: 13px;
+        color: #2e7d32;
+        margin-bottom: 16px;
+    }
+
+    .preview-status.pending {
+        background: #fff8e1;
+        color: #f57c00;
+    }
+
+    .preview-status .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .preview-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .preview-btn {
+        flex: 1;
+        padding: 10px 16px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+    }
+
+    .preview-btn-primary {
+        background: #114084;
+        color: white;
+    }
+
+    .preview-btn-primary:hover {
+        background: #0d3570;
+    }
+
+    .preview-btn-secondary {
+        background: #f5f5f5;
+        color: #333;
+    }
+
+    .preview-btn-secondary:hover {
+        background: #e8e8e8;
+    }
+
+    /* Color swatch display */
+    .color-swatches {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    .color-swatch {
+        aspect-ratio: 1;
+        border-radius: 6px;
+        border: 1px solid #e0e0e0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .color-swatch::after {
+        content: attr(data-color);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        font-size: 8px;
+        padding: 2px;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        text-align: center;
+    }
+</style>
+
+<script>
+    (function () {
+        'use strict';
+
+        // Theme Preview System
+        window.ThemePreview = {
+            panel: null,
+            toggleBtn: null,
+            previewUrl: '/',
+            isOpen: false,
+            pendingChanges: {},
+            updateTimeout: null,
+
+            init: function () {
+                this.createPanel();
+                this.createToggleButton();
+                this.bindFormInputs();
+                console.log('Theme Preview System initialized');
+            },
+
+            createPanel: function () {
+                this.panel = document.createElement('div');
+                this.panel.className = 'theme-preview-panel';
+                this.panel.innerHTML = `
+                <div class="preview-header">
+                    <h3>🎨 Live Theme Preview</h3>
+                    <button class="preview-close" onclick="ThemePreview.toggle()">&times;</button>
+                </div>
+                <div class="preview-body">
+                    <div class="preview-iframe-container">
+                        <iframe class="preview-iframe" id="preview-iframe" src="/" sandbox="allow-same-origin"></iframe>
+                    </div>
+                    <div class="preview-status" id="preview-status">
+                        <span class="dot"></span>
+                        <span>Ready to preview</span>
+                    </div>
+                    <div class="preview-actions">
+                        <button class="preview-btn preview-btn-secondary" onclick="ThemePreview.refreshPreview()">↻ Refresh</button>
+                        <button class="preview-btn preview-btn-primary" onclick="ThemePreview.saveAndClose()">Save Changes</button>
+                    </div>
+                </div>
+            `;
+                document.body.appendChild(this.panel);
+            },
+
+            createToggleButton: function () {
+                this.toggleBtn = document.createElement('button');
+                this.toggleBtn.className = 'preview-toggle-btn hidden';
+                this.toggleBtn.innerHTML = '👁️ Live Preview';
+                this.toggleBtn.onclick = function () { ThemePreview.toggle(); };
+                document.body.appendChild(this.toggleBtn);
+            },
+
+            bindFormInputs: function () {
+                var form = document.querySelector('.django-admin-form');
+                if (!form) return;
+
+                // Show toggle button when form is ready
+                this.toggleBtn.classList.remove('hidden');
+
+                // Bind all inputs to track changes
+                var inputs = form.querySelectorAll('input, select, textarea');
+                inputs.forEach(function (input) {
+                    input.addEventListener('input', function (e) {
+                        ThemePreview.trackChange(e.target.name, e.target.value);
+                    });
+                    input.addEventListener('change', function (e) {
+                        ThemePreview.trackChange(e.target.name, e.target.value);
+                    });
+                });
+            },
+
+            trackChange: function (name, value) {
+                this.pendingChanges[name] = value;
+                this.updateStatus('pending', 'Changes pending...');
+
+                // Debounce the preview update
+                clearTimeout(this.updateTimeout);
+                this.updateTimeout = setTimeout(function () {
+                    ThemePreview.applyPreview();
+                }, 300);
+            },
+
+            applyPreview: function () {
+                var iframe = document.getElementById('preview-iframe');
+                if (!iframe || !iframe.contentWindow) return;
+
+                try {
+                    var doc = iframe.contentDocument || iframe.contentWindow.document;
+                    var root = doc.documentElement;
+
+                    // Apply color changes
+                    var colorFields = [
+                        'primary_color', 'secondary_color', 'accent_color', 'accent_hover_color',
+                        'text_primary_color', 'text_secondary_color', 'text_white_color', 'text_accent_color',
+                        'surface_bg_color', 'card_bg_color', 'border_color', 'border_hover_color',
+                        'header_bg_color', 'header_text_color', 'header_border_color',
+                        'footer_bg_color', 'footer_text_color', 'footer_heading_color'
+                    ];
+
+                    colorFields.forEach(function (field) {
+                        if (ThemePreview.pendingChanges[field]) {
+                            root.style.setProperty('--' + field, ThemePreview.pendingChanges[field]);
+                        }
+                    });
+
+                    // Apply typography changes
+                    if (ThemePreview.pendingChanges.font_main) {
+                        root.style.setProperty('--font-main', ThemePreview.pendingChanges.font_main);
+                    }
+                    if (ThemePreview.pendingChanges.font_heading) {
+                        root.style.setProperty('--font-heading', ThemePreview.pendingChanges.font_heading);
+                    }
+                    if (ThemePreview.pendingChanges.font_accent) {
+                        root.style.setProperty('--font-accent', ThemePreview.pendingChanges.font_accent);
+                    }
+
+                    // Apply spacing/radius changes
+                    if (ThemePreview.pendingChanges.container_radius) {
+                        root.style.setProperty('--radius-container', ThemePreview.pendingChanges.container_radius);
+                    }
+                    if (ThemePreview.pendingChanges.card_radius) {
+                        root.style.setProperty('--radius-card', ThemePreview.pendingChanges.card_radius);
+                    }
+                    if (ThemePreview.pendingChanges.button_radius) {
+                        root.style.setProperty('--radius-btn', ThemePreview.pendingChanges.button_radius);
+                    }
+
+                    this.updateStatus('success', 'Preview updated!');
+                } catch (e) {
+                    console.warn('Preview update failed:', e);
+                    this.updateStatus('pending', 'Preview limited (cross-origin)');
+                }
+            },
+
+            updateStatus: function (type, message) {
+                var status = document.getElementById('preview-status');
+                if (!status) return;
+
+                status.className = 'preview-status ' + type;
+                status.innerHTML = '<span class="dot"></span><span>' + message + '</span>';
+            },
+
+            refreshPreview: function () {
+                var iframe = document.getElementById('preview-iframe');
+                if (iframe) {
+                    iframe.src = iframe.src;
+                    this.updateStatus('pending', 'Refreshing...');
+                }
+            },
+
+            saveAndClose: function () {
+                // Submit the form
+                var form = document.querySelector('.django-admin-form');
+                if (form) {
+                    form.submit();
+                }
+                this.toggle();
+            },
+
+            toggle: function () {
+                this.isOpen = !this.isOpen;
+
+                if (this.isOpen) {
+                    this.panel.classList.add('active');
+                    this.toggleBtn.classList.add('hidden');
+                    this.applyPreview();
+                } else {
+                    this.panel.classList.remove('active');
+                    this.toggleBtn.classList.remove('hidden');
+                }
+            }
+        };
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function () {
+                setTimeout(function () { ThemePreview.init(); }, 100);
+            });
+        } else {
+            setTimeout(function () { ThemePreview.init(); }, 100);
+        }
+    })();
+</script>
+{% endblock %}

@@ -1,16 +1,17 @@
 {% load static %}
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
+
     {# SEO Meta Tags #}
     <title>{% block meta_title %}{{ site_settings.meta_title|default:site_settings.site_name }}{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}{{ site_settings.meta_description }}{% endblock %}"/>
-    <meta name="keywords" content="{% block meta_keywords %}{{ site_settings.meta_keywords }}{% endblock %}"/>
-    <meta name="author" content="JKR International"/>
+    <meta name="description" content="{% block meta_description %}{{ site_settings.meta_description }}{% endblock %}" />
+    <meta name="keywords" content="{% block meta_keywords %}{{ site_settings.meta_keywords }}{% endblock %}" />
+    <meta name="author" content="JKR International" />
     <meta name="robots" content="{% block robots %}index, follow{% endblock %}">
 
     {# Tracking & Analytics #}
@@ -18,23 +19,27 @@
     <!-- Google Analytics (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ site_settings.google_analytics_id }}"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '{{ site_settings.google_analytics_id }}');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', '{{ site_settings.google_analytics_id }}');
     </script>
     {% endif %}
 
     {% if site_settings.facebook_pixel_id %}
     <!-- Meta Pixel Code -->
     <script>
-      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-      document,'script','https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '{{ site_settings.facebook_pixel_id }}');
-      fbq('track', 'PageView');
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            }; if (!f._fbq) f._fbq = n;
+            n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
+        }(window,
+            document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '{{ site_settings.facebook_pixel_id }}');
+        fbq('track', 'PageView');
     </script>
     {% endif %}
 
@@ -49,14 +54,17 @@
 
     {# Open Graph / Social #}
     <meta property="og:type" content="website">
-    <meta property="og:title" content="{% block og_title %}{{ site_settings.meta_title|default:site_settings.site_name }}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}{{ site_settings.meta_description }}{% endblock %}">
+    <meta property="og:title"
+        content="{% block og_title %}{{ site_settings.meta_title|default:site_settings.site_name }}{% endblock %}">
+    <meta property="og:description"
+        content="{% block og_description %}{{ site_settings.meta_description }}{% endblock %}">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    {% if site_settings.logo %}<meta property="og:image" content="{{ site_settings.logo.url }}">{% endif %}
-    
+    {% if site_settings.logo %}
+    <meta property="og:image" content="{{ site_settings.logo.url }}">{% endif %}
+
     <!-- Technical SEO -->
     <link rel="canonical" href="{{ request.build_absolute_uri }}" />
-    
+
     {# JSON-LD Schema #}
     <script type="application/ld+json">
     {
@@ -80,8 +88,8 @@
     }
     </script>
     {% block extra_json_ld %}{% endblock %}
-    
-    
+
+
     {% if site_settings.favicon %}
     <link rel="icon" type="image/png" href="{{ site_settings.favicon.url }}" />
     {% endif %}
@@ -89,69 +97,151 @@
     <!-- Fonts Cache - Updated Typography Hierarchy -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700;800&family=Oswald:wght@500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700;800&family=Oswald:wght@500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
+
     <!-- Premium Design System (Compiled Tailwind) -->
     <link rel="stylesheet" href="{% static 'css/main.min.css' %}?v=1.0">
-    
+
     <!-- Modern UI Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    
+
     <script>
-      // Global Design Tokens from Django
-      const designTokens = {
-        primary: "{{ design_settings.primary_color|default:'#114084' }}",
-        secondary: "{{ design_settings.secondary_color|default:'#005CB9' }}",
-        accent: "{{ design_settings.accent_color|default:'#0081ff' }}",
-        surface: "{{ design_settings.surface_bg_color|default:'#f8fafc' }}",
-        card: "{{ design_settings.card_bg_color|default:'#ffffff' }}",
-        border: "{{ design_settings.border_color|default:'#e2e8f0' }}",
-        text: "{{ design_settings.text_primary_color|default:'#1e293b' }}",
-        radius: {
-          container: "{{ design_settings.container_radius|default:'40px' }}",
-          card: "{{ design_settings.card_radius|default:'24px' }}",
-          btn: "{{ design_settings.button_radius|default:'9999px' }}",
-        },
-        effects: {
-          glass: true,
-          glow: true,
-          animations: {{ design_settings.enable_animations|yesno:"true,false" }},
-          threejs: "{{ design_settings.hero_3d_effect|default:'fluid' }}",
-          cursor: {{ design_settings.enable_custom_cursor|yesno:"true,false" }},
+        // Global Design Tokens from Django
+        const designTokens = {
+            primary: "{{ design_settings.primary_color|default:'#114084' }}",
+            secondary: "{{ design_settings.secondary_color|default:'#005CB9' }}",
+            accent: "{{ design_settings.accent_color|default:'#0081ff' }}",
+            surface: "{{ design_settings.surface_bg_color|default:'#f8fafc' }}",
+            card: "{{ design_settings.card_bg_color|default:'#ffffff' }}",
+            border: "{{ design_settings.border_color|default:'#e2e8f0' }}",
+            text: "{{ design_settings.text_primary_color|default:'#1e293b' }}",
+            radius: {
+                container: "{{ design_settings.container_radius|default:'40px' }}",
+                card: "{{ design_settings.card_radius|default:'24px' }}",
+                btn: "{{ design_settings.button_radius|default:'9999px' }}",
+            },
+            effects: {
+                glass: true,
+                glow: true,
+                animations: {{ design_settings.enable_animations| yesno: "true,false" }},
+        threejs: "{{ design_settings.hero_3d_effect|default:'fluid' }}",
+            cursor: { { design_settings.enable_custom_cursor | yesno: "true,false" } },
         }
       };
     </script>
 
     <style type="text/css">
         :root {
+
             /* ── Flower District Color Palette (Dark Blue Variant) ─── */
-            --primary: {{ design_settings.primary_color|default:"#114084" }};
-            --primary-light: {{ design_settings.secondary_color|default:"#1a5cb8" }};
-            --primary-hover: {{ design_settings.accent_color|default:"#0081ff" }};
-            --accent: {{ design_settings.accent_color|default:"#0081ff" }};
+            --primary: {
+                    {
+                    design_settings.primary_color|default: "#114084"
+                }
+            }
+
+            ;
+
+            --primary-light: {
+                    {
+                    design_settings.secondary_color|default: "#1a5cb8"
+                }
+            }
+
+            ;
+
+            --primary-hover: {
+                    {
+                    design_settings.accent_color|default: "#0081ff"
+                }
+            }
+
+            ;
+
+            --accent: {
+                    {
+                    design_settings.accent_color|default: "#0081ff"
+                }
+            }
+
+            ;
             --accent-light: #4da8ff;
 
-            --surface: {{ design_settings.surface_bg_color|default:"#ffffff" }};
-            --surface-light: #f8f9fa;
-            --card: {{ design_settings.card_bg_color|default:"#ffffff" }};
+            --surface: {
+                    {
+                    design_settings.surface_bg_color|default: "#ffffff"
+                }
+            }
 
-            --border-custom: {{ design_settings.border_color|default:"#e5e5e5" }};
+            ;
+            --surface-light: #f8f9fa;
+
+            --card: {
+                    {
+                    design_settings.card_bg_color|default: "#ffffff"
+                }
+            }
+
+            ;
+
+            --border-custom: {
+                    {
+                    design_settings.border_color|default: "#e5e5e5"
+                }
+            }
+
+            ;
             --border-light: #f0f0f0;
             --border-hover: #cccccc;
 
-            --txt-main: {{ design_settings.text_primary_color|default:"#1a1a1a" }};
-            --txt-secondary: {{ design_settings.text_secondary_color|default:"#4a4a4a" }};
+            --txt-main: {
+                    {
+                    design_settings.text_primary_color|default: "#1a1a1a"
+                }
+            }
+
+            ;
+
+            --txt-secondary: {
+                    {
+                    design_settings.text_secondary_color|default: "#4a4a4a"
+                }
+            }
+
+            ;
             --txt-muted: #888888;
             --txt-inverse: #ffffff;
 
-            --font-ui: {{ design_settings.font_main|safe|default:"'Inter', sans-serif" }};
-            --font-display: {{ design_settings.font_heading|safe|default:"'Montserrat', sans-serif" }};
-            --font-accent: {{ design_settings.font_accent|safe|default:"'Playfair Display', serif" }};
+            --font-ui: {
+                    {
+                    design_settings.font_main|safe|default: "'Inter', sans-serif"
+                }
+            }
+
+            ;
+
+            --font-display: {
+                    {
+                    design_settings.font_heading|safe|default: "'Montserrat', sans-serif"
+                }
+            }
+
+            ;
+
+            --font-accent: {
+                    {
+                    design_settings.font_accent|safe|default: "'Playfair Display', serif"
+                }
+            }
+
+            ;
 
             /* Fallbacks for older references */
             --font-sans: var(--font-ui);
@@ -164,12 +254,12 @@
             --radius-2xl: 0px;
             --radius-full: 9999px;
 
-            --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
-            --shadow-card: 0 2px 8px rgba(0,0,0,0.06);
-            --shadow-card-hover: 0 8px 24px rgba(0,0,0,0.1);
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.1);
             --shadow-btn: 0 2px 4px rgba(17, 64, 132, 0.12);
             --shadow-btn-hover: 0 4px 12px rgba(17, 64, 132, 0.18);
 
@@ -178,7 +268,13 @@
             --warning: #D4A017;
 
             /* Global UI Scale */
-            --site-scale: {{ design_settings.site_scale|default:"1.00" }};
+            --site-scale: {
+                    {
+                    design_settings.site_scale|default: "1.00"
+                }
+            }
+
+            ;
         }
 
         /* Apply scale at 100% browser zoom */
@@ -186,7 +282,10 @@
             zoom: var(--site-scale);
         }
 
-        html { overflow-x: hidden; }
+        html {
+            overflow-x: hidden;
+        }
+
         body {
             font-family: var(--font-ui);
             background-color: var(--surface);
@@ -197,16 +296,29 @@
             opacity: 0;
             transition: opacity 0.8s ease-out;
         }
-        body.loaded { opacity: 1; }
 
-        h1, h2, h3, h4, h5, h6,
-        .section-title, .hero-title, .page-hero-title {
+        body.loaded {
+            opacity: 1;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .section-title,
+        .hero-title,
+        .page-hero-title {
             font-family: var(--font-display);
             font-weight: 700;
             letter-spacing: -0.02em;
         }
 
-        .brand, .logo, .accent-serif, .premium-brand {
+        .brand,
+        .logo,
+        .accent-serif,
+        .premium-brand {
             font-family: var(--font-accent);
             font-weight: 700;
         }
@@ -217,6 +329,7 @@
             background-color: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
+
         body.no-glass .glass-morph {
             background-color: white;
             border: 1px solid #f0f0f0;
@@ -231,10 +344,12 @@
             box-shadow: var(--shadow-card);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .premium-card:hover {
             box-shadow: var(--shadow-card-hover);
             transform: translateY(-4px);
         }
+
         .premium-btn {
             display: flex;
             align-items: center;
@@ -251,27 +366,32 @@
             cursor: pointer;
             white-space: nowrap;
         }
+
         .premium-btn-primary {
             background: var(--primary);
             color: white;
             border: 2px solid var(--primary);
         }
+
         .premium-btn-primary:hover {
             background: var(--primary-hover, #0d3a6e);
             border-color: var(--primary-hover, #0d3a6e);
             transform: translateY(-2px);
             box-shadow: var(--shadow-btn-hover);
         }
+
         .premium-btn-secondary {
             background: white;
             color: var(--primary);
             border: 2px solid var(--primary);
         }
+
         .premium-btn-secondary:hover {
             background: var(--primary);
             color: white;
             transform: translateY(-2px);
         }
+
         .premium-toast {
             position: fixed;
             bottom: 2rem;
@@ -293,26 +413,32 @@
             max-width: 360px;
             font-size: 14px;
         }
+
         .premium-toast.show {
             transform: translateY(0);
             opacity: 1;
         }
+
         .glass-header {
             background-color: white;
             border-bottom: 1px solid var(--border-custom);
             box-shadow: var(--shadow-sm);
         }
-        .premium-shadow { box-shadow: var(--shadow-md); }
+
+        .premium-shadow {
+            box-shadow: var(--shadow-md);
+        }
 
         /* ── Header scroll state ── */
         #main-header.scrolled {
-            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
         }
 
         /* ── Mega Menu hover bridge ── */
         .nav-item-mega {
             position: relative;
         }
+
         .nav-item-mega::after {
             content: '';
             position: absolute;
@@ -325,16 +451,30 @@
 
         /* Mobile-Specific Premium Refinements */
         @media (max-width: 639px) {
-            .header-logo { height: 1.75rem !important; }
-            .logo-text-main { font-size: 1.25rem !important; }
-            h1 { font-size: 2.25rem !important; line-height: 1.1 !important; }
-            h3 { font-size: 1.75rem !important; }
+            .header-logo {
+                height: 1.75rem !important;
+            }
+
+            .logo-text-main {
+                font-size: 1.25rem !important;
+            }
+
+            h1 {
+                font-size: 2.25rem !important;
+                line-height: 1.1 !important;
+            }
+
+            h3 {
+                font-size: 1.75rem !important;
+            }
+
             .premium-toast {
                 right: 1rem;
                 left: 1rem;
                 bottom: 5rem;
                 padding: 0.75rem 1rem;
             }
+
             .premium-btn {
                 padding: 0.85rem 1.5rem !important;
                 font-size: 11px !important;
@@ -347,14 +487,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
     <!-- Global Premium Styles - Flower District Theme -->
-    <link rel="stylesheet" href="{% static 'css/flower-district-new.css' %}?v=1.0"> {# Theme styles (Flower District aesthetic - clean white/deep blue) #}
+    <link rel="stylesheet" href="{% static 'css/flower-district-new.css' %}?v=1.0"> {# Theme styles (Flower District
+    aesthetic - clean white/deep blue) #}
     <link rel="stylesheet" href="{% static 'css/header_hero.css' %}?v=1.8">
-    
+
 
     {% block split_css %}{% endblock %}
 </head>
 
-<body class="{% if request.path == '/' %}is-home{% endif %} {% if not design_settings.enable_glassmorphism %}no-glass{% endif %} antialiased">
+<body
+    class="{% if request.path == '/' %}is-home{% endif %} {% if not design_settings.enable_glassmorphism %}no-glass{% endif %} antialiased">
     <!-- Luxury 3D Canvas -->
     {% if request.path == '/' %}
     <div id="hero-canvas"></div>
@@ -366,7 +508,8 @@
             <i class="fas fa-check text-xs"></i>
         </div>
         <div>
-            <p id="toast-title" class="text-[10px] font-black uppercase tracking-widest text-white/50 leading-none mb-1">Success</p>
+            <p id="toast-title"
+                class="text-[10px] font-black uppercase tracking-widest text-white/50 leading-none mb-1">Success</p>
             <p id="toast-message" class="text-sm font-bold text-white"></p>
         </div>
     </div>
@@ -374,38 +517,49 @@
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
     <!-- ===== FLOWER DISTRICT STYLE HEADER ===== -->
-    <header id="main-header" class="fixed top-0 left-0 right-0 z-[2000] bg-white border-b border-[var(--border-custom)] transition-all duration-300">
+    <header id="main-header"
+        class="fixed top-0 left-0 right-0 z-[2000] bg-white border-b border-[var(--border-custom)] transition-all duration-300">
         <!-- Tier 1: Announcement & Social Bar -->
         <div class="border-b border-[var(--border-light)] bg-[var(--surface-light)]">
             <div class="container h-10 flex items-center justify-between text-xs text-[var(--text-secondary)]">
                 <div class="flex items-center gap-1.5 truncate">
                     <span class="font-bold text-[var(--primary)]">Enjoy Free Shipping!</span>
                     {% if announcement_bar_list %}
-                        {% for bar in announcement_bar_list %}
-                            {% if forloop.first %}
-                                <span class="text-[var(--text-muted)]">- {{ bar.text }}</span>
-                            {% endif %}
-                        {% endfor %}
+                    {% for bar in announcement_bar_list %}
+                    {% if forloop.first %}
+                    <span class="text-[var(--text-muted)]">- {{ bar.text }}</span>
+                    {% endif %}
+                    {% endfor %}
                     {% else %}
-                        <span class="text-[var(--text-muted)]">- Minimum order value varies by location.</span>
+                    <span class="text-[var(--text-muted)]">- Minimum order value varies by location.</span>
                     {% endif %}
                 </div>
                 <div class="flex items-center gap-4 sm:gap-6 flex-shrink-0">
                     <div class="flex items-center gap-2 sm:gap-3">
-                        <a href="#" class="font-medium hover:text-[var(--primary)] transition-colors text-[var(--text-secondary)]">En</a>
+                        <a href="#"
+                            class="font-medium hover:text-[var(--primary)] transition-colors text-[var(--text-secondary)]">En</a>
                         <span class="text-[var(--border-hover)]">|</span>
-                        <a href="#" class="font-medium hover:text-[var(--primary)] transition-colors text-[var(--text-secondary)]">Ar</a>
+                        <a href="#"
+                            class="font-medium hover:text-[var(--primary)] transition-colors text-[var(--text-secondary)]">Ar</a>
                     </div>
-                    <div class="flex items-center gap-3 sm:gap-4 text-sm border-l border-[var(--border)] pl-4 sm:pl-6 h-4">
+                    <div
+                        class="flex items-center gap-3 sm:gap-4 text-sm border-l border-[var(--border)] pl-4 sm:pl-6 h-4">
                         {% if site_settings.instagram %}
-                        <a href="{{ site_settings.instagram }}" target="_blank" class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="{{ site_settings.instagram }}" target="_blank"
+                            class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]"
+                            aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                         {% endif %}
                         {% if site_settings.whatsapp %}
-                        <a href="https://wa.me/{{ site_settings.whatsapp }}" target="_blank" class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://wa.me/{{ site_settings.whatsapp }}" target="_blank"
+                            class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]"
+                            aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                         {% elif site_settings.phone %}
-                        <a href="https://wa.me/{{ site_settings.phone }}" target="_blank" class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://wa.me/{{ site_settings.phone }}" target="_blank"
+                            class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]"
+                            aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                         {% endif %}
-                        <a href="#" class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]"
+                            aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>
@@ -417,12 +571,17 @@
             <div class="flex-shrink-0">
                 <a href="{% url 'core:home' %}" class="block group">
                     {% if site_settings.logo %}
-                        <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
+                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}"
+                        class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
                     {% else %}
-                         <div class="logo-box border-2 border-[var(--text-primary)] px-4 py-1.5 text-center relative inline-block transition-transform group-hover:scale-105">
-                             <div class="text-[13px] font-bold tracking-[0.3em] uppercase leading-none text-[var(--text-primary)]">JKR</div>
-                             <div class="text-[9px] font-medium tracking-[0.2em] text-[var(--text-secondary)] mt-0.5">INTERNATIONAL</div>
-                         </div>
+                    <div
+                        class="logo-box border-2 border-[var(--text-primary)] px-4 py-1.5 text-center relative inline-block transition-transform group-hover:scale-105">
+                        <div
+                            class="text-[13px] font-bold tracking-[0.3em] uppercase leading-none text-[var(--text-primary)]">
+                            JKR</div>
+                        <div class="text-[9px] font-medium tracking-[0.2em] text-[var(--text-secondary)] mt-0.5">
+                            INTERNATIONAL</div>
+                    </div>
                     {% endif %}
                 </a>
             </div>
@@ -430,11 +589,10 @@
             <!-- Center: Search Input (desktop-only) -->
             <div class="hidden lg:block flex-grow max-w-lg mx-auto">
                 <form action="{% url 'products:product_list' %}" method="GET" class="relative">
-                    <input type="text"
-                           name="q"
-                           placeholder="What are you looking for?"
-                           class="w-full h-11 pl-4 pr-12 bg-[var(--card)] border border-[var(--border)] rounded-sm text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)] transition-colors">
-                    <button type="submit" class="absolute right-0 top-0 h-11 w-12 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--primary)] transition-colors">
+                    <input type="text" name="q" placeholder="What are you looking for?"
+                        class="w-full h-11 pl-4 pr-12 bg-[var(--card)] border border-[var(--border)] rounded-sm text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)] transition-colors">
+                    <button type="submit"
+                        class="absolute right-0 top-0 h-11 w-12 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--primary)] transition-colors">
                         <i class="fas fa-search text-base"></i>
                     </button>
                 </form>
@@ -445,23 +603,31 @@
                 <!-- User Account -->
                 {% if design_settings.show_header_account %}
                 <div class="group relative">
-                    <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center">
+                    <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}"
+                        class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center">
                         <i class="far fa-user text-xl"></i>
                         <span class="text-[11px] font-medium tracking-wide">Account</span>
                     </a>
                     <!-- Account Dropdown -->
-                    <div class="absolute right-0 top-full mt-2 hidden group-hover:block w-48 bg-white border border-[var(--border)] shadow-[var(--shadow-md)] rounded-sm py-1 z-50">
+                    <div
+                        class="absolute right-0 top-full mt-2 hidden group-hover:block w-48 bg-white border border-[var(--border)] shadow-[var(--shadow-md)] rounded-sm py-1 z-50">
                         <div class="absolute -top-2 left-0 right-0 h-2 bg-transparent"></div>
                         {% if user.is_authenticated %}
-                            <div class="px-4 py-2 text-xs font-bold text-[var(--text-primary)] truncate border-b border-[var(--border-light)] mb-1">
-                                Hi, {{ user.username }}
-                            </div>
-                            <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Profile</a>
-                            <a href="{% url 'accounts:order_history' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Orders</a>
-                            <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-xs text-[var(--error)] hover:bg-[var(--surface-light)]">Logout</a>
+                        <div
+                            class="px-4 py-2 text-xs font-bold text-[var(--text-primary)] truncate border-b border-[var(--border-light)] mb-1">
+                            Hi, {{ user.username }}
+                        </div>
+                        <a href="{% url 'accounts:profile' %}"
+                            class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Profile</a>
+                        <a href="{% url 'accounts:order_history' %}"
+                            class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Orders</a>
+                        <a href="{% url 'accounts:logout' %}"
+                            class="block px-4 py-2 text-xs text-[var(--error)] hover:bg-[var(--surface-light)]">Logout</a>
                         {% else %}
-                            <a href="{% url 'accounts:login' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Login</a>
-                            <a href="{% url 'accounts:register' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Register</a>
+                        <a href="{% url 'accounts:login' %}"
+                            class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Login</a>
+                        <a href="{% url 'accounts:register' %}"
+                            class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Register</a>
                         {% endif %}
                     </div>
                 </div>
@@ -469,10 +635,12 @@
 
                 <!-- Wishlist -->
                 {% if design_settings.show_header_wishlist %}
-                <a href="{% url 'products:wishlist' %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center relative">
+                <a href="{% url 'products:wishlist' %}"
+                    class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center relative">
                     <div class="relative">
                         <i class="far fa-heart text-xl"></i>
-                        <span class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center {% if not wishlist_count %}hidden{% endif %}">
+                        <span
+                            class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center {% if not wishlist_count %}hidden{% endif %}">
                             {{ wishlist_count|default:"0" }}
                         </span>
                     </div>
@@ -482,10 +650,12 @@
 
                 <!-- Shopping Cart -->
                 {% if design_settings.show_header_cart %}
-                <a href="{% url 'orders:enquiry_cart' %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center relative">
+                <a href="{% url 'orders:enquiry_cart' %}"
+                    class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center relative">
                     <div class="relative">
                         <i class="far fa-shopping-bag text-xl"></i>
-                        <span class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center {% if not cart_count %}hidden{% endif %}">
+                        <span
+                            class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center {% if not cart_count %}hidden{% endif %}">
                             {{ cart_count|default:"0" }}
                         </span>
                     </div>
@@ -494,7 +664,8 @@
                 {% endif %}
 
                 <!-- Store Locations -->
-                <a href="{% url 'core:store_locations' %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center">
+                <a href="{% url 'core:store_locations' %}"
+                    class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center">
                     <i class="far fa-map-marker-alt text-xl"></i>
                     <span class="text-[11px] font-medium tracking-wide">Stores</span>
                 </a>
@@ -503,14 +674,17 @@
             <!-- Mobile utility icons (visible on mobile, hidden on lg) -->
             <div class="flex lg:hidden items-center gap-3 text-[var(--text-primary)]">
                 {% if design_settings.show_header_cart %}
-                <a href="{% url 'orders:enquiry_cart' %}" class="relative hover:text-[var(--primary)] transition-colors p-2">
+                <a href="{% url 'orders:enquiry_cart' %}"
+                    class="relative hover:text-[var(--primary)] transition-colors p-2">
                     <i class="far fa-shopping-bag text-xl"></i>
-                    <span class="cart-count-badge absolute top-1 right-1 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center {% if not cart_count %}hidden{% endif %}">
+                    <span
+                        class="cart-count-badge absolute top-1 right-1 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center {% if not cart_count %}hidden{% endif %}">
                         {{ cart_count|default:"0" }}
                     </span>
                 </a>
                 {% endif %}
-                <button id="mobile-menu-trigger" class="hover:text-[var(--primary)] transition-colors p-2" aria-label="Menu">
+                <button id="mobile-menu-trigger" class="hover:text-[var(--primary)] transition-colors p-2"
+                    aria-label="Menu">
                     <i class="fas fa-bars text-xl" id="hamburger-icon"></i>
                 </button>
             </div>
@@ -522,36 +696,41 @@
                 <nav id="header-category-nav" class="flex items-center py-3 overflow-x-hidden">
                     <!-- Left Arrow -->
                     <button id="cat-scroll-left"
-                            class="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 bg-white border border-[var(--border)] rounded-full flex items-center justify-center shadow-sm hover:bg-[var(--surface-light)] transition-all"
-                            aria-label="Scroll categories left">
+                        class="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 bg-white border border-[var(--border)] rounded-full flex items-center justify-center shadow-sm hover:bg-[var(--surface-light)] transition-all"
+                        aria-label="Scroll categories left">
                         <i class="fas fa-chevron-left text-sm text-[var(--text-muted)]"></i>
                     </button>
 
                     <div id="header-category-scroll"
-                         class="flex items-center gap-8 whitespace-nowrap overflow-x-auto no-scrollbar scroll-smooth flex-1 mx-10">
+                        class="flex items-center gap-8 whitespace-nowrap overflow-x-auto no-scrollbar scroll-smooth flex-1 mx-10">
                         {% for cat in categories %}
                         <div class="relative nav-item-mega group/nav-item flex-shrink-0">
-                            <a href="{{ cat.get_absolute_url }}" class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-1">
+                            <a href="{{ cat.get_absolute_url }}"
+                                class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-1">
                                 {{ cat.name }}
                                 {% if cat.active_subcategories %}
-                                <i class="fas fa-chevron-down text-[8px] text-[var(--text-muted)] opacity-60 group-hover/nav-item:rotate-180 transition-transform duration-200"></i>
+                                <i
+                                    class="fas fa-chevron-down text-[8px] text-[var(--text-muted)] opacity-60 group-hover/nav-item:rotate-180 transition-transform duration-200"></i>
                                 {% endif %}
                             </a>
 
                             {% if cat.active_subcategories %}
-                            <div class="absolute left-1/2 -translate-x-1/2 top-full mt-3 hidden group-hover/nav-item:block w-[800px] bg-white border border-[var(--border)] shadow-[var(--shadow-lg)] rounded-xl z-50 transition-all duration-200" style="opacity:0;transform:translateX(-50%) translateY(8px);">
+                            <div class="absolute left-1/2 -translate-x-1/2 top-full mt-3 hidden group-hover/nav-item:block w-[800px] bg-white border border-[var(--border)] shadow-[var(--shadow-lg)] rounded-xl z-50 transition-all duration-200"
+                                style="opacity:0;transform:translateX(-50%) translateY(8px);">
                                 <div class="absolute -top-3 left-0 right-0 h-3 bg-transparent"></div>
                                 <div class="grid grid-cols-4 gap-0 p-6">
                                     {% for sub in cat.active_subcategories %}
                                     <div>
                                         <a href="{{ sub.get_absolute_url }}" class="block group">
-                                             <h5 class="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--primary)] mb-3 pb-2 border-b border-[var(--border)]">
+                                            <h5
+                                                class="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--primary)] mb-3 pb-2 border-b border-[var(--border)]">
                                                 {{ sub.name }}
                                             </h5>
                                             {% if sub.active_subcategories %}
                                             <div class="space-y-2">
                                                 {% for subsub in sub.active_subcategories %}
-                                                 <a href="{{ subsub.get_absolute_url }}" class="block text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--primary)] hover:pl-2 transition-all">
+                                                <a href="{{ subsub.get_absolute_url }}"
+                                                    class="block text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--primary)] hover:pl-2 transition-all">
                                                     {{ subsub.name }}
                                                 </a>
                                                 {% endfor %}
@@ -561,8 +740,10 @@
                                     </div>
                                     {% endfor %}
                                 </div>
-                                 <div class="border-t border-[var(--border)] px-6 py-4 bg-[var(--surface-light)] rounded-b-xl">
-                                     <a href="{{ cat.get_absolute_url }}" class="flex items-center justify-between text-xs font-bold text-[var(--primary)] hover:text-[var(--primary-light)] transition-colors">
+                                <div
+                                    class="border-t border-[var(--border)] px-6 py-4 bg-[var(--surface-light)] rounded-b-xl">
+                                    <a href="{{ cat.get_absolute_url }}"
+                                        class="flex items-center justify-between text-xs font-bold text-[var(--primary)] hover:text-[var(--primary-light)] transition-colors">
                                         <span>View All {{ cat.name }}</span>
                                         <i class="fas fa-arrow-right text-[10px]"></i>
                                     </a>
@@ -575,49 +756,61 @@
 
                     <!-- Right Arrow -->
                     <button id="cat-scroll-right"
-                            class="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 bg-white border border-[var(--border)] rounded-full flex items-center justify-center shadow-sm hover:bg-[var(--surface-light)] transition-all"
-                            aria-label="Scroll categories right">
+                        class="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 bg-white border border-[var(--border)] rounded-full flex items-center justify-center shadow-sm hover:bg-[var(--surface-light)] transition-all"
+                        aria-label="Scroll categories right">
                         <i class="fas fa-chevron-right text-sm text-[var(--text-muted)]"></i>
                     </button>
                 </nav>
             </div>
-         </div>
+        </div>
 
         <!-- MOBILE SEARCH & NAV (Slide Down) -->
-        <div id="mobile-menu" class="hidden lg:hidden" style="border-top:1px solid var(--border);background:var(--card);max-height:85vh;overflow-y:auto;">
+        <div id="mobile-menu" class="hidden lg:hidden"
+            style="border-top:1px solid var(--border);background:var(--card);max-height:85vh;overflow-y:auto;">
             <div style="padding:28px 24px;display:flex;flex-direction:column;gap:28px;">
                 <!-- Mobile Search -->
                 <form action="{% url 'products:product_list' %}" method="GET" class="relative">
                     <input type="text" name="q" placeholder="What are you looking for?"
-                           style="width:100%;padding:13px 16px 13px 48px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-main);font-size:14px;color:var(--txt-main);outline:none;transition:border-color 0.2s;">
-                    <button type="submit" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;">
+                        style="width:100%;padding:13px 16px 13px 48px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-main);font-size:14px;color:var(--txt-main);outline:none;transition:border-color 0.2s;">
+                    <button type="submit"
+                        style="position:absolute;left:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;">
                         <i class="fas fa-search text-sm"></i>
                     </button>
                 </form>
 
                 <!-- Navigation Accordion -->
                 <nav style="display:flex;flex-direction:column;gap:8px;">
-                    <p style="font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;padding-left:8px;">Shop Categories</p>
+                    <p
+                        style="font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;padding-left:8px;">
+                        Shop Categories</p>
                     {% for cat in categories %}
-                    <div class="mobile-accordion-item" style="border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);overflow:hidden;">
+                    <div class="mobile-accordion-item"
+                        style="border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);overflow:hidden;">
                         <div style="display:flex;align-items:center;padding:16px;gap:12px;">
-                            <a href="{{ cat.get_absolute_url }}" style="flex:1;font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--txt-main);text-decoration:none;">{{ cat.name }}</a>
+                            <a href="{{ cat.get_absolute_url }}"
+                                style="flex:1;font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--txt-main);text-decoration:none;">{{
+                                cat.name }}</a>
                             {% if cat.active_subcategories %}
-                            <button class="accordion-trigger" style="background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                <i class="fas fa-chevron-down text-[10px] chevron" style="transition:transform 0.25s;"></i>
+                            <button class="accordion-trigger"
+                                style="background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-chevron-down text-[10px] chevron"
+                                    style="transition:transform 0.25s;"></i>
                             </button>
                             {% endif %}
                         </div>
                         {% if cat.active_subcategories %}
-                        <div class="mobile-sub" style="display:none;padding:0 16px 16px;border-top:1px solid var(--border);">
+                        <div class="mobile-sub"
+                            style="display:none;padding:0 16px 16px;border-top:1px solid var(--border);">
                             {% for sub in cat.active_subcategories %}
-                            <a href="{{ sub.get_absolute_url }}" style="display:block;padding:8px 0;font-size:12px;font-weight:600;color:var(--text-secondary);border-left:2px solid var(--border);padding-left:12px;margin-top:8px;transition:all 0.15s;text-decoration:none;"
-                               onmouseover="this.style.color='var(--primary)';this.style.borderLeftColor='var(--primary)'"
-                               onmouseout="this.style.color='var(--text-secondary)';this.style.borderLeftColor='var(--border)'">
+                            <a href="{{ sub.get_absolute_url }}"
+                                style="display:block;padding:8px 0;font-size:12px;font-weight:600;color:var(--text-secondary);border-left:2px solid var(--border);padding-left:12px;margin-top:8px;transition:all 0.15s;text-decoration:none;"
+                                onmouseover="this.style.color='var(--primary)';this.style.borderLeftColor='var(--primary)'"
+                                onmouseout="this.style.color='var(--text-secondary)';this.style.borderLeftColor='var(--border)'">
                                 {{ sub.name }}
                             </a>
                             {% endfor %}
-                            <a href="{{ cat.get_absolute_url }}" style="display:block;padding:10px 0 0;font-size:10px;font-family:var(--font-heading);font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--primary);text-decoration:none;">
+                            <a href="{{ cat.get_absolute_url }}"
+                                style="display:block;padding:10px 0 0;font-size:10px;font-family:var(--font-heading);font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--primary);text-decoration:none;">
                                 View All {{ cat.name }} →
                             </a>
                         </div>
@@ -627,44 +820,58 @@
                 </nav>
 
                 <!-- Mobile Account Actions -->
-                <div style="padding-top:20px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:12px;">
-                    <p style="font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;padding-left:8px;">Account & Support</p>
+                <div
+                    style="padding-top:20px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:12px;">
+                    <p
+                        style="font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;padding-left:8px;">
+                        Account & Support</p>
                     {% if user.is_authenticated %}
-                        <div style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);">
-                            <div style="width:40px;height:40px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-family:var(--font-heading);font-size:16px;font-weight:800;flex-shrink:0;">
-                                {{ user.username|first|upper }}
-                            </div>
-                            <div>
-                                <p style="font-size:9px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px;">Signed in as</p>
-                                <p style="font-size:13px;font-weight:700;color:var(--txt-main);">{{ user.username }}</p>
-                            </div>
+                    <div
+                        style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);">
+                        <div
+                            style="width:40px;height:40px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-family:var(--font-heading);font-size:16px;font-weight:800;flex-shrink:0;">
+                            {{ user.username|first|upper }}
                         </div>
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                            <a href="{% url 'accounts:profile' %}" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-heading);font-size:11px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:all 0.2s;">
-                                <i class="fas fa-id-card" style="color:var(--primary);"></i> Profile
-                            </a>
-                            <a href="{% url 'accounts:order_history' %}" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-heading);font-size:11px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:all 0.2s;">
-                                <i class="fas fa-history" style="color:var(--primary);"></i> Orders
-                            </a>
+                        <div>
+                            <p
+                                style="font-size:9px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px;">
+                                Signed in as</p>
+                            <p style="font-size:13px;font-weight:700;color:var(--txt-main);">{{ user.username }}</p>
                         </div>
-                        <a href="{% url 'accounts:logout' %}" style="display:block;padding:12px;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.12);border-radius:var(--radius-sm);text-align:center;font-family:var(--font-heading);font-size:11px;font-weight:800;color:var(--error);text-decoration:none;transition:all 0.2s;">
-                            Sign Out
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                        <a href="{% url 'accounts:profile' %}"
+                            style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-heading);font-size:11px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:all 0.2s;">
+                            <i class="fas fa-id-card" style="color:var(--primary);"></i> Profile
                         </a>
+                        <a href="{% url 'accounts:order_history' %}"
+                            style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-heading);font-size:11px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:all 0.2s;">
+                            <i class="fas fa-history" style="color:var(--primary);"></i> Orders
+                        </a>
+                    </div>
+                    <a href="{% url 'accounts:logout' %}"
+                        style="display:block;padding:12px;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.12);border-radius:var(--radius-sm);text-align:center;font-family:var(--font-heading);font-size:11px;font-weight:800;color:var(--error);text-decoration:none;transition:all 0.2s;">
+                        Sign Out
+                    </a>
                     {% else %}
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                            <a href="{% url 'accounts:login' %}" style="display:flex;align-items:center;justify-content:center;padding:14px;background:var(--primary);color:white;border-radius:var(--radius-sm);font-family:var(--font-heading);font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;">
-                                Sign In
-                            </a>
-                            <a href="{% url 'accounts:register' %}" style="display:flex;align-items:center;justify-content:center;padding:14px;background:var(--card);border:1px solid var(--border);color:var(--txt-main);border-radius:var(--radius-sm);font-family:var(--font-heading);font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;">
-                                Register
-                            </a>
-                        </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                        <a href="{% url 'accounts:login' %}"
+                            style="display:flex;align-items:center;justify-content:center;padding:14px;background:var(--primary);color:white;border-radius:var(--radius-sm);font-family:var(--font-heading);font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;">
+                            Sign In
+                        </a>
+                        <a href="{% url 'accounts:register' %}"
+                            style="display:flex;align-items:center;justify-content:center;padding:14px;background:var(--card);border:1px solid var(--border);color:var(--txt-main);border-radius:var(--radius-sm);font-family:var(--font-heading);font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;">
+                            Register
+                        </a>
+                    </div>
                     {% endif %}
 
-                    <a href="{% url 'core:store_locations' %}" style="display:flex;align-items:center;gap:10px;padding:12px 0;font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:color 0.2s;">
+                    <a href="{% url 'core:store_locations' %}"
+                        style="display:flex;align-items:center;gap:10px;padding:12px 0;font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:color 0.2s;">
                         <i class="far fa-map-marker-alt text-lg" style="color:var(--primary);"></i> Store Locations
                     </a>
-                    <a href="{% url 'core:faq' %}" style="display:flex;align-items:center;gap:10px;padding:12px 0;font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:color 0.2s;">
+                    <a href="{% url 'core:faq' %}"
+                        style="display:flex;align-items:center;gap:10px;padding:12px 0;font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:color 0.2s;">
                         <i class="far fa-question-circle text-lg" style="color:var(--primary);"></i> FAQs
                     </a>
                 </div>
@@ -686,33 +893,38 @@
                 <div class="space-y-8">
                     <a href="{% url 'core:home' %}" class="block group">
                         {% if site_settings.logo %}
-                            <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="h-10 w-auto brightness-0 invert">
+                        <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}"
+                            class="h-10 w-auto brightness-0 invert">
                         {% else %}
-                            <span class="text-2xl font-black text-white tracking-tight">{{ site_settings.site_name|default:"JKR International" }}</span>
+                        <span class="text-2xl font-black text-white tracking-tight">{{
+                            site_settings.site_name|default:"JKR International" }}</span>
                         {% endif %}
                     </a>
 
                     <p class="text-sm text-white/45 leading-relaxed">
-                        Delivering world-class medical equipment and integrated healthcare technology solutions globally.
+                        Delivering world-class medical equipment and integrated healthcare technology solutions
+                        globally.
                     </p>
 
                     <div class="space-y-4 text-sm text-white/55">
                         {% if site_settings.dubai_address %}
                         <div class="flex items-start gap-3">
-                             <i class="fas fa-map-marker-alt text-[var(--accent)] mt-1 flex-shrink-0"></i>
+                            <i class="fas fa-map-marker-alt text-[var(--accent)] mt-1 flex-shrink-0"></i>
                             <span class="leading-relaxed">{{ site_settings.dubai_address }}</span>
                         </div>
                         {% endif %}
                         {% if site_settings.email %}
                         <div class="flex items-center gap-3">
-                             <i class="fas fa-envelope text-[var(--accent)] flex-shrink-0"></i>
-                            <a href="mailto:{{ site_settings.email }}" class="hover:text-white transition-colors">{{ site_settings.email }}</a>
+                            <i class="fas fa-envelope text-[var(--accent)] flex-shrink-0"></i>
+                            <a href="mailto:{{ site_settings.email }}" class="hover:text-white transition-colors">{{
+                                site_settings.email }}</a>
                         </div>
                         {% endif %}
                         {% if site_settings.phone %}
                         <div class="flex items-center gap-3">
-                             <i class="fas fa-phone text-[var(--accent)] flex-shrink-0"></i>
-                            <a href="tel:{{ site_settings.phone }}" class="hover:text-white transition-colors">{{ site_settings.phone }}</a>
+                            <i class="fas fa-phone text-[var(--accent)] flex-shrink-0"></i>
+                            <a href="tel:{{ site_settings.phone }}" class="hover:text-white transition-colors">{{
+                                site_settings.phone }}</a>
                         </div>
                         {% endif %}
                     </div>
@@ -720,16 +932,22 @@
                     <!-- Social Links -->
                     <div class="flex items-center gap-3">
                         {% if site_settings.instagram %}
-                         <a href="{{ site_settings.instagram }}" target="_blank" class="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/50 hover:bg-[var(--primary)] hover:text-white transition-all" aria-label="Instagram">
+                        <a href="{{ site_settings.instagram }}" target="_blank"
+                            class="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/50 hover:bg-[var(--primary)] hover:text-white transition-all"
+                            aria-label="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
                         {% endif %}
                         {% if site_settings.whatsapp or site_settings.phone %}
-                         <a href="https://wa.me/{{ site_settings.whatsapp|default:site_settings.phone }}" target="_blank" class="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/50 hover:bg-[var(--primary)] hover:text-white transition-all" aria-label="WhatsApp">
+                        <a href="https://wa.me/{{ site_settings.whatsapp|default:site_settings.phone }}" target="_blank"
+                            class="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/50 hover:bg-[var(--primary)] hover:text-white transition-all"
+                            aria-label="WhatsApp">
                             <i class="fab fa-whatsapp"></i>
                         </a>
                         {% endif %}
-                         <a href="#" class="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/50 hover:bg-[var(--primary)] hover:text-white transition-all" aria-label="TikTok">
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/50 hover:bg-[var(--primary)] hover:text-white transition-all"
+                            aria-label="TikTok">
                             <i class="fab fa-tiktok"></i>
                         </a>
                     </div>
@@ -740,7 +958,8 @@
                     <h4 class="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--accent)]">Categories</h4>
                     <nav class="flex flex-col gap-3">
                         {% for cat in categories|slice:":8" %}
-                        <a href="{{ cat.get_absolute_url }}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">
+                        <a href="{{ cat.get_absolute_url }}"
+                            class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">
                             {{ cat.name }}
                         </a>
                         {% endfor %}
@@ -751,28 +970,49 @@
                 <div class="space-y-6">
                     <h4 class="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--accent)]">Information</h4>
                     <nav class="flex flex-col gap-3">
-                        <a href="{% url 'core:store_locations' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Store Locations</a>
-                        <a href="{% url 'accounts:profile' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">My Account</a>
-                        <a href="{% url 'core:about_us' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">About Us</a>
-                        <a href="{% url 'contact:contact' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Contact Us</a>
-                        <a href="{% url 'blog:post_list' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Blog</a>
-                        <a href="#" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Return & Refund Policy</a>
-                        <a href="#" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Terms & Conditions</a>
-                        <a href="#" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Privacy Policy</a>
-                        <a href="{% url 'core:shipping_info' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Shipping & Delivery</a>
-                        <a href="{% url 'core:faq' %}" class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">FAQs</a>
+                        <a href="{% url 'core:store_locations' %}"
+                            class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Store
+                            Locations</a>
+                        <a href="{% url 'accounts:profile' %}"
+                            class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">My
+                            Account</a>
+                        <a href="{% url 'core:about_us' %}"
+                            class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">About
+                            Us</a>
+                        <a href="{% url 'contact:contact' %}"
+                            class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Contact
+                            Us</a>
+                        <a href="{% url 'blog:post_list' %}"
+                            class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Blog</a>
+                        <a href="#"
+                            class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Return
+                            & Refund Policy</a>
+                        <a href="#"
+                            class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Terms &
+                            Conditions</a>
+                        <a href="#"
+                            class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Privacy
+                            Policy</a>
+                        <a href="{% url 'core:shipping_info' %}"
+                            class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">Shipping
+                            & Delivery</a>
+                        <a href="{% url 'core:faq' %}"
+                            class="text-sm text-white/50 hover:text-white hover:pl-2 transition-all font-medium">FAQs</a>
                     </nav>
                 </div>
 
                 <!-- Column 4: Newsletter -->
                 <div class="space-y-6">
                     <h4 class="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--accent)]">Newsletter</h4>
-                    <p class="text-sm text-white/45 leading-relaxed">Subscribe to receive updates, access to exclusive deals, and more.</p>
+                    <p class="text-sm text-white/45 leading-relaxed">Subscribe to receive updates, access to exclusive
+                        deals, and more.</p>
 
                     <form class="relative" action="#" method="POST">
                         {% csrf_token %}
-                         <input type="email" name="email" placeholder="Your email address" required class="w-full bg-white/8 border border-white/10 rounded-full py-3.5 px-5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-[var(--accent)] transition-all pr-14">
-                         <button type="submit" class="absolute right-2 top-1.5 bottom-1.5 px-4 bg-[var(--primary)] text-white rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary-dark)] transition-all">
+                        <input type="email" name="email" placeholder="Your email address" required
+                            class="w-full bg-white/8 border border-white/10 rounded-full py-3.5 px-5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-[var(--accent)] transition-all pr-14">
+                        <button type="submit"
+                            class="absolute right-2 top-1.5 bottom-1.5 px-4 bg-[var(--primary)] text-white rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary-dark)] transition-all">
                             Subscribe
                         </button>
                     </form>
@@ -799,8 +1039,11 @@
                     © 2026 {{ site_settings.site_name|default:"JKR International" }}. All rights reserved.
                 </p>
                 <div class="flex items-center gap-6">
-                    <a href="#" class="text-[11px] text-white/30 hover:text-white font-bold uppercase tracking-widest transition-colors">Privacy Policy</a>
-                    <a href="#" class="text-[11px] text-white/30 hover:text-white font-bold uppercase tracking-widest transition-colors">Terms</a>
+                    <a href="#"
+                        class="text-[11px] text-white/30 hover:text-white font-bold uppercase tracking-widest transition-colors">Privacy
+                        Policy</a>
+                    <a href="#"
+                        class="text-[11px] text-white/30 hover:text-white font-bold uppercase tracking-widest transition-colors">Terms</a>
                 </div>
             </div>
         </div>
@@ -808,20 +1051,18 @@
 
     <!-- Floating WhatsApp Button -->
     {% if site_settings.whatsapp or site_settings.phone %}
-    <a href="https://wa.me/{{ site_settings.whatsapp|default:site_settings.phone|slice:'1:' }}"
-       target="_blank"
-       class="floating-whatsapp"
-       aria-label="Chat on WhatsApp">
+    <a href="https://wa.me/{{ site_settings.whatsapp|default:site_settings.phone|slice:'1:' }}" target="_blank"
+        class="floating-whatsapp" aria-label="Chat on WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
     {% endif %}
 
     <!-- Vendor Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    
+
     <!-- Core Logic -->
     <script src="{% static 'js/main.js' %}?v=1.0"></script>
-    
+
     <script>
         // Premium Core Interface Logic
         document.addEventListener('DOMContentLoaded', () => {
@@ -882,7 +1123,7 @@
         });
 
         // ===== Header Category Horizontal Scroller with Infinite Loop =====
-        (function() {
+        (function () {
             const scrollContainer = document.getElementById('header-category-scroll');
             const btnLeft = document.getElementById('cat-scroll-left');
             const btnRight = document.getElementById('cat-scroll-right');
@@ -924,5 +1165,9 @@
     <!-- Luxury UI Scripts -->
     <script src="{% static 'js/premium_ui.js' %}"></script>
 
+    <!-- Real-Time Theme Updates -->
+    <script src="{% static 'js/theme-live-update.js' %}"></script>
+
 </body>
+
 </html>

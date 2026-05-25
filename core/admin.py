@@ -83,6 +83,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 @admin.register(DesignSettings)
 class DesignSettingsAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'primary_color', 'enable_animations', 'updated_at')
+    change_form_template = 'admin/core/designsettings/change_form.html'
     fieldsets = (
         ('Flower District Color Palette (Deep Blue Theme)', {
             'fields': (
