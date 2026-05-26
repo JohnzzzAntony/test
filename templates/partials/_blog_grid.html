@@ -17,12 +17,9 @@
     <div class="fd-blog-grid">
       {% for post in posts|slice:":3" %}
       <article class="fd-blog-card">
-        {% if post.image or post.featured_image %}
         <a href="{{ post.get_absolute_url }}" class="fd-blog-img-link">
-          <img src="{% if post.image %}{{ post.image.url }}{% elif post.featured_image %}{{ post.featured_image.url }}{% endif %}"
-               alt="{{ post.title }}" class="fd-blog-img" loading="lazy">
+          <img src="{{ post.get_image_url }}" alt="{{ post.title }}" class="fd-blog-img" loading="lazy">
         </a>
-        {% endif %}
         <div class="fd-blog-body">
           {% if post.category %}
           <span class="fd-blog-category">{{ post.category }}</span>
@@ -30,8 +27,8 @@
           <h3 class="fd-blog-title">
             <a href="{{ post.get_absolute_url }}">{{ post.title|truncatechars:65 }}</a>
           </h3>
-          {% if post.excerpt or post.summary %}
-          <p class="fd-blog-excerpt">{{ post.excerpt|default:post.summary|truncatechars:120 }}</p>
+          {% if post.excerpt %}
+          <p class="fd-blog-excerpt">{{ post.excerpt|truncatechars:120 }}</p>
           {% endif %}
           <div class="fd-blog-meta">
             <span><i class="far fa-calendar-alt"></i> {{ post.created_at|date:"M d, Y" }}</span>
