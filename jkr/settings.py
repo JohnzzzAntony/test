@@ -341,7 +341,7 @@ if IS_PRODUCTION:
     # Use standard Cloudinary storage for media
     MEDIA_STORAGE_BACKEND = "cloudinary_storage.storage.MediaCloudinaryStorage"
     # Use WhiteNoise for static files
-    STATIC_STORAGE_BACKEND = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    STATIC_STORAGE_BACKEND = "jkr.storage.CustomWhiteNoiseStorage"
 else:
     MEDIA_STORAGE_BACKEND = "django.core.files.storage.FileSystemStorage"
     STATIC_STORAGE_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage"
