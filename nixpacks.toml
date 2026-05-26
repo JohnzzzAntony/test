@@ -1,11 +1,18 @@
-# Force Nixpacks to use Python only.
-# package.json exists for local Tailwind CSS compilation only — Node.js is
-# NOT needed at runtime. Without this, Nixpacks detects both package.json and
-# requirements.txt and tries to mix Node + Python, leaving pip unavailable.
+# Explicitly declare Python via Nix packages.
+# 'providers' alone is sometimes ignored when package.json is present.
+# Declaring nixPkgs forces the correct Python + pip3 environment.
 providers = ["python"]
 
+[phases.setup]
+nixPkgs = [
+  "python311",
+  "python311Packages.pip",
+  "python311Packages.setuptools",
+  "python311Packages.wheel"
+]
+
 [phases.install]
-cmds = ["pip install -r requirements.txt"]
+cmds = ["pip3 install --no-cache-dir -r requirements.txt"]
 
 [phases.build]
 cmds = ["python manage.py collectstatic --noinput --clear"]
