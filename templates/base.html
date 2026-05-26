@@ -466,115 +466,93 @@ Theme styles (Flower District
     <header id="main-header"
         class="fixed top-0 left-0 right-0 z-[2000] bg-white border-b border-[var(--border-custom)] transition-all duration-300">
         <!-- Tier 1: Announcement & Social Bar -->
-        <div class="border-b border-[var(--border-light)] bg-[var(--surface-light)]">
-            <div class="container h-10 flex items-center justify-between text-xs text-[var(--text-secondary)]">
-                <div class="flex items-center gap-1.5 truncate">
-                    <span class="font-bold text-[var(--primary)]">Enjoy Free Shipping!</span>
-                    {% if announcement_bar_list %}
-                    {% for bar in announcement_bar_list %}
-                    {% if forloop.first %}
-                    <span class="text-[var(--text-muted)]">- {{ bar.text }}</span>
-                    {% endif %}
-                    {% endfor %}
-                    {% else %}
-                    <span class="text-[var(--text-muted)]">- Minimum order value varies by location.</span>
-                    {% endif %}
+        <div class="border-b border-[var(--border-light)] bg-gray-50">
+            <div class="container h-9 flex items-center justify-between text-[11px] font-medium text-[var(--text-secondary)]">
+                <div class="flex items-center gap-2 truncate">
+                    <span class="font-bold text-[var(--primary)] uppercase tracking-wider">Enjoy Free Shipping!</span>
+                    <span class="text-[var(--border-hover)]">|</span>
+                    <span class="truncate text-gray-500">
+                        {% if announcement_bar_list %}
+                        {% for bar in announcement_bar_list %}{% if forloop.first %}{{ bar.text }}{% endif %}{% endfor %}
+                        {% else %}
+                        Free UAE Delivery on Purchases Above AED 2000
+                        {% endif %}
+                    </span>
                 </div>
-                <div class="flex items-center gap-4 sm:gap-6 flex-shrink-0">
-                    <div class="flex items-center gap-2 sm:gap-3">
-                        <a href="#"
-                            class="font-medium hover:text-[var(--primary)] transition-colors text-[var(--text-secondary)]">En</a>
+                <div class="flex items-center gap-5 flex-shrink-0">
+                    <div class="flex items-center gap-2">
+                        <a href="#" class="hover:text-[var(--primary)] transition-colors text-[var(--text-primary)] font-bold">En</a>
                         <span class="text-[var(--border-hover)]">|</span>
-                        <a href="#"
-                            class="font-medium hover:text-[var(--primary)] transition-colors text-[var(--text-secondary)]">Ar</a>
+                        <a href="#" class="hover:text-[var(--primary)] transition-colors">Ar</a>
                     </div>
-                    <div
-                        class="flex items-center gap-3 sm:gap-4 text-sm border-l border-[var(--border)] pl-4 sm:pl-6 h-4">
+                    <div class="flex items-center gap-4 pl-5 border-l border-gray-200">
                         {% if site_settings.instagram %}
-                        <a href="{{ site_settings.instagram }}" target="_blank"
-                            class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]"
-                            aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="{{ site_settings.instagram }}" target="_blank" class="hover:text-[var(--primary)] transition-colors text-gray-500" aria-label="Instagram"><i class="fab fa-instagram text-sm"></i></a>
                         {% endif %}
                         {% if site_settings.whatsapp %}
-                        <a href="https://wa.me/{{ site_settings.whatsapp }}" target="_blank"
-                            class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]"
-                            aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://wa.me/{{ site_settings.whatsapp }}" target="_blank" class="hover:text-[var(--primary)] transition-colors text-gray-500" aria-label="WhatsApp"><i class="fab fa-whatsapp text-sm"></i></a>
                         {% elif site_settings.phone %}
-                        <a href="https://wa.me/{{ site_settings.phone }}" target="_blank"
-                            class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]"
-                            aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://wa.me/{{ site_settings.phone }}" target="_blank" class="hover:text-[var(--primary)] transition-colors text-gray-500" aria-label="WhatsApp"><i class="fab fa-whatsapp text-sm"></i></a>
                         {% endif %}
-                        <a href="#" class="hover:text-[var(--primary)] transition-colors text-[var(--text-muted)]"
-                            aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="hover:text-[var(--primary)] transition-colors text-gray-500" aria-label="TikTok"><i class="fab fa-tiktok text-sm"></i></a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Tier 2: Main Branding, Search & Utilities -->
-        <div class="container py-4 flex items-center justify-between gap-6">
+        <div class="container py-4 flex items-center justify-between gap-8 lg:gap-12">
             <!-- Left: Logo -->
             <div class="flex-shrink-0">
                 <a href="{% url 'core:home' %}" class="block group">
                     {% if site_settings.logo %}
-                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}"
-                        class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
+                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="h-10 lg:h-12 w-auto object-contain transition-transform group-hover:scale-105">
                     {% else %}
-                    <div
-                        class="logo-box border-2 border-[var(--text-primary)] px-4 py-1.5 text-center relative inline-block transition-transform group-hover:scale-105">
-                        <div
-                            class="text-[13px] font-bold tracking-[0.3em] uppercase leading-none text-[var(--text-primary)]">
-                            JKR</div>
-                        <div class="text-[9px] font-medium tracking-[0.2em] text-[var(--text-secondary)] mt-0.5">
-                            INTERNATIONAL</div>
+                    <div class="logo-box border-2 border-[var(--primary)] px-4 py-1.5 text-center relative inline-block transition-transform group-hover:scale-105">
+                        <div class="text-[15px] font-black tracking-[0.2em] uppercase leading-none text-[var(--primary)]">JKR</div>
+                        <div class="text-[8px] font-bold tracking-[0.3em] text-[var(--text-secondary)] mt-1">INTERNATIONAL</div>
                     </div>
                     {% endif %}
                 </a>
             </div>
 
             <!-- Center: Search Input (desktop-only) -->
-            <div class="hidden lg:block flex-grow max-w-lg mx-auto">
-                <form action="{% url 'products:product_list' %}" method="GET" class="relative">
+            <div class="hidden lg:block flex-grow max-w-2xl">
+                <form action="{% url 'products:product_list' %}" method="GET" class="relative group">
                     <input type="text" name="q" placeholder="What are you looking for?"
-                        class="w-full h-11 pl-4 pr-12 bg-[var(--card)] border border-[var(--border)] rounded-sm text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)] transition-colors">
+                        class="w-full h-11 pl-5 pr-14 bg-gray-50 border border-transparent rounded-full text-[13px] text-[var(--text-primary)] placeholder-gray-400 focus:outline-none focus:border-[var(--primary)] focus:bg-white transition-all group-hover:bg-white group-hover:border-gray-200">
                     <button type="submit"
-                        class="absolute right-0 top-0 h-11 w-12 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--primary)] transition-colors">
-                        <i class="fas fa-search text-base"></i>
+                        class="absolute right-1 top-1 bottom-1 w-10 flex items-center justify-center bg-[var(--primary)] text-white rounded-full hover:bg-[var(--primary-hover)] transition-colors shadow-sm">
+                        <i class="fas fa-search text-xs"></i>
                     </button>
                 </form>
             </div>
 
             <!-- Right: Utilities (desktop-only) -->
-            <div class="hidden lg:flex items-center gap-8 text-[var(--text-primary)]">
+            <div class="hidden lg:flex items-center gap-7 text-[var(--primary)]">
                 <!-- User Account -->
                 {% if design_settings.show_header_account %}
                 <div class="group relative">
                     <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}"
-                        class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center">
-                        <i class="far fa-user text-xl"></i>
-                        <span class="text-[11px] font-medium tracking-wide">Account</span>
+                        class="flex flex-col items-center gap-1.5 text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors text-center w-14">
+                        <i class="far fa-user text-[20px]"></i>
+                        <span class="text-[9px] font-bold tracking-widest uppercase">Account</span>
                     </a>
                     <!-- Account Dropdown -->
-                    <div
-                        class="absolute right-0 top-full mt-2 hidden group-hover:block w-48 bg-white border border-[var(--border)] shadow-[var(--shadow-md)] rounded-sm py-1 z-50">
-                        <div class="absolute -top-2 left-0 right-0 h-2 bg-transparent"></div>
-                        {% if user.is_authenticated %}
-                        <div
-                            class="px-4 py-2 text-xs font-bold text-[var(--text-primary)] truncate border-b border-[var(--border-light)] mb-1">
-                            Hi, {{ user.username }}
+                    <div class="absolute right-1/2 translate-x-1/2 top-full pt-4 hidden group-hover:block z-50">
+                        <div class="w-48 bg-white border border-[var(--border)] shadow-[var(--shadow-md)] rounded-md py-1">
+                            {% if user.is_authenticated %}
+                            <div class="px-4 py-2 text-xs font-bold text-[var(--text-primary)] truncate border-b border-[var(--border-light)] mb-1">
+                                Hi, {{ user.username }}
+                            </div>
+                            <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">Profile</a>
+                            <a href="{% url 'accounts:order_history' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">Orders</a>
+                            <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-xs text-[var(--error)] hover:bg-gray-50 transition-colors">Logout</a>
+                            {% else %}
+                            <a href="{% url 'accounts:login' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">Login</a>
+                            <a href="{% url 'accounts:register' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">Register</a>
+                            {% endif %}
                         </div>
-                        <a href="{% url 'accounts:profile' %}"
-                            class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Profile</a>
-                        <a href="{% url 'accounts:order_history' %}"
-                            class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Orders</a>
-                        <a href="{% url 'accounts:logout' %}"
-                            class="block px-4 py-2 text-xs text-[var(--error)] hover:bg-[var(--surface-light)]">Logout</a>
-                        {% else %}
-                        <a href="{% url 'accounts:login' %}"
-                            class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Login</a>
-                        <a href="{% url 'accounts:register' %}"
-                            class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-light)]">Register</a>
-                        {% endif %}
                     </div>
                 </div>
                 {% endif %}
@@ -582,38 +560,36 @@ Theme styles (Flower District
                 <!-- Wishlist -->
                 {% if design_settings.show_header_wishlist %}
                 <a href="{% url 'products:wishlist' %}"
-                    class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center relative">
+                    class="flex flex-col items-center gap-1.5 text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors text-center w-14 relative">
                     <div class="relative">
-                        <i class="far fa-heart text-xl"></i>
-                        <span
-                            class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center {% if not wishlist_count %}hidden{% endif %}">
+                        <i class="far fa-heart text-[20px]"></i>
+                        <span class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center shadow-sm {% if not wishlist_count %}hidden{% endif %}">
                             {{ wishlist_count|default:"0" }}
                         </span>
                     </div>
-                    <span class="text-[11px] font-medium tracking-wide">Wishlist</span>
+                    <span class="text-[9px] font-bold tracking-widest uppercase">Wishlist</span>
                 </a>
                 {% endif %}
 
                 <!-- Shopping Cart -->
                 {% if design_settings.show_header_cart %}
                 <a href="{% url 'orders:enquiry_cart' %}"
-                    class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center relative">
+                    class="flex flex-col items-center gap-1.5 text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors text-center w-14 relative">
                     <div class="relative">
-                        <i class="far fa-shopping-bag text-xl"></i>
-                        <span
-                            class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center {% if not cart_count %}hidden{% endif %}">
+                        <i class="far fa-shopping-bag text-[20px]"></i>
+                        <span class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center shadow-sm {% if not cart_count %}hidden{% endif %}">
                             {{ cart_count|default:"0" }}
                         </span>
                     </div>
-                    <span class="text-[11px] font-medium tracking-wide">Cart</span>
+                    <span class="text-[9px] font-bold tracking-widest uppercase">Cart</span>
                 </a>
                 {% endif %}
 
                 <!-- Store Locations -->
                 <a href="{% url 'core:store_locations' %}"
-                    class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center">
-                    <i class="far fa-map-marker-alt text-xl"></i>
-                    <span class="text-[11px] font-medium tracking-wide">Stores</span>
+                    class="flex flex-col items-center gap-1.5 text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors text-center w-14">
+                    <i class="far fa-map-marker-alt text-[20px]"></i>
+                    <span class="text-[9px] font-bold tracking-widest uppercase">Stores</span>
                 </a>
             </div>
 
@@ -621,77 +597,116 @@ Theme styles (Flower District
             <div class="flex lg:hidden items-center gap-3 text-[var(--text-primary)]">
                 {% if design_settings.show_header_cart %}
                 <a href="{% url 'orders:enquiry_cart' %}"
-                    class="relative hover:text-[var(--primary)] transition-colors p-2">
+                    class="relative hover:text-[var(--primary)] transition-colors p-2 text-[var(--primary)]">
                     <i class="far fa-shopping-bag text-xl"></i>
-                    <span
-                        class="cart-count-badge absolute top-1 right-1 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center {% if not cart_count %}hidden{% endif %}">
+                    <span class="cart-count-badge absolute top-1 right-1 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center shadow-sm {% if not cart_count %}hidden{% endif %}">
                         {{ cart_count|default:"0" }}
                     </span>
                 </a>
                 {% endif %}
-                <button id="mobile-menu-trigger" class="hover:text-[var(--primary)] transition-colors p-2"
-                    aria-label="Menu">
+                <button id="mobile-menu-trigger" class="hover:text-[var(--primary)] transition-colors p-2 text-[var(--primary)]" aria-label="Menu">
                     <i class="fas fa-bars text-xl" id="hamburger-icon"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Tier 3: Scrollable Category Navigation (Desktop Only) -->
-        <div class="border-t border-[var(--border)] bg-white hidden lg:block">
-            <div class="container relative">
-                <nav id="header-category-nav" class="flex items-center py-3 overflow-x-hidden">
-                    <!-- Left Arrow -->
-                    <button id="cat-scroll-left"
-                        class="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 bg-white border border-[var(--border)] rounded-full flex items-center justify-center shadow-sm hover:bg-[var(--surface-light)] transition-all"
-                        aria-label="Scroll categories left">
-                        <i class="fas fa-chevron-left text-sm text-[var(--text-muted)]"></i>
+        <!-- Tier 3: Navigation Bar (Desktop Only) -->
+        <div class="border-t border-[var(--border-light)] bg-white hidden lg:block">
+            <div class="container h-[50px] flex items-center">
+                
+                <!-- Left: Static Links -->
+                <nav class="flex items-center gap-6 h-full border-r border-gray-200 pr-6 mr-6 flex-shrink-0">
+                    {% if nav_brands %}
+                    <div class="relative group/brands h-full flex items-center">
+                        <button class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">
+                            Brands <i class="fas fa-chevron-down text-[8px] opacity-70 group-hover/brands:rotate-180 transition-transform"></i>
+                        </button>
+                        <div class="absolute left-0 top-full pt-0 hidden group-hover/brands:block z-50">
+                            <div class="bg-white border border-gray-200 shadow-xl p-4 grid grid-cols-3 gap-3 rounded-b-md" style="min-width:360px">
+                                {% for brand in nav_brands %}
+                                <a href="{{ brand.get_absolute_url }}" class="flex flex-col items-center gap-2 p-3 border border-transparent hover:bg-gray-50 rounded-md transition-all">
+                                    <img src="{{ brand.get_image_url }}" alt="{{ brand.name }}" class="h-8 object-contain opacity-70 hover:opacity-100 transition-opacity">
+                                    <span class="text-[9px] text-center font-bold text-gray-600">{{ brand.name }}</span>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if nav_collections %}
+                    <div class="relative group/cols h-full flex items-center">
+                        <button class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">
+                            Collections <i class="fas fa-chevron-down text-[8px] opacity-70 group-hover/cols:rotate-180 transition-transform"></i>
+                        </button>
+                        <div class="absolute left-0 top-full pt-0 hidden group-hover/cols:block z-50">
+                            <div class="bg-white border border-gray-200 shadow-xl py-2 rounded-b-md" style="min-width:200px">
+                                {% for col in nav_collections %}
+                                <a href="{{ col.get_absolute_url }}" class="block px-5 py-2.5 text-[11px] font-bold text-gray-600 hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">{{ col.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if nav_offers %}
+                    <a href="{% url 'products:product_list' %}?on_sale=1" class="text-[10px] font-bold uppercase tracking-widest text-red-600 hover:text-red-700 flex items-center gap-1.5 transition-colors">
+                        <i class="fas fa-tag"></i> Offers
+                    </a>
+                    {% endif %}
+                    
+                    <a href="{% url 'blog:post_list' %}" class="text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Blog</a>
+                    <a href="{% url 'core:about_us' %}" class="text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">About Us</a>
+                    <a href="{% url 'contact:contact' %}" class="text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Contact</a>
+                </nav>
+
+                <!-- Right: Scrollable Categories -->
+                <div class="flex-grow relative h-full flex items-center min-w-0">
+                    <!-- Left Scroll Arrow -->
+                    <button id="cat-scroll-left" class="absolute left-0 top-0 bottom-0 z-20 w-10 bg-gradient-to-r from-white via-white to-transparent flex items-center justify-start text-gray-400 hover:text-[var(--primary)] opacity-0 transition-opacity pointer-events-none" aria-label="Scroll left">
+                        <i class="fas fa-chevron-left text-[10px] bg-white rounded-full shadow-sm w-6 h-6 flex items-center justify-center border border-gray-100"></i>
                     </button>
 
-                    <div id="header-category-scroll"
-                        class="flex items-center gap-8 whitespace-nowrap overflow-x-auto no-scrollbar scroll-smooth flex-1 mx-10">
+                    <!-- Categories Scroll Area -->
+                    <div id="header-category-scroll" class="flex items-center gap-7 overflow-x-auto no-scrollbar scroll-smooth h-full w-full px-4">
                         {% for cat in categories %}
-                        <div class="relative nav-item-mega group/nav-item flex-shrink-0">
-                            <a href="{{ cat.get_absolute_url }}"
-                                class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-1">
+                        <div class="relative group/nav-item h-full flex items-center flex-shrink-0">
+                            <a href="{{ cat.get_absolute_url }}" class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors">
                                 {{ cat.name }}
                                 {% if cat.active_subcategories %}
-                                <i
-                                    class="fas fa-chevron-down text-[8px] text-[var(--text-muted)] opacity-60 group-hover/nav-item:rotate-180 transition-transform duration-200"></i>
+                                <i class="fas fa-chevron-down text-[8px] text-gray-400 group-hover/nav-item:rotate-180 transition-transform"></i>
                                 {% endif %}
                             </a>
 
                             {% if cat.active_subcategories %}
-                            <div class="absolute left-1/2 -translate-x-1/2 top-full mt-3 hidden group-hover/nav-item:flex flex-col w-[800px] bg-white border border-[var(--border-custom)] shadow-lg rounded-xl z-50">
-                                <div class="absolute -top-3 left-0 right-0 h-3 bg-transparent"></div>
-                                <div class="grid grid-cols-4 gap-0 p-6">
-                                    {% for sub in cat.active_subcategories %}
-                                    <div>
-                                        <a href="{{ sub.get_absolute_url }}" class="block group">
-                                            <h5
-                                                class="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--primary)] mb-3 pb-2 border-b border-[var(--border)]">
-                                                {{ sub.name }}
-                                            </h5>
-                                            {% if sub.active_subcategories %}
-                                            <div class="space-y-2">
-                                                {% for subsub in sub.active_subcategories %}
-                                                <a href="{{ subsub.get_absolute_url }}"
-                                                    class="block text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--primary)] hover:pl-2 transition-all">
-                                                    {{ subsub.name }}
-                                                </a>
-                                                {% endfor %}
-                                            </div>
-                                            {% endif %}
+                            <div class="absolute left-1/2 -translate-x-1/2 top-full pt-0 hidden group-hover/nav-item:flex flex-col w-[800px] z-50">
+                                <div class="bg-white border border-gray-200 shadow-xl rounded-b-xl overflow-hidden mt-0">
+                                    <div class="grid grid-cols-4 gap-0 p-6">
+                                        {% for sub in cat.active_subcategories %}
+                                        <div class="px-4 border-l border-gray-100 first:border-0">
+                                            <a href="{{ sub.get_absolute_url }}" class="block group">
+                                                <h5 class="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--primary)] mb-3 pb-2 border-b border-gray-100 group-hover:text-[var(--primary-hover)]">
+                                                    {{ sub.name }}
+                                                </h5>
+                                                {% if sub.active_subcategories %}
+                                                <div class="space-y-2">
+                                                    {% for subsub in sub.active_subcategories %}
+                                                    <a href="{{ subsub.get_absolute_url }}" class="block text-xs font-medium text-gray-500 hover:text-[var(--primary)] hover:translate-x-1 transition-transform">
+                                                        {{ subsub.name }}
+                                                    </a>
+                                                    {% endfor %}
+                                                </div>
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="border-t border-gray-100 px-6 py-4 bg-gray-50 text-center">
+                                        <a href="{{ cat.get_absolute_url }}" class="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors">
+                                            <span>Shop All {{ cat.name }}</span>
+                                            <i class="fas fa-arrow-right text-[10px]"></i>
                                         </a>
                                     </div>
-                                    {% endfor %}
-                                </div>
-                                <div
-                                    class="border-t border-[var(--border)] px-6 py-4 bg-[var(--surface-light)] rounded-b-xl">
-                                    <a href="{{ cat.get_absolute_url }}"
-                                        class="flex items-center justify-between text-xs font-bold text-[var(--primary)] hover:text-[var(--primary-light)] transition-colors">
-                                        <span>View All {{ cat.name }}</span>
-                                        <i class="fas fa-arrow-right text-[10px]"></i>
-                                    </a>
                                 </div>
                             </div>
                             {% endif %}
@@ -699,55 +714,10 @@ Theme styles (Flower District
                         {% endfor %}
                     </div>
 
-                    <!-- Right Arrow -->
-                    <button id="cat-scroll-right"
-                        class="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-8 h-8 bg-white border border-[var(--border)] rounded-full flex items-center justify-center shadow-sm hover:bg-[var(--surface-light)] transition-all"
-                        aria-label="Scroll categories right">
-                        <i class="fas fa-chevron-right text-sm text-[var(--text-muted)]"></i>
+                    <!-- Right Scroll Arrow -->
+                    <button id="cat-scroll-right" class="absolute right-0 top-0 bottom-0 z-20 w-10 bg-gradient-to-l from-white via-white to-transparent flex items-center justify-end text-gray-400 hover:text-[var(--primary)] transition-colors" aria-label="Scroll right">
+                        <i class="fas fa-chevron-right text-[10px] bg-white rounded-full shadow-sm w-6 h-6 flex items-center justify-center border border-gray-100"></i>
                     </button>
-                </nav>
-
-                <!-- Secondary Static Nav Links: Brands / Collections / Blog / About / Contact -->
-                <div class="hidden lg:flex items-center gap-6 py-2 border-t border-[var(--border)] text-[11px] font-bold uppercase tracking-wider">
-                  {% if nav_brands %}
-                  <div class="relative group/brands">
-                    <button class="flex items-center gap-1 text-[var(--text-secondary)] hover:text-[var(--primary)] transition-colors">
-                      Brands <i class="fas fa-chevron-down text-[8px] group-hover/brands:rotate-180 transition-transform"></i>
-                    </button>
-                    <div class="absolute left-0 top-full pt-3 hidden group-hover/brands:block z-50">
-                      <div class="bg-white border border-[var(--border)] shadow-lg p-4 grid grid-cols-3 gap-3" style="min-width:320px">
-                        {% for brand in nav_brands %}
-                        <a href="{{ brand.get_absolute_url }}" class="flex flex-col items-center gap-2 p-2 hover:bg-[var(--surface-light)] transition-colors">
-                          <img src="{{ brand.get_image_url }}" alt="{{ brand.name }}" class="h-8 object-contain opacity-70 hover:opacity-100 transition-opacity">
-                          <span class="text-[9px] text-center text-[var(--text-secondary)]">{{ brand.name }}</span>
-                        </a>
-                        {% endfor %}
-                      </div>
-                    </div>
-                  </div>
-                  {% endif %}
-                  {% if nav_collections %}
-                  <div class="relative group/cols">
-                    <button class="flex items-center gap-1 text-[var(--text-secondary)] hover:text-[var(--primary)] transition-colors">
-                      Collections <i class="fas fa-chevron-down text-[8px] group-hover/cols:rotate-180 transition-transform"></i>
-                    </button>
-                    <div class="absolute left-0 top-full pt-3 hidden group-hover/cols:block z-50">
-                      <div class="bg-white border border-[var(--border)] shadow-lg py-2" style="min-width:180px">
-                        {% for col in nav_collections %}
-                        <a href="{{ col.get_absolute_url }}" class="block px-4 py-2 text-xs font-semibold text-[var(--text-secondary)] hover:bg-[var(--surface-light)] hover:text-[var(--primary)] transition-colors">{{ col.name }}</a>
-                        {% endfor %}
-                      </div>
-                    </div>
-                  </div>
-                  {% endif %}
-                  {% if nav_offers %}
-                  <a href="{% url 'products:product_list' %}?on_sale=1" class="text-red-600 hover:text-red-700 transition-colors flex items-center gap-1">
-                    <i class="fas fa-tag text-[9px]"></i> Offers
-                  </a>
-                  {% endif %}
-                  <a href="{% url 'blog:post_list' %}" class="text-[var(--text-secondary)] hover:text-[var(--primary)] transition-colors">Blog</a>
-                  <a href="{% url 'core:about_us' %}" class="text-[var(--text-secondary)] hover:text-[var(--primary)] transition-colors">About Us</a>
-                  <a href="{% url 'contact:contact' %}" class="text-[var(--text-secondary)] hover:text-[var(--primary)] transition-colors">Contact</a>
                 </div>
             </div>
         </div>
