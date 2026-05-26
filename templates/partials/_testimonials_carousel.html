@@ -7,7 +7,7 @@
 {% if testimonials %}
 <section class="fd-testimonials-section">
   <div class="container">
-    <h2 class="fd-section-title text-center">{{ design_settings.hp_testimonials_title|default:"What Our Clients Say" }}</h2>
+    <h2 class="fd-section-title text-center">{{ design_settings.hp_testimonials_title|safe|default:"What Our Clients Say" }}</h2>
     <div class="swiper fd-testimonials-swiper">
       <div class="swiper-wrapper">
         {% for t in testimonials %}
