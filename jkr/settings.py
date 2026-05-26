@@ -346,11 +346,9 @@ else:
     MEDIA_STORAGE_BACKEND = "django.core.files.storage.FileSystemStorage"
     STATIC_STORAGE_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
-# Fallbacks for libraries that still check these legacy settings (like django-cloudinary-storage)
-STATICFILES_STORAGE = STATIC_STORAGE_BACKEND
-DEFAULT_FILE_STORAGE = MEDIA_STORAGE_BACKEND
-
-# Django 4.2+ native way to configure storages
+# Django 4.2+ / Django 5.x native way to configure storages.
+# NOTE: Do NOT also set STATICFILES_STORAGE or DEFAULT_FILE_STORAGE —
+# they are mutually exclusive with STORAGES and will crash the app.
 STORAGES = {
     "default": {
         "BACKEND": MEDIA_STORAGE_BACKEND,
