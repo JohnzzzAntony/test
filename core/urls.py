@@ -13,4 +13,5 @@ urlpatterns = [
     path('shipping-info/', views.shipping_info_view, name='shipping_info'),
     path('health/', views.health_check, name='health_check'),
     path('robots.txt', views.robots_txt_view, name='robots_txt'),
+    path('newsletter/subscribe/', views.newsletter_subscribe, name='newsletter_subscribe'),
 ]

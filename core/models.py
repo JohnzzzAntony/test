@@ -216,3 +216,16 @@ class SearchIndex(models.Model):
     slug = models.SlugField(blank=True)
 
     def __str__(self): return self.product_name
+
+
+class NewsletterSubscription(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self): return self.email
+
+    class Meta:
+        verbose_name = "Newsletter Subscription"
+        verbose_name_plural = "Newsletter Subscriptions"
+        ordering = ['-subscribed_at']

@@ -1,0 +1,57 @@
+{% load static %}
+{# ================================================================
+   _testimonials_carousel.html — Testimonials Swiper Carousel
+   ================================================================ #}
+{% if testimonials %}
+<section class="fd-testimonials-section">
+  <div class="container">
+    <h2 class="fd-section-title text-center">{{ design_settings.hp_testimonials_title|default:"What Our Clients Say" }}</h2>
+    <div class="swiper fd-testimonials-swiper">
+      <div class="swiper-wrapper">
+        {% for t in testimonials %}
+        <div class="swiper-slide">
+          <div class="fd-testimonial-card">
+            <div class="fd-stars">
+              {% with ''|center:t.rating as stars %}
+              {% for s in stars %}<i class="fas fa-star"></i>{% endfor %}
+              {% endwith %}
+            </div>
+            <blockquote class="fd-testimonial-text">"{{ t.content }}"</blockquote>
+            <div class="fd-testimonial-author">
+              {% if t.image or t.image_url %}
+              <img src="{{ t.get_image_url }}" alt="{{ t.client_name }}" class="fd-testimonial-avatar">
+              {% else %}
+              <div class="fd-testimonial-avatar-placeholder">{{ t.client_name|first|upper }}</div>
+              {% endif %}
+              <div>
+                <p class="fd-testimonial-name">{{ t.client_name }}</p>
+                {% if t.position %}<p class="fd-testimonial-role">{{ t.position }}</p>{% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="swiper-pagination fd-testimonials-pagination"></div>
+    </div>
+  </div>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof Swiper !== 'undefined') {
+    new Swiper('.fd-testimonials-swiper', {
+      slidesPerView: 1,
+      spaceBetween: 24,
+      pagination: { el: '.fd-testimonials-pagination', clickable: true },
+      autoplay: { delay: 5000, disableOnInteraction: false },
+      loop: true,
+      speed: 700,
+      breakpoints: {
+        640: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
+      },
+    });
+  }
+});
+</script>
+{% endif %}

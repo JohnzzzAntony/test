@@ -1,0 +1,54 @@
+{% load static %}
+{# ================================================================
+   _counters.html — Animated Stats Counters Row
+   ================================================================ #}
+{% if counters %}
+<section class="fd-counters-section">
+  <div class="container">
+    <div class="fd-counters-grid">
+      {% for counter in counters %}
+      <div class="fd-counter-item" data-animate>
+        {% if counter.icon_svg %}
+        <div class="fd-counter-icon">{{ counter.icon_svg|safe }}</div>
+        {% endif %}
+        <div class="fd-counter-value counter-up" data-target="{{ counter.value|default:'0' }}">
+          {{ counter.value }}
+        </div>
+        <div class="fd-counter-label">{{ counter.title }}</div>
+        {% if counter.subtitle %}<div class="fd-counter-sublabel">{{ counter.subtitle }}</div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<script>
+(function() {
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target) || 0;
+    const duration = 2000;
+    const step = Math.max(1, Math.floor(target / (duration / 16)));
+    let current = 0;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = current.toLocaleString();
+    }, 16);
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        if (!el.dataset.animated) {
+          el.dataset.animated = '1';
+          animateCounter(el);
+        }
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.counter-up').forEach(el => observer.observe(el));
+})();
+</script>
+{% endif %}

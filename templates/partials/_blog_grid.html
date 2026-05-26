@@ -1,0 +1,45 @@
+{% load static %}
+{# ================================================================
+   _blog_grid.html — Latest Blog Posts 3-Card Grid
+   ================================================================ #}
+{% with posts=latest_blog_posts|default:blog_posts %}
+{% if posts %}
+<section class="fd-blog-section">
+  <div class="container">
+    <div class="fd-section-header">
+      <div>
+        <h2 class="fd-section-title">From Our Blog</h2>
+      </div>
+      <a href="{% url 'blog:post_list' %}" class="fd-view-all">View All Posts <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="fd-blog-grid">
+      {% for post in posts|slice:":3" %}
+      <article class="fd-blog-card">
+        {% if post.image or post.featured_image %}
+        <a href="{{ post.get_absolute_url }}" class="fd-blog-img-link">
+          <img src="{% if post.image %}{{ post.image.url }}{% elif post.featured_image %}{{ post.featured_image.url }}{% endif %}"
+               alt="{{ post.title }}" class="fd-blog-img" loading="lazy">
+        </a>
+        {% endif %}
+        <div class="fd-blog-body">
+          {% if post.category %}
+          <span class="fd-blog-category">{{ post.category }}</span>
+          {% endif %}
+          <h3 class="fd-blog-title">
+            <a href="{{ post.get_absolute_url }}">{{ post.title|truncatechars:65 }}</a>
+          </h3>
+          {% if post.excerpt or post.summary %}
+          <p class="fd-blog-excerpt">{{ post.excerpt|default:post.summary|truncatechars:120 }}</p>
+          {% endif %}
+          <div class="fd-blog-meta">
+            <span><i class="far fa-calendar-alt"></i> {{ post.created_at|date:"M d, Y" }}</span>
+            <a href="{{ post.get_absolute_url }}" class="fd-blog-read-more">Read More →</a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endwith %}

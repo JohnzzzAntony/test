@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SiteSettings, Testimonial, Client, SocialPost, StoreLocation, AnnouncementBar, SearchIndex
+from .models import SiteSettings, Testimonial, Client, SocialPost, StoreLocation, AnnouncementBar, SearchIndex, NewsletterSubscription
 from .design_models import DesignSettings
 
 from django.contrib import messages
@@ -373,4 +373,14 @@ class AnnouncementBarAdmin(admin.ModelAdmin):
     def delete_model(self, request, obj):
         super().delete_model(request, obj)
         messages.error(request, "🗑️ Announcement was removed.")
+
+
+@admin.register(NewsletterSubscription)
+class NewsletterSubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('email', 'subscribed_at', 'is_active')
+    list_editable = ('is_active',)
+    list_filter = ('is_active',)
+    search_fields = ('email',)
+    readonly_fields = ('subscribed_at',)
+    date_hierarchy = 'subscribed_at'
 

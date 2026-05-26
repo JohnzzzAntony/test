@@ -1,0 +1,122 @@
+{% load static %}
+{# ================================================================
+   _collections_tabs.html — Collections Tab Section
+   ================================================================ #}
+{% if collections %}
+<section class="fd-collections-section">
+  <div class="container">
+    <div class="fd-section-header">
+      <h2 class="fd-section-title">{{ design_settings.hp_collections_title|default:"Shop Collections" }}</h2>
+      {% if design_settings.hp_collections_subtitle %}
+      <p class="fd-section-subtitle">{{ design_settings.hp_collections_subtitle }}</p>
+      {% endif %}
+    </div>
+    {# Tab Buttons #}
+    <div class="fd-tabs-nav" id="collection-tabs">
+      {% for col in collections %}
+      <button class="fd-tab-btn {% if forloop.first %}active{% endif %}"
+              data-tab="col-{{ col.id }}"
+              type="button">
+        {{ col.name }}
+      </button>
+      {% endfor %}
+    </div>
+
+    {# Tab Panels — each a mini product slider #}
+    {% for col in collections %}
+    <div class="fd-tab-panel {% if forloop.first %}active{% endif %}" id="col-{{ col.id }}">
+      {% with col_products=col.products.all %}
+      {% if col_products %}
+      <div class="swiper fd-col-swiper" id="col-swiper-{{ col.id }}">
+        <div class="swiper-wrapper">
+          {% for product in col_products|slice:":12" %}
+          <div class="swiper-slide">
+            <div class="fd-product-card">
+              {% if product.price_info.has_offer %}
+              <div class="fd-product-badge sale">{{ product.price_info.discount_display|default:"SALE" }}</div>
+              {% elif product.badge %}
+              <div class="fd-product-badge {{ product.badge_color }}">{{ product.badge }}</div>
+              {% endif %}
+              <a href="{{ product.get_absolute_url }}" class="fd-product-img-link">
+                <img src="{{ product.get_image_url }}" alt="{{ product.name }}" class="fd-product-img" loading="lazy">
+              </a>
+              <div class="fd-product-info">
+                <h3 class="fd-product-name">
+                  <a href="{{ product.get_absolute_url }}">{{ product.name|truncatechars:50 }}</a>
+                </h3>
+                <div class="fd-product-price-row">
+                  {% if product.price_info.has_offer %}
+                    <span class="fd-price-final">{{ product.price_info.final_price }} AED</span>
+                    <span class="fd-price-old">{{ product.price_info.regular_price }} AED</span>
+                  {% elif product.price_info.regular_price %}
+                    <span class="fd-price-final">{{ product.price_info.regular_price }} AED</span>
+                  {% else %}
+                    <span class="fd-price-poa">Price on Request</span>
+                  {% endif %}
+                </div>
+                <a href="{{ product.get_absolute_url }}" class="fd-add-to-cart">
+                  <i class="far fa-shopping-bag"></i> Add to Cart
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="swiper-button-next fd-swiper-next"></div>
+        <div class="swiper-button-prev fd-swiper-prev"></div>
+      </div>
+      {% else %}
+      <p class="fd-empty-state">No products in this collection yet.</p>
+      {% endif %}
+      {% endwith %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Tab switching
+  const tabBtns = document.querySelectorAll('.fd-tab-btn');
+  const tabPanels = document.querySelectorAll('.fd-tab-panel');
+  const swiperInstances = {};
+
+  function activateTab(tabId) {
+    tabBtns.forEach(b => b.classList.remove('active'));
+    tabPanels.forEach(p => p.classList.remove('active'));
+    document.querySelector(`[data-tab="${tabId}"]`)?.classList.add('active');
+    const panel = document.getElementById(tabId);
+    if (panel) {
+      panel.classList.add('active');
+      // Init swiper for this panel if not done yet
+      const swiperEl = panel.querySelector('.fd-col-swiper');
+      if (swiperEl && !swiperInstances[tabId] && typeof Swiper !== 'undefined') {
+        swiperInstances[tabId] = new Swiper(swiperEl, {
+          slidesPerView: 2,
+          spaceBetween: 16,
+          navigation: {
+            nextEl: swiperEl.querySelector('.fd-swiper-next'),
+            prevEl: swiperEl.querySelector('.fd-swiper-prev'),
+          },
+          breakpoints: {
+            480: { slidesPerView: 2 },
+            768: { slidesPerView: 3, spaceBetween: 20 },
+            1024: { slidesPerView: 4, spaceBetween: 24 },
+            1280: { slidesPerView: 5, spaceBetween: 24 },
+          },
+          loop: false,
+        });
+      }
+    }
+  }
+
+  // Init first tab
+  const firstTab = document.querySelector('.fd-tab-btn');
+  if (firstTab) activateTab(firstTab.dataset.tab);
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => activateTab(btn.dataset.tab));
+  });
+});
+</script>
+{% endif %}

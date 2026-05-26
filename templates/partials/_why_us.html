@@ -1,0 +1,72 @@
+{% load static %}
+{# ================================================================
+   _why_us.html — Why Us / USP Cards Strip
+   ================================================================ #}
+{% if why_us or design_settings.show_trust_badges %}
+<section class="fd-why-us-section">
+  <div class="container">
+    <div class="fd-why-us-grid">
+      {% if why_us %}
+        {% for card in why_us %}
+        <div class="fd-usp-card">
+          <div class="fd-usp-icon">
+            {% if card.icon_svg %}{{ card.icon_svg|safe }}
+            {% else %}<i class="fas fa-star"></i>{% endif %}
+          </div>
+          <div>
+            <h4 class="fd-usp-title">{{ card.title }}</h4>
+            {% if card.description %}<p class="fd-usp-desc">{{ card.description }}</p>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      {% elif design_settings.show_trust_badges %}
+        {% if design_settings.trust_badge_1_title %}
+        <div class="fd-usp-card">
+          <div class="fd-usp-icon"><i class="fas fa-shipping-fast"></i></div>
+          <div>
+            <h4 class="fd-usp-title">{{ design_settings.trust_badge_1_title }}</h4>
+            {% if design_settings.trust_badge_1_text %}<p class="fd-usp-desc">{{ design_settings.trust_badge_1_text }}</p>{% endif %}
+          </div>
+        </div>
+        {% endif %}
+        {% if design_settings.trust_badge_2_title %}
+        <div class="fd-usp-card">
+          <div class="fd-usp-icon"><i class="fas fa-shield-alt"></i></div>
+          <div>
+            <h4 class="fd-usp-title">{{ design_settings.trust_badge_2_title }}</h4>
+            {% if design_settings.trust_badge_2_text %}<p class="fd-usp-desc">{{ design_settings.trust_badge_2_text }}</p>{% endif %}
+          </div>
+        </div>
+        {% endif %}
+        {% if design_settings.trust_badge_3_title %}
+        <div class="fd-usp-card">
+          <div class="fd-usp-icon"><i class="fas fa-headset"></i></div>
+          <div>
+            <h4 class="fd-usp-title">{{ design_settings.trust_badge_3_title }}</h4>
+            {% if design_settings.trust_badge_3_text %}<p class="fd-usp-desc">{{ design_settings.trust_badge_3_text }}</p>{% endif %}
+          </div>
+        </div>
+        {% endif %}
+      {% else %}
+        {# Fallback defaults #}
+        <div class="fd-usp-card">
+          <div class="fd-usp-icon"><i class="fas fa-shipping-fast"></i></div>
+          <div><h4 class="fd-usp-title">Free Delivery</h4><p class="fd-usp-desc">On orders meeting minimum value</p></div>
+        </div>
+        <div class="fd-usp-card">
+          <div class="fd-usp-icon"><i class="fas fa-shield-alt"></i></div>
+          <div><h4 class="fd-usp-title">Secure Payment</h4><p class="fd-usp-desc">100% protected transactions</p></div>
+        </div>
+        <div class="fd-usp-card">
+          <div class="fd-usp-icon"><i class="fas fa-undo-alt"></i></div>
+          <div><h4 class="fd-usp-title">Easy Returns</h4><p class="fd-usp-desc">Hassle-free return policy</p></div>
+        </div>
+        <div class="fd-usp-card">
+          <div class="fd-usp-icon"><i class="fas fa-headset"></i></div>
+          <div><h4 class="fd-usp-title">24/7 Support</h4><p class="fd-usp-desc">Dedicated customer care</p></div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}

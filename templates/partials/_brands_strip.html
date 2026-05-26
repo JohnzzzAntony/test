@@ -1,0 +1,40 @@
+{% load static %}
+{# ================================================================
+   _brands_strip.html — Scrolling Brand Logos Strip
+   ================================================================ #}
+{% if brands %}
+<section class="fd-brands-section">
+  <div class="container">
+    <h2 class="fd-section-title text-center">Our Brands</h2>
+    <div class="swiper fd-brands-swiper">
+      <div class="swiper-wrapper">
+        {% for brand in brands %}
+        <div class="swiper-slide">
+          <a href="{{ brand.get_absolute_url }}" class="fd-brand-logo-link" title="{{ brand.name }}">
+            <img src="{{ brand.get_image_url }}" alt="{{ brand.name }}" class="fd-brand-logo" loading="lazy">
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof Swiper !== 'undefined') {
+    new Swiper('.fd-brands-swiper', {
+      slidesPerView: 3,
+      spaceBetween: 24,
+      autoplay: { delay: 2500, disableOnInteraction: false },
+      loop: true,
+      speed: 800,
+      breakpoints: {
+        480:  { slidesPerView: 4 },
+        768:  { slidesPerView: 5 },
+        1024: { slidesPerView: 7 },
+      },
+    });
+  }
+});
+</script>
+{% endif %}

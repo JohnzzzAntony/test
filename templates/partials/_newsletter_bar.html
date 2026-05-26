@@ -1,0 +1,56 @@
+{% load static %}
+{# ================================================================
+   _newsletter_bar.html — Newsletter Subscription Form
+   ================================================================ #}
+<section class="fd-newsletter-section">
+  <div class="container">
+    <div class="fd-newsletter-inner">
+      <div class="fd-newsletter-text">
+        <h2 class="fd-newsletter-title">Stay in the Loop</h2>
+        <p class="fd-newsletter-subtitle">Subscribe for exclusive offers, new arrivals, and more — straight to your inbox.</p>
+      </div>
+      <form class="fd-newsletter-form" action="{% url 'core:newsletter_subscribe' %}" method="POST" id="newsletter-form">
+        {% csrf_token %}
+        <div class="fd-newsletter-input-wrap">
+          <input type="email" name="email" placeholder="Your email address" required
+                 class="fd-newsletter-input" id="newsletter-email"
+                 autocomplete="email">
+          <button type="submit" class="fd-newsletter-btn">
+            <span class="btn-text">Subscribe</span>
+            <i class="fas fa-paper-plane btn-icon"></i>
+          </button>
+        </div>
+        <p class="fd-newsletter-legal">No spam. Unsubscribe anytime.</p>
+      </form>
+    </div>
+  </div>
+</section>
+<script>
+(function() {
+  const form = document.getElementById('newsletter-form');
+  if (!form) return;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('newsletter-email').value;
+    if (!email) return;
+    fetch(form.action, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      body: 'email=' + encodeURIComponent(email),
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        form.innerHTML = '<p class="fd-newsletter-success"><i class="fas fa-check-circle"></i> Thank you for subscribing!</p>';
+      } else {
+        form.querySelector('.fd-newsletter-input').style.borderColor = 'var(--error)';
+      }
+    })
+    .catch(() => form.submit());
+  });
+})();
+</script>

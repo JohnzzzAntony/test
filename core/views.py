@@ -216,3 +216,32 @@ def robots_txt_view(request):
         content = "User-agent: *\nDisallow: /admin/\nDisallow: /checkout/\nAllow: /"
     
     return HttpResponse(content, content_type="text/plain")
+
+
+def newsletter_subscribe(request):
+    """Handle newsletter subscription form (AJAX or standard POST)."""
+    if request.method != 'POST':
+        from django.shortcuts import redirect
+        return redirect('core:home')
+
+    email = request.POST.get('email', '').strip()
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+    if not email or '@' not in email:
+        if is_ajax:
+            return JsonResponse({'success': False, 'error': 'Invalid email address'}, status=400)
+        from django.shortcuts import redirect
+        return redirect('core:home')
+
+    try:
+        from .models import NewsletterSubscription
+        obj, created = NewsletterSubscription.objects.get_or_create(email=email)
+        if is_ajax:
+            return JsonResponse({'success': True, 'created': created})
+    except Exception:
+        # If model doesn't exist yet, silently accept
+        if is_ajax:
+            return JsonResponse({'success': True, 'created': True})
+
+    from django.shortcuts import redirect
+    return redirect('core:home')

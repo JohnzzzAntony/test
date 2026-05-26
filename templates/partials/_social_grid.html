@@ -1,0 +1,39 @@
+{% load static %}
+{# ================================================================
+   _social_grid.html — Instagram-style Social Posts Grid
+   ================================================================ #}
+{% if social_posts and design_settings.show_hp_social %}
+<section class="fd-social-section">
+  <div class="container">
+    <h2 class="fd-section-title text-center">{{ design_settings.hp_social_title|default:"Follow Us on Instagram" }}</h2>
+    {% if site_settings.instagram %}
+    <p class="fd-social-handle text-center">
+      <a href="{{ site_settings.instagram }}" target="_blank" rel="noopener">
+        <i class="fab fa-instagram"></i> {{ site_settings.instagram_handle|default:"@our_store" }}
+      </a>
+    </p>
+    {% endif %}
+    <div class="fd-social-grid">
+      {% for post in social_posts|slice:":6" %}
+      <a href="{{ post.link|default:site_settings.instagram|default:'#' }}" target="_blank" rel="noopener" class="fd-social-item">
+        {% if post.image or post.image_url %}
+          <img src="{{ post.get_image_url }}" alt="{{ post.image_alt|default:'Social post' }}" class="fd-social-img" loading="lazy">
+        {% elif post.icon_svg %}
+          <div class="fd-social-svg">{{ post.icon_svg|safe }}</div>
+        {% endif %}
+        <div class="fd-social-overlay">
+          <i class="fab fa-instagram text-2xl"></i>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% if site_settings.instagram %}
+    <div class="text-center mt-8">
+      <a href="{{ site_settings.instagram }}" target="_blank" rel="noopener" class="fd-btn-outline">
+        <i class="fab fa-instagram"></i> Follow on Instagram
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}

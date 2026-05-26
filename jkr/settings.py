@@ -9,6 +9,7 @@ import os
 import environ
 import cloudinary
 from pathlib import Path
+import core.monkeypatch_django
 
 # =============================================================================
 # PATH CONFIGURATION
@@ -350,8 +351,8 @@ STORAGES = {
 
 # Legacy compatibility for django-cloudinary-storage (still references old Django 4 settings)
 # These must mirror STORAGES to prevent AttributeError during collectstatic
-STATICFILES_STORAGE = STATIC_STORAGE_BACKEND
-DEFAULT_FILE_STORAGE = MEDIA_STORAGE_BACKEND
+# STATICFILES_STORAGE = STATIC_STORAGE_BACKEND
+# DEFAULT_FILE_STORAGE = MEDIA_STORAGE_BACKEND
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

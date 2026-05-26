@@ -1,606 +1,281 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block split_css %}
-<style>
-  /* Flower District Inspired Homepage - Clean White with Deep Blue Accents */
-  :root {
-    --fd-primary: #114084;
-    --fd-primary-light: #1a5cb8;
-    --fd-accent: #0081ff;
-    --fd-text: #1a1a1a;
-    --fd-muted: #666666;
-    --fd-border: #e5e5e5;
-    --fd-surface: #ffffff;
-    --fd-surface-light: #f8f9fa;
-  }
-  
-  body { background-color: var(--fd-surface); }
-  
-  .hero-section {
-    position: relative;
-    height: 600px;
-    overflow: hidden;
-    background: var(--fd-primary);
-  }
-  
-  .hero-section img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.85;
-  }
-  
-  .hero-content {
-    position: absolute;
-    bottom: 80px;
-    left: 60px;
-    color: white;
-    max-width: 520px;
-  }
-  
-  .hero-badge {
-    display: inline-block;
-    background: rgba(255,255,255,0.15);
-    padding: 4px 14px;
-    border-radius: 9999px;
-    font-size: 12px;
-    margin-bottom: 16px;
-  }
-  
-  .hero-title { 
-    font-size: 52px; 
-    font-weight: 800; 
-    letter-spacing: -0.03em;
-    line-height: 1.05; 
-    margin-bottom: 24px;
-  }
-  
-  .hero-subtitle { 
-    font-size: 18px; 
-    opacity: 0.9; 
-    line-height: 1.7;
-    max-width: 480px;
-  }
-  
-  .promo-section { padding: 64px 0; }
-  
-  .promo-grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
-  
-  .promo-card, .promo-single {
-    position: relative;
-    display: block;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-    transition: box-shadow 0.2s ease;
-  }
-  
-  .promo-card:hover, .promo-single:hover {
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-  }
-  
-  .promo-card img, .promo-single img { 
-    width: 100%; 
-    height: 380px; 
-    object-fit: cover; 
-  }
-  
-  .promo-overlay {
-    position: absolute;
-    bottom: 0; 
-    left: 0; 
-    right: 0;
-    padding: 48px;
-    background: linear-gradient(to top, rgba(17,64,132,0.7), transparent);
-    color: white;
-    transition: background 0.2s ease;
-  }
-  
-  .section { 
-    padding: 80px 0; 
-  }
-  
-  .section-title {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 48px;
-    text-align: center;
-    color: var(--fd-text);
-    position: relative;
-  }
-  
-  .section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: var(--fd-primary);
-  }
-  
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 32px;
-  }
-  
-  .service-card {
-    background: var(--fd-surface);
-    border: 1px solid var(--fd-border);
-    border-radius: 8px;
-    padding: 32px;
-    transition: all 0.3s ease;
-  }
-  
-  .service-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    border-color: var(--fd-primary);
-  }
-  
-  .service-icon { 
-    width: 48px; 
-    height: 48px; 
-    margin-bottom: 24px; 
-    color: var(--fd-primary);
-  }
-  
-  .counters-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 40px;
-    text-align: center;
-  }
-  
-  .counter-value { 
-    font-size: 48px; 
-    font-weight: 800; 
-    color: var(--fd-primary); 
-  }
-  
-  .counter-title { 
-    color: var(--fd-muted); 
-    font-size: 16px; 
-  }
-  
-  .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 32px;
-  }
-  
-  .testimonial-card {
-    background: var(--fd-surface-light);
-    border: 1px solid var(--fd-border);
-    border-radius: 12px;
-    padding: 32px;
-    transition: all 0.3s ease;
-  }
-  
-  .testimonial-card:hover {
-    border-color: var(--fd-primary);
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  }
-  
-  .testimonial-photo { 
-    width: 64px; 
-    height: 64px; 
-    border-radius: 50%; 
-    object-fit: cover; 
-    margin-bottom: 24px; 
-  }
-  
-  .partners-grid, .clients-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .partner-logo, .client-logo { 
-    max-width: 140px; 
-    opacity: 0.85; 
-    transition: opacity 0.2s ease;
-  }
-  
-  .partner-logo:hover, .client-logo:hover {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-  
-  .partner-logo img, .client-logo img { 
-    max-height: 60px; 
-    width: auto; 
-  }
+{% block title %}{{ site_settings.meta_title|default:"Home" }}{% endblock %}
+{% block meta_description %}{{ site_settings.meta_description|default:"" }}{% endblock %}
 
-  /* Shop by Category Grid Layout */
-  .shop-by-category-section {
-    background-color: var(--fd-surface);
-    border-bottom: 1px solid var(--fd-border);
-    padding: 60px 0;
-  }
-
-  .category-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-  }
-  
-  @media (min-width: 768px) {
-    .category-grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-  
-  .category-card-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--fd-surface);
-    border: 1px solid var(--fd-border);
-    border-radius: 0px !important; /* Sharp corners */
-    padding: 32px 20px;
-    text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    height: 100%;
-  }
-  
-  .category-card-item::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: var(--fd-primary);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-    transform-origin: left;
-  }
-  
-  .category-card-item:hover {
-    transform: translateY(-8px);
-    border-color: var(--fd-primary-light);
-    box-shadow: 0 12px 30px rgba(17, 64, 132, 0.08);
-  }
-  
-  .category-card-item:hover::after {
-    transform: scaleX(1);
-  }
-  
-  .category-icon-wrapper {
-    width: 80px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--fd-surface-light);
-    border-radius: 0px !important; /* Sharp corners */
-    margin-bottom: 20px;
-    color: var(--fd-primary);
-    transition: all 0.3s ease;
-    position: relative;
-    border: 1px solid transparent;
-  }
-  
-  .category-card-item:hover .category-icon-wrapper {
-    background: var(--fd-primary);
-    color: white;
-    transform: scale(1.05);
-  }
-  
-  .category-svg-icon {
-    width: 38px;
-    height: 38px;
-    stroke: currentColor;
-    transition: transform 0.3s ease;
-  }
-  
-  .category-card-item:hover .category-svg-icon {
-    transform: rotate(5deg);
-  }
-  
-  .category-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 0px !important;
-  }
-  
-  .category-card-label {
-    font-family: var(--font-display, 'Montserrat', sans-serif);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--fd-text);
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    line-height: 1.4;
-    transition: color 0.3s ease;
-  }
-  
-  .category-card-item:hover .category-card-label {
-    color: var(--fd-primary);
-  }
-</style>
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/homepage-sections.css' %}">
 {% endblock %}
 
 {% block content %}
 
+{# ═══════════════════════════════════════════════════════════
+   1. HERO SLIDER
+═══════════════════════════════════════════════════════════ #}
 {% if sliders %}
 <section class="hero-section">
-    <div class="hero-swiper swiper">
-        <div class="swiper-wrapper">
-            {% for slide in sliders %}
-            <div class="swiper-slide">
-                <img src="{{ slide.get_image_url }}" alt="{{ slide.image_alt|default:slide.title }}">
-                <div class="hero-content">
-                    {% if slide.badge_text %}<span class="hero-badge">{{ slide.badge_text }}</span>{% endif %}
-                    {% if slide.title %}<h1 class="hero-title">{{ slide.title }}</h1>{% endif %}
-                    {% if slide.description %}<p class="hero-subtitle">{{ slide.description }}</p>{% endif %}
-                    {% if slide.link_url %}
-                    <a href="{{ slide.link_url }}" class="btn btn-primary">Learn More</a>
-                    {% endif %}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="swiper-pagination"></div>
-    </div>
-</section>
-{% endif %}
-
-{% if shop_by_categories %}
-<section class="section shop-by-category-section">
-    <div class="container">
-        <h2 class="section-title">Shop by Category</h2>
-        <div class="category-grid">
-            {% for category in shop_by_categories %}
-            <a href="{{ category.get_absolute_url }}" class="category-card-item">
-                <div class="category-icon-wrapper">
-                    {% if category.get_image_url %}
-                        <img src="{{ category.get_image_url }}" alt="{{ category.name }}" class="category-img">
-                    {% else %}
-                        {% if category.slug == 'wheelchairs' %}
-                            <svg class="category-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="10" cy="5" r="2" />
-                                <path d="M9 11h4l2.5 4.5H20" />
-                                <path d="M9 11v6l-3 4" />
-                                <circle cx="13" cy="17" r="4" />
-                            </svg>
-                        {% elif category.slug == 'walking-standing-aids' %}
-                            <svg class="category-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M7 21V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v15" />
-                                <path d="M7 11h10" />
-                                <path d="M7 15h10" />
-                                <circle cx="7" cy="21" r="1" />
-                                <circle cx="17" cy="21" r="1" />
-                            </svg>
-                        {% elif category.slug == 'seating-positioning-system' %}
-                            <svg class="category-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 18v3" />
-                                <path d="M20 18v3" />
-                                <path d="M19 13v-4a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v4" />
-                                <path d="M4 13h16v5H4z" />
-                                <path d="M12 3v4" />
-                            </svg>
-                        {% elif category.slug == 'prosthetics-orthotics-services' %}
-                            <svg class="category-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 18a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3V3h-4v3H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2" />
-                                <path d="M9 11h6" />
-                                <path d="M9 15h6" />
-                                <path d="M12 6v12" />
-                            </svg>
-                        {% elif category.slug == 'physiotherapy-rehabilitation-product' %}
-                            <svg class="category-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="5" r="2.5" />
-                                <path d="M12 7.5v8M5 12h14M9 21.5l3-5.5 3 5.5" />
-                            </svg>
-                        {% elif category.slug == 'orthopedic-products' %}
-                            <svg class="category-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2v20M9 6h6M8 10h8M9 14h6M8 18h8" />
-                                <circle cx="12" cy="6" r="1" />
-                                <circle cx="12" cy="10" r="1" />
-                                <circle cx="12" cy="14" r="1" />
-                                <circle cx="12" cy="18" r="1" />
-                            </svg>
-                        {% elif category.slug == 'hospital-equipment-furniture' %}
-                            <svg class="category-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 4v16M22 8v12M2 12h20M2 8h10a2 2 0 0 1 2 2v2" />
-                                <circle cx="7" cy="8" r="1.5" />
-                            </svg>
-                        {% elif category.slug == 'homecare' %}
-                            <svg class="category-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                <path d="M12 11v6M9 14h6" />
-                            </svg>
-                        {% else %}
-                            <svg class="category-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 5v14M5 12h14" />
-                            </svg>
-                        {% endif %}
-                    {% endif %}
-                </div>
-                <h3 class="category-card-label">{{ category.name }}</h3>
-            </a>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-{% for promo in promo_sections %}
-    {% if promo.layout == '2_col' and promo.items.count >= 2 %}
-    <section class="promo-section">
-        <div class="container">
-            <div class="promo-grid-2">
-                {% for item in promo.items.all|slice:":2" %}
-                <a href="{{ item.link|default:'#' }}" class="promo-card">
-                    <img src="{{ item.get_image_url }}" alt="{{ item.image_alt|default:item.title }}">
-                    {% if item.title or item.subtitle %}
-                    <div class="promo-overlay">
-                        {% if item.title %}<h3>{{ item.title }}</h3>{% endif %}
-                        {% if item.subtitle %}<p>{{ item.subtitle }}</p>{% endif %}
-                    </div>
-                    {% endif %}
-                </a>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-    {% elif promo.layout == '1_col' %}
-    <section class="promo-section">
-        <div class="container">
-            {% for item in promo.items.all|slice:":1" %}
-            <a href="{{ item.link|default:'#' }}" class="promo-single">
-                <img src="{{ item.get_image_url }}" alt="{{ item.image_alt|default:item.title }}">
-                {% if item.title or item.subtitle %}
-                <div class="promo-overlay">
-                    {% if item.title %}<h2>{{ item.title }}</h2>{% endif %}
-                    {% if item.subtitle %}<p>{{ item.subtitle }}</p>{% endif %}
-                </div>
-                {% endif %}
-            </a>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
-{% endfor %}
-
-{% if services %}
-<section class="section services-section">
-    <div class="container">
-        <h2 class="section-title">Our Services</h2>
-        <div class="services-grid">
-            {% for service in services %}
-            <div class="service-card">
-                {% if service.icon or service.icon_svg %}
-                    {% if service.icon_svg %}
-                        <div class="service-icon">{{ service.icon_svg|safe }}</div>
-                    {% else %}
-                        <img src="{{ service.get_image_url }}" alt="{{ service.title }}" class="service-icon">
-                    {% endif %}
-                {% endif %}
-                <h3>{{ service.title }}</h3>
-                <p>{{ service.description }}</p>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-{% if counters %}
-<section class="section counters-section">
-    <div class="container">
-        <div class="counters-grid">
-            {% for counter in counters %}
-            <div class="counter-item">
-                {% if counter.icon_svg %}<div class="counter-icon">{{ counter.icon_svg|safe }}</div>{% endif %}
-                <div class="counter-value">{{ counter.value }}</div>
-                <div class="counter-title">{{ counter.title }}</div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-{% if testimonials %}
-<section class="section testimonials-section">
-    <div class="container">
-        <h2 class="section-title">What Our Clients Say</h2>
-        <div class="testimonials-grid">
-            {% for testimonial in testimonials %}
-            <div class="testimonial-card">
-                {% if testimonial.image %}<img src="{{ testimonial.get_image_url }}" alt="{{ testimonial.client_name }}" class="testimonial-photo">{% endif %}
-                <blockquote>{{ testimonial.content }}</blockquote>
-                <div class="testimonial-author">
-                    <strong>{{ testimonial.client_name }}</strong>
-                    {% if testimonial.position %}<span>{{ testimonial.position }}</span>{% endif %}
-                </div>
-                {% if testimonial.rating %}
-                <div class="rating">{% for i in "12345" %}★{% endfor %}</div>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-{% if partners %}
-<section class="section partners-section">
-    <div class="container">
-        <h2 class="section-title">Our Partners</h2>
-        <div class="partners-grid">
-            {% for partner in partners %}
-            <a href="{{ partner.website_url|default:'#' }}" class="partner-logo">
-                {% if partner.icon_svg %}
-                    {{ partner.icon_svg|safe }}
-                {% else %}
-                    <img src="{{ partner.get_image_url }}" alt="{{ partner.name }}">
-                {% endif %}
-            </a>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-{% if public_clients or private_clients %}
-<section class="section clients-section">
-    <div class="container">
-        <h2 class="section-title">Trusted By</h2>
-        {% if public_clients %}
-        <div class="clients-grid">
-            {% for client in public_clients %}
-            <div class="client-logo">
-                <img src="{{ client.get_image_url }}" alt="{{ client.name }}">
-            </div>
-            {% endfor %}
-        </div>
+  <div class="swiper hero-swiper">
+    <div class="swiper-wrapper">
+      {% for slide in sliders %}
+      <div class="swiper-slide" style="background-color:{{ slide.background_color|default:'#114084' }}">
+        {% if slide.image or slide.image_url %}
+        <img src="{{ slide.get_image_url }}" alt="{{ slide.title|default:'Hero' }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
         {% endif %}
-        {% if private_clients %}
-        <div class="clients-grid private">
-            {% for client in private_clients %}
-            <div class="client-logo">
-                <img src="{{ client.get_image_url }}" alt="{{ client.name }}">
-            </div>
-            {% endfor %}
+        <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(17,64,132,.5),rgba(17,64,132,.2) 60%,transparent);pointer-events:none;"></div>
+        <div class="hero-content">
+          {% if slide.subtitle %}<span class="hero-badge">{{ slide.subtitle }}</span>{% endif %}
+          {% if slide.title %}<h1 class="hero-title">{{ slide.title }}</h1>{% endif %}
+          {% if slide.description %}<p class="hero-subtitle">{{ slide.description }}</p>{% endif %}
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            {% if slide.btn_text and slide.btn_link %}
+            <a href="{{ slide.btn_link }}" class="fd-btn-primary" style="background:#fff;color:#114084;padding:14px 32px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s;">
+              {{ slide.btn_text }} <i class="fas fa-arrow-right"></i>
+            </a>
+            {% endif %}
+            {% if slide.btn2_text and slide.btn2_link %}
+            <a href="{{ slide.btn2_link }}" style="padding:13px 32px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:2px solid rgba(255,255,255,.6);color:#fff;display:inline-flex;align-items:center;gap:8px;transition:border-color .2s,background .2s;">
+              {{ slide.btn2_text }}
+            </a>
+            {% endif %}
+          </div>
         </div>
-        {% endif %}
+      </div>
+      {% endfor %}
     </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-next" style="color:#fff;"></div>
+    <div class="swiper-button-prev" style="color:#fff;"></div>
+  </div>
 </section>
-{% endif %}
-
-{% endblock %}
-
-{% block scripts %}
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const heroEl = document.querySelector('.hero-swiper');
-    if (heroEl && typeof Swiper !== 'undefined') {
-      new Swiper('.hero-swiper', {
-        loop: true,
-        autoplay: { delay: 4500, disableOnInteraction: false },
-        pagination: { el: '.hero-swiper .swiper-pagination', clickable: true },
-        speed: 800
-      });
-    }
-  });
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof Swiper !== 'undefined') {
+    new Swiper('.hero-swiper', {
+      loop: true,
+      speed: 800,
+      autoplay: { delay: 5000, disableOnInteraction: false },
+      pagination: { el: '.hero-swiper .swiper-pagination', clickable: true },
+      navigation: {
+        nextEl: '.hero-swiper .swiper-button-next',
+        prevEl: '.hero-swiper .swiper-button-prev',
+      },
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+    });
+  }
+});
 </script>
+{% endif %}
+
+{# ═══════════════════════════════════════════════════════════
+   2. WHY US — USP Strip (above fold for instant trust)
+═══════════════════════════════════════════════════════════ #}
+{% include 'partials/_why_us.html' %}
+
+{# ═══════════════════════════════════════════════════════════
+   3. SHOP BY CATEGORY
+═══════════════════════════════════════════════════════════ #}
+{% if shop_by_categories %}
+<section class="fd-shop-by-cat-section">
+  <div class="container">
+    <div class="fd-section-header">
+      <h2 class="fd-section-title">{{ design_settings.hp_categories_title|default:"Shop by Category" }}</h2>
+      <a href="{% url 'products:product_list' %}" class="fd-view-all">All Categories <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="fd-cat-grid">
+      {% for cat in shop_by_categories %}
+      <a href="{{ cat.get_absolute_url }}" class="fd-cat-card">
+        <div class="fd-cat-icon-wrap">
+          {% if cat.get_image_url and cat.get_image_url != 'None' and 'placeholder' not in cat.get_image_url|default:'' %}
+            <img src="{{ cat.get_image_url }}" alt="{{ cat.name }}" class="fd-cat-icon-img" loading="lazy">
+          {% elif cat.icon_svg %}
+            <div class="fd-cat-svg-icon">{{ cat.icon_svg|safe }}</div>
+          {% else %}
+            <i class="fas fa-th-large" style="font-size:28px;color:var(--primary,#114084);transition:color .3s;"></i>
+          {% endif %}
+        </div>
+        <p class="fd-cat-label">{{ cat.name }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ═══════════════════════════════════════════════════════════
+   4. LATEST PRODUCTS SLIDER
+═══════════════════════════════════════════════════════════ #}
+{% with section_title=design_settings.hp_latest_products_title|default:"Latest Products" section_subtitle=design_settings.hp_latest_products_subtitle products=latest_products slider_id="latest" section_link="/products/" %}
+{% include 'partials/_product_slider.html' %}
+{% endwith %}
+
+{# ═══════════════════════════════════════════════════════════
+   5. PROMO BANNERS
+═══════════════════════════════════════════════════════════ #}
+{% if promo_sections %}
+<section class="fd-promo-section">
+  <div class="container">
+    {% for promo in promo_sections %}
+      {% if promo.items.count == 1 %}
+        {% for item in promo.items.all %}
+        <a href="{{ item.link|default:'#' }}" class="fd-promo-card" style="display:block;margin-bottom:20px;">
+          {% if item.get_image_url %}
+          <img src="{{ item.get_image_url }}" alt="{{ item.title|default:'Promo' }}" style="width:100%;aspect-ratio:16/5;object-fit:cover;display:block;">
+          {% endif %}
+          {% if item.title %}
+          <div class="fd-promo-overlay">
+            <h3>{{ item.title }}</h3>
+            {% if item.subtitle %}<p>{{ item.subtitle }}</p>{% endif %}
+          </div>
+          {% endif %}
+        </a>
+        {% endfor %}
+      {% else %}
+      <div class="fd-promo-2col">
+        {% for item in promo.items.all %}
+        <a href="{{ item.link|default:'#' }}" class="fd-promo-card">
+          {% if item.get_image_url %}
+          <img src="{{ item.get_image_url }}" alt="{{ item.title|default:'Promo' }}">
+          {% endif %}
+          {% if item.title %}
+          <div class="fd-promo-overlay">
+            <h3>{{ item.title }}</h3>
+            {% if item.subtitle %}<p>{{ item.subtitle }}</p>{% endif %}
+          </div>
+          {% endif %}
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ═══════════════════════════════════════════════════════════
+   6. COLLECTIONS TABS (with product sliders per tab)
+═══════════════════════════════════════════════════════════ #}
+{% include 'partials/_collections_tabs.html' %}
+
+{# ═══════════════════════════════════════════════════════════
+   7. FEATURED / OFFER PRODUCTS SLIDER
+═══════════════════════════════════════════════════════════ #}
+{% if active_offers_products %}
+{% with section_title="On Sale Now" products=active_offers_products slider_id="offers" section_link="/products/" %}
+{% include 'partials/_product_slider.html' %}
+{% endwith %}
+{% elif featured_products %}
+{% with section_title=design_settings.hp_bestsellers_title|default:"Featured Products" products=featured_products slider_id="featured" section_link="/products/" %}
+{% include 'partials/_product_slider.html' %}
+{% endwith %}
+{% endif %}
+
+{# ═══════════════════════════════════════════════════════════
+   8. COUNTERS / STATS STRIP
+═══════════════════════════════════════════════════════════ #}
+{% include 'partials/_counters.html' %}
+
+{# ═══════════════════════════════════════════════════════════
+   9. MISSION / VISION
+═══════════════════════════════════════════════════════════ #}
+{% if mission_vision %}
+<section class="fd-mission-section">
+  <div class="container">
+    <div class="fd-mission-grid">
+      {% for mv in mission_vision %}
+      <div class="fd-mission-item">
+        <div class="fd-mission-icon">
+          {% if mv.section_type == 'mission' %}
+          <i class="fas fa-bullseye"></i>
+          {% else %}
+          <i class="fas fa-eye"></i>
+          {% endif %}
+        </div>
+        <h2 class="fd-mission-title">{{ mv.title }}</h2>
+        {% if mv.content %}
+        <p class="fd-mission-text">{{ mv.content|striptags }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ═══════════════════════════════════════════════════════════
+   10. BRANDS STRIP
+═══════════════════════════════════════════════════════════ #}
+{% include 'partials/_brands_strip.html' %}
+
+{# ═══════════════════════════════════════════════════════════
+   11. TESTIMONIALS CAROUSEL
+═══════════════════════════════════════════════════════════ #}
+{% if design_settings.show_hp_testimonials %}
+{% include 'partials/_testimonials_carousel.html' %}
+{% endif %}
+
+{# ═══════════════════════════════════════════════════════════
+   12. CLIENTS / PARTNERS LOGOS
+═══════════════════════════════════════════════════════════ #}
+{% if design_settings.show_hp_clients %}
+{% if public_clients or private_clients %}
+<section class="fd-clients-section">
+  <div class="container">
+    <h2 class="fd-section-title text-center">{{ design_settings.hp_clients_title|default:"Trusted By" }}</h2>
+    {% if public_clients %}
+    <div class="fd-clients-group">
+      <p class="fd-clients-label">Public Sector</p>
+      <div class="fd-clients-logos">
+        {% for client in public_clients %}
+        <img src="{{ client.get_image_url }}" alt="{{ client.name }}" class="fd-client-logo" loading="lazy">
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    {% if private_clients %}
+    <div class="fd-clients-group">
+      <p class="fd-clients-label">Private Sector</p>
+      <div class="fd-clients-logos">
+        {% for client in private_clients %}
+        <img src="{{ client.get_image_url }}" alt="{{ client.name }}" class="fd-client-logo" loading="lazy">
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+{% endif %}
+
+{# ═══════════════════════════════════════════════════════════
+   13. BLOG GRID
+═══════════════════════════════════════════════════════════ #}
+{% include 'partials/_blog_grid.html' %}
+
+{# ═══════════════════════════════════════════════════════════
+   14. NEWSLETTER
+═══════════════════════════════════════════════════════════ #}
+{% include 'partials/_newsletter_bar.html' %}
+
+{# ═══════════════════════════════════════════════════════════
+   15. SOCIAL POSTS GRID
+═══════════════════════════════════════════════════════════ #}
+{% include 'partials/_social_grid.html' %}
+
+{# ═══════════════════════════════════════════════════════════
+   16. GALLERY
+═══════════════════════════════════════════════════════════ #}
+{% include 'partials/_gallery_grid.html' %}
+
+{# ═══════════════════════════════════════════════════════════
+   WhatsApp Float Button
+═══════════════════════════════════════════════════════════ #}
+{% if site_settings.whatsapp %}
+<a href="https://wa.me/{{ site_settings.whatsapp|cut:'+' }}" class="floating-whatsapp"
+   target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+{% endif %}
+
 {% endblock %}

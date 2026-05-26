@@ -74,3 +74,20 @@ class TestStoreLocations:
         client = Client()
         response = client.get('/stores/')
         assert response.status_code == 200
+
+
+@pytest.mark.django_db
+class TestNewsletter:
+    def test_newsletter_subscribe_success(self):
+        client = Client()
+        response = client.post('/newsletter/subscribe/', {'email': 'test@example.com'})
+        assert response.status_code == 302  # Redirects to home
+        from core.models import NewsletterSubscription
+        assert NewsletterSubscription.objects.filter(email='test@example.com').exists()
+
+    def test_newsletter_subscribe_invalid_email(self):
+        client = Client()
+        response = client.post('/newsletter/subscribe/', {'email': 'invalid-email'})
+        assert response.status_code == 302  # Redirects to home without saving
+        from core.models import NewsletterSubscription
+        assert not NewsletterSubscription.objects.filter(email='invalid-email').exists()
