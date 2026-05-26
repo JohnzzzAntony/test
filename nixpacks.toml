@@ -1,21 +1,15 @@
-# Explicitly declare Python via Nix packages.
-# 'providers' alone is sometimes ignored when package.json is present.
-# Declaring nixPkgs forces the correct Python + pip3 environment.
+# Force Python-only provider.
+# Prevents Nixpacks from detecting package.json and mixing Node + Python.
 providers = ["python"]
 
-[phases.setup]
-nixPkgs = [
-  "python311",
-  "python311Packages.pip",
-  "python311Packages.setuptools",
-  "python311Packages.wheel"
-]
-
-[phases.install]
-cmds = ["pip3 install --no-cache-dir -r requirements.txt"]
+# DO NOT override [phases.install] — Nixpacks automatically creates a
+# virtualenv and runs pip install -r requirements.txt inside it.
+# Overriding it breaks the virtualenv and causes pip3 to try to install
+# into the Nix-managed (read-only) system Python, which fails with
+# "externally-managed-environment".
 
 [phases.build]
 cmds = ["python manage.py collectstatic --noinput --clear"]
 
 [start]
-cmd = "python manage.py migrate --noinput && gunicorn jkr.wsgi:application --bind 0.0.0.0:$PORT --timeout 120 --workers 2 --log-file - --access-logfile - --error-logfile -"
+cmd = "bash start.sh"
