@@ -1,0 +1,131 @@
+{% load static %}
+
+<!-- Premium Product Grid Component -->
+<section class="py-16 bg-white">
+  <div class="section-container">
+    <!-- Section Header -->
+    <div class="mb-12">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div>
+          <h2 class="text-4xl font-black text-slate-900 mb-2">{{ section_title|default:"Featured Products" }}</h2>
+          <p class="text-lg text-slate-600">{{ section_description|default:"Discover our handpicked selection of premium products" }}</p>
+        </div>
+
+        <!-- Filter/Sort Controls -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <!-- Sort Dropdown -->
+          <div x-data="{ open: false }" class="relative">
+            <button @click="open = !open" class="px-4 py-2 border border-slate-200 rounded-lg hover:border-primary transition-colors duration-300 flex items-center gap-2">
+              <i class="fas fa-sort"></i>
+              Sort By
+              <i class="fas fa-chevron-down text-xs"></i>
+            </button>
+            <div x-show="open" @click.outside="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-2 z-10">
+              <a href="?sort=newest" class="block px-4 py-2 hover:bg-slate-50 text-slate-700 transition-colors duration-300">Newest</a>
+              <a href="?sort=price_low" class="block px-4 py-2 hover:bg-slate-50 text-slate-700 transition-colors duration-300">Price: Low to High</a>
+              <a href="?sort=price_high" class="block px-4 py-2 hover:bg-slate-50 text-slate-700 transition-colors duration-300">Price: High to Low</a>
+              <a href="?sort=popular" class="block px-4 py-2 hover:bg-slate-50 text-slate-700 transition-colors duration-300">Most Popular</a>
+              <a href="?sort=rating" class="block px-4 py-2 hover:bg-slate-50 text-slate-700 transition-colors duration-300">Highest Rated</a>
+            </div>
+          </div>
+
+          <!-- View Toggle -->
+          <div class="flex items-center border border-slate-200 rounded-lg p-1">
+            <button class="p-2 hover:bg-slate-100 rounded transition-colors duration-300" title="Grid View">
+              <i class="fas fa-th text-primary"></i>
+            </button>
+            <button class="p-2 hover:bg-slate-100 rounded transition-colors duration-300" title="List View">
+              <i class="fas fa-list text-slate-400"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    {% if products %}
+      <div class="product-grid">
+        {% for product in products %}
+          {% include "components/product_card.html" %}
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if is_paginated %}
+        <div class="mt-16 flex items-center justify-center gap-2">
+          {% if page_obj.has_previous %}
+            <a href="?page=1" class="p-2 border border-slate-200 rounded-lg hover:border-primary hover:text-primary transition-all duration-300">
+              <i class="fas fa-chevron-left"></i>
+            </a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="p-2 border border-slate-200 rounded-lg hover:border-primary hover:text-primary transition-all duration-300">
+              Previous
+            </a>
+          {% endif %}
+
+          <!-- Page Numbers -->
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <span class="px-4 py-2 bg-primary text-white rounded-lg font-bold">{{ num }}</span>
+            {% else %}
+              <a href="?page={{ num }}" class="px-4 py-2 border border-slate-200 rounded-lg hover:border-primary hover:text-primary transition-all duration-300">{{ num }}</a>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="p-2 border border-slate-200 rounded-lg hover:border-primary hover:text-primary transition-all duration-300">
+              Next
+            </a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="p-2 border border-slate-200 rounded-lg hover:border-primary hover:text-primary transition-all duration-300">
+              <i class="fas fa-chevron-right"></i>
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% else %}
+      <!-- Empty State -->
+      <div class="text-center py-16">
+        <i class="fas fa-box text-6xl text-slate-300 mb-4"></i>
+        <h3 class="text-2xl font-bold text-slate-900 mb-2">No Products Found</h3>
+        <p class="text-slate-600 mb-6">We couldn't find any products matching your criteria.</p>
+        <a href="{% url 'products:product_list' %}" class="btn-primary">
+          <i class="fas fa-arrow-left"></i>
+          Back to Shop
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Related Products Section (Optional) -->
+{% if related_products %}
+  <section class="py-16 bg-slate-50">
+    <div class="section-container">
+      <h2 class="text-3xl font-black text-slate-900 mb-8">You Might Also Like</h2>
+      <div class="product-grid">
+        {% for product in related_products|slice:":4" %}
+          {% include "components/product_card.html" %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<!-- Newsletter Section -->
+<section class="py-16 bg-gradient-to-r from-primary to-primary-700">
+  <div class="section-container">
+    <div class="max-w-2xl mx-auto text-center text-white">
+      <h2 class="text-3xl font-black mb-4">Get Special Offers & Updates</h2>
+      <p class="text-lg mb-8 text-primary-100">Subscribe to our newsletter and receive exclusive deals delivered to your inbox.</p>
+      
+      <form class="flex flex-col sm:flex-row gap-3">
+        <input type="email" 
+               placeholder="Enter your email" 
+               class="flex-1 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+               required>
+        <button type="submit" class="px-8 py-3 bg-white text-primary font-bold rounded-lg hover:bg-slate-100 transition-colors duration-300">
+          Subscribe
+        </button>
+      </form>
+    </div>
+  </div>
+</section>

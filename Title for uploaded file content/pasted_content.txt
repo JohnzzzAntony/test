@@ -1,0 +1,153 @@
+You are a world-class frontend architect and Django integration expert.
+
+I have an existing Django ecommerce/admin project:
+https://github.com/JohnzzzAntony/admin.git
+
+Your task is to UPGRADE the frontend to an award-winning, premium ecommerce UI
+WITHOUT breaking any backend functionality.
+
+--------------------------------------------------
+
+STRICT RULES (DO NOT VIOLATE):
+
+- DO NOT modify Django models, views, or database schema
+- DO NOT change API responses or business logic
+- DO NOT rename backend variables used in templates
+- DO NOT remove any existing functionality
+- ONLY improve UI/UX and frontend structure
+
+--------------------------------------------------
+
+TECH STACK:
+
+- Django Templates (must remain compatible)
+- Tailwind CSS (preferred styling system)
+- Alpine.js (for lightweight interactivity)
+- No heavy frameworks (NO React unless isolated)
+
+--------------------------------------------------
+
+CORE OBJECTIVE:
+
+Transform the UI into a premium ecommerce experience similar to:
+- Apple
+- Stripe
+- Shopify
+
+Focus on:
+- Clean layout
+- Smooth animations
+- Professional spacing and typography
+- High-end visual polish
+
+--------------------------------------------------
+
+IMPLEMENTATION STRATEGY:
+
+1. CREATE A DESIGN SYSTEM
+- Typography scale
+- Color palette (neutral + primary accent)
+- Spacing system
+- Button styles
+- Card components
+
+2. REFACTOR BASE TEMPLATE
+- Upgrade base.html
+- Add modern navbar with:
+  - Logo
+  - Categories dropdown (mega menu)
+  - Search bar with category filter
+  - Cart icon with badge
+- Sticky header with blur effect
+
+3. HERO SECTION
+- Fully blended with header
+- Large headline + CTA
+- Subtle animation / gradient background
+
+4. PRODUCT UI
+- Responsive product grid
+- Hover effects (scale, shadow, quick view)
+- Clean product cards
+- Badge system (sale, new, out of stock)
+
+5. PRODUCT DETAIL PAGE
+- Image gallery with thumbnails
+- Zoom effect
+- Variant selectors
+- Add-to-cart animation
+
+6. CART & CHECKOUT
+- Clean minimal layout
+- Order summary sidebar
+- Smooth quantity updates
+
+7. AUTH PAGES
+- Premium login/signup UI
+- Google login button styled professionally
+- Error states clearly shown
+
+8. ADMIN PANEL UI IMPROVEMENT
+- Dashboard cards
+- Tables redesigned
+- Better spacing and alignment
+- Sidebar navigation
+
+--------------------------------------------------
+
+UX ENHANCEMENTS:
+
+- Skeleton loaders
+- Lazy loading images
+- Micro-interactions
+- Toast notifications
+- Form validation states
+- Mobile-first responsiveness
+
+--------------------------------------------------
+
+PERFORMANCE:
+
+- Minimize JS
+- Use Tailwind efficiently
+- Optimize images
+- Avoid blocking scripts
+
+--------------------------------------------------
+
+DELIVERABLES:
+
+1. Updated Django templates (drop-in compatible)
+2. Tailwind config
+3. Reusable components:
+   - Navbar
+   - Product card
+   - Buttons
+   - Forms
+4. Minimal JS (Alpine)
+5. Clear integration instructions
+
+--------------------------------------------------
+
+CRITICAL:
+
+Before generating code:
+- Analyze existing template variables and context usage
+- Preserve ALL Django template tags
+- Ensure compatibility with existing views
+
+--------------------------------------------------
+
+OUTPUT FORMAT:
+
+- Provide clean, modular code
+- Separate files logically
+- Comment where integration is required
+
+--------------------------------------------------
+
+GOAL:
+
+A visually stunning, fast, modern ecommerce frontend
+that works instantly with the existing Django backend
+without breaking anything.

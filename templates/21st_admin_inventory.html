@@ -1,0 +1,196 @@
+{% extends '21st_admin_base.html' %}
+{% load static %}
+
+{% block admin_title %}Inventory{% endblock %}
+{% block breadcrumb %}Dashboard / Inventory{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .admin-toolbar-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .admin-search { position: relative; }
+    .admin-search input { padding: 10px 16px 10px 40px; border: 1px solid var(--color-surface-lighter); border-radius: var(--radius-lg); font-size: 14px; background: white; width: 280px; }
+    .admin-search i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-surface-medium); }
+    .inventory-alert { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: var(--radius-lg); margin-bottom: 16px; }
+    .inventory-alert.warning { background: #fef3c7; color: #b45309; }
+    .inventory-alert.critical { background: #fee2e2; color: #b91c1c; }
+    .stock-bar { height: 8px; border-radius: 4px; background: var(--color-surface-lightest); overflow: hidden; }
+    .stock-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s var(--ease-out-expo); }
+    .admin-action-dropdown { position: relative; display: inline-block; }
+    .admin-action-dropdown-menu { position: absolute; right: 0; top: 100%; margin-top: 8px; background: white; border: 1px solid var(--color-surface-lighter); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); min-width: 160px; z-index: 50; display: none; }
+    .admin-action-dropdown:hover .admin-action-dropdown-menu, .admin-action-dropdown.open .admin-action-dropdown-menu { display: block; }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="inventory-alert warning">
+    <i class="fas fa-exclamation-triangle"></i>
+    <div>
+        <strong>Low Stock Alert:</strong> 32 products are running low. <a href="#low-stock" class="underline font-semibold">View details</a>
+    </div>
+</div>
+
+<div class="admin-toolbar">
+    <div class="admin-toolbar-left">
+        <div class="admin-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search inventory..." id="inventorySearch">
+        </div>
+        <button class="btn-21st btn-21st-sm btn-21st-secondary"><i class="fas fa-filter"></i> Filter</button>
+        <div class="flex gap-2">
+            <button class="btn-21st btn-21st-xs btn-21st-secondary active">All</button>
+            <button class="btn-21st btn-21st-xs btn-21st-ghost">In Stock</button>
+            <button class="btn-21st btn-21st-xs btn-21st-ghost">Low Stock</button>
+            <button class="btn-21st btn-21st-xs btn-21st-ghost">Out of Stock</button>
+        </div>
+    </div>
+    <div class="flex gap-2">
+        <button class="btn-21st btn-21st-sm btn-21st-secondary"><i class="fas fa-download"></i> Export</button>
+        <button class="btn-21st btn-21st-sm btn-21st-primary"><i class="fas fa-plus"></i> Add Stock</button>
+    </div>
+</div>
+
+<div class="admin-table-wrap" id="low-stock">
+    <div class="overflow-x-auto">
+        <table class="admin-data-table" id="inventoryTable">
+            <thead>
+                <tr>
+                    <th style="width: 40px;"><input type="checkbox" class="rounded" id="selectAllInv"></th>
+                    <th>Product</th>
+                    <th>SKU</th>
+                    <th>Category</th>
+                    <th>Stock</th>
+                    <th>Reorder Level</th>
+                    <th>Status</th>
+                    <th>Last Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" class="inv-checkbox rounded"></td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-thermometer-half"></i></div>
+                            <div><div class="font-medium text-sm">Digital Thermometer Pro</div><div class="text-xs text-[#9ca3af]">THR-2026-001</div></div>
+                        </div>
+                    </td>
+                    <td class="font-mono text-xs text-[#6b7280]">THR-2026-001</td>
+                    <td>Diagnostic</td>
+                    <td><div class="flex items-center gap-3"><span class="font-semibold w-8">45</span><div class="stock-bar w-24"><div class="stock-bar-fill" style="width: 90%; background: var(--color-teal-500);"></div></div></div></td>
+                    <td>10</td>
+                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>In Stock</span></td>
+                    <td class="text-sm text-[#6b7280]">May 24, 2026</td>
+                    <td><div class="admin-table-actions"><button><i class="fas fa-edit"></i></button><button><i class="fas fa-history"></i></button></div></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="inv-checkbox rounded"></td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-heart-pulse"></i></div>
+                            <div><div class="font-medium text-sm">Pulse Oximeter Pro</div><div class="text-xs text-[#9ca3af]">OXM-2026-005</div></div>
+                        </div>
+                    </td>
+                    <td class="font-mono text-xs text-[#6b7280]">OXM-2026-005</td>
+                    <td>Diagnostic</td>
+                    <td><div class="flex items-center gap-3"><span class="font-semibold w-8 text-red-600">5</span><div class="stock-bar w-24"><div class="stock-bar-fill" style="width: 10%; background: #ef4444;"></div></div></div></td>
+                    <td class="text-red-600 font-semibold">10</td>
+                    <td><span class="admin-status" style="background: #fef3c7; color: #d97706;"><span class="admin-status-dot" style="background: #d97706;"></span>Low Stock</span></td>
+                    <td class="text-sm text-[#6b7280]">May 23, 2026</td>
+                    <td><div class="admin-table-actions"><button><i class="fas fa-edit"></i></button><button><i class="fas fa-history"></i></button></div></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="inv-checkbox rounded"></td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-stethoscope"></i></div>
+                            <div><div class="font-medium text-sm">Cardiology Stethoscope</div><div class="text-xs text-[#9ca3af]">STH-2026-012</div></div>
+                        </div>
+                    </td>
+                    <td class="font-mono text-xs text-[#6b7280]">STH-2026-012</td>
+                    <td>Examination</td>
+                    <td><div class="flex items-center gap-3"><span class="font-semibold w-8">120</span><div class="stock-bar w-24"><div class="stock-bar-fill" style="width: 100%; background: var(--color-teal-500);"></div></div></div></td>
+                    <td>20</td>
+                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>In Stock</span></td>
+                    <td class="text-sm text-[#6b7280]">May 22, 2026</td>
+                    <td><div class="admin-table-actions"><button><i class="fas fa-edit"></i></button><button><i class="fas fa-history"></i></button></div></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="inv-checkbox rounded"></td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-mask-ventilator"></i></div>
+                            <div><div class="font-medium text-sm">Oxygen Concentrator</div><div class="text-xs text-[#9ca3af]">OCN-2026-008</div></div>
+                        </div>
+                    </td>
+                    <td class="font-mono text-xs text-[#6b7280]">OCN-2026-008</td>
+                    <td>Respiratory</td>
+                    <td><div class="flex items-center gap-3"><span class="font-semibold w-8">32</span><div class="stock-bar w-24"><div class="stock-bar-fill" style="width: 64%; background: var(--color-teal-500);"></div></div></div></td>
+                    <td>5</td>
+                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>In Stock</span></td>
+                    <td class="text-sm text-[#6b7280]">May 20, 2026</td>
+                    <td><div class="admin-table-actions"><button><i class="fas fa-edit"></i></button><button><i class="fas fa-history"></i></button></div></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="inv-checkbox rounded"></td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-syringe"></i></div>
+                            <div><div class="font-medium text-sm">Surgical Scalpel Set</div><div class="text-xs text-[#9ca3af]">STL-2026-003</div></div>
+                        </div>
+                    </td>
+                    <td class="font-mono text-xs text-[#6b7280]">STL-2026-003</td>
+                    <td>Surgical</td>
+                    <td><div class="flex items-center gap-3"><span class="font-semibold w-8 text-red-600">0</span><div class="stock-bar w-24"><div class="stock-bar-fill" style="width: 0%; background: #ef4444;"></div></div></div></td>
+                    <td class="text-red-600 font-semibold">15</td>
+                    <td><span class="admin-status" style="background: #fee2e2; color: #ef4444;"><span class="admin-status-dot" style="background: #ef4444;"></span>Out of Stock</span></td>
+                    <td class="text-sm text-[#6b7280]">May 18, 2026</td>
+                    <td><div class="admin-table-actions"><button><i class="fas fa-edit"></i></button><button><i class="fas fa-history"></i></button></div></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="inv-checkbox rounded"></td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-heartbeat"></i></div>
+                            <div><div class="font-medium text-sm">Blood Pressure Monitor</div><div class="text-xs text-[#9ca3af]">BPM-2026-009</div></div>
+                        </div>
+                    </td>
+                    <td class="font-mono text-xs text-[#6b7280]">BPM-2026-009</td>
+                    <td>Diagnostic</td>
+                    <td><div class="flex items-center gap-3"><span class="font-semibold w-8">8</span><div class="stock-bar w-24"><div class="stock-bar-fill" style="width: 16%; background: #f59e0b;"></div></div></div></td>
+                    <td class="text-amber-600 font-semibold">10</td>
+                    <td><span class="admin-status" style="background: #fef3c7; color: #d97706;"><span class="admin-status-dot" style="background: #d97706;"></span>Low Stock</span></td>
+                    <td class="text-sm text-[#6b7280]">May 24, 2026</td>
+                    <td><div class="admin-table-actions"><button><i class="fas fa-edit"></i></button><button><i class="fas fa-history"></i></button></div></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="admin-pagination">
+        <span class="text-sm text-[#6b7280]">Showing 1 to 6 of 2,526 results</span>
+        <div class="pagination-21st">
+            <button class="pagination-21st-btn" disabled><i class="fas fa-chevron-left text-xs"></i></button>
+            <button class="pagination-21st-btn active">1</button>
+            <button class="pagination-21st-btn">2</button>
+            <button class="pagination-21st-btn">3</button>
+            <span class="flex items-center px-2 text-sm text-[#9ca3af]">...</span>
+            <button class="pagination-21st-btn">422</button>
+            <button class="pagination-21st-btn"><i class="fas fa-chevron-right text-xs"></i></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('selectAllInv').addEventListener('change', function() {
+        document.querySelectorAll('.inv-checkbox').forEach(cb => cb.checked = this.checked);
+    });
+    document.getElementById('inventorySearch').addEventListener('input', function() {
+        const term = this.value.toLowerCase();
+        document.querySelectorAll('#inventoryTable tbody tr').forEach(row => {
+            row.style.display = row.textContent.toLowerCase().includes(term) ? '' : 'none';
+        });
+    });
+</script>
+
+{% endblock %}

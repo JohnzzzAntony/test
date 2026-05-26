@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21st Century Healthcare — Preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Source+Sans+3:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="static/css/21st-design-system.css">
+    <link rel="stylesheet" href="static/css/21st-components.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Source Sans 3', sans-serif; background: var(--color-background); }
+        .preview-nav { position: fixed; top: 0; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; padding: 16px 0; }
+        .preview-nav a { display: block; padding: 8px 16px; background: var(--color-primary-900); color: white; border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+        .preview-nav a:hover { background: var(--color-primary-700); }
+        .preview-section { margin-bottom: 80px; padding: 60px 0; }
+        .preview-section + .preview-section { border-top: 2px dashed var(--color-surface-lighter); }
+        .preview-label { display: inline-block; padding: 4px 16px; background: var(--color-primary-100); color: var(--color-primary-700); border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 32px; }
+    </style>
+</head>
+<body>
+    <div class="preview-nav">
+        <a href="#home">Home</a>
+        <a href="#plp">PLP</a>
+        <a href="#pdp">PDP</a>
+        <a href="#cart">Cart</a>
+        <a href="#checkout">Checkout</a>
+        <a href="#admin">Admin</a>
+    </div>
+
+    <!-- HOME PAGE -->
+    <section id="home" class="preview-section">
+        <div class="preview-label">Home Page</div>
+        <!-- Hero -->
+        <section style="position: relative; min-height: 80vh; display: flex; align-items: center; background: var(--color-primary-900); overflow: hidden; color: white; padding: 80px 0;">
+            <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(58,100,158,0.15), transparent 60%), radial-gradient(ellipse at 70% 20%, rgba(20,184,166,0.08), transparent 50%);"></div>
+            <div class="container-21st relative" style="z-index: 2;">
+                <div style="max-width: 600px;">
+                    <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 9999px; font-size: 12px; font-weight: 600; color: #d4a820; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 24px;"><i class="fas fa-shield-alt"></i> Trusted by 500+ Healthcare Providers</div>
+                    <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 600; line-height: 1.05; margin-bottom: 24px;">Equipping Healthcare<br>for the <em style="color: #d4a820; font-style: italic;">Modern Era</em></h1>
+                    <p style="font-size: 18px; color: rgba(255,255,255,0.65); max-width: 520px; margin-bottom: 36px; line-height: 1.7;">Cutting-edge medical equipment and supplies, curated for hospitals, clinics, and practices worldwide.</p>
+                    <div style="display: flex; gap: 16px;"><a href="#" class="btn-21st btn-21st-accent btn-21st-lg">Browse Catalog <i class="fas fa-arrow-right"></i></a><a href="#" class="btn-21st btn-21st-ghost" style="color: rgba(255,255,255,0.8);">Request Quote</a></div>
+                </div>
+                <div style="display: flex; gap: 40px; padding-top: 48px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 48px;">
+                    <div><span style="font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 600; color: white; line-height: 1;">2,500+</span><div style="font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em;">Products</div></div>
+                    <div><span style="font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 600; color: white; line-height: 1;">150+</span><div style="font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em;">Brands</div></div>
+                    <div><span style="font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 600; color: white; line-height: 1;">98%</span><div style="font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em;">Satisfaction</div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section style="background: white; padding: 0;">
+            <div class="container-21st">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
+                    <div style="padding: 40px 32px; text-align: center; border-right: 1px solid #e2e8f0;">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: #eaf2fa; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #1a3a6e; font-size: 20px;"><i class="fas fa-shipping-fast"></i></div>
+                        <div style="font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: #0a1628; margin-bottom: 4px;">Fast Shipping</div>
+                        <div style="font-size: 14px; color: #6b7280;">Next-day delivery on orders</div>
+                    </div>
+                    <div style="padding: 40px 32px; text-align: center; border-right: 1px solid #e2e8f0;">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: #eaf2fa; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #1a3a6e; font-size: 20px;"><i class="fas fa-award"></i></div>
+                        <div style="font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: #0a1628; margin-bottom: 4px;">Certified Quality</div>
+                        <div style="font-size: 14px; color: #6b7280;">ISO, FDA compliant</div>
+                    </div>
+                    <div style="padding: 40px 32px; text-align: center; border-right: 1px solid #e2e8f0;">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: #eaf2fa; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #1a3a6e; font-size: 20px;"><i class="fas fa-headset"></i></div>
+                        <div style="font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: #0a1628; margin-bottom: 4px;">24/7 Support</div>
+                        <div style="font-size: 14px; color: #6b7280;">Expert assistance always</div>
+                    </div>
+                    <div style="padding: 40px 32px; text-align: center;">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: #eaf2fa; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #1a3a6e; font-size: 20px;"><i class="fas fa-undo-alt"></i></div>
+                        <div style="font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: #0a1628; margin-bottom: 4px;">Easy Returns</div>
+                        <div style="font-size: 14px; color: #6b7280;">30-day return policy</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products -->
+        <section style="padding: 96px 0; background: #f6f8fa;">
+            <div class="container-21st">
+                <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 48px;">
+                    <div><h2 style="font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 600; color: #0a1628; line-height: 1.15;">Featured Products</h2><p style="font-size: 16px; color: #6b7280; margin-top: 8px;">Handpicked essentials for your practice</p></div>
+                    <a href="#" class="btn-21st btn-21st-secondary btn-21st-sm">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
+                    <div style="background: white; border: 1px solid #f0f0f0; border-radius: 24px; overflow: hidden; transition: all 0.25s;">
+                        <div style="aspect-ratio: 1; background: #f6f8fa; padding: 24px; display: flex; align-items: center; justify-content: center; position: relative;">
+                            <i class="fas fa-thermometer-half text-6xl text-[#d1d5db]"></i>
+                            <span style="position: absolute; top: 16px; left: 16px; padding: 4px 12px; background: #0a1628; color: white; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; border-radius: 9999px;">New</span>
+                        </div>
+                        <div style="padding: 20px 24px 24px;"><div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #3a649e; margin-bottom: 8px;">Diagnostic</div><h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #0a1628; line-height: 1.2; margin-bottom: 12px;">Digital Thermometer Pro</h3><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #224880;">AED 299</span><button class="btn-21st btn-21st-primary btn-21st-icon"><i class="fas fa-plus"></i></button></div></div>
+                    </div>
+                    <div style="background: white; border: 1px solid #f0f0f0; border-radius: 24px; overflow: hidden; transition: all 0.25s;">
+                        <div style="aspect-ratio: 1; background: #f6f8fa; padding: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-stethoscope text-6xl text-[#d1d5db]"></i></div>
+                        <div style="padding: 20px 24px 24px;"><div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #3a649e; margin-bottom: 8px;">Examination</div><h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #0a1628; line-height: 1.2; margin-bottom: 12px;">Cardiology Stethoscope</h3><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #224880;">AED 349</span><button class="btn-21st btn-21st-primary btn-21st-icon"><i class="fas fa-plus"></i></button></div></div>
+                    </div>
+                    <div style="background: white; border: 1px solid #f0f0f0; border-radius: 24px; overflow: hidden; transition: all 0.25s;">
+                        <div style="aspect-ratio: 1; background: #f6f8fa; padding: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-heart-pulse text-6xl text-[#d1d5db]"></i></div>
+                        <div style="padding: 20px 24px 24px;"><div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #3a649e; margin-bottom: 8px;">Diagnostic</div><h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #0a1628; line-height: 1.2; margin-bottom: 12px;">Pulse Oximeter Pro</h3><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #224880;">AED 459</span><button class="btn-21st btn-21st-primary btn-21st-icon"><i class="fas fa-plus"></i></button></div></div>
+                    </div>
+                    <div style="background: white; border: 1px solid #f0f0f0; border-radius: 24px; overflow: hidden; transition: all 0.25s;">
+                        <div style="aspect-ratio: 1; background: #f6f8fa; padding: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-mask-ventilator text-6xl text-[#d1d5db]"></i></div>
+                        <div style="padding: 20px 24px 24px;"><div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #3a649e; margin-bottom: 8px;">Respiratory</div><h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #0a1628; line-height: 1.2; margin-bottom: 12px;">Oxygen Concentrator</h3><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #224880;">AED 2499</span><button class="btn-21st btn-21st-primary btn-21st-icon"><i class="fas fa-plus"></i></button></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section style="padding: 96px 0; background: white;">
+            <div class="container-21st">
+                <div style="background: #0a1628; border-radius: 24px; padding: 64px; text-align: center; position: relative; overflow: hidden;">
+                    <div style="position: absolute; inset: 0; opacity: 0.3; background: radial-gradient(circle at 50% 50%, #14b8a6, transparent 70%);"></div>
+                    <div style="position: relative; z-index: 1; max-width: 600px; margin: 0 auto;">
+                        <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 600; color: white; margin-bottom: 16px; line-height: 1.15;">Need Bulk Orders or Custom Quotes?</h2>
+                        <p style="color: rgba(255,255,255,0.6); margin-bottom: 32px; font-size: 18px;">Our dedicated team is ready to help you find the right solutions for your facility.</p>
+                        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                            <a href="#" class="btn-21st btn-21st-accent btn-21st-lg"><i class="fas fa-paper-plane"></i> Get a Quote</a>
+                            <a href="#" class="btn-21st btn-21st-outline" style="color: white; border-color: rgba(255,255,255,0.2);"><i class="fas fa-phone"></i> Call Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- PLP DEMO -->
+    <section id="plp" class="preview-section" style="background: #f6f8fa;">
+        <div class="container-21st">
+            <div class="preview-label">Product Listing Page (PLP)</div>
+            <div style="display: grid; grid-template-columns: 280px 1fr; gap: 40px; padding: 40px 0;">
+                <aside style="background: white; border-radius: 24px; padding: 24px; border: 1px solid #f0f0f0; height: fit-content; position: sticky; top: 40px;">
+                    <div style="font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #0a1628; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0;">Categories</div>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 14px; color: #0a1628; cursor: pointer;"><input type="radio" name="cat" style="accent-color: #1a3a6e;" checked> All Categories</label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 14px; color: #0a1628; cursor: pointer;"><input type="radio" name="cat" style="accent-color: #1a3a6e;"> Medical Equipment <span style="margin-left: auto; font-size: 12px; color: #9ca3af; background: #f6f8fa; padding: 2px 8px; border-radius: 9999px;">120</span></label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 14px; color: #0a1628; cursor: pointer;"><input type="radio" name="cat" style="accent-color: #1a3a6e;"> Surgical Supplies <span style="margin-left: auto; font-size: 12px; color: #9ca3af; background: #f6f8fa; padding: 2px 8px; border-radius: 9999px;">85</span></label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 14px; color: #0a1628; cursor: pointer;"><input type="radio" name="cat" style="accent-color: #1a3a6e;"> Diagnostic <span style="margin-left: auto; font-size: 12px; color: #9ca3af; background: #f6f8fa; padding: 2px 8px; border-radius: 9999px;">65</span></label>
+                    </div>
+                    <div style="font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #0a1628; margin: 24px 0 16px; padding-top: 16px; border-top: 1px solid #f0f0f0;">Price Range</div>
+                    <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                        <input type="number" placeholder="Min" style="width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px;" value="0">
+                        <input type="number" placeholder="Max" style="width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px;" value="5000">
+                    </div>
+                    <div class="flex gap-3"><button class="btn-21st btn-21st-primary btn-21st-sm flex-1">Apply</button><button class="btn-21st btn-21st-secondary btn-21st-sm">Reset</button></div>
+                </aside>
+                <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: white; border-radius: 12px; border: 1px solid #f0f0f0; margin-bottom: 24px;">
+                        <span style="font-size: 14px; color: #6b7280;">Showing 1-8 of 256 results</span>
+                        <div style="display: flex; align-items: center; gap: 12px;"><label style="font-size: 13px; color: #6b7280; white-space: nowrap;">Sort by:</label><select style="padding: 6px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px;"><option>Featured</option><option>Price: Low to High</option><option>Price: High to Low</option></select></div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+                        <div style="background: white; border: 1px solid #f0f0f0; border-radius: 24px; overflow: hidden;"><div style="aspect-ratio: 1; background: #f6f8fa; padding: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-thermometer-half text-5xl text-[#d1d5db]"></i></div><div style="padding: 20px 24px 24px;"><div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #3a649e; margin-bottom: 8px;">Diagnostic</div><h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #0a1628; margin-bottom: 12px;">Digital Thermometer Pro</h3><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #224880;">AED 299</span><button class="btn-21st btn-21st-primary btn-21st-icon"><i class="fas fa-plus"></i></button></div></div></div>
+                        <div style="background: white; border: 1px solid #f0f0f0; border-radius: 24px; overflow: hidden;"><div style="aspect-ratio: 1; background: #f6f8fa; padding: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-stethoscope text-5xl text-[#d1d5db]"></i></div><div style="padding: 20px 24px 24px;"><div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #3a649e; margin-bottom: 8px;">Examination</div><h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #0a1628; margin-bottom: 12px;">Cardiology Stethoscope</h3><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #224880;">AED 349</span><button class="btn-21st btn-21st-primary btn-21st-icon"><i class="fas fa-plus"></i></button></div></div></div>
+                        <div style="background: white; border: 1px solid #f0f0f0; border-radius: 24px; overflow: hidden;"><div style="aspect-ratio: 1; background: #f6f8fa; padding: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-heart-pulse text-5xl text-[#d1d5db]"></i></div><div style="padding: 20px 24px 24px;"><div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #3a649e; margin-bottom: 8px;">Diagnostic</div><h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #0a1628; margin-bottom: 12px;">Pulse Oximeter Pro</h3><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #224880;">AED 459</span><button class="btn-21st btn-21st-primary btn-21st-icon"><i class="fas fa-plus"></i></button></div></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CART DEMO -->
+    <section id="cart" class="preview-section" style="background: white;">
+        <div class="container-21st">
+            <div class="preview-label">Shopping Cart</div>
+            <div style="display: grid; grid-template-columns: 1fr 360px; gap: 48px;">
+                <div>
+                    <div style="display: grid; grid-template-columns: 100px 1fr auto auto auto; gap: 16px; padding: 16px 0; border-bottom: 1px solid #f0f0f0; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #9ca3af;"><div class="col-span-1"></div><div>Product</div><div>Price</div><div class="text-center">Qty</div><div>Total</div></div>
+                    <div style="display: grid; grid-template-columns: 100px 1fr auto auto auto; gap: 16px; align-items: center; padding: 24px 0; border-bottom: 1px solid #f0f0f0;">
+                        <div style="width: 100px; height: 100px; background: #f6f8fa; border-radius: 16px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-thermometer-half text-4xl text-[#d1d5db]"></i></div>
+                        <div><h3 style="font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: #0a1628;">Digital Thermometer Pro</h3><p style="font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px;">Diagnostic</p></div>
+                        <div style="font-weight: 600; font-size: 14px;">AED 299</div>
+                        <div style="display: flex; align-items: center; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;"><button style="width: 32px; height: 36px; background: white; border: none; cursor: pointer; font-size: 16px;">-</button><input type="text" value="1" style="width: 40px; text-align: center; border: none; font-size: 14px; font-weight: 600;"><button style="width: 32px; height: 36px; background: white; border: none; cursor: pointer; font-size: 16px;">+</button></div>
+                        <div style="display: flex; align-items: center; gap: 16px;"><span style="font-weight: 700; color: #0a1628;">AED 299</span><button style="background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 16px;"><i class="fas fa-times"></i></button></div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 100px 1fr auto auto auto; gap: 16px; align-items: center; padding: 24px 0; border-bottom: 1px solid #f0f0f0;">
+                        <div style="width: 100px; height: 100px; background: #f6f8fa; border-radius: 16px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-stethoscope text-4xl text-[#d1d5db]"></i></div>
+                        <div><h3 style="font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: #0a1628;">Cardiology Stethoscope</h3><p style="font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px;">Examination</p></div>
+                        <div style="font-weight: 600; font-size: 14px;">AED 349</div>
+                        <div style="display: flex; align-items: center; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;"><button style="width: 32px; height: 36px; background: white; border: none; cursor: pointer; font-size: 16px;">-</button><input type="text" value="2" style="width: 40px; text-align: center; border: none; font-size: 14px; font-weight: 600;"><button style="width: 32px; height: 36px; background: white; border: none; cursor: pointer; font-size: 16px;">+</button></div>
+                        <div style="display: flex; align-items: center; gap: 16px;"><span style="font-weight: 700; color: #0a1628;">AED 698</span><button style="background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 16px;"><i class="fas fa-times"></i></button></div>
+                    </div>
+                    <a href="#" class="btn-21st btn-21st-ghost" style="margin-top: 16px;"><i class="fas fa-arrow-left" style="font-size: 11px;"></i> Continue Shopping</a>
+                </div>
+                <div style="background: #0a1628; color: white; border-radius: 24px; padding: 32px; position: sticky; top: 40px; height: fit-content;">
+                    <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; margin-bottom: 24px;">Order Summary</h3>
+                    <div style="font-size: 14px; line-height: 2;"><div style="display: flex; justify-content: space-between;"><span>Subtotal</span><span>AED 1,047</span></div><div style="display: flex; justify-content: space-between;"><span>Shipping</span><span>Free</span></div><div style="display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px; margin-top: 12px; font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600;"><span>Total</span><span>AED 1,047</span></div></div>
+                    <button class="btn-21st btn-21st-accent btn-21st-lg btn-21st-block" style="margin-top: 24px;">Proceed to Checkout</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHECKOUT DEMO -->
+    <section id="checkout" class="preview-section" style="background: #f6f8fa;">
+        <div class="container-21st">
+            <div class="preview-label">Checkout</div>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 48px; position: relative;">
+                    <div style="position: absolute; top: 16px; left: 0; right: 0; height: 2px; background: #e2e8f0;"></div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 1;"><div style="width: 32px; height: 32px; border-radius: 50%; background: #b8860b; border: 2px solid #b8860b; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: white;">1</div><span style="font-size: 12px; font-weight: 600; color: #0a1628;">Details</span></div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 1;"><div style="width: 32px; height: 32px; border-radius: 50%; background: #b8860b; border: 2px solid #b8860b; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: white;">2</div><span style="font-size: 12px; font-weight: 600; color: #0a1628;">Shipping</span></div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 1;"><div style="width: 32px; height: 32px; border-radius: 50%; background: white; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #9ca3af;">3</div><span style="font-size: 12px; font-weight: 600; color: #9ca3af;">Payment</span></div>
+                </div>
+                <div style="background: white; border-radius: 24px; padding: 32px; border: 1px solid #f0f0f0;">
+                    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;"><i class="fas fa-truck" style="color: #b8860b;"></i> Shipping Details</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;"><div><label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; margin-bottom: 6px; display: block;">First Name *</label><input type="text" style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;"></div><div><label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; margin-bottom: 6px; display: block;">Last Name *</label><input type="text" style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;"></div></div>
+                    <div style="margin-bottom: 16px;"><label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; margin-bottom: 6px; display: block;">Email *</label><input type="email" style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;"></div>
+                    <div style="margin-bottom: 16px;"><label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; margin-bottom: 6px; display: block;">Address *</label><input type="text" style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;"></div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;"><div><label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; margin-bottom: 6px; display: block;">City *</label><input type="text" style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;"></div><div><label style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; margin-bottom: 6px; display: block;">Emirate *</label><select style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;"><option>Dubai</option><option>Abu Dhabi</option></select></div></div>
+                    <div style="display: flex; justify-content: flex-end; margin-top: 24px;"><button class="btn-21st btn-21st-primary btn-21st-lg">Continue to Shipping <i class="fas fa-arrow-right"></i></button></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ADMIN DEMO -->
+    <section id="admin" class="preview-section" style="background: #0a1628;">
+        <div class="container-21st">
+            <div class="preview-label" style="background: #1a3a6e; color: white;">Admin Dashboard</div>
+
+            <!-- Stats -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px;">
+                <div style="background: white; border-radius: 16px; padding: 24px; transition: all 0.25s;"><div style="width: 48px; height: 48px; border-radius: 12px; background: #eaf2fa; display: flex; align-items: center; justify-content: center; color: #1a3a6e; font-size: 20px; margin-bottom: 16px;"><i class="fas fa-dollar-sign"></i></div><div style="font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: #0a1628; line-height: 1;">AED 128,450</div><div style="font-size: 14px; color: #6b7280; margin-top: 8px;">Total Revenue</div><div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-top: 12px; background: #ccfbf1; color: #14b8a6;"><i class="fas fa-arrow-up"></i> 12.5%</div></div>
+                <div style="background: white; border-radius: 16px; padding: 24px;"><div style="width: 48px; height: 48px; border-radius: 12px; background: #ccfbf1; display: flex; align-items: center; justify-content: center; color: #14b8a6; font-size: 20px; margin-bottom: 16px;"><i class="fas fa-shopping-bag"></i></div><div style="font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: #0a1628; line-height: 1;">847</div><div style="font-size: 14px; color: #6b7280; margin-top: 8px;">Total Orders</div><div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-top: 12px; background: #ccfbf1; color: #14b8a6;"><i class="fas fa-arrow-up"></i> 8.2%</div></div>
+                <div style="background: white; border-radius: 16px; padding: 24px;"><div style="width: 48px; height: 48px; border-radius: 12px; background: #fef3c7; display: flex; align-items: center; justify-content: center; color: #d97706; font-size: 20px; margin-bottom: 16px;"><i class="fas fa-users"></i></div><div style="font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: #0a1628; line-height: 1;">1,234</div><div style="font-size: 14px; color: #6b7280; margin-top: 8px;">Customers</div><div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-top: 12px; background: #ccfbf1; color: #14b8a6;"><i class="fas fa-arrow-up"></i> 15.3%</div></div>
+                <div style="background: white; border-radius: 16px; padding: 24px;"><div style="width: 48px; height: 48px; border-radius: 12px; background: #fee2e2; display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 20px; margin-bottom: 16px;"><i class="fas fa-box"></i></div><div style="font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: #0a1628; line-height: 1;">32</div><div style="font-size: 14px; color: #6b7280; margin-top: 8px;">Low Stock</div><div style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-top: 12px; background: #fee2e2; color: #ef4444;"><i class="fas fa-arrow-down"></i> 3 items</div></div>
+            </div>
+
+            <!-- Orders Table -->
+            <div style="background: white; border-radius: 16px; overflow: hidden;">
+                <div style="padding: 20px 24px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between;"><h3 style="font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600;">Recent Orders</h3><a href="#" style="font-size: 13px; color: #1a3a6e; font-weight: 500; text-decoration: none;">View All</a></div>
+                <table style="width: 100%; font-size: 14px;"><thead><tr style="background: #f6f8fa;"><th style="padding: 14px 24px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280;">Order #</th><th style="padding: 14px 24px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280;">Customer</th><th style="padding: 14px 24px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280;">Date</th><th style="padding: 14px 24px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280;">Amount</th><th style="padding: 14px 24px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280;">Status</th></tr></thead>
+                    <tbody>
+                        <tr><td style="padding: 16px 24px; border-bottom: 1px solid #f0f0f0;"><a href="#" style="font-weight: 600; color: #1a3a6e; text-decoration: none;">#ORD-78945</a></td><td style="padding: 16px 24px; border-bottom: 1px solid #f0f0f0;"><div style="display: flex; align-items: center; gap: 10px;"><div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #1a3a6e, #2dd4bf); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 700;">JD</div><span>James Davidson</span></div></td><td style="padding: 16px 24px; border-bottom: 1px solid #f0f0f0;"><span style="font-size: 13px; color: #6b7280;">May 24, 2026</span></td><td style="padding: 16px 24px; border-bottom: 1px solid #f0f0f0;"><span style="font-weight: 600; color: #0a1628;">AED 2,490</span></td><td style="padding: 16px 24px; border-bottom: 1px solid #f0f0f0;"><span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; background: #ccfbf1; color: #14b8a6;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #14b8a6;"></span>Delivered</span></td></tr>
+                        <tr><td style="padding: 16px 24px; border-bottom: 1px solid #f0f0f0;"><a href="#" style="font-weight: 600; color: #1a3a6e; text-decoration: none;">#ORD-78944</a></td><td style="padding: 16px 24px; border-bottom: 1px solid #f0f0f0;"><div style="display: flex; align-items: center; gap: 10px;"><div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #b8860b, #f59e0b); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 700;">SK</div><span>Sarah Kim</span></div></td><td style="padding: 16px 24px;"><span style="font-size: 13px; color: #6b7280;">May 23, 2026</span></td><td style="padding: 16px 24px;"><span style="font-weight: 600; color: #0a1628;">AED 1,250</span></td><td style="padding: 16px 24px;"><span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; background: #fef3c7; color: #d97706;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #d97706;"></span>Shipped</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

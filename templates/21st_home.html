@@ -1,0 +1,617 @@
+{% extends '21st_base.html' %}
+{% load static %}
+
+{% block meta_title %}21st Century Healthcare{% endblock %}
+{% block meta_description %}Premium medical equipment and healthcare supplies for the 21st century.{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hero Section */
+    .hero-21st {
+        position: relative;
+        min-height: calc(100vh - 162px);
+        display: flex;
+        align-items: center;
+        background: var(--color-primary-900);
+        overflow: hidden;
+    }
+    .hero-21st-bg {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 30% 50%, rgba(58, 100, 158, 0.15), transparent 60%),
+                    radial-gradient(ellipse at 70% 20%, rgba(20, 184, 166, 0.08), transparent 50%);
+    }
+    .hero-21st-content {
+        position: relative;
+        z-index: 2;
+    }
+    .hero-21st-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 16px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: var(--radius-full);
+        font-size: var(--text-12);
+        font-weight: var(--weight-semibold);
+        color: var(--color-accent-400);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 24px;
+    }
+    .hero-21st h1 {
+        font-family: var(--font-display);
+        font-size: clamp(3rem, 6vw, 5.5rem);
+        font-weight: 600;
+        line-height: 1.05;
+        color: var(--color-pure-white);
+        margin-bottom: 24px;
+    }
+    .hero-21st h1 em {
+        font-style: italic;
+        color: var(--color-accent-400);
+    }
+    .hero-21st p {
+        font-size: var(--text-18);
+        color: rgba(255,255,255,0.65);
+        max-width: 520px;
+        margin-bottom: 36px;
+        line-height: 1.7;
+    }
+    .hero-21st-stats {
+        display: flex;
+        gap: 40px;
+        padding-top: 48px;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        margin-top: auto;
+    }
+    .hero-21st-stat {
+        display: flex;
+        flex-direction: column;
+    }
+    .hero-21st-stat-number {
+        font-family: var(--font-display);
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: var(--color-pure-white);
+        line-height: 1;
+    }
+    .hero-21st-stat-label {
+        font-size: var(--text-12);
+        color: rgba(255,255,255,0.45);
+        margin-top: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    /* Products Grid */
+    .section-21st-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-bottom: 48px;
+    }
+    .section-21st-title {
+        font-family: var(--font-display);
+        font-size: var(--text-36);
+        font-weight: 600;
+        color: var(--color-primary-900);
+        line-height: 1.15;
+    }
+    .section-21st-subtitle {
+        font-size: var(--text-16);
+        color: var(--color-surface-medium);
+        margin-top: 8px;
+    }
+
+    .product-card-21st {
+        background: var(--color-pure-white);
+        border: 1px solid var(--color-surface-lightest);
+        border-radius: var(--radius-2xl);
+        overflow: hidden;
+        transition: all var(--duration-normal) var(--ease-out-expo);
+        position: relative;
+    }
+    .product-card-21st:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-2xl);
+        border-color: var(--color-primary-100);
+    }
+    .product-card-21st-image {
+        aspect-ratio: 1;
+        background: var(--color-surface-lightest);
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .product-card-21st-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: transform 0.6s var(--ease-out-expo);
+    }
+    .product-card-21st:hover .product-card-21st-image img {
+        transform: scale(1.08);
+    }
+    .product-card-21st-badge {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        padding: 4px 12px;
+        background: var(--color-primary-900);
+        color: white;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        border-radius: var(--radius-full);
+    }
+    .product-card-21st-wishlist {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-full);
+        background: var(--color-pure-white);
+        border: 1px solid var(--color-surface-lighter);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-surface-medium);
+        cursor: pointer;
+        transition: all var(--duration-fast) var(--ease-out-expo);
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    .product-card-21st:hover .product-card-21st-wishlist {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .product-card-21st-wishlist:hover {
+        background: var(--color-primary-600);
+        color: white;
+        border-color: var(--color-primary-600);
+    }
+    .product-card-21st-body {
+        padding: 20px 24px 24px;
+    }
+    .product-card-21st-category {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--color-primary-400);
+        margin-bottom: 8px;
+    }
+    .product-card-21st-name {
+        font-family: var(--font-display);
+        font-size: var(--text-20);
+        font-weight: 600;
+        color: var(--color-primary-900);
+        line-height: 1.2;
+        margin-bottom: 12px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .product-card-21st-price-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .product-card-21st-price {
+        font-family: var(--font-display);
+        font-size: var(--text-24);
+        font-weight: 600;
+        color: var(--color-primary-700);
+    }
+    .product-card-21st-price .currency {
+        font-size: var(--text-14);
+        color: var(--color-surface-medium);
+    }
+    .product-card-21st-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        background: var(--color-primary-50);
+        color: var(--color-primary-600);
+        border-radius: var(--radius-lg);
+        border: none;
+        cursor: pointer;
+        transition: all var(--duration-fast) var(--ease-out-expo);
+    }
+    .product-card-21st-btn:hover {
+        background: var(--color-primary-600);
+        color: white;
+    }
+
+    /* Category Cards */
+    .category-card-21st {
+        position: relative;
+        aspect-ratio: 4/3;
+        border-radius: var(--radius-2xl);
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .category-card-21st-bg {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        transition: transform 0.8s var(--ease-out-expo);
+    }
+    .category-card-21st:hover .category-card-21st-bg {
+        transform: scale(1.1);
+    }
+    .category-card-21st-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(10, 22, 40, 0.8), rgba(10, 22, 40, 0.2));
+        transition: background 0.4s var(--ease-out-expo);
+    }
+    .category-card-21st:hover .category-card-21st-overlay {
+        background: linear-gradient(to top, rgba(10, 22, 40, 0.9), rgba(10, 22, 40, 0.3));
+    }
+    .category-card-21st-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 32px;
+    }
+    .category-card-21st-name {
+        font-family: var(--font-display);
+        font-size: var(--text-24);
+        font-weight: 600;
+        color: white;
+        margin-bottom: 8px;
+    }
+    .category-card-21st-count {
+        font-size: var(--text-14);
+        color: rgba(255,255,255,0.6);
+    }
+
+    /* Features Strip */
+    .feature-strip {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 0;
+        border-top: 1px solid var(--color-surface-lighter);
+        border-bottom: 1px solid var(--color-surface-lighter);
+    }
+    .feature-strip-item {
+        padding: 40px 32px;
+        text-align: center;
+        border-right: 1px solid var(--color-surface-lighter);
+    }
+    .feature-strip-item:last-child {
+        border-right: none;
+    }
+    .feature-strip-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-xl);
+        background: var(--color-primary-50);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        color: var(--color-primary-600);
+        font-size: 20px;
+    }
+    .feature-strip-title {
+        font-family: var(--font-display);
+        font-size: var(--text-18);
+        font-weight: 600;
+        color: var(--color-primary-900);
+        margin-bottom: 4px;
+    }
+    .feature-strip-desc {
+        font-size: var(--text-14);
+        color: var(--color-surface-medium);
+    }
+
+    /* Testimonial */
+    .testimonial-21st {
+        background: var(--color-primary-900);
+        padding: var(--space-20) var(--space-6);
+        position: relative;
+        overflow: hidden;
+    }
+    .testimonial-21st::before {
+        content: '';
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(20, 184, 166, 0.08), transparent 70%);
+    }
+    .testimonial-21st-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: var(--radius-2xl);
+        padding: 48px;
+        position: relative;
+    }
+    .testimonial-21st-quote {
+        font-family: var(--font-display);
+        font-size: var(--text-24);
+        font-style: italic;
+        color: rgba(255,255,255,0.9);
+        line-height: 1.5;
+        margin-bottom: 32px;
+    }
+    .testimonial-21st-author {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    .testimonial-21st-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: var(--radius-full);
+        background: var(--color-accent-500);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-size: var(--text-20);
+        font-weight: 600;
+        color: white;
+    }
+    .testimonial-21st-name {
+        font-family: var(--font-display);
+        font-size: var(--text-18);
+        font-weight: 600;
+        color: white;
+    }
+    .testimonial-21st-role {
+        font-size: var(--text-14);
+        color: rgba(255,255,255,0.5);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ===== HERO ===== -->
+<section class="hero-21st">
+    <div class="hero-21st-bg"></div>
+    <div class="container-21st w-full">
+        <div class="hero-21st-content py-20 lg:py-24">
+            <div class="max-w-2xl">
+                <div class="hero-21st-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    Trusted by 500+ Healthcare Providers
+                </div>
+                <h1>
+                    Equipping Healthcare<br>for the <em>Modern Era</em>
+                </h1>
+                <p>
+                    Cutting-edge medical equipment and supplies, curated for hospitals, clinics, and practices worldwide. Precision, reliability, and care in every product.
+                </p>
+                <div class="flex items-center gap-4">
+                    <a href="{% url 'products:category_index' %}" class="btn-21st btn-21st-accent btn-21st-lg">
+                        Browse Catalog <i class="fas fa-arrow-right text-sm"></i>
+                    </a>
+                    <a href="{% url 'contact:contact' %}" class="btn-21st btn-21st-ghost text-white/80 hover:text-white">
+                        Request Quote
+                    </a>
+                </div>
+            </div>
+            <div class="hero-21st-stats">
+                <div class="hero-21st-stat">
+                    <span class="hero-21st-stat-number">2,500+</span>
+                    <span class="hero-21st-stat-label">Products</span>
+                </div>
+                <div class="hero-21st-stat">
+                    <span class="hero-21st-stat-number">150+</span>
+                    <span class="hero-21st-stat-label">Brands</span>
+                </div>
+                <div class="hero-21st-stat">
+                    <span class="hero-21st-stat-number">98%</span>
+                    <span class="hero-21st-stat-label">Satisfaction</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FEATURES STRIP ===== -->
+<section class="bg-white">
+    <div class="container-21st">
+        <div class="feature-strip">
+            <div class="feature-strip-item">
+                <div class="feature-strip-icon"><i class="fas fa-shipping-fast"></i></div>
+                <div class="feature-strip-title">Fast Shipping</div>
+                <div class="feature-strip-desc">Next-day delivery on orders</div>
+            </div>
+            <div class="feature-strip-item">
+                <div class="feature-strip-icon"><i class="fas fa-award"></i></div>
+                <div class="feature-strip-title">Certified Quality</div>
+                <div class="feature-strip-desc">ISO, FDA compliant</div>
+            </div>
+            <div class="feature-strip-item">
+                <div class="feature-strip-icon"><i class="fas fa-headset"></i></div>
+                <div class="feature-strip-title">24/7 Support</div>
+                <div class="feature-strip-desc">Expert assistance always</div>
+            </div>
+            <div class="feature-strip-item">
+                <div class="feature-strip-icon"><i class="fas fa-undo-alt"></i></div>
+                <div class="feature-strip-title">Easy Returns</div>
+                <div class="feature-strip-desc">30-day return policy</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CATEGORIES ===== -->
+<section class="py-24 bg-white">
+    <div class="container-21st">
+        <div class="section-21st-header">
+            <div>
+                <h2 class="section-21st-title">Shop by Category</h2>
+                <p class="section-21st-subtitle">Explore our comprehensive range of healthcare supplies</p>
+            </div>
+            <a href="{% url 'products:category_index' %}" class="btn-21st btn-21st-secondary btn-21st-sm hidden sm:inline-flex">
+                View All <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for cat in categories|slice:":4" %}
+            <div class="category-card-21st" onclick="window.location.href='{{ cat.get_absolute_url }}'">
+                {% if cat.image %}
+                <div class="category-card-21st-bg" style="background-image: url('{{ cat.image.url }}')"></div>
+                {% else %}
+                <div class="category-card-21st-bg" style="background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700))"></div>
+                {% endif %}
+                <div class="category-card-21st-overlay"></div>
+                <div class="category-card-21st-content">
+                    <div class="category-card-21st-name">{{ cat.name }}</div>
+                    <div class="category-card-21st-count">{{ cat.product_count|default:"0" }} products</div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="category-card-21st" style="background: linear-gradient(135deg, #1a3a6e, #0a1628)">
+                <div class="category-card-21st-overlay"></div>
+                <div class="category-card-21st-content">
+                    <div class="category-card-21st-name">Medical Equipment</div>
+                    <div class="category-card-21st-count">120 products</div>
+                </div>
+            </div>
+            <div class="category-card-21st" style="background: linear-gradient(135deg, #14b8a6, #0f172a)">
+                <div class="category-card-21st-overlay"></div>
+                <div class="category-card-21st-content">
+                    <div class="category-card-21st-name">Surgical Supplies</div>
+                    <div class="category-card-21st-count">85 products</div>
+                </div>
+            </div>
+            <div class="category-card-21st" style="background: linear-gradient(135deg, #b8860b, #0a1628)">
+                <div class="category-card-21st-overlay"></div>
+                <div class="category-card-21st-content">
+                    <div class="category-card-21st-name">Diagnostic Tools</div>
+                    <div class="category-card-21st-count">65 products</div>
+                </div>
+            </div>
+            <div class="category-card-21st" style="background: linear-gradient(135deg, #374151, #0a1628)">
+                <div class="category-card-21st-overlay"></div>
+                <div class="category-card-21st-content">
+                    <div class="category-card-21st-name">Patient Care</div>
+                    <div class="category-card-21st-count">42 products</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ===== FEATURED PRODUCTS ===== -->
+<section class="py-24 bg-[#fafbfc]">
+    <div class="container-21st">
+        <div class="section-21st-header">
+            <div>
+                <h2 class="section-21st-title">Featured Products</h2>
+                <p class="section-21st-subtitle">Handpicked essentials for your practice</p>
+            </div>
+            <a href="{% url 'products:product_list' %}" class="btn-21st btn-21st-secondary btn-21st-sm hidden sm:inline-flex">
+                View All <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for product in featured_products|default:"
+                [{name:'Premium Digital Thermometer',price:'299',category:'Diagnostic',img:'/static/images/placeholder.jpg'},
+                 {name:'Surgical Scalpel Set',price:'189',category:'Surgical',img:'/static/images/placeholder.jpg'},
+                 {name:'Pulse Oximeter Pro',price:'459',category:'Diagnostic',img:'/static/images/placeholder.jpg'},
+                 {name:'Stethoscope Cardiology',price:'349',category:'Examination',img:'/static/images/placeholder.jpg'},
+                 {name:'Blood Pressure Monitor',price:'599',category:'Diagnostic',img:'/static/images/placeholder.jpg'},
+                 {name:'Oxygen Concentrator',price:'2499',category:'Respiratory',img:'/static/images/placeholder.jpg'},
+                 {name:'Infusion Pump Smart',price:'1899',category:'Infusion',img:'/static/images/placeholder.jpg'},
+                 {name:'Patient Monitor',price:'4599',category:'Monitoring',img:'/static/images/placeholder.jpg'}]" %}
+                {% if forloop.counter <= 8 %}
+                <div class="product-card-21st">
+                    <div class="product-card-21st-image">
+                        {% if product.image %}
+                        <img src="{{ product.get_image_url }}" alt="{{ product.name }}" loading="lazy">
+                        {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-[#d1d5db]">
+                            <i class="fas fa-image text-4xl"></i>
+                        </div>
+                        {% endif %}
+                        {% if product.is_new or forloop.counter <= 4 %}<span class="product-card-21st-badge">New</span>{% endif %}
+                        <button class="product-card-21st-wishlist" onclick="event.stopPropagation(); event.preventDefault();">
+                            <i class="far fa-heart text-sm"></i>
+                        </button>
+                    </div>
+                    <div class="product-card-21st-body">
+                        <div class="product-card-21st-category">{{ product.category.name|default:product.category }}</div>
+                        <h3 class="product-card-21st-name">{{ product.name }}</h3>
+                        <div class="product-card-21st-price-row">
+                            <span class="product-card-21st-price">{{ product.price|default:product.get_price_display }} <span class="currency">AED</span></span>
+                            <form action="{% url 'orders:add_to_cart' %}" method="POST" class="inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="product-card-21st-btn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ===== TESTIMONIAL ===== -->
+<section class="testimonial-21st">
+    <div class="container-21st relative">
+        <div class="testimonial-21st-card max-w-3xl mx-auto text-center">
+            <div class="text-[60px] text-[#b8860b]/30 leading-none mb-6 font-display">"</div>
+            <p class="testimonial-21st-quote">
+                Working with 21st Century Healthcare has transformed how we source medical equipment. Their product range, competitive pricing, and exceptional support are unmatched in the industry.
+            </p>
+            <div class="testimonial-21st-author justify-center">
+                <div class="testimonial-21st-avatar">JD</div>
+                <div class="text-left">
+                    <div class="testimonial-21st-name">Dr. James Davidson</div>
+                    <div class="testimonial-21st-role">Chief of Medicine, Emirates Hospital</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA SECTION ===== -->
+<section class="py-24 bg-white">
+    <div class="container-21st">
+        <div class="relative bg-primary-900 rounded-3xl overflow-hidden p-12 lg:p-16 text-center">
+            <div class="absolute inset-0 opacity-20" style="background: radial-gradient(circle at 50% 50%, var(--color-teal-500), transparent 70%)"></div>
+            <div class="relative z-10 max-w-2xl mx-auto">
+                <h2 class="font-display text-3xl lg:text-5xl font-semibold text-white mb-6 leading-tight">Need Bulk Orders or Custom Quotes?</h2>
+                <p class="text-white/60 mb-8 text-lg">Our dedicated team is ready to help you find the right solutions for your facility.</p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="{% url 'contact:contact' %}" class="btn-21st btn-21st-accent btn-21st-lg">
+                        <i class="fas fa-paper-plane"></i> Get a Quote
+                    </a>
+                    <a href="tel:{{ site_settings.phone }}" class="btn-21st btn-21st-outline text-white border-white/20 hover:bg-white/10">
+                        <i class="fas fa-phone"></i> {{ site_settings.phone|default:"Call Us" }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

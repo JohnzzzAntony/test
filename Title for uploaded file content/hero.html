@@ -1,0 +1,141 @@
+{% load static %}
+
+<!-- Premium Hero Section Component -->
+<section class="hero-section bg-gradient-to-br from-primary-50 via-white to-slate-50 relative overflow-hidden">
+  
+  <!-- Background Decorative Elements -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary-100 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-accent rounded-full blur-3xl opacity-10 animate-pulse" style="animation-delay: 1s;"></div>
+  </div>
+
+  <!-- Hero Content -->
+  <div class="section-container relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-20 lg:py-32">
+      
+      <!-- Left Content -->
+      <div class="space-y-8 animate-slideUp">
+        <div class="space-y-4">
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 rounded-full">
+            <span class="w-2 h-2 bg-primary rounded-full"></span>
+            <span class="text-sm font-bold text-primary uppercase tracking-wider">Welcome to {{ site_settings.site_name }}</span>
+          </div>
+          
+          <h1 class="text-5xl lg:text-6xl font-black text-slate-900 leading-tight">
+            Discover Premium Quality Products
+          </h1>
+          
+          <p class="text-xl text-slate-600 leading-relaxed">
+            Explore our curated collection of premium products designed to elevate your lifestyle. From fashion to electronics, we have everything you need.
+          </p>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="{% url 'products:product_list' %}" class="btn-primary text-center">
+            <i class="fas fa-shopping-bag"></i>
+            Shop Now
+          </a>
+          <a href="{% url 'core:about_us' %}" class="btn-outline text-center">
+            <i class="fas fa-info-circle"></i>
+            Learn More
+          </a>
+        </div>
+
+        <!-- Trust Indicators -->
+        <div class="grid grid-cols-3 gap-4 pt-8 border-t border-slate-200">
+          <div class="text-center">
+            <div class="text-2xl font-black text-primary">10K+</div>
+            <div class="text-sm text-slate-600">Happy Customers</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-black text-primary">5K+</div>
+            <div class="text-sm text-slate-600">Products</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-black text-primary">24/7</div>
+            <div class="text-sm text-slate-600">Support</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Visual -->
+      <div class="relative h-96 lg:h-full min-h-96 flex items-center justify-center">
+        {% if hero_image %}
+          <img src="{{ hero_image.url }}" alt="Hero Image" class="w-full h-full object-cover rounded-3xl shadow-premium-lg">
+        {% else %}
+          <!-- Placeholder Hero Visual -->
+          <div class="relative w-full h-full bg-gradient-to-br from-primary-100 to-accent-100 rounded-3xl shadow-premium-lg flex items-center justify-center overflow-hidden group">
+            <div class="absolute inset-0 bg-gradient-to-t from-primary-900/10 to-transparent"></div>
+            <div class="relative z-10 text-center space-y-4">
+              <i class="fas fa-box text-6xl text-primary-200"></i>
+              <p class="text-slate-600 font-bold">Your Hero Image Here</p>
+            </div>
+            
+            <!-- Floating Cards -->
+            <div class="absolute top-8 right-8 bg-white rounded-2xl shadow-lg p-4 transform group-hover:translate-y-2 transition-transform duration-300">
+              <div class="text-sm font-bold text-primary">Premium Quality</div>
+              <div class="text-xs text-slate-600">Best in class</div>
+            </div>
+            
+            <div class="absolute bottom-8 left-8 bg-white rounded-2xl shadow-lg p-4 transform group-hover:-translate-y-2 transition-transform duration-300">
+              <div class="text-sm font-bold text-primary">Fast Delivery</div>
+              <div class="text-xs text-slate-600">Within 24 hours</div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+    <i class="fas fa-chevron-down text-primary text-2xl"></i>
+  </div>
+</section>
+
+<!-- Featured Categories Section -->
+<section class="py-16 bg-white">
+  <div class="section-container">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-black text-slate-900 mb-4">Shop by Category</h2>
+      <p class="text-lg text-slate-600">Explore our most popular categories</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for category in featured_categories %}
+        <a href="{{ category.get_absolute_url }}" class="group">
+          <div class="relative overflow-hidden rounded-2xl bg-slate-100 aspect-square mb-4">
+            {% if category.image %}
+              <img src="{{ category.image.url }}" alt="{{ category.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            {% else %}
+              <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-100 to-accent-100">
+                <i class="fas fa-box text-4xl text-primary-200"></i>
+              </div>
+            {% endif %}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors duration-300">{{ category.name }}</h3>
+          <p class="text-sm text-slate-600">{{ category.products.count }} Products</p>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes slideUp {
+    from {
+      transform: translateY(2rem);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .animate-slideUp {
+    animation: slideUp 0.8s ease-out;
+  }
+</style>

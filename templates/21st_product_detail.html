@@ -1,0 +1,238 @@
+{% extends '21st_base.html' %}
+{% load static %}
+
+{% block meta_title %}{{ product.name }}{% endblock %}
+{% block meta_description %}{{ product.overview|striptags|truncatewords:30 }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .pdp-header { padding: 40px 0; background: linear-gradient(135deg, var(--color-primary-900), var(--color-primary-700)); color: white; }
+    .pdp-header h1 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; margin-bottom: 12px; }
+    .pdp-header .price-large { font-family: var(--font-display); font-size: 2.5rem; font-weight: 600; color: var(--color-accent-400); }
+    .pdp-gallery { position: sticky; top: 180px; }
+    .pdp-gallery-main { background: var(--color-surface-lightest); border-radius: var(--radius-2xl); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 16px; }
+    .pdp-gallery-main img { width: 90%; height: 90%; object-fit: contain; transition: transform 0.6s var(--ease-out-expo); }
+    .pdp-gallery-main:hover img { transform: scale(1.05); }
+    .pdp-thumbs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+    .pdp-thumb { width: 72px; height: 72px; border-radius: var(--radius-lg); border: 2px solid var(--color-surface-lighter); background: var(--color-surface-lightest); padding: 8px; flex-shrink: 0; cursor: pointer; transition: all var(--duration-fast); }
+    .pdp-thumb.active, .pdp-thumb:hover { border-color: var(--color-primary-600); }
+    .pdp-thumb img { width: 100%; height: 100%; object-fit: contain; }
+    .pdp-form { display: flex; flex-direction: column; gap: 20px; }
+    .pdp-qty { display: flex; align-items: center; gap: 0; border: 1px solid var(--color-surface-lighter); border-radius: var(--radius-lg); overflow: hidden; width: fit-content; }
+    .pdp-qty button { width: 40px; height: 44px; background: white; border: none; cursor: pointer; font-size: 16px; color: var(--color-primary-700); transition: background var(--duration-fast); }
+    .pdp-qty button:hover { background: var(--color-primary-50); }
+    .pdp-qty input { width: 50px; height: 44px; text-align: center; border: none; font-size: var(--text-16); font-weight: 600; color: var(--color-primary-900); }
+    .pdp-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--color-surface-lighter); }
+    .pdp-tab { padding: 14px 24px; font-size: var(--text-14); font-weight: var(--weight-semibold); color: var(--color-surface-medium); background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; transition: all var(--duration-fast); position: relative; }
+    .pdp-tab:hover, .pdp-tab.active { color: var(--color-primary-600); }
+    .pdp-tab.active { border-bottom-color: var(--color-primary-600); }
+    .pdp-tab-content { display: none; padding: 32px 0; animation: fadeIn 0.4s var(--ease-out-expo); }
+    .pdp-tab-content.active { display: block; }
+    .pdp-specs { display: grid; grid-template-columns: 200px 1fr; gap: 0; border: 1px solid var(--color-surface-lighter); border-radius: var(--radius-xl); overflow: hidden; }
+    .pdp-specs dt, .pdp-specs dd { padding: 16px 24px; border-bottom: 1px solid var(--color-surface-lightest); }
+    .pdp-specs dt { background: var(--color-surface-lightest); font-size: var(--text-13); font-weight: var(--weight-semibold); color: var(--color-surface-medium); text-transform: uppercase; letter-spacing: 0.06em; }
+    .pdp-specs dd { font-size: var(--text-14); color: var(--color-primary-800); margin: 0; }
+    .pdp-specs dt:last-of-type, .pdp-specs dd:last-of-type { border-bottom: none; }
+    .pdp-related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 24px; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="bg-[#f6f8fa] border-b border-[#e2e8f0]">
+    <div class="container-21st py-4">
+        <nav class="flex items-center gap-2 text-[13px]">
+            <a href="{% url 'core:home' %}" class="text-[#6b7280] hover:text-[#1a3a6e]">Home</a>
+            <i class="fas fa-chevron-right text-[10px] text-[#d1d5db]"></i>
+            <a href="{% url 'products:category_index' %}" class="text-[#6b7280] hover:text-[#1a3a6e]">Shop</a>
+            {% if product.category %}
+            <i class="fas fa-chevron-right text-[10px] text-[#d1d5db]"></i>
+            <a href="{{ product.category.get_absolute_url }}" class="text-[#6b7280] hover:text-[#1a3a6e]">{{ product.category.name }}</a>
+            {% endif %}
+            <i class="fas fa-chevron-right text-[10px] text-[#d1d5db]"></i>
+            <span class="text-[#1a3a6e] font-semibold truncate max-w-[200px]">{{ product.name }}</span>
+        </nav>
+    </div>
+</div>
+
+<!-- Product Hero -->
+<section class="py-12 bg-white">
+    <div class="container-21st">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <!-- Gallery -->
+            <div class="lg:col-span-6 xl:col-span-5">
+                <div class="pdp-gallery">
+                    <div class="pdp-gallery-main" id="pdp-main-image">
+                        <img src="{{ product.get_image_url }}" alt="{{ product.name }}" id="pdp-current-image">
+                    </div>
+                    <div class="pdp-thumbs">
+                        <div class="pdp-thumb active" onclick="setImage(this, '{{ product.get_image_url }}')">
+                            <img src="{{ product.get_image_url }}" alt="{{ product.name }}">
+                        </div>
+                        {% for pimg in product.images.all %}
+                        <div class="pdp-thumb" onclick="setImage(this, '{{ pimg.image.url }}')">
+                            <img src="{{ pimg.image.url }}" alt="{{ product.name }} {{ forloop.counter }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <script>
+                    function setImage(el, src) {
+                        document.querySelectorAll('.pdp-thumb').forEach(t => t.classList.remove('active'));
+                        el.classList.add('active');
+                        document.getElementById('pdp-current-image').src = src;
+                    }
+                </script>
+            </div>
+
+            <!-- Details -->
+            <div class="lg:col-span-6 xl:col-span-7">
+                <div class="mb-4">
+                    {% if product.brand %}<a href="{{ product.brand.get_absolute_url }}" class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#b8860b]">{{ product.brand.name }}</a>{% endif %}
+                    <h1 class="font-display text-3xl lg:text-4xl font-semibold text-[#0a1628] mt-1 mb-3">{{ product.name }}</h1>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            {% for i in "     " %}<i class="fas fa-star text-xs text-[#b8860b]"></i>{% endfor %}
+                        </div>
+                        <span class="text-[13px] text-[#6b7280]">({{ product.reviews.count|default:0 }} reviews)</span>
+                    </div>
+                </div>
+
+                <div class="flex items-baseline gap-3 mb-6">
+                    <span class="price-large">{{ product.get_price_display|default:"Call for Price" }}</span>
+                    {% if product.compare_at_price %}<span class="text-xl text-[#9ca3af] line-through">{{ product.compare_at_price }}</span>{% endif %}
+                    {% if product.discount > 0 %}<span class="bg-red-100 text-red-600 text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">Save {{ product.discount }}%</span>{% endif %}
+                </div>
+
+                <p class="text-[#4b5563] mb-8 leading-relaxed">{{ product.overview|default:"A premium healthcare product designed for reliability and precision."|striptags|truncatewords:60 }}</p>
+
+                <form action="{% url 'orders:add_to_cart' %}" method="POST" class="pdp-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <div class="flex items-center gap-6">
+                        <div>
+                            <label class="text-[11px] font-bold uppercase tracking-[0.12em] text-[#6b7280] mb-2 block">Quantity</label>
+                            <div class="pdp-qty">
+                                <button type="button" onclick="this.nextElementSibling.value = Math.max(1, parseInt(this.nextElementSibling.value) - 1)">-</button>
+                                <input type="number" name="quantity" value="1" min="1">
+                                <button type="button" onclick="this.previousElementSibling.value = parseInt(this.previousElementSibling.value) + 1">+</button>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <label class="text-[11px] font-bold uppercase tracking-[0.12em] text-[#6b7280] mb-2 block">Action</label>
+                            <div class="flex gap-3">
+                                <button type="submit" class="btn-21st btn-21st-primary btn-21st-lg flex-1">
+                                    <i class="fas fa-shopping-bag"></i> Add to Cart
+                                </button>
+                                <button type="button" class="btn-21st btn-21st-secondary btn-21st-icon-lg" title="Add to Wishlist">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Meta -->
+                <div class="mt-8 pt-8 border-t border-[#f0f0f0] grid grid-cols-3 gap-4">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-shipping-fast text-[#b8860b] text-lg"></i>
+                        <div>
+                            <div class="text-[13px] font-semibold text-[#0a1628]">Free Shipping</div>
+                            <div class="text-[11px] text-[#9ca3af]">Orders over AED 2000</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-undo-alt text-[#14b8a6] text-lg"></i>
+                        <div>
+                            <div class="text-[13px] font-semibold text-[#0a1628]">Easy Returns</div>
+                            <div class="text-[11px] text-[#9ca3af]">30-day policy</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-shield-alt text-[#3b82f6] text-lg"></i>
+                        <div>
+                            <div class="text-[13px] font-semibold text-[#0a1628]">Warranty</div>
+                            <div class="text-[11px] text-[#9ca3af]">12 months</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tabs -->
+<section class="py-12 bg-[#f6f8fa]" id="pdp-tabs-section">
+    <div class="container-21st">
+        <div class="bg-white rounded-2xl border border-[#f0f0f0] overflow-hidden">
+            <div class="px-8 pt-6">
+                <div class="pdp-tabs">
+                    <button type="button" class="pdp-tab active" data-tab="description">Description</button>
+                    <button type="button" class="pdp-tab" data-tab="specifications">Specifications</button>
+                    <button type="button" class="pdp-tab" data-tab="reviews">Reviews ({{ product.reviews.count|default:0 }})</button>
+                </div>
+            </div>
+            <div class="px-8 pb-8">
+                <div id="tab-description" class="pdp-tab-content active">
+                    {{ product.description|default:"<p>No description available.</p>"|safe }}
+                </div>
+                <div id="tab-specifications" class="pdp-tab-content">
+                    <div class="pdp-specs">
+                        <dt>SKU</dt><dd>{{ product.sku|default:"N/A" }}</dd>
+                        <dt>Category</dt><dd>{{ product.category.name|default:"N/A" }}</dd>
+                        <dt>Brand</dt><dd>{{ product.brand.name|default:"N/A" }}</dd>
+                        <dt>Weight</dt><dd>{{ product.weight|default:"N/A" }}</dd>
+                        <dt>Dimensions</dt><dd>{{ product.dimensions|default:"N/A" }}</dd>
+                        <dt>Warranty</dt><dd>{{ product.warranty|default:"1 Year" }}</dd>
+                    </div>
+                </div>
+                <div id="tab-reviews" class="pdp-tab-content">
+                    <p class="text-[#6b7280]">Reviews coming soon.</p>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.querySelectorAll('.pdp-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.pdp-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.querySelectorAll('.pdp-tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+                });
+            });
+        </script>
+    </div>
+</section>
+
+<!-- Related Products -->
+{% if related_products %}
+<section class="py-16 bg-white">
+    <div class="container-21st">
+        <div class="flex items-end justify-between mb-10">
+            <div>
+                <h2 class="font-display text-3xl font-semibold text-[#0a1628]">Related Products</h2>
+                <p class="text-[#6b7280] mt-2">You might also be interested in these</p>
+            </div>
+        </div>
+        <div class="pdp-related-grid">
+            {% for p in related_products|slice:":4" %}
+            <div class="product-card-21st">
+                <a href="{{ p.get_absolute_url }}" class="block">
+                    <div class="product-card-21st-image" style="aspect-ratio: 4/3;">
+                        <img src="{{ p.get_image_url }}" alt="{{ p.name }}" loading="lazy" style="width:80%;height:80%;">
+                    </div>
+                    <div class="product-card-21st-body">
+                        <div class="product-card-21st-category">{{ p.category.name|default:"Category" }}</div>
+                        <h3 class="product-card-21st-name" style="font-size: var(--text-18);">{{ p.name }}</h3>
+                        <span class="product-card-21st-price">{{ p.get_price_display|default:"Call" }} <span class="currency">AED</span></span>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

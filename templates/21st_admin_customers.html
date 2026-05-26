@@ -1,0 +1,169 @@
+{% extends '21st_admin_base.html' %}
+{% load static %}
+
+{% block admin_title %}Customers{% endblock %}
+{% block breadcrumb %}Dashboard / Customers{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .admin-toolbar-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .admin-search { position: relative; }
+    .admin-search input { padding: 10px 16px 10px 40px; border: 1px solid var(--color-surface-lighter); border-radius: var(--radius-lg); font-size: 14px; background: white; width: 280px; }
+    .admin-search i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-surface-medium); }
+    .admin-customer-avatar-large { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; }
+    .admin-action-dropdown { position: relative; }
+    .admin-action-dropdown-menu { position: absolute; right: 0; top: 100%; margin-top: 8px; background: white; border: 1px solid var(--color-surface-lighter); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); min-width: 160px; z-index: 50; display: none; }
+    .admin-action-dropdown.open .admin-action-dropdown-menu { display: block; }
+    .admin-action-dropdown-item { display: block; padding: 10px 16px; font-size: 14px; color: var(--color-primary-800); cursor: pointer; transition: background 0.2s; }
+    .admin-action-dropdown-item:hover { background: var(--color-primary-50); }
+    .admin-action-dropdown-item.delete { color: var(--color-error); }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="admin-toolbar">
+    <div class="admin-toolbar-left">
+        <div class="admin-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search customers..." id="customerSearch">
+        </div>
+        <button class="btn-21st btn-21st-sm btn-21st-secondary"><i class="fas fa-filter"></i> Filter</button>
+    </div>
+    <div class="flex gap-2">
+        <button class="btn-21st btn-21st-sm btn-21st-secondary"><i class="fas fa-download"></i> Export</button>
+        <button class="btn-21st btn-21st-sm btn-21st-primary"><i class="fas fa-plus"></i> Add Customer</button>
+    </div>
+</div>
+
+<div class="admin-table-wrap">
+    <div class="overflow-x-auto">
+        <table class="admin-data-table" id="customerTable">
+            <thead>
+                <tr>
+                    <th style="width: 40px;"><input type="checkbox" class="rounded" id="selectAll"></th>
+                    <th>Customer</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Orders</th>
+                    <th>Spent</th>
+                    <th>Joined</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" class="customer-checkbox rounded"></td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="admin-customer-avatar-large" style="background: linear-gradient(135deg, #1a3a6e, #2dd4bf);">JD</div>
+                            <div><div class="font-medium text-sm">James Davidson</div><div class="text-xs text-[#9ca3af]">Dubai, UAE</div></div>
+                        </div>
+                    </td>
+                    <td>james@example.com</td>
+                    <td class="text-sm text-[#6b7280]">+971-50-1234567</td>
+                    <td class="font-medium">24</td>
+                    <td class="font-semibold text-[#1a3a6e]">AED 12,450</td>
+                    <td class="text-sm text-[#6b7280]">Jan 15, 2025</td>
+                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Active</span></td>
+                    <td><div class="admin-table-actions"><button><i class="fas fa-eye"></i></button><button><i class="fas fa-pen"></i></button><button><i class="fas fa-ellipsis-v"></i></button></div></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="customer-checkbox rounded"></td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="admin-customer-avatar-large" style="background: linear-gradient(135deg, #b8860b, #f59e0b);">SK</div>
+                            <div><div class="font-medium text-sm">Sarah Kim</div><div class="text-xs text-[#9ca3af]">Abu Dhabi, UAE</div></div>
+                        </div>
+                    </td>
+                    <td>sarah@example.com</td>
+                    <td class="text-sm text-[#6b7280]">+971-55-9876543</td>
+                    <td class="font-medium">18</td>
+                    <td class="font-semibold text-[#1a3a6e]">AED 8,320</td>
+                    <td class="text-sm text-[#6b7280]">Mar 22, 2025</td>
+                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Active</span></td>
+                    <td><div class="admin-table-actions"><button><i class="fas fa-eye"></i></button><button><i class="fas fa-pen"></i></button><button><i class="fas fa-ellipsis-v"></i></button></div></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="customer-checkbox rounded"></td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="admin-customer-avatar-large" style="background: linear-gradient(135deg, #374151, #6b7280);">AM</div>
+                            <div><div class="font-medium text-sm">Ahmed Mohammad</div><div class="text-xs text-[#9ca3af]">Sharjah, UAE</div></div>
+                        </div>
+                    </td>
+                    <td>ahmed@example.com</td>
+                    <td class="text-sm text-[#6b7280]">+971-52-4567890</td>
+                    <td class="font-medium">45</td>
+                    <td class="font-semibold text-[#1a3a6e]">AED 28,900</td>
+                    <td class="text-sm text-[#6b7280]">Oct 5, 2024</td>
+                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>VIP</span></td>
+                    <td><div class="admin-table-actions"><button><i class="fas fa-eye"></i></button><button><i class="fas fa-pen"></i></button><button><i class="fas fa-ellipsis-v"></i></button></div></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="customer-checkbox rounded"></td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="admin-customer-avatar-large" style="background: linear-gradient(135deg, #14b8a6, #2dd4bf);">LW</div>
+                            <div><div class="font-medium text-sm">Linda Wang</div><div class="text-xs text-[#9ca3af]">Dubai, UAE</div></div>
+                        </div>
+                    </td>
+                    <td>linda@example.com</td>
+                    <td class="text-sm text-[#6b7280]">+971-54-1112223</td>
+                    <td class="font-medium">7</td>
+                    <td class="font-semibold text-[#1a3a6e]">AED 3,890</td>
+                    <td class="text-sm text-[#6b7280]">Apr 10, 2026</td>
+                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Active</span></td>
+                    <td><div class="admin-table-actions"><button><i class="fas fa-eye"></i></button><button><i class="fas fa-pen"></i></button><button><i class="fas fa-ellipsis-v"></i></button></div></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="customer-checkbox rounded"></td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="admin-customer-avatar-large" style="background: linear-gradient(135deg, #ef4444, #f87171);">RJ</div>
+                            <div><div class="font-medium text-sm">Robert Johnson</div><div class="text-xs text-[#9ca3af]">Ras Al Khaimah, UAE</div></div>
+                        </div>
+                    </td>
+                    <td>robert@example.com</td>
+                    <td class="text-sm text-[#6b7280]">+971-56-3334445</td>
+                    <td class="font-medium">12</td>
+                    <td class="font-semibold text-[#1a3a6e]">AED 9,120</td>
+                    <td class="text-sm text-[#6b7280]">Dec 1, 2024</td>
+                    <td><span class="admin-status" style="background: #fee2e2; color: #ef4444;"><span class="admin-status-dot" style="background: #ef4444;"></span>Inactive</span></td>
+                    <td><div class="admin-table-actions"><button><i class="fas fa-eye"></i></button><button><i class="fas fa-pen"></i></button><button><i class="fas fa-ellipsis-v"></i></button></div></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="admin-pagination">
+        <span class="text-sm text-[#6b7280]">Showing 1 to 5 of 1,234 results</span>
+        <div class="pagination-21st">
+            <button class="pagination-21st-btn" disabled><i class="fas fa-chevron-left text-xs"></i></button>
+            <button class="pagination-21st-btn active">1</button>
+            <button class="pagination-21st-btn">2</button>
+            <button class="pagination-21st-btn">3</button>
+            <span class="flex items-center px-2 text-sm text-[#9ca3af]">...</span>
+            <button class="pagination-21st-btn">247</button>
+            <button class="pagination-21st-btn"><i class="fas fa-chevron-right text-xs"></i></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Select all
+    document.getElementById('selectAll').addEventListener('change', function() {
+        document.querySelectorAll('.customer-checkbox').forEach(cb => cb.checked = this.checked);
+    });
+
+    // Search filter
+    document.getElementById('customerSearch').addEventListener('input', function() {
+        const term = this.value.toLowerCase();
+        document.querySelectorAll('#customerTable tbody tr').forEach(row => {
+            row.style.display = row.textContent.toLowerCase().includes(term) ? '' : 'none';
+        });
+    });
+</script>
+
+{% endblock %}

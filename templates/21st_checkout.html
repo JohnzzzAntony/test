@@ -1,0 +1,316 @@
+{% extends '21st_base.html' %}
+{% load static %}
+
+{% block meta_title %}Checkout{% endblock %}
+
+{% block extra_css %}
+<style>
+    .checkout-page { padding: 40px 0; }
+    .checkout-progress { display: flex; align-items: center; justify-content: space-between; max-width: 600px; margin: 0 auto 48px; position: relative; }
+    .checkout-progress::before { content: ''; position: absolute; top: 16px; left: 0; right: 0; height: 2px; background: var(--color-surface-lightest); z-index: 0; }
+    .checkout-progress::after { content: ''; position: absolute; top: 16px; left: 0; height: 2px; background: var(--color-accent-500); z-index: 0; transition: width 0.6s var(--ease-out-expo); }
+    .checkout-step { display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 1; }
+    .checkout-step-circle { width: 32px; height: 32px; border-radius: 50%; background: var(--color-surface-lightest); border: 2px solid var(--color-surface-lighter); display: flex; align-items: center; justify-content: center; font-size: var(--text-13); font-weight: var(--weight-bold); color: var(--color-surface-medium); transition: all var(--duration-normal); }
+    .checkout-step.active .checkout-step-circle { background: var(--color-accent-500); border-color: var(--color-accent-500); color: white; }
+    .checkout-step.completed .checkout-step-circle { background: var(--color-teal-500); border-color: var(--color-teal-500); color: white; }
+    .checkout-step-label { font-size: var(--text-12); font-weight: var(--weight-semibold); color: var(--color-surface-medium); }
+    .checkout-step.active .checkout-step-label, .checkout-step.completed .checkout-step-label { color: var(--color-primary-900); }
+    .checkout-card { background: var(--color-pure-white); border: 1px solid var(--color-surface-lightest); border-radius: var(--radius-2xl); padding: 32px; }
+    .checkout-card-title { font-family: var(--font-display); font-size: var(--text-24); font-weight: 600; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+    .checkout-card-title i { color: var(--color-accent-500); }
+    .checkout-summary-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--color-surface-lightest); }
+    .checkout-summary-item:last-child { border-bottom: none; }
+    .checkout-shipping-option { display: flex; align-items: flex-start; gap: 12px; padding: 16px; border: 2px solid var(--color-surface-lighter); border-radius: var(--radius-xl); cursor: pointer; transition: all var(--duration-fast); margin-bottom: 12px; }
+    .checkout-shipping-option:hover, .checkout-shipping-option.selected { border-color: var(--color-primary-400); background: var(--color-primary-50); }
+    .form-section-title { font-family: var(--font-display); font-size: var(--text-20); font-weight: 600; margin: 32px 0 16px; padding-top: 16px; border-top: 1px solid var(--color-surface-lightest); }
+    .form-section-title:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+    .order-summary-card { background: var(--color-primary-900); color: white; border-radius: var(--radius-2xl); padding: 32px; position: sticky; top: 180px; }
+    .order-summary-card h3 { font-family: var(--font-display); font-size: var(--text-24); font-weight: 600; margin-bottom: 24px; }
+    .order-summary-row { display: flex; justify-content: space-between; padding: 10px 0; font-size: var(--text-14); border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .order-summary-row:last-child { border-bottom: none; }
+    .order-summary-row.total { border-top: 2px solid rgba(255,255,255,0.15); margin-top: 12px; padding-top: 16px; font-family: var(--font-display); font-size: var(--text-20); font-weight: 600; }
+
+    .payment-method { display: flex; align-items: center; gap: 16px; padding: 20px; border: 2px solid var(--color-surface-lighter); border-radius: var(--radius-xl); cursor: pointer; transition: all var(--duration-fast); margin-bottom: 12px; }
+    .payment-method:hover, .payment-method.selected { border-color: var(--color-primary-400); background: var(--color-primary-50); }
+    .payment-method-icon { width: 48px; height: 48px; border-radius: var(--radius-xl); background: var(--color-surface-lightest); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+
+    .success-page { text-align: center; padding: 80px 20px; }
+    .success-icon { width: 96px; height: 96px; background: linear-gradient(135deg, var(--color-teal-500), var(--color-teal-400)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 32px; color: white; font-size: 40px; box-shadow: 0 16px 40px rgba(20,184,166,0.3); }
+    .success-checkmark { animation: scaleIn 0.6s var(--ease-out-expo); }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-[#f6f8fa] border-b border-[#e2e8f0]">
+    <div class="container-21st py-4">
+        <nav class="flex items-center gap-2 text-[13px]">
+            <a href="{% url 'core:home' %}" class="text-[#6b7280] hover:text-[#1a3a6e]">Home</a>
+            <i class="fas fa-chevron-right text-[10px] text-[#d1d5db]"></i>
+            <a href="{% url 'orders:enquiry_cart' %}" class="text-[#6b7280] hover:text-[#1a3a6e]">Cart</a>
+            <i class="fas fa-chevron-right text-[10px] text-[#d1d5db]"></i>
+            <span class="text-[#1a3a6e] font-semibold">Checkout</span>
+        </nav>
+    </div>
+</div>
+
+<section class="checkout-page bg-[#fafbfc]">
+    <div class="container-21st">
+        <!-- Progress -->
+        <div class="checkout-progress" id="checkout-progress">
+            <div class="checkout-step {% if step == 'billing' %}active{% elif step == 'payment' or step == 'review' %}completed{% endif %}">
+                <div class="checkout-step-circle">1</div>
+                <span class="checkout-step-label">Billing</span>
+            </div>
+            <div class="checkout-step {% if step == 'payment' %}active{% elif step == 'review' %}completed{% endif %}">
+                <div class="checkout-step-circle">2</div>
+                <span class="checkout-step-label">Shipping</span>
+            </div>
+            <div class="checkout-step {% if step == 'review' %}active{% endif %}">
+                <div class="checkout-step-circle">3</div>
+                <span class="checkout-step-label">Payment</span>
+            </div>
+        </div>
+
+        <!-- STEP 1: BILLING -->
+        {% if step == 'billing' %}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="lg:col-span-8">
+                <form method="POST" action="{% url 'orders:checkout_billing' %}" id="billing-form">
+                    {% csrf_token %}
+                    <div class="checkout-card">
+                        <h2 class="checkout-card-title"><i class="fas fa-truck"></i> Shipping Details</h2>
+                        <!-- Customer Info -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-21st-group mb-0">
+                                <label class="form-21st-label">First Name *</label>
+                                <input type="text" name="first_name" class="form-21st-input" value="{% if user.is_authenticated %}{{ user.first_name }}{% endif %}" required>
+                            </div>
+                            <div class="form-21st-group mb-0">
+                                <label class="form-21st-label">Last Name *</label>
+                                <input type="text" name="last_name" class="form-21st-input" value="{% if user.is_authenticated %}{{ user.last_name }}{% endif %}" required>
+                            </div>
+                            <div class="form-21st-group md:col-span-2 mb-0">
+                                <label class="form-21st-label">Email Address *</label>
+                                <input type="email" name="email" class="form-21st-input" value="{% if user.is_authenticated %}{{ user.email }}{% endif %}" required>
+                            </div>
+                            <div class="form-21st-group md:col-span-2 mb-0">
+                                <label class="form-21st-label">Phone *</label>
+                                <input type="tel" name="phone" class="form-21st-input" placeholder="+971..." required>
+                            </div>
+                        </div>
+                        <div class="form-section-title">Delivery Address</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-21st-group md:col-span-2 mb-0">
+                                <label class="form-21st-label">Street Address *</label>
+                                <input type="text" name="address1" class="form-21st-input" required>
+                            </div>
+                            <div class="form-21st-group md:col-span-2 mb-0">
+                                <label class="form-21st-label">Apartment, Suite, etc. (optional)</label>
+                                <input type="text" name="address2" class="form-21st-input">
+                            </div>
+                            <div class="form-21st-group mb-0">
+                                <label class="form-21st-label">City *</label>
+                                <input type="text" name="city" class="form-21st-input" required>
+                            </div>
+                            <div class="form-21st-group mb-0">
+                                <label class="form-21st-label">Emirate *</label>
+                                <select name="emirate" class="form-21st-select" required>
+                                    <option value="">Select Emirate</option>
+                                    <option value="Dubai">Dubai</option>
+                                    <option value="Abu Dhabi">Abu Dhabi</option>
+                                    <option value="Sharjah">Sharjah</option>
+                                    <option value="Ajman">Ajman</option>
+                                    <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+                                    <option value="Fujairah">Fujairah</option>
+                                    <option value="Umm Al Quwain">Umm Al Quwain</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <label class="form-21st-check">
+                                <input type="checkbox" name="billing_same_address" checked>
+                                <span>Billing address is the same as shipping</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-end mt-6">
+                        <button type="submit" class="btn-21st btn-21st-primary btn-21st-lg">
+                            Continue to Shipping <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="lg:col-span-4">
+                <div class="order-summary-card">
+                    <h3>Order Summary</h3>
+                    <div>
+                        {% for item in cart_items %}
+                        <div class="order-summary-row">
+                            <span>{{ item.product.name }} x{{ item.quantity }}</span>
+                            <span>{{ item.total_item }} AED</span>
+                        </div>
+                        {% endfor %}
+                        <div class="order-summary-row">
+                            <span>Subtotal</span>
+                            <span>{{ cart_subtotal }} AED</span>
+                        </div>
+                        <div class="order-summary-row">
+                            <span>Shipping</span>
+                            <span>Free</span>
+                        </div>
+                        <div class="order-summary-row total">
+                            <span>Total</span>
+                            <span id="summary-total">{{ cart_total }} AED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- STEP 2: SHIPPING -->
+        {% if step == 'shipping' %}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="lg:col-span-8">
+                <form method="POST" action="{% url 'orders:checkout_shipping' %}">
+                    {% csrf_token %}
+                    <div class="checkout-card">
+                        <h2 class="checkout-card-title"><i class="fas fa-shipping-fast"></i> Shipping Method</h2>
+                        <div class="space-y-4">
+                            <label class="checkout-shipping-option selected">
+                                <input type="radio" name="shipping_method" value="express" checked class="mt-1">
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="font-semibold text-[#0a1628]">Express Shipping</span>
+                                        <span class="font-bold text-[#1a3a6e]">Free</span>
+                                    </div>
+                                    <p class="text-sm text-[#6b7280]">2-4 business days delivery within UAE</p>
+                                </div>
+                            </label>
+                            <label class="checkout-shipping-option">
+                                <input type="radio" name="shipping_method" value="same_day" class="mt-1">
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="font-semibold text-[#0a1628]">Same-Day Delivery</span>
+                                        <span class="font-bold text-[#1a3a6e]">49 AED</span>
+                                    </div>
+                                    <p class="text-sm text-[#6b7280]">Order before 12 PM for same-day delivery within Dubai</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-6">
+                        <a href="{% url 'orders:checkout_billing' %}" class="btn-21st btn-21st-ghost">Back</a>
+                        <button type="submit" class="btn-21st btn-21st-primary btn-21st-lg">Continue to Payment <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="lg:col-span-4">
+                <div class="order-summary-card">
+                    <h3>Order Summary</h3>
+                    <div>
+                        <div class="order-summary-row"><span>Subtotal</span><span>{{ cart_subtotal }} AED</span></div>
+                        <div class="order-summary-row"><span>Shipping</span><span id="shipping-cost">Free</span></div>
+                        <div class="order-summary-row total"><span>Total</span><span id="summary-total">{{ cart_total }} AED</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- STEP 3: PAYMENT -->
+        {% if step == 'payment' %}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="lg:col-span-8">
+                <form method="POST" action="{% url 'orders:checkout_payment' %}" id="payment-form">
+                    {% csrf_token %}
+                    <div class="checkout-card">
+                        <h2 class="checkout-card-title"><i class="fas fa-credit-card"></i> Payment Method</h2>
+                        <div class="space-y-4">
+                            <label class="payment-method selected">
+                                <input type="radio" name="payment_method" value="card" checked class="mt-1">
+                                <div class="payment-method-icon bg-[#1a3a6e] text-white"><i class="fas fa-credit-card"></i></div>
+                                <div class="flex-1">
+                                    <div class="font-semibold text-[#0a1628]">Credit / Debit Card</div>
+                                    <p class="text-sm text-[#6b7280]">Visa, Mastercard, American Express</p>
+                                </div>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="payment_method" value="tabby" class="mt-1">
+                                <div class="payment-method-icon bg-[#f6f8fa] text-[#1a3a6e]"><i class="fas fa-hand-holding-usd"></i></div>
+                                <div class="flex-1">
+                                    <div class="font-semibold text-[#0a1628]">Tabby</div>
+                                    <p class="text-sm text-[#6b7280]">Buy now, pay later in 4 installments</p>
+                                </div>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="payment_method" value="cod" class="mt-1">
+                                <div class="payment-method-icon bg-[#f6f8fa] text-[#1a3a6e]"><i class="fas fa-money-bill-wave"></i></div>
+                                <div class="flex-1">
+                                    <div class="font-semibold text-[#0a1628]">Cash on Delivery</div>
+                                    <p class="text-sm text-[#6b7280]">Pay when your order arrives</p>
+                                </div>
+                            </label>
+                        </div>
+                        <div id="card-details" class="mt-6 p-6 bg-[#f9fafb] rounded-xl">
+                            <div class="form-21st-group mb-4">
+                                <label class="form-21st-label">Card Number</label>
+                                <input type="text" class="form-21st-input" placeholder="0000 0000 0000 0000" id="card-number">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="form-21st-group mb-0">
+                                    <label class="form-21st-label">Expiry Date</label>
+                                    <input type="text" class="form-21st-input" placeholder="MM / YY">
+                                </div>
+                                <div class="form-21st-group mb-0">
+                                    <label class="form-21st-label">CVV</label>
+                                    <input type="text" class="form-21st-input" placeholder="123" maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-6">
+                        <a href="{% url 'orders:checkout_shipping' %}" class="btn-21st btn-21st-ghost">Back</a>
+                        <button type="submit" class="btn-21st btn-21st-primary btn-21st-lg">Place Order <i class="fas fa-lock"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="lg:col-span-4">
+                <div class="order-summary-card">
+                    <h3>Order Summary</h3>
+                    <div>
+                        <div class="order-summary-row"><span>Subtotal</span><span>{{ cart_subtotal }} AED</span></div>
+                        <div class="order-summary-row"><span>Shipping</span><span>Free</span></div>
+                        <div class="order-summary-row total"><span>Total</span><span>{{ cart_total }} AED</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+    document.querySelectorAll('.checkout-shipping-option').forEach(opt => {
+        opt.addEventListener('click', function() {
+            document.querySelectorAll('.checkout-shipping-option').forEach(o => {
+                o.classList.remove('selected');
+                o.querySelector('input').checked = false;
+            });
+            this.classList.add('selected');
+            this.querySelector('input').checked = true;
+        });
+    });
+
+    document.querySelectorAll('.payment-method').forEach(opt => {
+        opt.addEventListener('click', function() {
+            document.querySelectorAll('.payment-method').forEach(o => o.classList.remove('selected'));
+            this.classList.add('selected');
+            this.querySelector('input').checked = true;
+        });
+    });
+</script>
+
+{% endblock %}

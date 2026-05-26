@@ -1,0 +1,155 @@
+{% extends '21st_base.html' %}
+{% load static %}
+
+{% block meta_title %}Shopping Cart{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cart-page { padding: 40px 0; }
+    .cart-title { font-family: var(--font-display); font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 600; margin-bottom: 8px; }
+    .cart-item { display: grid; grid-template-columns: 100px 1fr auto auto auto; gap: 24px; align-items: center; padding: 24px 0; border-bottom: 1px solid var(--color-surface-lightest); }
+    .cart-item-image { width: 100px; height: 100px; background: var(--color-surface-lightest); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .cart-item-image img { width: 90%; height: 90%; object-fit: contain; }
+    .cart-item-details h3 { font-family: var(--font-display); font-size: var(--text-18); font-weight: 600; color: var(--color-primary-900); }
+    .cart-item-details p { font-size: var(--text-13); color: var(--color-surface-medium); margin-top: 4px; }
+    .cart-item-qty { display: flex; align-items: center; gap: 0; border: 1px solid var(--color-surface-lighter); border-radius: var(--radius-lg); overflow: hidden; height: 36px; }
+    .cart-item-qty button { width: 32px; height: 100%; background: white; border: none; cursor: pointer; font-size: 14px; color: var(--color-primary-700); }
+    .cart-item-qty input { width: 40px; height: 100%; text-align: center; border: none; font-size: var(--text-14); font-weight: 600; color: var(--color-primary-900); }
+    .cart-item-remove { color: var(--color-surface-medium); cursor: pointer; transition: color var(--duration-fast); background: none; border: none; padding: 8px; }
+    .cart-item-remove:hover { color: var(--color-error); }
+    .cart-summary-card { background: var(--color-primary-900); color: white; border-radius: var(--radius-2xl); padding: 32px; position: sticky; top: 180px; }
+    .cart-summary-title { font-family: var(--font-display); font-size: var(--text-24); font-weight: 600; margin-bottom: 24px; }
+    .cart-summary-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: var(--text-14); }
+    .cart-summary-row.discount { color: var(--color-accent-400); }
+    .cart-summary-row.total { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 16px; margin-top: 8px; font-family: var(--font-display); font-size: var(--text-20); font-weight: 600; }
+    .cart-empty { text-align: center; padding: 80px 20px; }
+    .cart-empty-icon { width: 96px; height: 96px; background: var(--color-surface-lightest); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--color-surface-light); font-size: 40px; }
+
+    @media (max-width: 768px) {
+        .cart-item { grid-template-columns: 80px 1fr; grid-template-rows: auto auto; gap: 12px; }
+        .cart-item-price, .cart-item-qty, .cart-item-remove { justify-self: start; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-[#f6f8fa]">
+    <div class="container-21st py-8">
+        <nav class="flex items-center gap-2 text-[13px]">
+            <a href="{% url 'core:home' %}" class="text-[#6b7280] hover:text-[#1a3a6e]">Home</a>
+            <i class="fas fa-chevron-right text-[10px] text-[#d1d5db]"></i>
+            <span class="text-[#1a3a6e] font-semibold">Shopping Cart</span>
+        </nav>
+    </div>
+</div>
+
+<section class="cart-page bg-white">
+    <div class="container-21st">
+        <div class="mb-8">
+            <h1 class="cart-title">Shopping Cart</h1>
+            <p class="text-[#6b7280]">Review your items and proceed to checkout.</p>
+        </div>
+
+        {% if cart_items %}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <!-- Items -->
+            <div class="lg:col-span-8">
+                <div class="hidden md:grid grid-cols-[100px_1fr_auto_auto_auto] gap-6 pb-4 border-b border-[#f0f0f0] text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af]">
+                    <div class="col-span-1"></div>
+                    <div>Product</div>
+                    <div class="text-center">Price</div>
+                    <div class="text-center">Qty</div>
+                    <div class="text-right">Total</div>
+                </div>
+                <div>
+                    {% for item in cart_items %}
+                    <div class="cart-item" style="grid-template-columns: 100px 1fr auto auto auto; display: grid;">
+                        <div class="cart-item-image">
+                            <img src="{{ item.product.get_image_url }}" alt="{{ item.product.name }}">
+                        </div>
+                        <div class="cart-item-details">
+                            <h3>{{ item.product.name }}</h3>
+                            <p>{{ item.product.category.name|default:"" }}</p>
+                        </div>
+                        <div class="text-right">
+                            <span id="unit-price-{{ item.id }}" class="text-[#0a1628] font-semibold text-sm">{{ item.unit_price }} AED</span>
+                        </div>
+                        <form method="POST" action="{% url 'orders:update_cart' %}" class="cart-item-qty" data-item-id="{{ item.id }}">
+                            {% csrf_token %}
+                            <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <button type="button" data-action="decrement">-</button>
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" aria-label="Quantity">
+                            <button type="button" data-action="increment">+</button>
+                        </form>
+                        <div class="flex items-center justify-end gap-4">
+                            <span id="line-total-{{ item.id }}" class="text-[#0a1628] font-semibold text-sm">{{ item.total_item }} AED</span>
+                            <form method="POST" action="{% url 'orders:remove_from_cart' %}" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                                <button type="submit" class="cart-item-remove" aria-label="Remove {{ item.product.name }}">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-6 flex items-center justify-between">
+                    <a href="{% url 'products:category_index' %}" class="btn-21st btn-21st-ghost">
+                        <i class="fas fa-arrow-left text-xs"></i> Continue Shopping
+                    </a>
+                    <form method="POST" action="{% url 'orders:clear_cart' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="text-[13px] text-red-500 hover:text-red-700 font-medium transition-colors">Clear Cart</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="lg:col-span-4">
+                <div class="cart-summary-card">
+                    <h2 class="cart-summary-title">Order Summary</h2>
+                    <div class="space-y-2 text-sm">
+                        <div class="cart-summary-row"><span>Subtotal</span> <span id="subtotal">{{ cart_subtotal }} AED</span></div>
+                        <div class="cart-summary-row"><span>Shipping</span> <span>Free</span></div>
+                        {% if cart_discount %}<div class="cart-summary-row discount"><span>Discount</span> <span>-{{ cart_discount }} AED</span></div>{% endif %}
+                        <div class="cart-summary-row total"><span>Total</span> <span id="grand-total">{{ cart_total }} AED</span></div>
+                    </div>
+                    <a href="{% url 'orders:checkout_billing' %}" class="btn-21st btn-21st-accent btn-21st-lg btn-21st-block mt-8">
+                        Proceed to Checkout <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <p class="text-center text-[11px] text-white/50 mt-4">Shipping & taxes calculated at checkout</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="cart-empty">
+            <div class="cart-empty-icon"><i class="fas fa-shopping-bag"></i></div>
+            <h2 class="font-display text-2xl font-semibold text-[#0a1628] mb-2">Your cart is empty</h2>
+            <p class="text-[#6b7280] mb-8">Looks like you haven't added any products yet.</p>
+            <a href="{% url 'products:category_index' %}" class="btn-21st btn-21st-primary btn-21st-lg">
+                <i class="fas fa-bag-shopping"></i> Start Shopping
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+    document.querySelectorAll('.cart-item-qty').forEach(form => {
+        const input = form.querySelector('input[name="quantity"]');
+        form.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.dataset.action;
+                let val = parseInt(input.value);
+                if (action === 'increment') val++;
+                else val = Math.max(1, val - 1);
+                input.value = val;
+                // form.submit(); // Auto-submit for real-time update
+            });
+        });
+    });
+</script>
+
+{% endblock %}

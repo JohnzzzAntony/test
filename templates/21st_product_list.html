@@ -1,0 +1,489 @@
+{% extends '21st_base.html' %}
+{% load static %}
+
+{% block meta_title %}{% if current_category %}{{ current_category.name }}{% else %}All Products{% endif %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .plp-hero {
+        background: linear-gradient(135deg, var(--color-primary-900) 0%, var(--color-primary-700) 100%);
+        padding: 64px var(--space-6);
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    .plp-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(20,184,166,0.1), transparent 70%);
+    }
+    .plp-hero h1 {
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        font-weight: 600;
+        margin-bottom: 8px;
+        position: relative;
+    }
+    .plp-hero p {
+        color: rgba(255,255,255,0.6);
+        font-size: var(--text-16);
+    }
+    .plp-hero-count {
+        font-size: var(--text-14);
+        color: rgba(255,255,255,0.5);
+        margin-top: 4px;
+    }
+
+    .plp-layout {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 40px;
+        padding: var(--space-12) 0;
+    }
+    .plp-sidebar {
+        position: sticky;
+        top: 180px;
+        height: fit-content;
+    }
+    .plp-filter-card {
+        background: var(--color-pure-white);
+        border: 1px solid var(--color-surface-lightest);
+        border-radius: var(--radius-2xl);
+        padding: var(--space-6);
+        margin-bottom: var(--space-5);
+    }
+    .plp-filter-title {
+        font-family: var(--font-body);
+        font-size: var(--text-13);
+        font-weight: var(--weight-extrabold);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--color-primary-900);
+        margin-bottom: var(--space-5);
+        padding-bottom: var(--space-3);
+        border-bottom: 1px solid var(--color-surface-lightest);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .plp-filter-toggle {
+        font-size: var(--text-12);
+        font-weight: var(--weight-medium);
+        color: var(--color-primary-600);
+        cursor: pointer;
+        background: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .plp-filter-option {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        padding: var(--space-2) 0;
+        cursor: pointer;
+        font-size: var(--text-14);
+        color: var(--color-primary-800);
+        transition: color var(--duration-fast);
+    }
+    .plp-filter-option:hover { color: var(--color-primary-600); }
+    .plp-filter-option input {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--color-primary-600);
+        flex-shrink: 0;
+    }
+    .plp-filter-option span {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+    }
+    .plp-filter-count {
+        font-size: var(--text-12);
+        color: var(--color-surface-medium);
+        background: var(--color-surface-lightest);
+        padding: 2px 8px;
+        border-radius: var(--radius-full);
+    }
+
+    .plp-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-4) var(--space-6);
+        background: var(--color-pure-white);
+        border: 1px solid var(--color-surface-lightest);
+        border-radius: var(--radius-xl);
+        margin-bottom: var(--space-6);
+    }
+    .plp-view-toggle {
+        display: flex;
+        gap: 4px;
+    }
+    .plp-view-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-surface-lighter);
+        background: var(--color-pure-white);
+        color: var(--color-surface-medium);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all var(--duration-fast);
+    }
+    .plp-view-btn.active, .plp-view-btn:hover {
+        background: var(--color-primary-600);
+        color: white;
+        border-color: var(--color-primary-600);
+    }
+    .plp-sort {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+    }
+    .plp-sort label {
+        font-size: var(--text-13);
+        color: var(--color-surface-medium);
+        white-space: nowrap;
+    }
+    .plp-select {
+        padding: var(--space-2) var(--space-4);
+        border: 1px solid var(--color-surface-lighter);
+        border-radius: var(--radius-md);
+        font-size: var(--text-13);
+        color: var(--color-primary-900);
+        background: var(--color-pure-white);
+        cursor: pointer;
+    }
+
+    .plp-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: var(--space-6);
+    }
+    .plp-grid.list-view {
+        grid-template-columns: 1fr;
+    }
+
+    /* Active Filters */
+    .plp-active-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        margin-bottom: var(--space-5);
+    }
+    .plp-active-filter {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        padding: 4px 12px;
+        background: var(--color-primary-50);
+        border: 1px solid var(--color-primary-100);
+        border-radius: var(--radius-full);
+        font-size: var(--text-12);
+        color: var(--color-primary-700);
+        font-weight: var(--weight-medium);
+    }
+    .plp-active-filter button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--color-primary-600);
+        padding: 0;
+        display: flex;
+        align-items: center;
+    }
+    .plp-clear-all {
+        font-size: var(--text-12);
+        color: var(--color-error);
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-weight: var(--weight-medium);
+    }
+
+    /* Mobile Filter Toggle */
+    .plp-mobile-filter-btn {
+        display: none;
+        align-items: center;
+        gap: var(--space-2);
+        padding: var(--space-3) var(--space-5);
+        background: var(--color-pure-white);
+        border: 1px solid var(--color-surface-lighter);
+        border-radius: var(--radius-lg);
+        font-size: var(--text-14);
+        font-weight: var(--weight-semibold);
+        color: var(--color-primary-800);
+        cursor: pointer;
+    }
+    .plp-mobile-filter-btn i { color: var(--color-primary-600); }
+
+    @media (max-width: 1023px) {
+        .plp-layout { grid-template-columns: 1fr; gap: 24px; }
+        .plp-sidebar { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,0.5); padding: 20px; top: unset; }
+        .plp-sidebar.open { display: block; }
+        .plp-sidebar-inner { background: white; border-radius: var(--radius-2xl); padding: var(--space-6); height: 100%; overflow-y: auto; }
+        .plp-mobile-filter-btn { display: flex; }
+    }
+    @media (max-width: 640px) {
+        .plp-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+        .plp-toolbar { flex-wrap: wrap; gap: var(--space-3); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="bg-[#f6f8fa] border-b border-[#e2e8f0]">
+    <div class="container-21st py-4">
+        <nav class="flex items-center gap-2 text-[13px]">
+            <a href="{% url 'core:home' %}" class="text-[#6b7280] hover:text-[#1a3a6e]">Home</a>
+            <i class="fas fa-chevron-right text-[10px] text-[#d1d5db]"></i>
+            {% if current_category %}
+                {% if current_category.parent %}
+                <a href="{{ current_category.parent.get_absolute_url }}" class="text-[#6b7280] hover:text-[#1a3a6e]">{{ current_category.parent.name }}</a>
+                <i class="fas fa-chevron-right text-[10px] text-[#d1d5db]"></i>
+                {% endif %}
+                <span class="text-[#1a3a6e] font-semibold">{{ current_category.name }}</span>
+            {% else %}
+                <span class="text-[#1a3a6e] font-semibold">All Products</span>
+            {% endif %}
+        </nav>
+    </div>
+</div>
+
+<!-- Hero -->
+<section class="plp-hero">
+    <div class="container-21st relative">
+        <h1>{% if current_category %}{{ current_category.name }}{% else %}All Products{% endif %}</h1>
+        <p>{% if current_category %}{{ current_category.description|default:"Browse our selection"|striptags|truncatewords:20 }}{% else %}Explore our complete catalog of medical equipment and supplies{% endif %}</p>
+        <div class="plp-hero-count">{{ products.paginator.count|default:0 }} products</div>
+    </div>
+</section>
+
+<div class="container-21st">
+    <div class="plp-layout">
+        <!-- Sidebar Filters -->
+        <aside class="plp-sidebar" id="plp-sidebar">
+            <div class="plp-sidebar-inner">
+                <div class="flex items-center justify-between mb-6 lg:hidden">
+                    <h3 class="font-display text-xl font-semibold text-[#1a3a6e]">Filters</h3>
+                    <button onclick="document.getElementById('plp-sidebar').classList.remove('open')" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form id="filter-form" method="GET" action="{{ request.path }}">
+                    <!-- Search -->
+                    <div class="plp-filter-card">
+                        <div class="plp-filter-title">Search</div>
+                        <div class="relative">
+                            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search products..." class="w-full h-10 pl-10 pr-4 bg-[#f6f8fa] border border-[#e2e8f0] rounded-lg text-[13px] text-[#1a3a6e] placeholder-[#9ca3af] focus:outline-none focus:border-[#3a649e] focus:bg-white transition-all">
+                            <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-xs"></i>
+                        </div>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="plp-filter-card">
+                        <div class="plp-filter-title">Categories</div>
+                        <div class="space-y-1 max-h-[200px] overflow-y-auto pr-1">
+                            {% for cat in categories %}
+                            <label class="plp-filter-option">
+                                <input type="radio" name="category" value="{{ cat.slug }}" {% if request.GET.category == cat.slug %}checked{% endif %} onchange="this.form.submit()">
+                                <span>{{ cat.name }} <span class="plp-filter-count">{{ cat.product_count|default:0 }}</span></span>
+                            </label>
+                            {% empty %}
+                            <label class="plp-filter-option"><input type="radio" name="category" value=""><span>Medical Equipment <span class="plp-filter-count">120</span></span></label>
+                            <label class="plp-filter-option"><input type="radio" name="category" value=""><span>Surgical Supplies <span class="plp-filter-count">85</span></span></label>
+                            <label class="plp-filter-option"><input type="radio" name="category" value=""><span>Diagnostic Tools <span class="plp-filter-count">65</span></span></label>
+                            <label class="plp-filter-option"><input type="radio" name="category" value=""><span>Patient Care <span class="plp-filter-count">42</span></span></label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="plp-filter-card">
+                        <div class="plp-filter-title">Price Range</div>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1">
+                                    <label class="text-[10px] font-semibold uppercase tracking-widest text-[#6b7280] mb-1 block">Min</label>
+                                    <input type="number" name="min_price" value="{{ request.GET.min_price }}" placeholder="0" class="w-full h-10 px-3 bg-[#f6f8fa] border border-[#e2e8f0] rounded-lg text-[13px] focus:outline-none focus:border-[#3a649e]">
+                                </div>
+                                <div class="flex-1">
+                                    <label class="text-[10px] font-semibold uppercase tracking-widest text-[#6b7280] mb-1 block">Max</label>
+                                    <input type="number" name="max_price" value="{{ request.GET.max_price }}" placeholder="9999" class="w-full h-10 px-3 bg-[#f6f8fa] border border-[#e2e8f0] rounded-lg text-[13px] focus:outline-none focus:border-[#3a649e]">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Availability -->
+                    <div class="plp-filter-card">
+                        <div class="plp-filter-title">Availability</div>
+                        <label class="plp-filter-option">
+                            <input type="checkbox" name="in_stock" value="1" {% if request.GET.in_stock %}checked{% endif %}>
+                            <span>In Stock Only</span>
+                        </label>
+                        <label class="plp-filter-option">
+                            <input type="checkbox" name="on_sale" value="1" {% if request.GET.on_sale %}checked{% endif %}>
+                            <span>On Sale</span>
+                        </label>
+                    </div>
+
+                    <div class="flex gap-3 mt-6">
+                        <button type="submit" class="btn-21st btn-21st-primary btn-21st-sm flex-1">Apply Filters</button>
+                        <a href="{{ request.path }}" class="btn-21st btn-21st-secondary btn-21st-sm">Reset</a>
+                    </div>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div>
+            <!-- Toolbar -->
+            <div class="plp-toolbar">
+                <div class="flex items-center gap-4">
+                    <button class="plp-mobile-filter-btn" onclick="document.getElementById('plp-sidebar').classList.add('open')">
+                        <i class="fas fa-filter"></i> Filters
+                    </button>
+                    <span class="text-[13px] text-[#6b7280]">{{ products|length }} products</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="plp-view-toggle">
+                        <button class="plp-view-btn active" data-view="grid"><i class="fas fa-th-large text-xs"></i></button>
+                        <button class="plp-view-btn" data-view="list"><i class="fas fa-list text-xs"></i></button>
+                    </div>
+                    <div class="plp-sort">
+                        <label>Sort by:</label>
+                        <select class="plp-select" onchange="window.location.href = this.value" form="">
+                            <option value="?sort=newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Newest</option>
+                            <option value="?sort=price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                            <option value="?sort=price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                            <option value="?sort=name" {% if request.GET.sort == 'name' %}selected{% endif %}>Name: A-Z</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Filters -->
+            {% if request.GET.q or request.GET.category or request.GET.min_price or request.GET.max_price or request.GET.in_stock or request.GET.on_sale %}
+            <div class="plp-active-filters">
+                {% if request.GET.q %}<span class="plp-active-filter">Query: {{ request.GET.q }} <button onclick="removeParam('q')">&times;</button></span>{% endif %}
+                {% if request.GET.category %}<span class="plp-active-filter">Category: {{ request.GET.category }} <button onclick="removeParam('category')">&times;</button></span>{% endif %}
+                {% if request.GET.min_price %}<span class="plp-active-filter">Min: {{ request.GET.min_price }} <button onclick="removeParam('min_price')">&times;</button></span>{% endif %}
+                {% if request.GET.max_price %}<span class="plp-active-filter">Max: {{ request.GET.max_price }} <button onclick="removeParam('max_price')">&times;</button></span>{% endif %}
+                {% if request.GET.in_stock %}<span class="plp-active-filter">In Stock <button onclick="removeParam('in_stock')">&times;</button></span>{% endif %}
+                {% if request.GET.on_sale %}<span class="plp-active-filter">On Sale <button onclick="removeParam('on_sale')">&times;</button></span>{% endif %}
+                <button onclick="window.location.href='{{ request.path }}'" class="plp-clear-all">Clear All</button>
+            </div>
+            <script>
+                function removeParam(param) {
+                    const url = new URL(window.location);
+                    url.searchParams.delete(param);
+                    window.location.href = url.toString();
+                }
+            </script>
+            {% endif %}
+
+            <!-- Products Grid -->
+            <div class="plp-grid" id="product-grid">
+                {% for product in products %}
+                <div class="product-card-21st group">
+                    <a href="{{ product.get_absolute_url }}" class="block">
+                        <div class="product-card-21st-image">
+                            {% if product.get_image_url %}
+                            <img src="{{ product.get_image_url }}" alt="{{ product.name }}" loading="lazy">
+                            {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-[#d1d5db]"><i class="fas fa-image text-3xl"></i></div>
+                            {% endif %}
+                            {% if product.is_new %}<span class="product-card-21st-badge">New</span>{% endif %}
+                            {% if product.discount > 0 %}<span class="product-card-21st-badge" style="background: #ef4444; left: auto; right: 16px;">-{{ product.discount }}%</span>{% endif %}
+                        </div>
+                    </a>
+                    <div class="product-card-21st-body">
+                        <div class="product-card-21st-category">{{ product.category.name|default:"Category" }}</div>
+                        <a href="{{ product.get_absolute_url }}" class="block">
+                            <h3 class="product-card-21st-name">{{ product.name }}</h3>
+                        </a>
+                        <div class="flex items-baseline gap-2 mb-3">
+                            <span class="product-card-21st-price">{{ product.get_price_display|default:"Call for Price" }}</span>
+                            {% if product.compare_at_price %}<span class="text-[13px] text-[#9ca3af] line-through">{{ product.compare_at_price }}</span>{% endif %}
+                        </div>
+                        <form action="{% url 'orders:add_to_cart' %}" method="POST" class="flex gap-2">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn-21st btn-21st-primary btn-21st-sm flex-1">
+                                <i class="fas fa-plus text-xs"></i> Add to Cart
+                            </button>
+                            <button type="button" class="btn-21st btn-21st-secondary btn-21st-icon border-0" title="Add to Wishlist">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-full text-center py-24">
+                    <div class="w-20 h-20 bg-[#f6f8fa] rounded-full flex items-center justify-center mx-auto mb-6 text-[#d1d5db]">
+                        <i class="fas fa-search text-3xl"></i>
+                    </div>
+                    <h3 class="font-display text-2xl font-semibold text-[#1a3a6e] mb-2">No products found</h3>
+                    <p class="text-[#6b7280] mb-6">Try adjusting your filters or search query</p>
+                    <a href="{{ request.path }}" class="btn-21st btn-21st-secondary btn-21st-sm">Clear Filters</a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if products.has_other_pages %}
+            <div class="mt-12 flex justify-center">
+                <div class="pagination-21st">
+                    {% if products.has_previous %}
+                    <a href="?page={{ products.previous_page_number }}" class="pagination-21st-btn"><i class="fas fa-chevron-left text-xs"></i></a>
+                    {% else %}
+                    <button disabled class="pagination-21st-btn"><i class="fas fa-chevron-left text-xs"></i></button>
+                    {% endif %}
+                    {% for p in products.paginator.page_range %}
+                    {% if p == products.number %}
+                    <span class="pagination-21st-btn active">{{ p }}</span>
+                    {% else %}
+                    <a href="?page={{ p }}" class="pagination-21st-btn">{{ p }}</a>
+                    {% endif %}
+                    {% endfor %}
+                    {% if products.has_next %}
+                    <a href="?page={{ products.next_page_number }}" class="pagination-21st-btn"><i class="fas fa-chevron-right text-xs"></i></a>
+                    {% else %}
+                    <button disabled class="pagination-21st-btn"><i class="fas fa-chevron-right text-xs"></i></button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // View toggle
+    document.querySelectorAll('.plp-view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.plp-view-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const grid = document.getElementById('product-grid');
+            if (this.dataset.view === 'list') grid.classList.add('list-view');
+            else grid.classList.remove('list-view');
+        });
+    });
+</script>
+
+{% endblock %}

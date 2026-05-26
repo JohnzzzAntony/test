@@ -5,21 +5,21 @@
 
 /* ── Design Tokens ────────────────────────────────────────────────────────── */
 :root {
-  /* Core palette */
-  --hp-blue:       #0f4c8a;
-  --hp-blue-light: #1a6ec5;
-  --hp-blue-dark:  #0a3561;
-  --hp-teal:       #0891b2;
-  --hp-teal-light: #06b6d4;
+  /* Core palette - Flower District theme */
+  --hp-blue:       #212529; /* Dark gray/black for primary texts and buttons */
+  --hp-blue-light: #343a40;
+  --hp-blue-dark:  #000000;
+  --hp-teal:       #495057;
+  --hp-teal-light: #6c757d;
   --hp-white:      #ffffff;
-  --hp-offwhite:   #f8fafc;
-  --hp-gray-50:    #f1f5f9;
-  --hp-gray-100:   #e2e8f0;
-  --hp-gray-200:   #cbd5e1;
-  --hp-gray-400:   #94a3b8;
-  --hp-gray-600:   #475569;
-  --hp-gray-800:   #1e293b;
-  --hp-gray-900:   #0f172a;
+  --hp-offwhite:   #f8f9fa;
+  --hp-gray-50:    #f8f9fa;
+  --hp-gray-100:   #e9ecef;
+  --hp-gray-200:   #dee2e6;
+  --hp-gray-400:   #ced4da;
+  --hp-gray-600:   #6c757d;
+  --hp-gray-800:   #343a40;
+  --hp-gray-900:   #212529;
 
   /* Spacing rhythm */
   --hp-s1: 8px;
