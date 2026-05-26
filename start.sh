@@ -1,10 +1,13 @@
 #!/bin/bash
 # Production startup script for Railway deployment
-# Runs migrations then starts gunicorn with proper signal handling
+# Runs migrations, collects static files, then starts gunicorn with proper signal handling
 set -e
 
 echo "==> Running database migrations..."
 python manage.py migrate --noinput
+
+echo "==> Collecting static files..."
+python manage.py collectstatic --noinput --clear
 
 echo "==> Starting Gunicorn..."
 exec gunicorn jkr.wsgi:application \
