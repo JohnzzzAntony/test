@@ -7,14 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    {# SEO Meta Tags #}
+    {% comment %}
+SEO Meta Tags #}
     <title>{% block meta_title %}{{ site_settings.meta_title|default:site_settings.site_name }}{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}{{ site_settings.meta_description }}{% endblock %}" />
     <meta name="keywords" content="{% block meta_keywords %}{{ site_settings.meta_keywords }}{% endblock %}" />
     <meta name="author" content="JKR International" />
     <meta name="robots" content="{% block robots %}index, follow{% endblock %}">
 
-    {# Tracking & Analytics #}
+    {# Tracking & Analytics
+{% endcomment %}
     {% if site_settings.google_analytics_id %}
     <!-- Google Analytics (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ site_settings.google_analytics_id }}"></script>
@@ -52,7 +54,8 @@
     {{ site_settings.schema_markup|safe }}
     {% endif %}
 
-    {# Open Graph / Social #}
+    {% comment %}
+Open Graph / Social #}
     <meta property="og:type" content="website">
     <meta property="og:title"
         content="{% block og_title %}{{ site_settings.meta_title|default:site_settings.site_name }}{% endblock %}">
@@ -65,7 +68,8 @@
     <!-- Technical SEO -->
     <link rel="canonical" href="{{ request.build_absolute_uri }}" />
 
-    {# JSON-LD Schema #}
+    {# JSON-LD Schema
+{% endcomment %}
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -404,8 +408,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
     <!-- Global Premium Styles - Flower District Theme -->
-    <link rel="stylesheet" href="{% static 'css/flower-district-new.css' %}?v=1.0"> {# Theme styles (Flower District
-    aesthetic - clean white/deep blue) #}
+    <link rel="stylesheet" href="{% static 'css/flower-district-new.css' %}?v=1.0"> {% comment %}
+Theme styles (Flower District
+    aesthetic - clean white/deep blue)
+{% endcomment %}
     <link rel="stylesheet" href="{% static 'css/header_hero.css' %}?v=1.8">
     <link rel="stylesheet" href="{% static 'css/homepage-sections.css' %}?v=1.0">
 

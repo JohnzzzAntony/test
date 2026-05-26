@@ -1,7 +1,9 @@
 {% load static %}
-{# ================================================================
+{% comment %}
+================================================================
    _collections_tabs.html — Collections Tab Section
-   ================================================================ #}
+   ================================================================
+{% endcomment %}
 {% if collections %}
 <section class="fd-collections-section">
   <div class="container">
@@ -11,7 +13,8 @@
       <p class="fd-section-subtitle">{{ design_settings.hp_collections_subtitle }}</p>
       {% endif %}
     </div>
-    {# Tab Buttons #}
+    {% comment %}
+Tab Buttons #}
     <div class="fd-tabs-nav" id="collection-tabs">
       {% for col in collections %}
       <button class="fd-tab-btn {% if forloop.first %}active{% endif %}"
@@ -22,7 +25,8 @@
       {% endfor %}
     </div>
 
-    {# Tab Panels — each a mini product slider #}
+    {# Tab Panels — each a mini product slider
+{% endcomment %}
     {% for col in collections %}
     <div class="fd-tab-panel {% if forloop.first %}active{% endif %}" id="col-{{ col.id }}">
       {% with col_products=col.products.all %}

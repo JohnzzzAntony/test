@@ -21,13 +21,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {# Group by Model name within the app #}
+                        {% comment %}
+Group by Model name within the app #}
                         {% regroup perms by model as model_list %}
                         {% for model in model_list %}
                         <tr>
                             <td class="model-name"><strong>{{ model.grouper }}</strong></td>
                             {% for perm in model.list %}
-                                {# Find matching column #}
+                                {# Find matching column
+{% endcomment %}
                                 {% with action=perm.action %}
                                 <td class="perm-checkbox-col">
                                     <label class="toggle-button">

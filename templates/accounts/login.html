@@ -4,7 +4,8 @@
 {% block content %}
 <div class="min-h-[85vh] flex items-center justify-center py-12 px-6" style="background:var(--surface);">
 
-    {# Left Panel — Visual #}
+    {% comment %}
+Left Panel — Visual #}
     <div class="hidden lg:flex lg:w-1/2 xl:w-[58%] min-h-[85vh]" style="position:relative;overflow:hidden;">
         <div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(17,64,132,0.92) 0%,rgba(26,92,184,0.85) 100%);"></div>
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px;z-index:10;">
@@ -22,15 +23,18 @@
                 Sign in to manage your equipment inquiries, saved solutions, and personalized healthcare technology experience.
             </p>
         </div>
-        {# Decorative element #}
+        {# Decorative element
+{% endcomment %}
         <div style="position:absolute;bottom:-60px;right:-60px;font-size:180px;color:rgba(255,255,255,0.04);font-family:var(--font-heading);line-height:1;user-select:none;pointer-events:none;">+</div>
     </div>
 
-    {# Right Panel — Form #}
+    {% comment %}
+Right Panel — Form #}
     <div class="w-full lg:w-1/2 xl:w-[42%] flex items-center justify-center p-8">
         <div style="width:100%;max-width:440px;">
 
-            {# Mobile Logo #}
+            {# Mobile Logo
+{% endcomment %}
             <div class="lg:hidden text-center mb-10">
                 <a href="{% url 'core:home' %}">
                     <span style="font-family:var(--font-heading);font-size:24px;font-weight:800;color:var(--text-primary);">{{ site_settings.site_name|default:"JKR International" }}</span>
@@ -44,7 +48,8 @@
                 <p style="font-size:14px;color:var(--text-secondary);">Don't have an account? <a href="{% url 'accounts:register' %}" style="color:var(--primary);font-weight:700;text-decoration:none;">Create one</a></p>
             </div>
 
-            {# Social Login #}
+            {% comment %}
+Social Login #}
             {% comment %}
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;">
                 <a href="#" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1px solid var(--border-light);border-radius:var(--radius-lg);font-family:var(--font-heading);font-size:12px;font-weight:700;color:var(--txt-main);text-decoration:none;transition:all 0.2s;background:var(--card);">
@@ -62,7 +67,8 @@
             </div>
             {% endcomment %}
 
-            {# Error Messages #}
+            {# Error Messages
+{% endcomment %}
             {% if messages %}
             <div style="padding:14px 16px;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2);border-radius:var(--radius-lg);margin-bottom:20px;">
                 {% for message in messages %}

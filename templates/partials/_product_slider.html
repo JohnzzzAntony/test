@@ -1,8 +1,10 @@
 {% load static %}
-{# ================================================================
+{% comment %}
+================================================================
    _product_slider.html  — Reusable Product Carousel Partial
    Usage: {% include 'partials/_product_slider.html' with products=latest_products section_title="Latest Products" section_link="/products/" slider_id="latest" %}
-   ================================================================ #}
+================================================================
+{% endcomment %}
 <section class="fd-product-section">
   <div class="container">
     <div class="fd-section-header">
@@ -35,7 +37,7 @@
             </a>
 
             <div class="fd-product-actions">
-              <a href="{% url 'products:wishlist_toggle' product.id %}" class="fd-action-btn" title="Add to Wishlist" data-product-id="{{ product.id }}">
+              <a href="{% url 'products:toggle_wishlist' product.id %}" class="fd-action-btn" title="Add to Wishlist" data-product-id="{{ product.id }}">
                 <i class="far fa-heart"></i>
               </a>
               <a href="{{ product.get_absolute_url }}" class="fd-action-btn" title="Quick View">

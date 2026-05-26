@@ -92,9 +92,11 @@
 {% block content %}
 <div class="about-page">
 
-  {# ══════════════════════════════════════
+  {% comment %}
+══════════════════════════════════════
      PAGE HERO
-  ══════════════════════════════════════ #}
+  ══════════════════════════════════════
+{% endcomment %}
   <section class="about-page-hero">
     {% if page_heroes.about and page_heroes.about.display_image %}
     <img src="{{ page_heroes.about.display_image }}" alt="About Us" class="about-hero-img">
@@ -110,9 +112,11 @@
     </div>
   </section>
 
-  {# ══════════════════════════════════════
+  {% comment %}
+══════════════════════════════════════
      STORY BLOCK
-  ══════════════════════════════════════ #}
+  ══════════════════════════════════════
+{% endcomment %}
   <section class="section">
     <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
       <div class="about-block" style="padding:80px 0;">
@@ -145,9 +149,11 @@
     </div>
   </section>
 
-  {# ══════════════════════════════════════
+  {% comment %}
+══════════════════════════════════════
      STATS / VALUES
-  ══════════════════════════════════════ #}
+  ══════════════════════════════════════
+{% endcomment %}
   <section class="section" style="background:white;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);">
     <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;">
@@ -171,9 +177,11 @@
     </div>
   </section>
 
-  {# ══════════════════════════════════════
+  {% comment %}
+══════════════════════════════════════
      WHY CHOOSE US FEATURES
-  ══════════════════════════════════════ #}
+  ══════════════════════════════════════
+{% endcomment %}
   <section class="section">
     <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
       <div class="section-header">
@@ -215,9 +223,11 @@
     </div>
   </section>
 
-  {# ══════════════════════════════════════
+  {% comment %}
+══════════════════════════════════════
      PRODUCTS OVERVIEW
-  ══════════════════════════════════════ #}
+  ══════════════════════════════════════
+{% endcomment %}
   <section class="section" style="background:var(--surface);">
     <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
       <div class="section-header">
@@ -244,9 +254,11 @@
     </div>
   </section>
 
-  {# ══════════════════════════════════════
+  {% comment %}
+══════════════════════════════════════
      STORE LOCATIONS TEASER
-  ══════════════════════════════════════ #}
+  ══════════════════════════════════════
+{% endcomment %}
   <section class="section">
     <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
       <div class="about-block" style="grid-template-columns:1fr 1fr;gap:80px;padding:0;direction:ltr;">

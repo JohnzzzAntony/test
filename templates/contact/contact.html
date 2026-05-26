@@ -33,9 +33,11 @@
 {% block content %}
 <div class="contact-page min-h-screen">
 
-  {# ══════════════════════════════════════
+  {% comment %}
+══════════════════════════════════════
      PAGE HERO
-  ══════════════════════════════════════ #}
+  ══════════════════════════════════════
+{% endcomment %}
   <section class="page-hero" style="min-height:50vh;background:#114084;">
     {% if page_heroes.contact and page_heroes.contact.display_image %}
     <img src="{{ page_heroes.contact.display_image }}" alt="Contact" class="page-hero-img">
@@ -50,9 +52,11 @@
     </div>
   </section>
 
-  {# ══════════════════════════════════════
+  {% comment %}
+══════════════════════════════════════
      CONTACT INFO CARDS
-  ══════════════════════════════════════ #}
+  ══════════════════════════════════════
+{% endcomment %}
   <section style="padding:80px 0 -40px;position:relative;z-index:20;margin-top:-60px;">
     <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
       <div class="trust-badges" style="grid-template-columns:repeat(3,1fr);gap:24px;padding:0;background:transparent;border:none;margin-bottom:48px;">
@@ -87,9 +91,11 @@
     </div>
   </section>
 
-  {# ══════════════════════════════════════
+  {% comment %}
+══════════════════════════════════════
      CONTACT FORM + INFO
-  ══════════════════════════════════════ #}
+  ══════════════════════════════════════
+{% endcomment %}
   <section class="section" style="padding-top:48px;">
     <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
       <div class="about-block" style="grid-template-columns:1fr 1fr;gap:80px;padding:0;">

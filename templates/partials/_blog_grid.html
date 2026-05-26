@@ -1,8 +1,10 @@
 {% load static %}
-{# ================================================================
+{% comment %}
+================================================================
    _blog_grid.html — Latest Blog Posts 3-Card Grid
-   ================================================================ #}
-{% with posts=latest_blog_posts|default:blog_posts %}
+   ================================================================
+{% endcomment %}
+{% with posts=latest_blog_posts %}
 {% if posts %}
 <section class="fd-blog-section">
   <div class="container">

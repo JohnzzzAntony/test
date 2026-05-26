@@ -78,7 +78,8 @@
 {% block content %}
 <div>
 
-  {# Page Hero #}
+  {% comment %}
+Page Hero #}
   <section class="stores-hero">
     <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(17,64,132,0.7),rgba(0,129,255,0.4));opacity:0.5;"></div>
     <div style="position:relative;z-index:10;text-align:center;padding:60px 48px;">
@@ -88,11 +89,13 @@
     </div>
   </section>
 
-  {# City Filter + Grid #}
+  {# City Filter + Grid
+{% endcomment %}
   <section class="section">
     <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
 
-      {# City Filter #}
+      {% comment %}
+City Filter #}
       <div class="city-filter">
         <a href="?city=all" class="city-filter-btn {% if selected_city == 'all' %}active{% endif %}">All UAE</a>
         {% for city in cities %}
@@ -100,7 +103,8 @@
         {% endfor %}
       </div>
 
-      {# Store Grid #}
+      {# Store Grid
+{% endcomment %}
       <div class="store-grid">
         {% for store in stores %}
         <div class="store-card">
