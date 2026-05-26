@@ -147,22 +147,32 @@ Open Graph / Social #}
             /* ── Flower District Color Palette (Dark Blue Variant) ─── */
             --primary: {{ design_settings.primary_color|default:"#114084" }};
             --primary-light: {{ design_settings.secondary_color|default:"#1a5cb8" }};
-            --primary-hover: {{ design_settings.accent_color|default:"#0081ff" }};
+            --primary-dark: #0d3570;
+            --primary-hover: #0d3a6e;
             --accent: {{ design_settings.accent_color|default:"#0081ff" }};
             --accent-light: #4da8ff;
             --surface: {{ design_settings.surface_bg_color|default:"#ffffff" }};
             --surface-light: #f8f9fa;
             --card: {{ design_settings.card_bg_color|default:"#ffffff" }};
+            --border: {{ design_settings.border_color|default:"#e5e5e5" }};
             --border-custom: {{ design_settings.border_color|default:"#e5e5e5" }};
             --border-light: #f0f0f0;
             --border-hover: #cccccc;
+
+            /* Unified text aliases — both --txt-main and --text-primary work */
             --txt-main: {{ design_settings.text_primary_color|default:"#1a1a1a" }};
+            --text-primary: {{ design_settings.text_primary_color|default:"#1a1a1a" }};
             --txt-secondary: {{ design_settings.text_secondary_color|default:"#4a4a4a" }};
+            --text-secondary: {{ design_settings.text_secondary_color|default:"#4a4a4a" }};
             --txt-muted: #888888;
+            --text-muted: #888888;
             --txt-inverse: #ffffff;
-            --font-ui: {{ design_settings.font_main|safe|default:"'Inter', sans-serif" }};
+            --text-inverse: #ffffff;
+
+            --font-ui: {{ design_settings.font_main|safe|default:"'Inter', 'Montserrat', sans-serif" }};
             --font-display: {{ design_settings.font_heading|safe|default:"'Montserrat', sans-serif" }};
             --font-accent: {{ design_settings.font_accent|safe|default:"'Playfair Display', serif" }};
+            --font-main: var(--font-ui);
 
             /* Fallbacks for older references */
             --font-sans: var(--font-ui);
@@ -214,12 +224,21 @@ Open Graph / Social #}
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
+            /* Soft reveal — main.js adds .loaded class immediately on DOMContentLoaded */
             opacity: 0;
-            transition: opacity 0.8s ease-out;
+            transition: opacity 0.4s ease-out;
         }
 
         body.loaded {
             opacity: 1;
+        }
+
+        /* Failsafe: if JS is slow/blocked, reveal after 1s */
+        @keyframes revealBody {
+            to { opacity: 1; }
+        }
+        body {
+            animation: revealBody 0s 1s forwards;
         }
 
         h1,
@@ -642,8 +661,7 @@ Theme styles (Flower District
                             </a>
 
                             {% if cat.active_subcategories %}
-                            <div class="absolute left-1/2 -translate-x-1/2 top-full mt-3 hidden group-hover/nav-item:block w-[800px] bg-white border border-[var(--border)] shadow-[var(--shadow-lg)] rounded-xl z-50 transition-all duration-200"
-                                style="opacity:0;transform:translateX(-50%) translateY(8px);">
+                            <div class="absolute left-1/2 -translate-x-1/2 top-full mt-3 hidden group-hover/nav-item:flex flex-col w-[800px] bg-white border border-[var(--border-custom)] shadow-lg rounded-xl z-50">
                                 <div class="absolute -top-3 left-0 right-0 h-3 bg-transparent"></div>
                                 <div class="grid grid-cols-4 gap-0 p-6">
                                     {% for sub in cat.active_subcategories %}
@@ -736,7 +754,7 @@ Theme styles (Flower District
 
         <!-- MOBILE SEARCH & NAV (Slide Down) -->
         <div id="mobile-menu" class="hidden lg:hidden"
-            style="border-top:1px solid var(--border);background:var(--card);max-height:85vh;overflow-y:auto;">
+            style="border-top:1px solid var(--border-custom);background:var(--card);max-height:85vh;overflow-y:auto;">
             <div style="padding:28px 24px;display:flex;flex-direction:column;gap:28px;">
                 <!-- Mobile Search -->
                 <form action="{% url 'products:product_list' %}" method="GET" class="relative">

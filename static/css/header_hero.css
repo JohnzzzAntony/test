@@ -113,7 +113,7 @@
     }
 }
 
-#mobile-menu {
+#mobile-menu:not(.hidden) {
     animation: slideDownFade 0.3s ease-out forwards;
 }
 

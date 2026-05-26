@@ -2,127 +2,149 @@
 {% load static %}
 
 {% block content %}
-<div class="min-h-[85vh] flex items-center justify-center py-12 px-6" style="background:var(--surface);">
+<div style="min-height:85vh;display:flex;align-items:stretch;">
 
-    {% comment %}
-Left Panel — Visual #}
-    <div class="hidden lg:flex lg:w-1/2 xl:w-[58%] min-h-[85vh]" style="position:relative;overflow:hidden;">
-        <div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(17,64,132,0.92) 0%,rgba(26,92,184,0.85) 100%);"></div>
+    <!-- Left Panel: Brand Visual -->
+    <div class="hidden lg:flex" style="width:50%;position:relative;overflow:hidden;background:var(--primary);">
+        <div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(11,40,100,0.95) 0%,rgba(17,64,132,0.88) 100%);"></div>
+        <!-- Decorative grid lines -->
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:40px 40px;"></div>
+        <div style="position:absolute;bottom:-80px;right:-80px;width:400px;height:400px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);"></div>
+        <div style="position:absolute;bottom:-40px;right:-40px;width:280px;height:280px;border-radius:50%;border:1px solid rgba(255,255,255,0.08);"></div>
+        <div style="position:absolute;top:-60px;left:-60px;width:300px;height:300px;border-radius:50%;border:1px solid rgba(255,255,255,0.05);"></div>
+
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px;z-index:10;">
-            <a href="{% url 'core:home' %}">
+            <a href="{% url 'core:home' %}" style="display:block;margin-bottom:40px;">
                 {% if site_settings.logo %}
-                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="h-14 w-auto object-contain mb-8 brightness-0 invert">
+                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}"
+                         style="height:56px;width:auto;object-fit:contain;filter:brightness(0) invert(1);">
                 {% else %}
-                    <span style="font-family:var(--font-heading);font-size:36px;font-weight:800;color:white;letter-spacing:-0.02em;">{{ site_settings.site_name|default:"JKR International" }}</span>
+                    <div style="font-family:var(--font-heading);font-size:32px;font-weight:800;color:white;letter-spacing:-0.02em;">
+                        {{ site_settings.site_name|default:"JKR International" }}
+                    </div>
                 {% endif %}
             </a>
-            <h2 style="font-family:var(--font-heading);font-size:40px;font-weight:700;color:white;line-height:1.15;margin-bottom:20px;max-width:400px;">
+            <div style="width:40px;height:1px;background:rgba(255,255,255,0.25);margin:0 auto 32px;"></div>
+            <h2 style="font-family:var(--font-heading);font-size:36px;font-weight:700;color:white;line-height:1.2;margin-bottom:20px;max-width:360px;letter-spacing:-0.02em;">
                 Welcome Back
             </h2>
-            <p style="font-size:16px;color:rgba(255,255,255,0.8);max-width:380px;line-height:1.7;">
+            <p style="font-size:15px;color:rgba(255,255,255,0.65);max-width:320px;line-height:1.75;">
                 Sign in to manage your equipment inquiries, saved solutions, and personalized healthcare technology experience.
             </p>
+            <div style="margin-top:48px;display:flex;flex-direction:column;gap:16px;width:100%;max-width:300px;">
+                <div style="display:flex;align-items:center;gap:14px;padding:16px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);">
+                    <i class="fas fa-shield-alt" style="color:rgba(255,255,255,0.5);font-size:18px;flex-shrink:0;"></i>
+                    <span style="font-size:13px;color:rgba(255,255,255,0.65);font-weight:500;">Secure & encrypted sign-in</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:14px;padding:16px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);">
+                    <i class="fas fa-headset" style="color:rgba(255,255,255,0.5);font-size:18px;flex-shrink:0;"></i>
+                    <span style="font-size:13px;color:rgba(255,255,255,0.65);font-weight:500;">Priority customer support</span>
+                </div>
+            </div>
         </div>
-        {# Decorative element
-{% endcomment %}
-        <div style="position:absolute;bottom:-60px;right:-60px;font-size:180px;color:rgba(255,255,255,0.04);font-family:var(--font-heading);line-height:1;user-select:none;pointer-events:none;">+</div>
     </div>
 
-    {% comment %}
-Right Panel — Form #}
-    <div class="w-full lg:w-1/2 xl:w-[42%] flex items-center justify-center p-8">
-        <div style="width:100%;max-width:440px;">
+    <!-- Right Panel: Form -->
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:48px 32px;background:var(--surface);">
+        <div style="width:100%;max-width:420px;">
 
-            {# Mobile Logo
-{% endcomment %}
-            <div class="lg:hidden text-center mb-10">
+            <!-- Mobile Logo -->
+            <div class="lg:hidden" style="text-align:center;margin-bottom:36px;">
                 <a href="{% url 'core:home' %}">
-                    <span style="font-family:var(--font-heading);font-size:24px;font-weight:800;color:var(--text-primary);">{{ site_settings.site_name|default:"JKR International" }}</span>
+                    {% if site_settings.logo %}
+                        <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}"
+                             style="height:40px;width:auto;object-fit:contain;margin:0 auto;">
+                    {% else %}
+                        <span style="font-family:var(--font-heading);font-size:22px;font-weight:800;color:var(--text-primary);">
+                            {{ site_settings.site_name|default:"JKR International" }}
+                        </span>
+                    {% endif %}
                 </a>
             </div>
 
-            <div style="margin-bottom:32px;">
-                <h1 style="font-family:var(--font-heading);font-size:28px;font-weight:800;color:var(--text-primary);margin-bottom:8px;letter-spacing:-0.02em;">
-                    Sign In
-                </h1>
-                <p style="font-size:14px;color:var(--text-secondary);">Don't have an account? <a href="{% url 'accounts:register' %}" style="color:var(--primary);font-weight:700;text-decoration:none;">Create one</a></p>
+            <!-- Header -->
+            <div style="margin-bottom:36px;">
+                <p style="font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:var(--primary);margin-bottom:12px;">Account Access</p>
+                <h1 style="font-family:var(--font-heading);font-size:30px;font-weight:800;color:var(--text-primary);margin-bottom:10px;letter-spacing:-0.02em;line-height:1.15;">Sign In</h1>
+                <p style="font-size:14px;color:var(--text-secondary);">
+                    Don't have an account?
+                    <a href="{% url 'accounts:register' %}" style="color:var(--primary);font-weight:700;text-decoration:none;">Create one &rarr;</a>
+                </p>
             </div>
 
-            {% comment %}
-Social Login #}
-            {% comment %}
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;">
-                <a href="#" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1px solid var(--border-light);border-radius:var(--radius-lg);font-family:var(--font-heading);font-size:12px;font-weight:700;color:var(--txt-main);text-decoration:none;transition:all 0.2s;background:var(--card);">
-                    <i class="fab fa-google" style="color:#DB4437;"></i> Google
-                </a>
-                <a href="#" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1px solid var(--border-light);border-radius:var(--radius-lg);font-family:var(--font-heading);font-size:12px;font-weight:700;color:var(--txt-main);text-decoration:none;transition:all 0.2s;background:var(--card);">
-                    <i class="fab fa-apple" style="font-size:16px;"></i> Apple
-                </a>
-            </div>
-
-            <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px;">
-                <div style="flex:1;height:1px;background:var(--border-light);"></div>
-                <span style="font-size:11px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">or sign in with</span>
-                <div style="flex:1;height:1px;background:var(--border-light);"></div>
-            </div>
-            {% endcomment %}
-
-            {# Error Messages
-{% endcomment %}
+            <!-- Error Messages -->
             {% if messages %}
-            <div style="padding:14px 16px;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2);border-radius:var(--radius-lg);margin-bottom:20px;">
+            <div style="padding:14px 16px;background:rgba(192,57,43,0.07);border:1px solid rgba(192,57,43,0.18);margin-bottom:24px;">
                 {% for message in messages %}
-                <p style="font-size:13px;font-weight:600;color:#C0392B;">{{ message }}</p>
+                <p style="font-size:13px;font-weight:600;color:#C0392B;display:flex;align-items:center;gap:8px;">
+                    <i class="fas fa-exclamation-circle"></i> {{ message }}
+                </p>
                 {% endfor %}
             </div>
             {% endif %}
 
-            {# Login Form #}
+            <!-- Login Form -->
             <form method="POST" action="{% url 'accounts:login' %}" style="display:flex;flex-direction:column;gap:20px;">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ next|default:'' }}">
 
                 <div>
-                    <label class="form-label" for="id_username">Username or Email</label>
+                    <label for="id_username" style="display:block;font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px;">Username or Email</label>
                     <input type="text"
                            name="username"
                            id="id_username"
                            placeholder="Enter your username"
                            required
-                           style="width:100%;padding:14px 16px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-lg);font-family:var(--font-body);font-size:14px;color:var(--txt-main);outline:none;transition:border-color 0.2s;box-shadow:var(--shadow-sm);">
+                           autocomplete="username"
+                           style="width:100%;padding:14px 16px;background:white;border:1px solid var(--border);font-family:var(--font-main);font-size:14px;color:var(--text-primary);outline:none;transition:border-color 0.2s;box-sizing:border-box;"
+                           onfocus="this.style.borderColor='var(--primary)'"
+                           onblur="this.style.borderColor='var(--border)'">
                 </div>
 
                 <div>
-                    <label class="form-label" for="id_password">Password</label>
+                    <label for="id_password" style="display:block;font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px;">Password</label>
                     <input type="password"
                            name="password"
                            id="id_password"
                            placeholder="Enter your password"
                            required
-                           style="width:100%;padding:14px 16px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius-lg);font-family:var(--font-body);font-size:14px;color:var(--txt-main);outline:none;transition:border-color 0.2s;box-shadow:var(--shadow-sm);">
+                           autocomplete="current-password"
+                           style="width:100%;padding:14px 16px;background:white;border:1px solid var(--border);font-family:var(--font-main);font-size:14px;color:var(--text-primary);outline:none;transition:border-color 0.2s;box-sizing:border-box;"
+                           onfocus="this.style.borderColor='var(--primary)'"
+                           onblur="this.style.borderColor='var(--border)'">
                 </div>
 
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                     <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--text-secondary);">
-                        <input type="checkbox" name="remember" style="accent-color:var(--primary);width:16px;height:16px;border-radius:4px;">
+                        <input type="checkbox" name="remember"
+                               style="accent-color:var(--primary);width:15px;height:15px;">
                         <span>Remember me</span>
                     </label>
                     <a href="#" style="font-size:12px;font-weight:700;color:var(--primary);text-decoration:none;">Forgot Password?</a>
                 </div>
 
                 <button type="submit"
-                        style="width:100%;padding:16px;border:none;border-radius:var(--radius-full);background:var(--primary);color:white;font-family:var(--font-heading);font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:var(--shadow-btn);">
+                        style="width:100%;padding:16px;border:none;background:var(--primary);color:white;font-family:var(--font-heading);font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;"
+                        onmouseover="this.style.background='var(--primary-dark,#0d3570)'"
+                        onmouseout="this.style.background='var(--primary)'">
                     Sign In <i class="fas fa-arrow-right text-xs"></i>
                 </button>
             </form>
 
-            <div style="margin-top:28px;padding-top:28px;border-top:1px solid var(--border-light);text-align:center;">
-                <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">Continue as a guest</p>
-                <a href="{% url 'accounts:guest_checkout' %}{% if next %}?next={{ next }}{% endif %}"
-                   style="display:block;width:100%;padding:14px;border:1px solid var(--border);border-radius:var(--radius-full);text-align:center;font-family:var(--font-heading);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-secondary);text-decoration:none;transition:all 0.2s;background:var(--card);">
-                    Continue as Guest
-                </a>
+            <!-- Divider -->
+            <div style="display:flex;align-items:center;gap:16px;margin:28px 0;">
+                <div style="flex:1;height:1px;background:var(--border);"></div>
+                <span style="font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);">or</span>
+                <div style="flex:1;height:1px;background:var(--border);"></div>
             </div>
+
+            <!-- Guest Checkout -->
+            <a href="{% url 'accounts:guest_checkout' %}{% if next %}?next={{ next }}{% endif %}"
+               style="display:flex;align-items:center;justify-content:center;width:100%;padding:14px;border:1px solid var(--border);color:var(--text-secondary);font-family:var(--font-heading);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;background:white;"
+               onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'"
+               onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">
+                Continue as Guest
+            </a>
 
         </div>
     </div>
