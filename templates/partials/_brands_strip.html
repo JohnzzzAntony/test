@@ -1,42 +1,41 @@
 {% load static %}
-{% comment %}
-================================================================
-   _brands_strip.html — Scrolling Brand Logos Strip
-   ================================================================
-{% endcomment %}
+{# ================================================================
+   _brands_strip.html — Auto-sliding CSS marquee brand logos
+   ================================================================ #}
 {% if brands %}
-<section class="fd-brands-section">
-  <div class="container">
-    <h2 class="fd-section-title text-center">Our Brands</h2>
-    <div class="swiper fd-brands-swiper">
-      <div class="swiper-wrapper">
-        {% for brand in brands %}
-        <div class="swiper-slide">
-          <a href="{{ brand.get_absolute_url }}" class="fd-brand-logo-link" title="{{ brand.name }}">
-            <img src="{{ brand.get_image_url }}" alt="{{ brand.name }}" class="fd-brand-logo" loading="lazy">
-          </a>
-        </div>
-        {% endfor %}
-      </div>
+<section class="fd-brands-section" aria-label="Our Brands">
+  <div class="hp-container" style="margin-bottom:var(--hp-s3);">
+    <div style="text-align:center;margin-bottom:var(--hp-s3);">
+      <span class="hp-section-label">Trusted Brands</span>
+      <h2 class="hp-section-title" style="margin-top:4px;font-size:clamp(18px,2vw,24px);">Our Brands</h2>
     </div>
   </div>
+
+  {# CSS-only infinite marquee — no JS required #}
+  <div class="brands-marquee-wrapper" aria-hidden="true">
+    <div class="brands-marquee-track">
+      {# First copy #}
+      {% for brand in brands %}
+      <a href="{{ brand.get_absolute_url }}" class="fd-brand-logo-link" title="{{ brand.name }}" tabindex="-1">
+        <img src="{{ brand.get_image_url }}" alt="{{ brand.name }}" class="fd-brand-logo" loading="lazy">
+      </a>
+      {% endfor %}
+      {# Duplicate for seamless loop #}
+      {% for brand in brands %}
+      <a href="{{ brand.get_absolute_url }}" class="fd-brand-logo-link" title="{{ brand.name }}" tabindex="-1" aria-hidden="true">
+        <img src="{{ brand.get_image_url }}" alt="" class="fd-brand-logo" loading="lazy">
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  {# Accessible fallback links for screen readers #}
+  <div class="hp-container">
+    <ul style="display:none;" aria-label="Brands list">
+      {% for brand in brands %}
+      <li><a href="{{ brand.get_absolute_url }}">{{ brand.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
 </section>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  if (typeof Swiper !== 'undefined') {
-    new Swiper('.fd-brands-swiper', {
-      slidesPerView: 3,
-      spaceBetween: 24,
-      autoplay: { delay: 2500, disableOnInteraction: false },
-      loop: true,
-      speed: 800,
-      breakpoints: {
-        480:  { slidesPerView: 4 },
-        768:  { slidesPerView: 5 },
-        1024: { slidesPerView: 7 },
-      },
-    });
-  }
-});
-</script>
 {% endif %}

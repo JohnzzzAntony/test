@@ -1,48 +1,86 @@
 {% load static %}
-<section class="section">
-  <div class="container">
-    <div class="section-header">
-      {% if section_subtitle %}<span class="section-eyebrow">{{ section_subtitle }}</span>{% endif %}
-      <h2 class="section-title">{{ section_title|default:"Products" }}</h2>
-      {% if section_link %}
-      <div style="margin-top:20px;">
-        <a href="{{ section_link }}" class="btn btn-outline">View All</a>
+{# ================================================================
+   _product_slider.html — Product Swiper Carousel Section
+   Variables: section_title, section_subtitle, products, slider_id, section_link
+   ================================================================ #}
+<section class="section" aria-labelledby="section-{{ slider_id|default:'products' }}-heading">
+  <div class="hp-container">
+
+    <div class="hp-section-header">
+      <div>
+        {% if section_subtitle %}
+        <span class="hp-section-label">{{ section_subtitle }}</span>
+        {% endif %}
+        <h2 class="hp-section-title" id="section-{{ slider_id|default:'products' }}-heading">
+          {{ section_title|default:"Products" }}
+        </h2>
+        <div class="hp-divider"></div>
       </div>
+      {% if section_link %}
+      <a href="{{ section_link }}" class="hp-view-all" aria-label="View all {{ section_title|default:'products' }}">
+        View All
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
       {% endif %}
     </div>
 
-    <div class="swiper product-swiper" id="swiper-{{ slider_id|default:'products' }}">
+    {# Product Swiper #}
+    <div class="swiper product-swiper"
+         id="swiper-{{ slider_id|default:'products' }}"
+         role="region"
+         aria-label="{{ section_title|default:'Products' }} carousel">
       <div class="swiper-wrapper">
         {% for product in products %}
-        <div class="swiper-slide">
-          <div class="product-card" onclick="window.location.href='{{ product.get_absolute_url }}'">
+        <div class="swiper-slide" style="height:auto;">
+
+          {# ── Product Card ── #}
+          <article class="product-card"
+                   onclick="window.location.href='{{ product.get_absolute_url }}'"
+                   style="cursor:pointer;"
+                   aria-label="{{ product.name }}">
+
             <div class="product-card-image">
+
+              {# Badges #}
               {% if product.price_info.has_offer %}
-              <div class="product-card-badges">
-                <span class="product-badge product-badge-sale">{{ product.price_info.discount_display|default:"SALE" }}</span>
+              <div class="product-card-badges" aria-label="On sale">
+                <span class="product-badge product-badge-sale">
+                  {{ product.price_info.discount_display|default:"SALE" }}
+                </span>
               </div>
               {% elif product.badge %}
               <div class="product-card-badges">
-                <span class="product-badge product-badge-new" style="background-color: var(--{{ product.badge_color|default:'accent' }});">{{ product.badge }}</span>
+                <span class="product-badge product-badge-new"
+                      style="background-color:var(--{{ product.badge_color|default:'primary' }});">
+                  {{ product.badge }}
+                </span>
               </div>
               {% endif %}
 
-              <div class="product-card-wishlist" onclick="event.stopPropagation(); window.location.href='{% url 'products:toggle_wishlist' product.id %}'" title="Add to Wishlist">
-                <i class="far fa-heart"></i>
-              </div>
+              {# Wishlist #}
+              <button class="product-card-wishlist"
+                      onclick="event.stopPropagation(); window.location.href='{% url 'products:toggle_wishlist' product.id %}';"
+                      aria-label="Add {{ product.name }} to wishlist"
+                      title="Add to Wishlist">
+                <i class="far fa-heart" aria-hidden="true"></i>
+              </button>
 
-              <img src="{{ product.get_image_url }}" alt="{{ product.name }}" loading="lazy">
-            </div>
+              {# Product image #}
+              <img src="{{ product.get_image_url }}"
+                   alt="{{ product.name }}"
+                   loading="lazy"
+                   style="width:100%;height:100%;object-fit:contain;padding:12px;transition:transform 400ms ease;">
+
+            </div>{# /product-card-image #}
 
             <div class="product-card-body">
+
               <h3 class="product-card-name">{{ product.name|truncatechars:55 }}</h3>
-              
-              <div class="product-card-rating">
-                <div class="rating-stars">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
+
+              <div class="product-card-rating" aria-label="{{ product.review_count|default:0 }} reviews">
+                <div class="rating-stars" aria-hidden="true">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i>
                   <i class="fas fa-star-half-alt"></i>
                 </div>
                 <span class="rating-count">({{ product.review_count|default:0 }})</span>
@@ -50,25 +88,47 @@
 
               <div class="product-card-price">
                 {% if product.price_info.has_offer %}
-                  <span class="price-current">{{ product.price_info.final_price }} <span class="price-currency">AED</span></span>
-                  <span class="price-original">{{ product.price_info.regular_price }} AED</span>
+                  <span class="price-current" aria-label="Price: {{ product.price_info.final_price }} AED">
+                    {{ product.price_info.final_price }} <span class="price-currency">AED</span>
+                  </span>
+                  <span class="price-original" aria-label="Original: {{ product.price_info.regular_price }} AED">
+                    {{ product.price_info.regular_price }} AED
+                  </span>
                 {% elif product.price_info.regular_price %}
-                  <span class="price-current">{{ product.price_info.regular_price }} <span class="price-currency">AED</span></span>
+                  <span class="price-current" aria-label="Price: {{ product.price_info.regular_price }} AED">
+                    {{ product.price_info.regular_price }} <span class="price-currency">AED</span>
+                  </span>
                 {% else %}
-                  <span class="price-current" style="font-size:14px;">Price on Request</span>
+                  <span class="price-current" style="font-size:13px;font-style:italic;">Price on Request</span>
                 {% endif %}
               </div>
-            </div>
-          </div>
-        </div>
+
+              {# Quick CTA — see product detail #}
+              <a href="{{ product.get_absolute_url }}"
+                 class="btn btn-primary"
+                 style="margin-top:auto;font-size:11px;padding:9px 16px;border-radius:6px;text-align:center;justify-content:center;"
+                 onclick="event.stopPropagation();"
+                 aria-label="View {{ product.name }}">
+                <i class="fas fa-eye" aria-hidden="true"></i> View Details
+              </a>
+
+            </div>{# /product-card-body #}
+          </article>{# /product-card #}
+
+        </div>{# /swiper-slide #}
         {% empty %}
-        <p style="text-align:center;width:100%;">No products available.</p>
+        <div style="text-align:center;padding:var(--hp-s5);color:var(--hp-gray-400,#94a3b8);width:100%;">
+          <i class="fas fa-box-open" style="font-size:40px;margin-bottom:12px;display:block;" aria-hidden="true"></i>
+          <p>No products available at the moment.</p>
+        </div>
         {% endfor %}
       </div>
-      <div class="swiper-button-next" style="color:var(--primary);transform:scale(0.7);"></div>
-      <div class="swiper-button-prev" style="color:var(--primary);transform:scale(0.7);"></div>
-      <div class="swiper-pagination"></div>
-    </div>
+
+      <div class="swiper-button-next" aria-label="Next"></div>
+      <div class="swiper-button-prev" aria-label="Previous"></div>
+      <div class="swiper-pagination" aria-hidden="true"></div>
+    </div>{# /swiper #}
+
   </div>
 </section>
 
@@ -82,16 +142,20 @@ document.addEventListener('DOMContentLoaded', function () {
         nextEl: '#swiper-{{ slider_id|default:"products" }} .swiper-button-next',
         prevEl: '#swiper-{{ slider_id|default:"products" }} .swiper-button-prev',
       },
-      pagination: { el: '#swiper-{{ slider_id|default:"products" }} .swiper-pagination', clickable: true },
+      pagination: {
+        el: '#swiper-{{ slider_id|default:"products" }} .swiper-pagination',
+        clickable: true,
+      },
       breakpoints: {
-        480: { slidesPerView: 2, spaceBetween: 16 },
-        768: { slidesPerView: 3, spaceBetween: 20 },
+        480:  { slidesPerView: 2, spaceBetween: 16 },
+        768:  { slidesPerView: 3, spaceBetween: 20 },
         1024: { slidesPerView: 4, spaceBetween: 24 },
         1280: { slidesPerView: 5, spaceBetween: 24 },
       },
       autoplay: { delay: 4000, disableOnInteraction: false, pauseOnMouseEnter: true },
       loop: false,
       speed: 600,
+      a11y: { enabled: true },
     });
   }
 });

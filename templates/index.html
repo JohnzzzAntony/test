@@ -10,53 +10,86 @@
 
 {% block content %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
-   1. HERO SLIDER
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+{# ═══════════════════════════════════════════════════════
+   1. HERO SLIDER — Full-width with gradient overlay
+════════════════════════════════════════════════════════ #}
 {% if sliders %}
-<section class="hero-section">
+<section class="hero-section" aria-label="Hero Banner">
   <div class="swiper hero-swiper">
     <div class="swiper-wrapper">
       {% for slide in sliders %}
-      <div class="swiper-slide" style="background-color:{{ slide.background_color|default:'#114084' }}">
+      <div class="swiper-slide"
+           style="background-color:{{ slide.background_color|default:'#0f4c8a' }};"
+           aria-label="{{ slide.title|default:'Slide' }}">
+
         {% if slide.image or slide.image_url %}
-        <img src="{{ slide.get_image_url }}" alt="{{ slide.title|default:'Hero' }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+        <img src="{{ slide.get_image_url }}"
+             alt="{{ slide.title|default:'Hero banner' }}"
+             loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+             fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}">
         {% endif %}
-        <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(17,64,132,.5),rgba(17,64,132,.2) 60%,transparent);pointer-events:none;"></div>
+
+        {# Gradient overlay #}
+        <div style="position:absolute;inset:0;background:linear-gradient(105deg,rgba(10,53,97,.78) 0%,rgba(10,53,97,.45) 55%,rgba(10,53,97,.15) 100%);pointer-events:none;" aria-hidden="true"></div>
+
         <div class="hero-content">
-          {% if slide.subtitle %}<span class="hero-badge">{{ slide.subtitle }}</span>{% endif %}
-          {% if slide.title %}<h1 class="hero-title">{{ slide.title }}</h1>{% endif %}
-          {% if slide.description %}<p class="hero-subtitle">{{ slide.description }}</p>{% endif %}
-          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          {% if slide.subtitle %}
+          <span class="hero-badge">{{ slide.subtitle }}</span>
+          {% endif %}
+
+          {% if slide.title %}
+          <h1 class="hero-title">{{ slide.title }}</h1>
+          {% endif %}
+
+          {% if slide.description %}
+          <p class="hero-subtitle">{{ slide.description }}</p>
+          {% endif %}
+
+          <div class="hero-ctas">
             {% if slide.btn_text and slide.btn_link %}
-            <a href="{{ slide.btn_link }}" class="fd-btn-primary" style="background:#fff;color:#114084;padding:14px 32px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s;">
-              {{ slide.btn_text }} <i class="fas fa-arrow-right"></i>
+            <a href="{{ slide.btn_link }}" class="hero-btn-primary">
+              {{ slide.btn_text }}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
             {% endif %}
             {% if slide.btn2_text and slide.btn2_link %}
-            <a href="{{ slide.btn2_link }}" style="padding:13px 32px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:2px solid rgba(255,255,255,.6);color:#fff;display:inline-flex;align-items:center;gap:8px;transition:border-color .2s,background .2s;">
-              {{ slide.btn2_text }}
-            </a>
+            <a href="{{ slide.btn2_link }}" class="hero-btn-secondary">{{ slide.btn2_text }}</a>
             {% endif %}
           </div>
+
+          {# Trust badges — always visible below CTAs #}
+          <div class="hero-trust">
+            <div class="hero-trust-item">
+              <i class="fas fa-shipping-fast" aria-hidden="true"></i>
+              <span>Free Delivery</span>
+            </div>
+            <div class="hero-trust-item">
+              <i class="fas fa-shield-alt" aria-hidden="true"></i>
+              <span>2-Year Warranty</span>
+            </div>
+            <div class="hero-trust-item">
+              <i class="fas fa-headset" aria-hidden="true"></i>
+              <span>24/7 Support</span>
+            </div>
+          </div>
         </div>
+
       </div>
       {% endfor %}
     </div>
-    <div class="swiper-pagination"></div>
-    <div class="swiper-button-next" style="color:#fff;"></div>
-    <div class="swiper-button-prev" style="color:#fff;"></div>
+    <div class="swiper-pagination" aria-hidden="true"></div>
+    <div class="swiper-button-next" aria-label="Next slide"></div>
+    <div class="swiper-button-prev" aria-label="Previous slide"></div>
   </div>
 </section>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   if (typeof Swiper !== 'undefined') {
     new Swiper('.hero-swiper', {
       loop: true,
-      speed: 800,
-      autoplay: { delay: 5000, disableOnInteraction: false },
+      speed: 900,
+      autoplay: { delay: 5500, disableOnInteraction: false, pauseOnMouseEnter: true },
       pagination: { el: '.hero-swiper .swiper-pagination', clickable: true },
       navigation: {
         nextEl: '.hero-swiper .swiper-button-next',
@@ -64,97 +97,113 @@ document.addEventListener('DOMContentLoaded', function () {
       },
       effect: 'fade',
       fadeEffect: { crossFade: true },
+      a11y: { prevSlideMessage: 'Previous slide', nextSlideMessage: 'Next slide' },
     });
   }
 });
 </script>
 {% endif %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
-   2. WHY US — USP Strip (above fold for instant trust)
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+{# ═══════════════════════════════════════════════════════
+   2. USP STRIP — Trust signals immediately below hero
+════════════════════════════════════════════════════════ #}
 {% include 'partials/_why_us.html' %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
-   3. SHOP BY CATEGORY
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+{# ═══════════════════════════════════════════════════════
+   3. SHOP BY CATEGORY — Circular icon grid
+════════════════════════════════════════════════════════ #}
 {% if shop_by_categories %}
-<section class="section">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">{{ design_settings.hp_categories_title|safe|default:"Shop by Category" }}</h2>
+<section class="hp-categories-section" aria-labelledby="categories-heading">
+  <div class="hp-container">
+    <div class="hp-section-header">
+      <div>
+        <span class="hp-section-label">Browse</span>
+        <h2 class="hp-section-title" id="categories-heading">
+          {{ design_settings.hp_categories_title|safe|default:"Shop by Category" }}
+        </h2>
+        <div class="hp-divider"></div>
+      </div>
+      <a href="{% url 'products:product_list' %}" class="hp-view-all" aria-label="View all categories">
+        All Categories
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
     </div>
-    <div class="category-strip">
-      <div class="category-strip-inner">
+
+    <div class="hp-category-grid" role="list">
       {% for cat in shop_by_categories %}
-      <a href="{{ cat.get_absolute_url }}" class="category-card" style="min-width: 150px;">
-        <div class="category-card-image">
+      <a href="{{ cat.get_absolute_url }}"
+         class="hp-cat-card"
+         role="listitem"
+         aria-label="Shop {{ cat.name }}">
+        <div class="hp-cat-img-wrap">
           {% if cat.get_image_url and cat.get_image_url != 'None' and 'placeholder' not in cat.get_image_url|default:'' %}
-            <img src="{{ cat.get_image_url }}" alt="{{ cat.name }}" loading="lazy">
+            <img src="{{ cat.get_image_url }}" alt="" loading="lazy" aria-hidden="true">
           {% elif cat.icon_svg %}
-            <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--primary);">{{ cat.icon_svg|safe }}</div>
+            <div aria-hidden="true">{{ cat.icon_svg|safe }}</div>
           {% else %}
-            <div style="display:flex;align-items:center;justify-content:center;height:100%;">
-              <i class="fas fa-th-large" style="font-size:28px;color:var(--primary);"></i>
-            </div>
+            <i class="fas fa-th-large" aria-hidden="true"></i>
           {% endif %}
         </div>
-        <p class="category-card-name">{{ cat.name }}</p>
+        <p class="hp-cat-name">{{ cat.name }}</p>
       </a>
       {% endfor %}
-      </div>
     </div>
   </div>
 </section>
 {% endif %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
+{# ═══════════════════════════════════════════════════════
    4. LATEST PRODUCTS SLIDER
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+════════════════════════════════════════════════════════ #}
 {% with section_title=design_settings.hp_latest_products_title|default:"Latest Products" section_subtitle=design_settings.hp_latest_products_subtitle products=latest_products slider_id="latest" section_link="/products/" %}
 {% include 'partials/_product_slider.html' %}
 {% endwith %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
+{# ═══════════════════════════════════════════════════════
    5. PROMO BANNERS
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+════════════════════════════════════════════════════════ #}
 {% if promo_sections %}
-<section class="promo-section">
-  <div class="container">
+<section class="promo-section" aria-label="Promotional Banners">
+  <div class="hp-container">
     {% for promo in promo_sections %}
       {% if promo.items.count == 1 %}
         {% for item in promo.items.all %}
-        <a href="{{ item.link|default:'#' }}" class="promo-single" style="margin-bottom:20px;">
+        <a href="{{ item.link|default:'#' }}"
+           class="promo-single"
+           style="margin-bottom:var(--hp-s3);"
+           aria-label="{{ item.title|default:'View offer' }}">
           {% if item.get_image_url %}
-          <img src="{{ item.get_image_url }}" alt="{{ item.title|default:'Promo' }}" loading="lazy">
+          <img src="{{ item.get_image_url }}" alt="{{ item.title|default:'Promotional banner' }}" loading="lazy">
           {% endif %}
           {% if item.title %}
           <div class="promo-overlay">
             <h3>{{ item.title }}</h3>
             {% if item.subtitle %}<p>{{ item.subtitle }}</p>{% endif %}
+            <span class="promo-cta-pill">
+              Shop Now
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
           </div>
           {% endif %}
         </a>
         {% endfor %}
       {% else %}
-      <div class="promo-grid-2">
+      <div class="promo-grid-2" style="margin-bottom:var(--hp-s3);">
         {% for item in promo.items.all %}
-        <a href="{{ item.link|default:'#' }}" class="promo-card">
+        <a href="{{ item.link|default:'#' }}"
+           class="promo-card"
+           aria-label="{{ item.title|default:'View offer' }}">
           {% if item.get_image_url %}
-          <img src="{{ item.get_image_url }}" alt="{{ item.title|default:'Promo' }}" loading="lazy">
+          <img src="{{ item.get_image_url }}" alt="{{ item.title|default:'Promotional banner' }}" loading="lazy">
           {% endif %}
           {% if item.title %}
           <div class="promo-overlay">
             <h3>{{ item.title }}</h3>
             {% if item.subtitle %}<p>{{ item.subtitle }}</p>{% endif %}
+            <span class="promo-cta-pill" aria-hidden="true">
+              Shop Now
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
           </div>
           {% endif %}
         </a>
@@ -166,54 +215,55 @@ document.addEventListener('DOMContentLoaded', function () {
 </section>
 {% endif %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
-   6. COLLECTIONS TABS (with product sliders per tab)
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+{# ═══════════════════════════════════════════════════════
+   6. COLLECTIONS TABS — Products by collection
+════════════════════════════════════════════════════════ #}
 {% include 'partials/_collections_tabs.html' %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
-   7. FEATURED / OFFER PRODUCTS SLIDER
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+{# ═══════════════════════════════════════════════════════
+   7. OFFERS / FEATURED PRODUCTS
+════════════════════════════════════════════════════════ #}
 {% if active_offers_products %}
-{% with section_title="On Sale Now" products=active_offers_products slider_id="offers" section_link="/products/" %}
+{% with section_title="On Sale Now" section_subtitle="Limited-time offers on our top products" products=active_offers_products slider_id="offers" section_link="/products/" %}
 {% include 'partials/_product_slider.html' %}
 {% endwith %}
 {% elif featured_products %}
-{% with section_title=design_settings.hp_bestsellers_title|default:"Featured Products" products=featured_products slider_id="featured" section_link="/products/" %}
+{% with section_title=design_settings.hp_bestsellers_title|default:"Featured Products" section_subtitle="" products=featured_products slider_id="featured" section_link="/products/" %}
 {% include 'partials/_product_slider.html' %}
 {% endwith %}
 {% endif %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
+{# ═══════════════════════════════════════════════════════
    8. COUNTERS / STATS STRIP
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+════════════════════════════════════════════════════════ #}
 {% include 'partials/_counters.html' %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
-   9. MISSION / VISION
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+{# ═══════════════════════════════════════════════════════
+   9. MISSION / VISION CARDS
+════════════════════════════════════════════════════════ #}
 {% if mission_vision %}
-<section class="fd-mission-section">
-  <div class="container">
+<section class="fd-mission-section" aria-labelledby="mission-heading">
+  <div class="hp-container">
+    <div class="hp-section-header" style="margin-bottom:var(--hp-s4);">
+      <div>
+        <span class="hp-section-label">Our Promise</span>
+        <h2 class="hp-section-title" id="mission-heading">What Drives Us</h2>
+        <div class="hp-divider"></div>
+      </div>
+    </div>
     <div class="fd-mission-grid">
       {% for mv in mission_vision %}
       <div class="fd-mission-item">
-        <div class="fd-mission-icon">
+        <div class="fd-mission-icon" aria-hidden="true">
           {% if mv.section_type == 'mission' %}
           <i class="fas fa-bullseye"></i>
-          {% else %}
+          {% elif mv.section_type == 'vision' %}
           <i class="fas fa-eye"></i>
+          {% else %}
+          <i class="fas fa-heart"></i>
           {% endif %}
         </div>
-        <h2 class="fd-mission-title">{{ mv.title }}</h2>
+        <h3 class="fd-mission-title">{{ mv.title }}</h3>
         {% if mv.content %}
         <p class="fd-mission-text">{{ mv.content|striptags }}</p>
         {% endif %}
@@ -224,32 +274,32 @@ document.addEventListener('DOMContentLoaded', function () {
 </section>
 {% endif %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
-   10. BRANDS STRIP
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+{# ═══════════════════════════════════════════════════════
+   10. BRANDS STRIP — Auto-sliding marquee
+════════════════════════════════════════════════════════ #}
 {% include 'partials/_brands_strip.html' %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
+{# ═══════════════════════════════════════════════════════
    11. TESTIMONIALS CAROUSEL
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+════════════════════════════════════════════════════════ #}
 {% if design_settings.show_hp_testimonials %}
 {% include 'partials/_testimonials_carousel.html' %}
 {% endif %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
+{# ═══════════════════════════════════════════════════════
    12. CLIENTS / PARTNERS LOGOS
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+════════════════════════════════════════════════════════ #}
 {% if design_settings.show_hp_clients %}
 {% if public_clients or private_clients %}
-<section class="fd-clients-section">
-  <div class="container">
-    <h2 class="fd-section-title text-center">{{ design_settings.hp_clients_title|safe|default:"Trusted By" }}</h2>
+<section class="fd-clients-section" aria-labelledby="clients-heading">
+  <div class="hp-container">
+    <div style="text-align:center;margin-bottom:var(--hp-s5);">
+      <span class="hp-section-label">Trusted Partners</span>
+      <h2 class="hp-section-title fd-section-title text-center" id="clients-heading" style="margin-top:4px;">
+        {{ design_settings.hp_clients_title|safe|default:"Trusted By" }}
+      </h2>
+      <div class="hp-divider center"></div>
+    </div>
     {% if public_clients %}
     <div class="fd-clients-group">
       <p class="fd-clients-label">Public Sector</p>
@@ -275,43 +325,36 @@ document.addEventListener('DOMContentLoaded', function () {
 {% endif %}
 {% endif %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
+{# ═══════════════════════════════════════════════════════
    13. BLOG GRID
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+════════════════════════════════════════════════════════ #}
 {% include 'partials/_blog_grid.html' %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
-   14. NEWSLETTER
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+{# ═══════════════════════════════════════════════════════
+   14. NEWSLETTER SIGNUP
+════════════════════════════════════════════════════════ #}
 {% include 'partials/_newsletter_bar.html' %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
+{# ═══════════════════════════════════════════════════════
    15. SOCIAL POSTS GRID
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+════════════════════════════════════════════════════════ #}
 {% include 'partials/_social_grid.html' %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
+{# ═══════════════════════════════════════════════════════
    16. GALLERY
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+════════════════════════════════════════════════════════ #}
 {% include 'partials/_gallery_grid.html' %}
 
-{% comment %}
-═══════════════════════════════════════════════════════════
-   WhatsApp Float Button
-═══════════════════════════════════════════════════════════
-{% endcomment %}
+{# ═══════════════════════════════════════════════════════
+   FLOATING WHATSAPP — Always-visible contact shortcut
+════════════════════════════════════════════════════════ #}
 {% if site_settings.whatsapp %}
-<a href="https://wa.me/{{ site_settings.whatsapp|cut:'+' }}" class="floating-whatsapp"
-   target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-  <i class="fab fa-whatsapp"></i>
+<a href="https://wa.me/{{ site_settings.whatsapp|cut:'+' }}"
+   class="floating-whatsapp"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="Chat with us on WhatsApp">
+  <i class="fab fa-whatsapp" aria-hidden="true"></i>
 </a>
 {% endif %}
 
