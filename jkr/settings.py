@@ -59,7 +59,7 @@ _default_allowed_hosts = [
     "shop.creativegradientz.com",
     "ecom.creativegradientz.com",
     "admin.creativegradientz.com",
-    "creativegradientz.com",
+    "healthcheck.railway.app",
     ".up.railway.app",
     "localhost",
     "127.0.0.1",
