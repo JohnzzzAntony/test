@@ -1,8 +1,14 @@
+# Force Nixpacks to use Python only.
+# package.json exists for local Tailwind CSS compilation only — Node.js is
+# NOT needed at runtime. Without this, Nixpacks detects both package.json and
+# requirements.txt and tries to mix Node + Python, leaving pip unavailable.
+providers = ["python"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
+
 [phases.build]
-cmds = [
-  "pip install -r requirements.txt",
-  "python manage.py collectstatic --noinput --clear"
-]
+cmds = ["python manage.py collectstatic --noinput --clear"]
 
 [start]
-cmd = "gunicorn jkr.wsgi:application --bind 0.0.0.0:$PORT --timeout 120 --workers 2 --log-file - --access-logfile - --error-logfile -"
+cmd = "python manage.py migrate --noinput && gunicorn jkr.wsgi:application --bind 0.0.0.0:$PORT --timeout 120 --workers 2 --log-file - --access-logfile - --error-logfile -"
