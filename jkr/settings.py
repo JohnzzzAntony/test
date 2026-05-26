@@ -330,23 +330,35 @@ WHITENOISE_MANIFEST_STRICT = False
 WHITENOISE_COMPRESS = False
 WHITENOISE_KEEP_ONLY_HASHED_FILES = False
 
-# =============================================================================
-# STORAGE BACKENDS
-# Production:  Cloudinary (media)  +  WhiteNoise (static)
-# Development: Local filesystem
-# =============================================================================
+# -----------------------------------------------------------------------------
+# STATIC & MEDIA FILES CONFIGURATION
+# -----------------------------------------------------------------------------
+
+# For local dev, serve from local filesystem
+# For production (IS_PRODUCTION), we serve static via WhiteNoise and media via Cloudinary
 
 if IS_PRODUCTION:
+    # Use standard Cloudinary storage for media
     MEDIA_STORAGE_BACKEND = "cloudinary_storage.storage.MediaCloudinaryStorage"
-    STATIC_STORAGE_BACKEND = "whitenoise.storage.StaticFilesStorage"
+    # Use WhiteNoise for static files
+    STATIC_STORAGE_BACKEND = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 else:
     MEDIA_STORAGE_BACKEND = "django.core.files.storage.FileSystemStorage"
     STATIC_STORAGE_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
-# Legacy Django storage settings (fallback constructed dynamically by Django 5+)
-# Required for compatibility with django-cloudinary-storage which reads settings.STATICFILES_STORAGE
+# Fallbacks for libraries that still check these legacy settings (like django-cloudinary-storage)
 STATICFILES_STORAGE = STATIC_STORAGE_BACKEND
 DEFAULT_FILE_STORAGE = MEDIA_STORAGE_BACKEND
+
+# Django 4.2+ native way to configure storages
+STORAGES = {
+    "default": {
+        "BACKEND": MEDIA_STORAGE_BACKEND,
+    },
+    "staticfiles": {
+        "BACKEND": STATIC_STORAGE_BACKEND,
+    },
+}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

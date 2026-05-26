@@ -8,9 +8,9 @@
 <section class="fd-collections-section">
   <div class="container">
     <div class="fd-section-header">
-      <h2 class="fd-section-title">{{ design_settings.hp_collections_title|default:"Shop Collections" }}</h2>
+      <h2 class="fd-section-title">{{ design_settings.hp_collections_title|safe|default:"Shop Collections" }}</h2>
       {% if design_settings.hp_collections_subtitle %}
-      <p class="fd-section-subtitle">{{ design_settings.hp_collections_subtitle }}</p>
+      <p class="fd-section-subtitle">{{ design_settings.hp_collections_subtitle|safe }}</p>
       {% endif %}
     </div>
     {# Tab Buttons #}
@@ -33,42 +33,59 @@
         <div class="swiper-wrapper">
           {% for product in col_products|slice:":12" %}
           <div class="swiper-slide">
-            <div class="fd-product-card">
-              {% if product.price_info.has_offer %}
-              <div class="fd-product-badge sale">{{ product.price_info.discount_display|default:"SALE" }}</div>
-              {% elif product.badge %}
-              <div class="fd-product-badge {{ product.badge_color }}">{{ product.badge }}</div>
-              {% endif %}
-              <a href="{{ product.get_absolute_url }}" class="fd-product-img-link">
-                <img src="{{ product.get_image_url }}" alt="{{ product.name }}" class="fd-product-img" loading="lazy">
-              </a>
-              <div class="fd-product-info">
-                <h3 class="fd-product-name">
-                  <a href="{{ product.get_absolute_url }}">{{ product.name|truncatechars:50 }}</a>
-                </h3>
-                <div class="fd-product-price-row">
+            <div class="product-card" onclick="window.location.href='{{ product.get_absolute_url }}'">
+              <div class="product-card-image">
+                {% if product.price_info.has_offer %}
+                <div class="product-card-badges">
+                  <span class="product-badge product-badge-sale">{{ product.price_info.discount_display|default:"SALE" }}</span>
+                </div>
+                {% elif product.badge %}
+                <div class="product-card-badges">
+                  <span class="product-badge product-badge-new" style="background-color: var(--{{ product.badge_color|default:'accent' }});">{{ product.badge }}</span>
+                </div>
+                {% endif %}
+
+                <div class="product-card-wishlist" onclick="event.stopPropagation(); window.location.href='{% url 'products:toggle_wishlist' product.id %}'" title="Add to Wishlist">
+                  <i class="far fa-heart"></i>
+                </div>
+
+                <img src="{{ product.get_image_url }}" alt="{{ product.name }}" loading="lazy">
+              </div>
+
+              <div class="product-card-body">
+                <h3 class="product-card-name">{{ product.name|truncatechars:55 }}</h3>
+                
+                <div class="product-card-rating">
+                  <div class="rating-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                  </div>
+                  <span class="rating-count">({{ product.review_count|default:0 }})</span>
+                </div>
+
+                <div class="product-card-price">
                   {% if product.price_info.has_offer %}
-                    <span class="fd-price-final">{{ product.price_info.final_price }} AED</span>
-                    <span class="fd-price-old">{{ product.price_info.regular_price }} AED</span>
+                    <span class="price-current">{{ product.price_info.final_price }} <span class="price-currency">AED</span></span>
+                    <span class="price-original">{{ product.price_info.regular_price }} AED</span>
                   {% elif product.price_info.regular_price %}
-                    <span class="fd-price-final">{{ product.price_info.regular_price }} AED</span>
+                    <span class="price-current">{{ product.price_info.regular_price }} <span class="price-currency">AED</span></span>
                   {% else %}
-                    <span class="fd-price-poa">Price on Request</span>
+                    <span class="price-current" style="font-size:14px;">Price on Request</span>
                   {% endif %}
                 </div>
-                <a href="{{ product.get_absolute_url }}" class="fd-add-to-cart">
-                  <i class="far fa-shopping-bag"></i> Add to Cart
-                </a>
               </div>
             </div>
           </div>
           {% endfor %}
         </div>
-        <div class="swiper-button-next fd-swiper-next"></div>
-        <div class="swiper-button-prev fd-swiper-prev"></div>
+        <div class="swiper-button-next fd-swiper-next" style="color:var(--primary);transform:scale(0.7);"></div>
+        <div class="swiper-button-prev fd-swiper-prev" style="color:var(--primary);transform:scale(0.7);"></div>
       </div>
       {% else %}
-      <p class="fd-empty-state">No products in this collection yet.</p>
+      <p style="text-align:center;width:100%;padding:40px 0;">No products in this collection yet.</p>
       {% endif %}
       {% endwith %}
     </div>

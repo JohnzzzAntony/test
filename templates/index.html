@@ -83,27 +83,30 @@ document.addEventListener('DOMContentLoaded', function () {
 ═══════════════════════════════════════════════════════════
 {% endcomment %}
 {% if shop_by_categories %}
-<section class="fd-shop-by-cat-section">
+<section class="section">
   <div class="container">
-    <div class="fd-section-header">
-      <h2 class="fd-section-title">{{ design_settings.hp_categories_title|default:"Shop by Category" }}</h2>
-      <a href="{% url 'products:product_list' %}" class="fd-view-all">All Categories <i class="fas fa-arrow-right"></i></a>
+    <div class="section-header">
+      <h2 class="section-title">{{ design_settings.hp_categories_title|safe|default:"Shop by Category" }}</h2>
     </div>
-    <div class="fd-cat-grid">
+    <div class="category-strip">
+      <div class="category-strip-inner">
       {% for cat in shop_by_categories %}
-      <a href="{{ cat.get_absolute_url }}" class="fd-cat-card">
-        <div class="fd-cat-icon-wrap">
+      <a href="{{ cat.get_absolute_url }}" class="category-card" style="min-width: 150px;">
+        <div class="category-card-image">
           {% if cat.get_image_url and cat.get_image_url != 'None' and 'placeholder' not in cat.get_image_url|default:'' %}
-            <img src="{{ cat.get_image_url }}" alt="{{ cat.name }}" class="fd-cat-icon-img" loading="lazy">
+            <img src="{{ cat.get_image_url }}" alt="{{ cat.name }}" loading="lazy">
           {% elif cat.icon_svg %}
-            <div class="fd-cat-svg-icon">{{ cat.icon_svg|safe }}</div>
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--primary);">{{ cat.icon_svg|safe }}</div>
           {% else %}
-            <i class="fas fa-th-large" style="font-size:28px;color:var(--primary,#114084);transition:color .3s;"></i>
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;">
+              <i class="fas fa-th-large" style="font-size:28px;color:var(--primary);"></i>
+            </div>
           {% endif %}
         </div>
-        <p class="fd-cat-label">{{ cat.name }}</p>
+        <p class="category-card-name">{{ cat.name }}</p>
       </a>
       {% endfor %}
+      </div>
     </div>
   </div>
 </section>
@@ -124,17 +127,17 @@ document.addEventListener('DOMContentLoaded', function () {
 ═══════════════════════════════════════════════════════════
 {% endcomment %}
 {% if promo_sections %}
-<section class="fd-promo-section">
+<section class="promo-section">
   <div class="container">
     {% for promo in promo_sections %}
       {% if promo.items.count == 1 %}
         {% for item in promo.items.all %}
-        <a href="{{ item.link|default:'#' }}" class="fd-promo-card" style="display:block;margin-bottom:20px;">
+        <a href="{{ item.link|default:'#' }}" class="promo-single" style="margin-bottom:20px;">
           {% if item.get_image_url %}
-          <img src="{{ item.get_image_url }}" alt="{{ item.title|default:'Promo' }}" style="width:100%;aspect-ratio:16/5;object-fit:cover;display:block;">
+          <img src="{{ item.get_image_url }}" alt="{{ item.title|default:'Promo' }}" loading="lazy">
           {% endif %}
           {% if item.title %}
-          <div class="fd-promo-overlay">
+          <div class="promo-overlay">
             <h3>{{ item.title }}</h3>
             {% if item.subtitle %}<p>{{ item.subtitle }}</p>{% endif %}
           </div>
@@ -142,14 +145,14 @@ document.addEventListener('DOMContentLoaded', function () {
         </a>
         {% endfor %}
       {% else %}
-      <div class="fd-promo-2col">
+      <div class="promo-grid-2">
         {% for item in promo.items.all %}
-        <a href="{{ item.link|default:'#' }}" class="fd-promo-card">
+        <a href="{{ item.link|default:'#' }}" class="promo-card">
           {% if item.get_image_url %}
-          <img src="{{ item.get_image_url }}" alt="{{ item.title|default:'Promo' }}">
+          <img src="{{ item.get_image_url }}" alt="{{ item.title|default:'Promo' }}" loading="lazy">
           {% endif %}
           {% if item.title %}
-          <div class="fd-promo-overlay">
+          <div class="promo-overlay">
             <h3>{{ item.title }}</h3>
             {% if item.subtitle %}<p>{{ item.subtitle }}</p>{% endif %}
           </div>
@@ -246,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
 {% if public_clients or private_clients %}
 <section class="fd-clients-section">
   <div class="container">
-    <h2 class="fd-section-title text-center">{{ design_settings.hp_clients_title|default:"Trusted By" }}</h2>
+    <h2 class="fd-section-title text-center">{{ design_settings.hp_clients_title|safe|default:"Trusted By" }}</h2>
     {% if public_clients %}
     <div class="fd-clients-group">
       <p class="fd-clients-label">Public Sector</p>
