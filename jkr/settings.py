@@ -343,16 +343,10 @@ else:
     MEDIA_STORAGE_BACKEND = "django.core.files.storage.FileSystemStorage"
     STATIC_STORAGE_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
-# Modern Django STORAGES dictionary (required by Django 5+)
-STORAGES = {
-    "default": {"BACKEND": MEDIA_STORAGE_BACKEND},
-    "staticfiles": {"BACKEND": STATIC_STORAGE_BACKEND},
-}
-
-# Legacy compatibility for django-cloudinary-storage (still references old Django 4 settings)
-# These must mirror STORAGES to prevent AttributeError during collectstatic
-# STATICFILES_STORAGE = STATIC_STORAGE_BACKEND
-# DEFAULT_FILE_STORAGE = MEDIA_STORAGE_BACKEND
+# Legacy Django storage settings (fallback constructed dynamically by Django 5+)
+# Required for compatibility with django-cloudinary-storage which reads settings.STATICFILES_STORAGE
+STATICFILES_STORAGE = STATIC_STORAGE_BACKEND
+DEFAULT_FILE_STORAGE = MEDIA_STORAGE_BACKEND
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
