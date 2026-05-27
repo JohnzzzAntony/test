@@ -55,8 +55,7 @@ def _emails_enabled():
 
 
 def _from_email():
-    addr = getattr(settings, "DEFAULT_FROM_EMAIL", "") or getattr(settings, "EMAIL_HOST_USER", "")
-    return addr
+    return getattr(settings, "DEFAULT_FROM_EMAIL", "JKR International <onboarding@resend.dev>")
 
 
 def _fire(subject: str, body: str, to: str):
@@ -69,20 +68,38 @@ def _fire(subject: str, body: str, to: str):
     use_thread = not getattr(settings, "DEBUG", False)
 
     def _worker():
+        import requests
         try:
-            logger.info("Attempting to send email to %s | Subject: %s", to, subject)
-            send_mail(
-                subject=subject,
-                message=body,
-                from_email=_from_email(),
-                recipient_list=[to],
-                fail_silently=False,
+            logger.info("Attempting to send email to %s via Resend | Subject: %s", to, subject)
+            api_key = getattr(settings, "RESEND_API_KEY", "")
+            if not api_key:
+                logger.error("❌ Resend API Key is missing!")
+                return
+
+            html_body = body.replace("\n", "<br>")
+
+            response = requests.post(
+                "https://api.resend.com/emails",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "from": _from_email(),
+                    "to": [to],
+                    "subject": subject,
+                    "html": html_body,
+                    "text": body,
+                },
+                timeout=10,
             )
-            logger.info("✅ Email sent successfully → %s", to)
+            if response.status_code in (200, 201):
+                logger.info("✅ Email sent successfully via Resend → %s", to)
+            else:
+                logger.error("❌ Resend API failed → %s | Status: %s | Response: %s", to, response.status_code, response.text)
         except Exception as exc:
             logger.error("❌ Email failed → %s | Error: %s", to, exc)
             if settings.DEBUG:
-                # In debug mode, we want to know why it failed
                 import traceback
                 traceback.print_exc()
 
@@ -94,13 +111,13 @@ def _fire(subject: str, body: str, to: str):
 
 
 def test_email_connection(to_email=None):
-    """Utility to test the SMTP connection and credentials."""
+    """Utility to test the Resend API connection and credentials."""
     site = _site_name()
     target = to_email or _from_email()
-    subject = f"🔔 Test Email from {site}"
-    body = f"SMTP configuration is working correctly!\n\nHost: {settings.EMAIL_HOST}\nPort: {settings.EMAIL_PORT}\nUser: {settings.EMAIL_HOST_USER}"
+    subject = f"🔔 Test Email from {site} via Resend"
+    body = f"Resend API configuration is working correctly!\n\nAPI Key (first 10 chars): {getattr(settings, 'RESEND_API_KEY', '')[:10]}...\nFrom Email: {_from_email()}"
     
-    logger.info("Running SMTP connection test...")
+    logger.info("Running Resend API test...")
     _fire(subject, body, target)
     return f"Test email triggered for {target}. Check your console/logs for results."
 

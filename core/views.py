@@ -35,8 +35,6 @@ def home(request):
 
     # Promo Banners / Promo Sections from admin (sliders app)
     promo_sections = PromoBanner.objects.filter(is_active=True).prefetch_related('items').order_by('homepage_order')
-    first_promo = promo_sections.first()
-    home_banners = first_promo.items.all() if first_promo else []
 
     # Categories for homepage - top-level only (no parent)
     categories = Category.objects.filter(parent__isnull=True, is_active=True).order_by('homepage_order', 'name')[:12]
@@ -134,7 +132,6 @@ def home(request):
         'hero_slides': hero_slides,
         'sliders': sliders,
         'promo_sections': promo_sections,
-        'home_banners': home_banners,
         'categories': categories,
         'shop_by_categories': shop_by_categories,
         'collections': collections,
