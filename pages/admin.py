@@ -234,9 +234,46 @@ class VideoCardInline(admin.TabularInline):
     extra = 0
     fields = ('title', 'video_url', ('thumbnail', 'thumbnail_url'), 'order')
 
+class MissionVisionInline(admin.StackedInline):
+    model = MissionVision
+    extra = 0
+    fieldsets = (
+        ('Strategic Goal', {
+            'fields': (('section_type', 'title'),),
+        }),
+        ('Content & Visuals', {
+            'fields': ('content', ('image', 'image_url'), 'icon_svg'),
+        }),
+    )
+
+class ServiceInline(admin.TabularInline):
+    model = Service
+    extra = 0
+    fields = ('title', 'order', 'is_active', 'icon', 'icon_url', 'icon_svg')
+
+class CounterInline(admin.TabularInline):
+    model = Counter
+    extra = 0
+    fields = ('title', 'value', 'order', 'is_active')
+
+class WhyUsCardInline(admin.TabularInline):
+    model = WhyUsCard
+    extra = 0
+    fields = ('title', 'order', 'is_active', 'description', 'icon_svg')
+
+class GalleryItemInline(admin.TabularInline):
+    model = GalleryItem
+    extra = 0
+    fields = ('title', 'category', 'order', 'is_active', 'image', 'image_url')
+
+class PartnerInline(admin.TabularInline):
+    model = Partner
+    extra = 0
+    fields = ('name', 'website_url', 'order', 'is_active', 'logo', 'logo_url')
+
 @admin.register(AboutUs)
 class AboutUsAdmin(admin.ModelAdmin):
-    inlines = [VideoCardInline]
+    inlines = [VideoCardInline, MissionVisionInline, ServiceInline, CounterInline, WhyUsCardInline, PartnerInline, GalleryItemInline]
     
     radio_fields = {"is_active": admin.HORIZONTAL}
     
@@ -255,7 +292,7 @@ class AboutUsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False if self.model.objects.count() > 0 else super().has_add_permission(request)
 
-@admin.register(MissionVision)
+# @admin.register(MissionVision)
 class MissionVisionAdmin(admin.ModelAdmin):
     list_display = ('section_type', 'title')
     
@@ -268,7 +305,7 @@ class MissionVisionAdmin(admin.ModelAdmin):
         }),
     )
 
-@admin.register(Service)
+# @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('title', 'order', 'is_active', 'image_tag')
     list_editable = ('order', 'is_active')
@@ -297,7 +334,7 @@ class ServiceAdmin(admin.ModelAdmin):
         return format_html('<img src="{}" style="width: 45px; height:45px; border-radius: 5px; object-fit: contain;" />', url) if url else "-"
     image_tag.short_description = 'Icon'
 
-@admin.register(Counter)
+# @admin.register(Counter)
 class CounterAdmin(admin.ModelAdmin):
     list_display = ('title', 'value', 'order', 'is_active')
     list_editable = ('value', 'order', 'is_active')
@@ -387,7 +424,7 @@ class CounterAdmin(admin.ModelAdmin):
         return mark_safe(''.join(html_parts))
     svg_selection_helper.short_description = "Icon Selection Center"
 
-@admin.register(WhyUsCard)
+# @admin.register(WhyUsCard)
 class WhyUsCardAdmin(admin.ModelAdmin):
     list_display = ('title', 'order', 'is_active')
     list_editable = ('order', 'is_active')
@@ -399,7 +436,7 @@ class WhyUsCardAdmin(admin.ModelAdmin):
         }),
     )
 
-@admin.register(GalleryItem)
+# @admin.register(GalleryItem)
 class GalleryItemAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'order', 'is_active', 'image_tag')
     list_editable = ('order', 'category', 'is_active')
@@ -419,7 +456,7 @@ class GalleryItemAdmin(admin.ModelAdmin):
         return format_html('<img src="{}" style="width: 60px; height:45px; border-radius: 5px; object-fit: cover;" />', url) if url else "-"
     image_tag.short_description = 'Image'
 
-@admin.register(Partner)
+# @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
     list_display = ('name', 'website_url', 'order', 'is_active', 'image_tag')
     list_editable = ('order', 'is_active')

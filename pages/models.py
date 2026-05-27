@@ -183,6 +183,7 @@ class VideoCard(models.Model):
         return "https://via.placeholder.com/400x250"
 
 class MissionVision(models.Model):
+    about_us = models.ForeignKey(AboutUs, on_delete=models.SET_NULL, null=True, blank=True, related_name="mission_vision_items")
     SECTION_TYPES = (('mission', 'Mission'), ('vision', 'Vision'), ('values', 'Values'))
     title = models.CharField(max_length=255)
     content = models.TextField()
@@ -207,6 +208,7 @@ class MissionVision(models.Model):
         return "https://via.placeholder.com/600x400"
 
 class Service(models.Model):
+    about_us = models.ForeignKey(AboutUs, on_delete=models.SET_NULL, null=True, blank=True, related_name="services")
     title = models.CharField(max_length=255)
     icon = models.ImageField(
         upload_to="services/", 
@@ -236,6 +238,7 @@ class Service(models.Model):
         return "https://via.placeholder.com/64"
 
 class Counter(models.Model):
+    about_us = models.ForeignKey(AboutUs, on_delete=models.SET_NULL, null=True, blank=True, related_name="counters")
     title = models.CharField(max_length=100)
     value = models.CharField(max_length=50, help_text="Example: 15, 100+, etc.")
     icon_svg = models.TextField(blank=True, help_text="Paste SVG code here.")
@@ -245,6 +248,7 @@ class Counter(models.Model):
     def __str__(self): return f"{self.title}: {self.value}"
 
 class WhyUsCard(models.Model):
+    about_us = models.ForeignKey(AboutUs, on_delete=models.SET_NULL, null=True, blank=True, related_name="why_us_cards")
     title = models.CharField(max_length=255)
     description = models.TextField()
     icon_svg = models.TextField(help_text="SVG code for icon", blank=True)
@@ -254,6 +258,7 @@ class WhyUsCard(models.Model):
     def __str__(self): return self.title
 
 class GalleryItem(models.Model):
+    about_us = models.ForeignKey(AboutUs, on_delete=models.SET_NULL, null=True, blank=True, related_name="gallery_items")
     title = models.CharField(max_length=255, blank=True)
     image = models.ImageField(
         upload_to="gallery/", 
@@ -281,6 +286,7 @@ class GalleryItem(models.Model):
         return "https://via.placeholder.com/600x400"
 
 class Partner(models.Model):
+    about_us = models.ForeignKey(AboutUs, on_delete=models.SET_NULL, null=True, blank=True, related_name="partners")
     name = models.CharField(max_length=255)
     logo = models.ImageField(
         upload_to="partners/", 

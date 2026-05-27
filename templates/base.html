@@ -973,21 +973,25 @@ Theme styles (Flower District
                         {% if site_settings.dubai_address %}
                         <div class="flex items-start gap-3">
                             <i class="fas fa-map-marker-alt text-[var(--accent)] mt-1 flex-shrink-0"></i>
-                            <span class="leading-relaxed">{{ site_settings.dubai_address }}</span>
+                            <span class="leading-relaxed"><strong>{{ site_settings.branch1_name|default:"Dubai Office" }}:</strong><br>{{ site_settings.dubai_address }}</span>
+                        </div>
+                        {% endif %}
+                        {% if site_settings.abudhabi_address %}
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-map-marker-alt text-[var(--accent)] mt-1 flex-shrink-0"></i>
+                            <span class="leading-relaxed"><strong>{{ site_settings.branch2_name|default:"Abu Dhabi Office" }}:</strong><br>{{ site_settings.abudhabi_address }}</span>
                         </div>
                         {% endif %}
                         {% if site_settings.email %}
                         <div class="flex items-center gap-3">
                             <i class="fas fa-envelope text-[var(--accent)] flex-shrink-0"></i>
-                            <a href="mailto:{{ site_settings.email }}" class="hover:text-white transition-colors">{{
-                                site_settings.email }}</a>
+                            <a href="mailto:{{ site_settings.email }}" class="hover:text-white transition-colors">{{ site_settings.email }}</a>
                         </div>
                         {% endif %}
                         {% if site_settings.phone %}
                         <div class="flex items-center gap-3">
                             <i class="fas fa-phone text-[var(--accent)] flex-shrink-0"></i>
-                            <a href="tel:{{ site_settings.phone }}" class="hover:text-white transition-colors">{{
-                                site_settings.phone }}</a>
+                            <a href="tel:{{ site_settings.phone }}" class="hover:text-white transition-colors">{{ site_settings.phone }}</a>
                         </div>
                         {% endif %}
                     </div>
