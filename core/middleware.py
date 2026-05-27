@@ -46,3 +46,21 @@ class StripHTMLCommentsMiddleware(MiddlewareMixin):
             
             response.content = new_content.encode('utf-8')
         return response
+
+
+class HealthCheckBypassMiddleware:
+    """
+    Bypasses host/domain validation for health check requests.
+    Returns 200 OK directly, avoiding DisallowedHost (400 Bad Request) 
+    errors when Railway health checker calls the container directly via IP.
+    """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.path in ('/health/', '/health'):
+            from django.http import JsonResponse
+            from django.utils import timezone
+            return JsonResponse({'status': 'healthy', 'timestamp': timezone.now().isoformat()})
+        return self.get_response(request)
+

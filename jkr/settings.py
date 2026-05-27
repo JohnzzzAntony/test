@@ -133,6 +133,7 @@ LOGOUT_REDIRECT_URL = "core:home"
 # =============================================================================
 
 MIDDLEWARE = [
+    "core.middleware.HealthCheckBypassMiddleware",  # Bypass Host Header validation for health check
     "core.security_middleware.SecurityShieldMiddleware",  # Bot/Probe blocking
     "core.middleware.NoCacheMiddleware",  # Prevent browser caching of HTML
     "django.middleware.security.SecurityMiddleware",
