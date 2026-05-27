@@ -28,16 +28,23 @@
 
 <div class="admin-toolbar">
     <div class="admin-toolbar-left">
-        <div class="admin-search">
+        <form method="GET" class="admin-search">
             <i class="fas fa-search"></i>
-            <input type="text" placeholder="Search products..." id="productSearch">
+            <input type="text" name="q" placeholder="Search products..." id="productSearch" value="{{ search_query|default:'' }}">
+        </form>
+        <button class="admin-filter-btn" onclick="toggleFilterMenu()"><i class="fas fa-filter"></i> Filter <i class="fas fa-chevron-down text-xs"></i></button>
+        <div id="filterMenu" style="display:none; position:absolute; top:110px; background:white; border:1px solid var(--color-surface-lighter); border-radius:var(--radius-lg); box-shadow:var(--shadow-xl); padding:16px; z-index:100;">
+            <div class="font-semibold text-sm mb-2">Category Filter</div>
+            <div class="space-y-1">
+                <a href="?{% if search_query %}q={{ search_query }}{% endif %}" class="block text-sm text-[#4b5563] hover:text-[#1a3a6e]">All Categories</a>
+                {% for cat in categories %}
+                <a href="?category={{ cat.id }}{% if search_query %}&q={{ search_query }}{% endif %}" class="block text-sm text-[#4b5563] hover:text-[#1a3a6e] {% if selected_category == cat.id %}font-semibold text-[#1a3a6e]{% endif %}">{{ cat.name }}</a>
+                {% endfor %}
+            </div>
         </div>
-        <button class="admin-filter-btn"><i class="fas fa-filter"></i> Filter <i class="fas fa-chevron-down text-xs"></i></button>
     </div>
     <div class="admin-toolbar-right">
-        <button class="btn-21st btn-21st-sm btn-21st-secondary"><i class="fas fa-upload"></i> Import</button>
-        <button class="btn-21st btn-21st-sm btn-21st-secondary"><i class="fas fa-download"></i> Export</button>
-        <a href="{% url 'admin:product_create' %}" class="btn-21st btn-21st-sm btn-21st-primary"><i class="fas fa-plus"></i> Add Product</a>
+        <a href="{% url 'admin:products_product_add' %}" class="btn-21st btn-21st-sm btn-21st-primary"><i class="fas fa-plus"></i> Add Product</a>
     </div>
 </div>
 
@@ -47,7 +54,6 @@
     <div class="flex gap-2">
         <button class="btn-21st btn-21st-xs btn-21st-secondary"><i class="fas fa-eye"></i> Publish</button>
         <button class="btn-21st btn-21st-xs btn-21st-secondary"><i class="fas fa-eye-slash"></i> Unpublish</button>
-        <button class="btn-21st btn-21st-xs btn-21st-error" style="background: #fef2f2; color: #ef4444; border-color: #fecaca;"><i class="fas fa-trash"></i> Delete</button>
     </div>
 </div>
 
@@ -68,9 +74,9 @@
                 </tr>
             </thead>
             <tbody>
-                {% for product in products|default:"" %}
-                <tr>
-                    <td><input type="checkbox" class="product-checkbox rounded border-[#d1d5db]"></td>
+                {% for product in products %}
+                <tr id="row-prod-{{ product.id }}">
+                    <td><input type="checkbox" class="product-checkbox rounded border-[#d1d5db]" value="{{ product.id }}"></td>
                     <td>
                         <div class="admin-table-product">
                             <div class="admin-table-product-img">
@@ -78,112 +84,129 @@
                             </div>
                             <div>
                                 <div class="font-medium text-sm text-[#0a1628]">{{ product.name }}</div>
-                                <div class="text-xs text-[#9ca3af]">{{ product.sku|default:"N/A" }}</div>
+                                <div class="text-xs text-[#9ca3af]">{{ product.sku_id|default:"N/A" }}</div>
                             </div>
                         </div>
                     </td>
-                    <td class="font-mono text-xs text-[#6b7280]">{{ product.sku|default:"—" }}</td>
+                    <td class="font-mono text-xs text-[#6b7280]">{{ product.sku_id|default:"—" }}</td>
                     <td>{{ product.category.name|default:"—" }}</td>
-                    <td class="font-semibold text-[#1a3a6e]">{{ product.get_price_display|default:"Call" }}</td>
-                    <td><span class="px-2 py-1 rounded-md text-xs font-semibold {{ product.stock|default:0 > 10|yesno:'bg-emerald-50 text-emerald-600,bg-red-50 text-red-600' }}">{{ product.stock|default:0 }}</span></td>
-                    <td><span class="admin-status" style="background: {{ product.is_active|yesno:'var(--color-teal-100),#fee2e2' }}; color: {{ product.is_active|yesno:'var(--color-teal-500),#ef4444' }};"><span class="admin-status-dot" style="background: {{ product.is_active|yesno:'var(--color-teal-500),#ef4444' }}"></span>{{ product.is_active|yesno:"Active,Inactive" }}</span></td>
+                    <td class="font-semibold text-[#1a3a6e]">AED {{ product.regular_price|default:"0.00" }}</td>
+                    <td><span class="px-2 py-1 rounded-md text-xs font-semibold {% if product.quantity > 10 %}bg-emerald-50 text-emerald-600{% else %}bg-red-50 text-red-600{% endif %}">{{ product.quantity }}</span></td>
+                    <td>
+                        <span class="admin-status cursor-pointer" onclick="toggleProduct({{ product.id }})" id="prod-status-{{ product.id }}" style="background: {% if product.is_active %}var(--color-teal-100){% else %}#fee2e2{% endif %}; color: {% if product.is_active %}var(--color-teal-500){% else %}#ef4444{% endif %};">
+                            <span class="admin-status-dot" id="prod-status-dot-{{ product.id }}" style="background: {% if product.is_active %}var(--color-teal-500){% else %}#ef4444{% endif %};"></span>
+                            <span id="prod-status-text-{{ product.id }}">{{ product.is_active|yesno:"Active,Inactive" }}</span>
+                        </span>
+                    </td>
                     <td>
                         <div class="admin-table-actions">
-                            <button title="Edit"><i class="fas fa-pen"></i></button>
-                            <button title="Duplicate"><i class="fas fa-copy"></i></button>
-                            <button title="Delete"><i class="fas fa-trash"></i></button>
+                            <a href="{% url 'admin:products_product_change' product.id %}" title="Edit" class="w-8 h-8 rounded-md hover:bg-primary-50 hover:text-primary-600 flex items-center justify-center text-[#6b7280]"><i class="fas fa-pen"></i></a>
+                            <button onclick="deleteProduct({{ product.id }})" title="Delete"><i class="fas fa-trash" style="color: var(--color-error);"></i></button>
                         </div>
                     </td>
                 </tr>
                 {% empty %}
-                <tr><td colspan="8">No products found. <a href="{% url 'admin:product_create' %}" class="text-primary-600 underline">Add your first product</a>.</td></tr>
+                <tr><td colspan="8" class="text-center py-8 text-[#9ca3af]">No products found. <a href="{% url 'admin:products_product_add' %}" class="text-primary-600 underline">Add your first product</a>.</td></tr>
                 {% endfor %}
-                <!-- Demo Data -->
-                <tr>
-                    <td><input type="checkbox" class="product-checkbox rounded border-[#d1d5db]"></td>
-                    <td><div class="admin-table-product"><div class="admin-table-product-img"><i class="fas fa-thermometer-half text-[#9ca3af]"></i></div><div><div class="font-medium text-sm text-[#0a1628]">Digital Thermometer Pro</div><div class="text-xs text-[#9ca3af]">THR-2026-001</div></div></div></td>
-                    <td class="font-mono text-xs text-[#6b7280]">THR-2026-001</td>
-                    <td>Diagnostic</td>
-                    <td class="font-semibold text-[#1a3a6e]">AED 299</td>
-                    <td><span class="px-2 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-600">45</span></td>
-                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Active</span></td>
-                    <td><div class="admin-table-actions"><button title="Edit"><i class="fas fa-pen"></i></button><button title="Duplicate"><i class="fas fa-copy"></i></button><button title="Delete"><i class="fas fa-trash"></i></button></div></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" class="product-checkbox rounded border-[#d1d5db]"></td>
-                    <td><div class="admin-table-product"><div class="admin-table-product-img"><i class="fas fa-stethoscope text-[#9ca3af]"></i></div><div><div class="font-medium text-sm text-[#0a1628]">Cardiology Stethoscope</div><div class="text-xs text-[#9ca3af]">STH-2026-012</div></div></div></td>
-                    <td class="font-mono text-xs text-[#6b7280]">STH-2026-012</td>
-                    <td>Examination</td>
-                    <td class="font-semibold text-[#1a3a6e]">AED 349</td>
-                    <td><span class="px-2 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-600">120</span></td>
-                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Active</span></td>
-                    <td><div class="admin-table-actions"><button title="Edit"><i class="fas fa-pen"></i></button><button title="Duplicate"><i class="fas fa-copy"></i></button><button title="Delete"><i class="fas fa-trash"></i></button></div></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" class="product-checkbox rounded border-[#d1d5db]"></td>
-                    <td><div class="admin-table-product"><div class="admin-table-product-img"><i class="fas fa-heart-pulse text-[#9ca3af]"></i></div><div><div class="font-medium text-sm text-[#0a1628]">Pulse Oximeter Pro</div><div class="text-xs text-[#9ca3af]">OXM-2026-005</div></div></div></td>
-                    <td class="font-mono text-xs text-[#6b7280]">OXM-2026-005</td>
-                    <td>Diagnostic</td>
-                    <td class="font-semibold text-[#1a3a6e]">AED 459</td>
-                    <td><span class="px-2 py-1 rounded-md text-xs font-semibold bg-red-50 text-red-600">5</span></td>
-                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Active</span></td>
-                    <td><div class="admin-table-actions"><button title="Edit"><i class="fas fa-pen"></i></button><button title="Duplicate"><i class="fas fa-copy"></i></button><button title="Delete"><i class="fas fa-trash"></i></button></div></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" class="product-checkbox rounded border-[#d1d5db]"></td>
-                    <td><div class="admin-table-product"><div class="admin-table-product-img"><i class="fas fa-mask-ventilator text-[#9ca3af]"></i></div><div><div class="font-medium text-sm text-[#0a1628]">Oxygen Concentrator</div><div class="text-xs text-[#9ca3af]">OCN-2026-008</div></div></div></td>
-                    <td class="font-mono text-xs text-[#6b7280]">OCN-2026-008</td>
-                    <td>Respiratory</td>
-                    <td class="font-semibold text-[#1a3a6e]">AED 2,499</td>
-                    <td><span class="px-2 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-600">32</span></td>
-                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Active</span></td>
-                    <td><div class="admin-table-actions"><button title="Edit"><i class="fas fa-pen"></i></button><button title="Duplicate"><i class="fas fa-copy"></i></button><button title="Delete"><i class="fas fa-trash"></i></button></div></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" class="product-checkbox rounded border-[#d1d5db]"></td>
-                    <td><div class="admin-table-product"><div class="admin-table-product-img"><i class="fas fa-syringe text-[#9ca3af]"></i></div><div><div class="font-medium text-sm text-[#0a1628]">Surgical Scalpel Set</div><div class="text-xs text-[#9ca3af]">STL-2026-003</div></div></div></td>
-                    <td class="font-mono text-xs text-[#6b7280]">STL-2026-003</td>
-                    <td>Surgical</td>
-                    <td class="font-semibold text-[#1a3a6e]">AED 189</td>
-                    <td><span class="px-2 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-600">200</span></td>
-                    <td><span class="admin-status" style="background: #fee2e2; color: #ef4444;"><span class="admin-status-dot" style="background: #ef4444;"></span>Inactive</span></td>
-                    <td><div class="admin-table-actions"><button title="Edit"><i class="fas fa-pen"></i></button><button title="Duplicate"><i class="fas fa-copy"></i></button><button title="Delete"><i class="fas fa-trash"></i></button></div></td>
-                </tr>
             </tbody>
         </table>
     </div>
+    
+    {% if products.has_other_pages %}
     <div class="admin-pagination">
-        <span class="text-sm text-[#6b7280]">Showing 1 to 5 of 2,526 results</span>
+        <span class="text-sm text-[#6b7280]">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
         <div class="pagination-21st">
+            {% if products.has_previous %}
+            <a href="?page={{ products.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" class="pagination-21st-btn"><i class="fas fa-chevron-left text-xs"></i></a>
+            {% else %}
             <button class="pagination-21st-btn" disabled><i class="fas fa-chevron-left text-xs"></i></button>
-            <button class="pagination-21st-btn active">1</button>
-            <button class="pagination-21st-btn">2</button>
-            <button class="pagination-21st-btn">3</button>
-            <span class="flex items-center px-2 text-sm text-[#9ca3af]">...</span>
-            <button class="pagination-21st-btn">506</button>
-            <button class="pagination-21st-btn"><i class="fas fa-chevron-right text-xs"></i></button>
+            {% endif %}
+            
+            <button class="pagination-21st-btn active">{{ products.number }}</button>
+            
+            {% if products.has_next %}
+            <a href="?page={{ products.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" class="pagination-21st-btn"><i class="fas fa-chevron-right text-xs"></i></a>
+            {% else %}
+            <button class="pagination-21st-btn" disabled><i class="fas fa-chevron-right text-xs"></i></button>
+            {% endif %}
         </div>
     </div>
+    {% endif %}
 </div>
 
 <script>
     const selectAll = document.getElementById('selectAll');
-    const checkboxes = document.querySelectorAll('.product-checkbox');
     const bulkActions = document.getElementById('bulkActions');
     const selectedCount = document.getElementById('selectedCount');
 
+    function toggleFilterMenu() {
+        const menu = document.getElementById('filterMenu');
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+
     function updateBulkActions() {
+        const checkboxes = document.querySelectorAll('.product-checkbox');
         const checked = document.querySelectorAll('.product-checkbox:checked').length;
         selectedCount.textContent = checked;
         bulkActions.style.display = checked > 0 ? 'flex' : 'none';
     }
 
-    selectAll.addEventListener('change', () => {
-        checkboxes.forEach(cb => cb.checked = selectAll.checked);
-        updateBulkActions();
-    });
+    if (selectAll) {
+        selectAll.addEventListener('change', () => {
+            document.querySelectorAll('.product-checkbox').forEach(cb => cb.checked = selectAll.checked);
+            updateBulkActions();
+        });
+    }
 
-    checkboxes.forEach(cb => cb.addEventListener('change', updateBulkActions));
+    document.querySelectorAll('.product-checkbox').forEach(cb => cb.addEventListener('change', updateBulkActions));
+
+    function toggleProduct(id) {
+        fetch(`/21st/admin/api/products/${id}/toggle/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const badge = document.getElementById(`prod-status-${id}`);
+                const dot = document.getElementById(`prod-status-dot-${id}`);
+                const text = document.getElementById(`prod-status-text-${id}`);
+                if (data.is_active) {
+                    badge.style.background = 'var(--color-teal-100)';
+                    badge.style.color = 'var(--color-teal-500)';
+                    dot.style.background = 'var(--color-teal-500)';
+                    text.textContent = 'Active';
+                } else {
+                    badge.style.background = '#fee2e2';
+                    badge.style.color = '#ef4444';
+                    dot.style.background = '#ef4444';
+                    text.textContent = 'Inactive';
+                }
+            }
+        });
+    }
+
+    function deleteProduct(id) {
+        if (!confirm('Are you sure you want to delete this product?')) return;
+        fetch(`/21st/admin/api/products/${id}/delete/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`row-prod-${id}`).remove();
+            } else {
+                alert('Error deleting product');
+            }
+        });
+    }
 </script>
 
 {% endblock %}

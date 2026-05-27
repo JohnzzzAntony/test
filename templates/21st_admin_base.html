@@ -1,13 +1,16 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block admin_title %}Dashboard{% endblock %} | 21st Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Source+Sans+3:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Source+Sans+3:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/21st-design-system.css' %}?v=2.0">
     <link rel="stylesheet" href="{% static 'css/21st-components.css' %}?v=2.0">
@@ -15,75 +18,449 @@
     {% block extra_css %}{% endblock %}
     <style>
         /* Admin Shell */
-        .admin-shell { display: flex; min-height: 100vh; }
-        .admin-sidebar { width: 260px; background: var(--color-primary-900); color: white; position: fixed; inset: 0 auto 0 0; z-index: 200; display: flex; flex-direction: column; transition: transform 0.3s var(--ease-out-expo); }
-        .admin-sidebar-header { padding: 20px 24px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-        .admin-sidebar-header .logo { width: 36px; height: 36px; background: white; color: var(--color-primary-900); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 18px; font-weight: 700; }
-        .admin-sidebar-header .brand { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
-        .admin-sidebar-header .brand small { display: block; font-family: var(--font-body); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.5; margin-top: -2px; }
-        .admin-menu { padding: 16px 12px; flex: 1; overflow-y: auto; }
-        .admin-menu-group { margin-bottom: 24px; }
-        .admin-menu-title { padding: 0 12px 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.4; }
-        .admin-menu-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.7); text-decoration: none; transition: all 0.2s ease; cursor: pointer; border: none; background: none; width: 100%; }
-        .admin-menu-item:hover, .admin-menu-item.active { background: rgba(255,255,255,0.08); color: white; }
-        .admin-menu-item i { width: 20px; text-align: center; font-size: 14px; }
-        .admin-menu-badge { margin-left: auto; background: var(--color-accent-500); color: white; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
-        .admin-sidebar-footer { padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.08); }
-        .admin-user { display: flex; align-items: center; gap: 12px; }
-        .admin-user-avatar { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--color-accent-500), var(--color-teal-500)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
-        .admin-user-name { font-size: 14px; font-weight: 600; }
-        .admin-user-role { font-size: 11px; opacity: 0.5; }
-        .admin-main { flex: 1; margin-left: 260px; display: flex; flex-direction: column; min-height: 100vh; }
-        .admin-topbar { height: 64px; background: white; border-bottom: 1px solid var(--color-surface-lightest); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 100; }
-        .admin-topbar-left { display: flex; align-items: center; gap: 16px; }
-        .admin-topbar-title { font-family: var(--font-display); font-size: 24px; font-weight: 600; color: var(--color-primary-900); }
-        .admin-topbar-breadcrumb { font-size: 13px; color: var(--color-surface-medium); display: flex; align-items: center; gap: 8px; }
-        .admin-topbar-actions { display: flex; align-items: center; gap: 12px; }
-        .admin-topbar-action { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--color-surface-medium); background: none; border: none; cursor: pointer; transition: all 0.2s; position: relative; }
-        .admin-topbar-action:hover { background: var(--color-surface-lightest); color: var(--color-primary-700); }
-        .admin-topbar-action .dot { position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; background: var(--color-error); border-radius: 50%; border: 2px solid white; }
-        .admin-content { padding: 32px; flex: 1; background: var(--color-background); }
-        .admin-mobile-toggle { display: none; padding: 12px; font-size: 20px; color: var(--color-primary-700); background: none; border: none; cursor: pointer; }
-        @media (max-width: 1024px) {
-            .admin-sidebar { transform: translateX(-100%); }
-            .admin-sidebar.open { transform: translateX(0); }
-            .admin-main { margin-left: 0; }
-            .admin-mobile-toggle { display: block; }
+        .admin-shell {
+            display: flex;
+            min-height: 100vh;
         }
-        .admin-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 190; backdrop-filter: blur(4px); }
+
+        .admin-sidebar {
+            width: 260px;
+            background: var(--color-primary-900);
+            color: white;
+            position: fixed;
+            inset: 0 auto 0 0;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s var(--ease-out-expo);
+        }
+
+        .admin-sidebar-header {
+            padding: 20px 24px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .admin-sidebar-header .logo {
+            width: 36px;
+            height: 36px;
+            background: white;
+            color: var(--color-primary-900);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .admin-sidebar-header .brand {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .admin-sidebar-header .brand small {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-top: -2px;
+        }
+
+        .admin-menu {
+            padding: 16px 12px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .admin-menu-group {
+            margin-bottom: 24px;
+        }
+
+        .admin-menu-title {
+            padding: 0 12px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.4;
+        }
+
+        .admin-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+        }
+
+        .admin-menu-item:hover,
+        .admin-menu-item.active {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        .admin-menu-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .admin-menu-badge {
+            margin-left: auto;
+            background: var(--color-accent-500);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        .admin-sidebar-footer {
+            padding: 16px 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--color-accent-500), var(--color-teal-500));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .admin-user-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .admin-user-role {
+            font-size: 11px;
+            opacity: 0.5;
+        }
+
+        .admin-main {
+            flex: 1;
+            margin-left: 260px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .admin-topbar {
+            height: 64px;
+            background: white;
+            border-bottom: 1px solid var(--color-surface-lightest);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .admin-topbar-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-primary-900);
+        }
+
+        .admin-topbar-breadcrumb {
+            font-size: 13px;
+            color: var(--color-surface-medium);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-topbar-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-surface-medium);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .admin-topbar-action:hover {
+            background: var(--color-surface-lightest);
+            color: var(--color-primary-700);
+        }
+
+        .admin-topbar-action .dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--color-error);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .admin-content {
+            padding: 32px;
+            flex: 1;
+            background: var(--color-background);
+        }
+
+        .admin-mobile-toggle {
+            display: none;
+            padding: 12px;
+            font-size: 20px;
+            color: var(--color-primary-700);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
         @media (max-width: 1024px) {
-            .admin-overlay { display: block; }
+            .admin-sidebar {
+                transform: translateX(-100%);
+            }
+
+            .admin-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+
+            .admin-mobile-toggle {
+                display: block;
+            }
+        }
+
+        .admin-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 190;
+            backdrop-filter: blur(4px);
+        }
+
+        @media (max-width: 1024px) {
+            .admin-overlay {
+                display: block;
+            }
         }
 
         /* Stat Cards */
-        .admin-stat-card { background: white; border: 1px solid var(--color-surface-lightest); border-radius: var(--radius-xl); padding: 24px; position: relative; overflow: hidden; transition: all var(--duration-normal); }
-        .admin-stat-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
-        .admin-stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 16px; }
-        .admin-stat-value { font-family: var(--font-display); font-size: 32px; font-weight: 600; color: var(--color-primary-900); line-height: 1; }
-        .admin-stat-label { font-size: 14px; color: var(--color-surface-medium); margin-top: 8px; }
-        .admin-stat-change { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-top: 12px; }
-        .admin-stat-change.up { background: var(--color-teal-100); color: var(--color-teal-500); }
-        .admin-stat-change.down { background: #fee2e2; color: #dc2626; }
+        .admin-stat-card {
+            background: white;
+            border: 1px solid var(--color-surface-lightest);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all var(--duration-normal);
+        }
+
+        .admin-stat-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .admin-stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .admin-stat-value {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--color-primary-900);
+            line-height: 1;
+        }
+
+        .admin-stat-label {
+            font-size: 14px;
+            color: var(--color-surface-medium);
+            margin-top: 8px;
+        }
+
+        .admin-stat-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        .admin-stat-change.up {
+            background: var(--color-teal-100);
+            color: var(--color-teal-500);
+        }
+
+        .admin-stat-change.down {
+            background: #fee2e2;
+            color: #dc2626;
+        }
 
         /* Charts */
-        .admin-chart-card { background: white; border: 1px solid var(--color-surface-lightest); border-radius: var(--radius-xl); padding: 24px; }
-        .admin-chart-title { font-family: var(--font-display); font-size: 18px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+        .admin-chart-card {
+            background: white;
+            border: 1px solid var(--color-surface-lightest);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+        }
+
+        .admin-chart-title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
         /* Data Table */
-        .admin-table-wrap { background: white; border: 1px solid var(--color-surface-lightest); border-radius: var(--radius-xl); overflow: hidden; }
-        .admin-table-header { padding: 20px 24px; border-bottom: 1px solid var(--color-surface-lightest); display: flex; align-items: center; justify-content: space-between; }
-        .admin-table-header h3 { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
-        .admin-table-filter { display: flex; align-items: center; gap: 12px; }
-        .admin-table-filter input { padding: 8px 16px; border: 1px solid var(--color-surface-lighter); border-radius: var(--radius-lg); font-size: 13px; background: var(--color-pure-white); }
-        .admin-data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        .admin-data-table thead th { padding: 14px 24px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-surface-medium); border-bottom: 1px solid var(--color-surface-lighter); white-space: nowrap; background: var(--color-surface-lightest); }
-        .admin-data-table tbody td { padding: 16px 24px; border-bottom: 1px solid var(--color-surface-lightest); color: var(--color-primary-800); transition: background 0.2s; }
-        .admin-data-table tbody tr:hover td { background: var(--color-primary-50); }
-        .admin-data-table tbody tr:last-child td { border-bottom: none; }
-        .admin-status { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .admin-status-dot { width: 6px; height: 6px; border-radius: 50%; }
+        .admin-table-wrap {
+            background: white;
+            border: 1px solid var(--color-surface-lightest);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+        }
+
+        .admin-table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--color-surface-lightest);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .admin-table-header h3 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .admin-table-filter {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-table-filter input {
+            padding: 8px 16px;
+            border: 1px solid var(--color-surface-lighter);
+            border-radius: var(--radius-lg);
+            font-size: 13px;
+            background: var(--color-pure-white);
+        }
+
+        .admin-data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .admin-data-table thead th {
+            padding: 14px 24px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--color-surface-medium);
+            border-bottom: 1px solid var(--color-surface-lighter);
+            white-space: nowrap;
+            background: var(--color-surface-lightest);
+        }
+
+        .admin-data-table tbody td {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--color-surface-lightest);
+            color: var(--color-primary-800);
+            transition: background 0.2s;
+        }
+
+        .admin-data-table tbody tr:hover td {
+            background: var(--color-primary-50);
+        }
+
+        .admin-data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .admin-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .admin-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
     </style>
 </head>
+
 <body>
     <div class="admin-shell">
         <!-- Sidebar -->
@@ -98,37 +475,72 @@
             <nav class="admin-menu">
                 <div class="admin-menu-group">
                     <div class="admin-menu-title">Overview</div>
-                    <a href="{% url 'admin:dashboard' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"><i class="fas fa-chart-line"></i> Dashboard</a>
-                    <a href="{% url 'admin:analytics' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}"><i class="fas fa-chart-pie"></i> Analytics</a>
-                    <a href="{% url 'admin:reports' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'reports' %}active{% endif %}"><i class="fas fa-file-alt"></i> Reports</a>
+                    <a href="{% url 'admin_dashboard_21st' %}"
+                        class="admin-menu-item {% if request.resolver_match.url_name == 'admin_dashboard_21st' %}active{% endif %}"><i
+                            class="fas fa-chart-line"></i> Dashboard</a>
+                    <a href="#" class="admin-menu-item" onclick="alert('Analytics module coming soon')"><i
+                            class="fas fa-chart-pie"></i> Analytics</a>
+                    <a href="#" class="admin-menu-item" onclick="alert('Reports module coming soon')"><i
+                            class="fas fa-file-alt"></i> Reports</a>
                 </div>
                 <div class="admin-menu-group">
                     <div class="admin-menu-title">Catalog</div>
-                    <a href="{% url 'admin:products' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'products' %}active{% endif %}"><i class="fas fa-box"></i> Products <span class="admin-menu-badge">2.5k</span></a>
-                    <a href="{% url 'admin:categories' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'categories' %}active{% endif %}"><i class="fas fa-layer-group"></i> Categories</a>
-                    <a href="{% url 'admin:brands' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'brands' %}active{% endif %}"><i class="fas fa-tag"></i> Brands</a>
-                    <a href="{% url 'admin:collections' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'collections' %}active{% endif %}"><i class="fas fa-cubes"></i> Collections</a>
-                    <a href="{% url 'admin:inventory' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'inventory' %}active{% endif %}"><i class="fas fa-warehouse"></i> Inventory</a>
-                    <a href="{% url 'admin:offers' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'offers' %}active{% endif %}"><i class="fas fa-percent"></i> Offers</a>
+                    <a href="{% url 'admin_products_21st' %}"
+                        class="admin-menu-item {% if request.resolver_match.url_name == 'admin_products_21st' %}active{% endif %}"><i
+                            class="fas fa-box"></i> Products <span class="admin-menu-badge">{{
+                            products_count|default:"0" }}</span></a>
+                    <a href="{% url 'admin:products_category_changelist' %}" class="admin-menu-item"><i
+                            class="fas fa-layer-group"></i> Categories</a>
+                    <a href="{% url 'admin:products_brand_changelist' %}" class="admin-menu-item"><i
+                            class="fas fa-tag"></i> Brands</a>
+                    <a href="#" class="admin-menu-item" onclick="alert('Collections module coming soon')"><i
+                            class="fas fa-cubes"></i> Collections</a>
+                    <a href="{% url 'admin_inventory_21st' %}"
+                        class="admin-menu-item {% if request.resolver_match.url_name == 'admin_inventory_21st' %}active{% endif %}"><i
+                            class="fas fa-warehouse"></i> Inventory</a>
+                    <a href="#" class="admin-menu-item" onclick="alert('Offers module coming soon')"><i
+                            class="fas fa-percent"></i> Offers</a>
                 </div>
                 <div class="admin-menu-group">
                     <div class="admin-menu-title">Orders</div>
-                    <a href="{% url 'admin:orders' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'orders' %}active{% endif %}"><i class="fas fa-shopping-cart"></i> Orders <span class="admin-menu-badge">12</span></a>
-                    <a href="{% url 'admin:shipping' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'shipping' %}active{% endif %}"><i class="fas fa-truck"></i> Shipping</a>
-                    <a href="{% url 'admin:returns' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'returns' %}active{% endif %}"><i class="fas fa-undo"></i> Returns</a>
+                    <a href="{% url 'admin_orders_21st' %}"
+                        class="admin-menu-item {% if request.resolver_match.url_name == 'admin_orders_21st' %}active{% endif %}"><i
+                            class="fas fa-shopping-cart"></i> Orders <span class="admin-menu-badge">{{
+                            orders_count|default:"0" }}</span></a>
+                    <a href="#" class="admin-menu-item" onclick="alert('Shipping module coming soon')"><i
+                            class="fas fa-truck"></i> Shipping</a>
+                    <a href="#" class="admin-menu-item" onclick="alert('Returns module coming soon')"><i
+                            class="fas fa-undo"></i> Returns</a>
                 </div>
                 <div class="admin-menu-group">
                     <div class="admin-menu-title">Customers</div>
-                    <a href="{% url 'admin:customers' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'customers' %}active{% endif %}"><i class="fas fa-users"></i> Customers</a>
-                    <a href="{% url 'admin:reviews' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'reviews' %}active{% endif %}"><i class="fas fa-star"></i> Reviews</a>
-                    <a href="{% url 'admin:subscribers' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'subscribers' %}active{% endif %}"><i class="fas fa-envelope"></i> Subscribers</a>
+                    <a href="{% url 'admin_customers_21st' %}"
+                        class="admin-menu-item {% if request.resolver_match.url_name == 'admin_customers_21st' %}active{% endif %}"><i
+                            class="fas fa-users"></i> Customers</a>
+                    <a href="{% url 'admin_testimonials_21st' %}"
+                        class="admin-menu-item {% if request.resolver_match.url_name == 'admin_testimonials_21st' %}active{% endif %}"><i
+                            class="fas fa-star"></i> Reviews</a>
+                    <a href="{% url 'admin_newsletter_21st' %}"
+                        class="admin-menu-item {% if request.resolver_match.url_name == 'admin_newsletter_21st' %}active{% endif %}"><i
+                            class="fas fa-envelope"></i> Subscribers</a>
                 </div>
                 <div class="admin-menu-group">
                     <div class="admin-menu-title">Content</div>
-                    <a href="{% url 'admin:pages' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'pages' %}active{% endif %}"><i class="fas fa-file"></i> Pages</a>
-                    <a href="{% url 'admin:blog' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'blog' %}active{% endif %}"><i class="fas fa-newspaper"></i> Blog</a>
-                    <a href="{% url 'admin:sliders' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'sliders' %}active{% endif %}"><i class="fas fa-image"></i> Sliders</a>
-                    <a href="{% url 'admin:design' %}" class="admin-menu-item {% if request.resolver_match.url_name == 'design' %}active{% endif %}"><i class="fas fa-paint-brush"></i> Design</a>
+                    <a href="{% url 'admin:pages_page_changelist' %}" class="admin-menu-item"><i
+                            class="fas fa-file"></i> Pages</a>
+                    <a href="{% url 'admin:blog_post_changelist' %}" class="admin-menu-item"><i
+                            class="fas fa-newspaper"></i> Blog</a>
+                    <a href="{% url 'admin_social_21st' %}"
+                        class="admin-menu-item {% if request.resolver_match.url_name == 'admin_social_21st' %}active{% endif %}"><i
+                            class="fas fa-image"></i> Sliders</a>
+                    <a href="{% url 'admin_locations_21st' %}"
+                        class="admin-menu-item {% if request.resolver_match.url_name == 'admin_locations_21st' %}active{% endif %}"><i
+                            class="fas fa-map-marker-alt"></i> Locations</a>
+                    <a href="{% url 'admin_announcements_21st' %}"
+                        class="admin-menu-item {% if request.resolver_match.url_name == 'admin_announcements_21st' %}active{% endif %}"><i
+                            class="fas fa-bullhorn"></i> Announcements</a>
+                    <a href="{% url 'admin:core_designsettings_change' %}" class="admin-menu-item"><i
+                            class="fas fa-paint-brush"></i> Design</a>
                 </div>
             </nav>
             <div class="admin-sidebar-footer">
@@ -154,7 +566,8 @@
                 </div>
                 <div class="admin-topbar-actions">
                     <button class="admin-topbar-action" title="Search"><i class="fas fa-search"></i></button>
-                    <button class="admin-topbar-action" title="Notifications"><i class="far fa-bell"></i><span class="dot"></span></button>
+                    <button class="admin-topbar-action" title="Notifications"><i class="far fa-bell"></i><span
+                            class="dot"></span></button>
                     <button class="admin-topbar-action" title="Messages"><i class="far fa-envelope"></i></button>
                     <button class="admin-topbar-action" title="Settings"><i class="fas fa-cog"></i></button>
                 </div>
@@ -167,10 +580,10 @@
     <script>
         const sidebar = document.getElementById('adminSidebar');
         const toggle = document.getElementById('sidebarToggle');
-        if(toggle) {
+        if (toggle) {
             toggle.addEventListener('click', () => {
                 sidebar.classList.toggle('open');
-                if(!sidebar.nextElementSibling?.classList?.contains('admin-overlay')) {
+                if (!sidebar.nextElementSibling?.classList?.contains('admin-overlay')) {
                     const overlay = document.createElement('div');
                     overlay.className = 'admin-overlay';
                     overlay.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.remove(); });
@@ -181,4 +594,5 @@
     </script>
     {% block extra_js %}{% endblock %}
 </body>
+
 </html>

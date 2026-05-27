@@ -10,27 +10,27 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <div class="admin-stat-card">
         <div class="admin-stat-icon" style="background: var(--color-primary-50); color: var(--color-primary-600);"><i class="fas fa-dollar-sign"></i></div>
-        <div class="admin-stat-value">AED 128,450</div>
+        <div class="admin-stat-value">AED {{ total_revenue|floatformat:2 }}</div>
         <div class="admin-stat-label">Total Revenue</div>
         <div class="admin-stat-change up"><i class="fas fa-arrow-up"></i> 12.5% vs last month</div>
     </div>
     <div class="admin-stat-card">
         <div class="admin-stat-icon" style="background: var(--color-teal-100); color: var(--color-teal-500);"><i class="fas fa-shopping-bag"></i></div>
-        <div class="admin-stat-value">847</div>
+        <div class="admin-stat-value">{{ orders_count }}</div>
         <div class="admin-stat-label">Total Orders</div>
         <div class="admin-stat-change up"><i class="fas fa-arrow-up"></i> 8.2% vs last month</div>
     </div>
     <div class="admin-stat-card">
         <div class="admin-stat-icon" style="background: #fef3c7; color: #d97706;"><i class="fas fa-users"></i></div>
-        <div class="admin-stat-value">1,234</div>
+        <div class="admin-stat-value">{{ customers_count }}</div>
         <div class="admin-stat-label">Total Customers</div>
         <div class="admin-stat-change up"><i class="fas fa-arrow-up"></i> 15.3% vs last month</div>
     </div>
     <div class="admin-stat-card">
         <div class="admin-stat-icon" style="background: #fee2e2; color: #ef4444;"><i class="fas fa-box"></i></div>
-        <div class="admin-stat-value">32</div>
+        <div class="admin-stat-value">{{ low_stock_items }}</div>
         <div class="admin-stat-label">Low Stock Items</div>
-        <div class="admin-stat-change down"><i class="fas fa-arrow-down"></i> 3 items restocked</div>
+        <div class="admin-stat-change down"><i class="fas fa-arrow-down"></i> Status checks</div>
     </div>
 </div>
 
@@ -62,7 +62,7 @@
     <div class="lg:col-span-2 admin-table-wrap">
         <div class="admin-table-header">
             <h3>Recent Orders</h3>
-            <a href="{% url 'admin:orders' %}" class="btn-21st btn-21st-sm btn-21st-ghost">View All</a>
+            <a href="{% url 'admin_orders_21st' %}" class="btn-21st btn-21st-sm btn-21st-ghost">View All</a>
         </div>
         <div class="overflow-x-auto">
             <table class="admin-data-table">
@@ -76,41 +76,31 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for order in recent_orders %}
                     <tr>
-                        <td><a href="#" class="font-semibold text-[#1a3a6e] hover:underline">#ORD-78945</a></td>
-                        <td><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-[#1a3a6e] text-white flex items-center justify-center text-xs font-bold">JD</div><span class="font-medium">James Davidson</span></div></td>
-                        <td>May 24, 2026</td>
-                        <td class="font-semibold">AED 2,490</td>
-                        <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Delivered</span></td>
+                        <td><a href="#" class="font-semibold text-[#1a3a6e] hover:underline">#ORD-{{ order.id }}</a></td>
+                        <td>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-[#1a3a6e] text-white flex items-center justify-center text-xs font-bold">
+                                    {{ order.first_name|slice:":1"|upper }}{{ order.last_name|slice:":1"|upper }}
+                                </div>
+                                <span class="font-medium">{{ order.full_name }}</span>
+                            </div>
+                        </td>
+                        <td>{{ order.created_at|date:"M d, Y" }}</td>
+                        <td class="font-semibold">AED {{ order.total_amount|floatformat:2 }}</td>
+                        <td>
+                            <span class="admin-status" style="background: {% if order.status == 'delivered' %}var(--color-teal-100){% elif order.status == 'shipped' %}#fef3c7{% elif order.status == 'pending' %}#e0e7ff{% else %}#fee2e2{% endif %}; color: {% if order.status == 'delivered' %}var(--color-teal-500){% elif order.status == 'shipped' %}#d97706{% elif order.status == 'pending' %}#4f46e5{% else %}#ef4444{% endif %};">
+                                <span class="admin-status-dot" style="background: {% if order.status == 'delivered' %}var(--color-teal-500){% elif order.status == 'shipped' %}#d97706{% elif order.status == 'pending' %}#4f46e5{% else %}#ef4444{% endif %};"></span>
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
                     </tr>
+                    {% empty %}
                     <tr>
-                        <td><a href="#" class="font-semibold text-[#1a3a6e] hover:underline">#ORD-78944</a></td>
-                        <td><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-[#b8860b] text-white flex items-center justify-center text-xs font-bold">SK</div><span class="font-medium">Sarah Kim</span></div></td>
-                        <td>May 23, 2026</td>
-                        <td class="font-semibold">AED 1,250</td>
-                        <td><span class="admin-status" style="background: #fef3c7; color: #d97706;"><span class="admin-status-dot" style="background: #d97706;"></span>Shipped</span></td>
+                        <td colspan="5" class="text-center py-8 text-[#9ca3af]">No recent orders found.</td>
                     </tr>
-                    <tr>
-                        <td><a href="#" class="font-semibold text-[#1a3a6e] hover:underline">#ORD-78943</a></td>
-                        <td><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-[#374151] text-white flex items-center justify-center text-xs font-bold">AM</div><span class="font-medium">Ahmed Mohammad</span></div></td>
-                        <td>May 22, 2026</td>
-                        <td class="font-semibold">AED 4,850</td>
-                        <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Delivered</span></td>
-                    </tr>
-                    <tr>
-                        <td><a href="#" class="font-semibold text-[#1a3a6e] hover:underline">#ORD-78942</a></td>
-                        <td><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-[#14b8a6] text-white flex items-center justify-center text-xs font-bold">LW</div><span class="font-medium">Linda Wang</span></div></td>
-                        <td>May 22, 2026</td>
-                        <td class="font-semibold">AED 890</td>
-                        <td><span class="admin-status" style="background: #e0e7ff; color: #4f46e5;"><span class="admin-status-dot" style="background: #4f46e5;"></span>Processing</span></td>
-                    </tr>
-                    <tr>
-                        <td><a href="#" class="font-semibold text-[#1a3a6e] hover:underline">#ORD-78941</a></td>
-                        <td><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-[#ef4444] text-white flex items-center justify-center text-xs font-bold">RJ</div><span class="font-medium">Robert Johnson</span></div></td>
-                        <td>May 21, 2026</td>
-                        <td class="font-semibold">AED 3,120</td>
-                        <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Delivered</span></td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -120,15 +110,19 @@
     <div class="admin-chart-card">
         <div class="admin-chart-title"><span>Top Products</span></div>
         <div class="space-y-4">
-            {% for i in "12345" %}
+            {% for product in top_products_list %}
             <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-[#f6f8fa] transition-colors cursor-pointer">
-                <div class="w-12 h-12 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-image"></i></div>
-                <div class="flex-1 min-w-0">
-                    <div class="font-medium text-sm text-[#0a1628] truncate">Product {{ forloop.counter }}</div>
-                    <div class="text-xs text-[#9ca3af]">{{ 150|add:forloop.counter0 }} sold</div>
+                <div class="w-12 h-12 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af] overflow-hidden">
+                    <img src="{{ product.get_image_url }}" alt="{{ product.name }}" class="w-full h-full object-contain p-1">
                 </div>
-                <div class="text-sm font-semibold text-[#1a3a6e]">AED {{ forloop.counter|add:"240" }}</div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-medium text-sm text-[#0a1628] truncate">{{ product.name }}</div>
+                    <div class="text-xs text-[#9ca3af]">{{ product.sales_count }} sold</div>
+                </div>
+                <div class="text-sm font-semibold text-[#1a3a6e]">AED {{ product.regular_price|floatformat:0 }}</div>
             </div>
+            {% empty %}
+            <div class="text-center py-8 text-[#9ca3af]">No product sales tracked yet.</div>
             {% endfor %}
         </div>
     </div>
@@ -162,7 +156,7 @@ new Chart(revCtx, {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [{
             label: 'Revenue (AED)',
-            data: [45000, 52000, 48000, 61000, 58000, 72000, 85000, 78000, 92000, 88000, 105000, 128450],
+            data: {{ monthly_revenue_json }},
             borderColor: '#14b8a6',
             backgroundColor: revenueGradient,
             borderWidth: 3,
@@ -189,9 +183,9 @@ new Chart(revCtx, {
 new Chart(document.getElementById('categoryChart').getContext('2d'), {
     type: 'doughnut',
     data: {
-        labels: ['Medical Equipment', 'Surgical Supplies', 'Diagnostic', 'Patient Care', 'Others'],
+        labels: {{ category_labels_json|safe }},
         datasets: [{
-            data: [35, 25, 20, 12, 8],
+            data: {{ category_data_json }},
             backgroundColor: ['#1a3a6e', '#14b8a6', '#b8860b', '#374151', '#d1d5db'],
             borderWidth: 0,
             hoverOffset: 8
@@ -209,9 +203,9 @@ new Chart(document.getElementById('categoryChart').getContext('2d'), {
 new Chart(document.getElementById('ordersChart').getContext('2d'), {
     type: 'pie',
     data: {
-        labels: ['Delivered', 'Shipped', 'Processing', 'Pending', 'Cancelled'],
+        labels: {{ status_labels_json|safe }},
         datasets: [{
-            data: [320, 85, 45, 25, 8],
+            data: {{ status_data_json }},
             backgroundColor: ['#14b8a6', '#f59e0b', '#4f46e5', '#d97706', '#ef4444'],
             borderWidth: 0
         }]

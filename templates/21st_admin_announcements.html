@@ -1,0 +1,190 @@
+{% extends '21st_admin_base.html' %}
+{% load static %}
+
+{% block admin_title %}Announcement Bars{% endblock %}
+{% block breadcrumb %}Dashboard / Announcement Bar{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .ann-grid { display: grid; grid-template-cols: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+    .ann-card { background: white; border: 1px solid var(--color-surface-lightest); border-radius: var(--radius-xl); padding: 24px; display: flex; flex-direction: column; justify-content: space-between; }
+    .preview-bar { padding: 8px 12px; font-size: 13px; font-weight: 500; text-align: center; border-radius: var(--radius-md); margin-bottom: 16px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+    .modal.open { display: flex; }
+    .modal-content { background: white; border-radius: var(--radius-xl); padding: 32px; width: 500px; max-width: 90%; }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="admin-toolbar">
+    <div></div>
+    <button onclick="openAddModal()" class="btn-21st btn-21st-sm btn-21st-primary"><i class="fas fa-plus"></i> Add Announcement</button>
+</div>
+
+<div class="ann-grid">
+    {% for item in announcements %}
+    <div class="ann-card" id="ann-card-{{ item.id }}">
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-xs font-bold text-[#9ca3af]">ID: #{{ item.id }}</span>
+                <span class="admin-status" id="status-badge-{{ item.id }}" style="background: {% if item.is_active %}var(--color-teal-100){% else %}#fee2e2{% endif %}; color: {% if item.is_active %}var(--color-teal-500){% else %}#ef4444{% endif %};">
+                    {{ item.is_active|yesno:"Active,Inactive" }}
+                </span>
+            </div>
+            
+            <div class="preview-bar" style="background-color: {{ item.background_color }}; color: {{ item.text_color }};">
+                {{ item.text }}
+            </div>
+            
+            <div class="text-xs space-y-1 text-[#6b7280] mb-6">
+                <div><strong>BG Color:</strong> {{ item.background_color }}</div>
+                <div><strong>Text Color:</strong> {{ item.text_color }}</div>
+                <div><strong>User Closable:</strong> {{ item.closable|yesno:"Yes,No" }}</div>
+            </div>
+        </div>
+        
+        <div class="flex gap-2">
+            <button onclick="toggleStatus({{ item.id }})" class="btn-21st btn-21st-sm btn-21st-secondary flex-1">Toggle Status</button>
+            <button onclick="deleteAnnouncement({{ item.id }})" class="btn-21st btn-21st-sm btn-21st-ghost text-red-500" style="color: var(--color-error);"><i class="fas fa-trash"></i></button>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-16 text-[#9ca3af]">No announcements found. Click "Add Announcement" to create one.</div>
+    {% endfor %}
+</div>
+
+<!-- Add Modal -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <h3 class="font-display text-xl font-semibold mb-6">Add Announcement</h3>
+        <form id="addAnnForm" onsubmit="submitAnnouncement(event)">
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">Announcement Text</label>
+                <input type="text" name="text" class="form-21st-input" required placeholder="e.g. Free Express Shipping on orders above AED 300!">
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="form-21st-group">
+                    <label class="form-21st-label">Background Color</label>
+                    <input type="color" name="background_color" class="form-21st-input" value="#000000" style="padding: 4px; height: 40px;">
+                </div>
+                <div class="form-21st-group">
+                    <label class="form-21st-label">Text Color</label>
+                    <input type="color" name="text_color" class="form-21st-input" value="#ffffff" style="padding: 4px; height: 40px;">
+                </div>
+            </div>
+            <div class="form-21st-group mb-6 flex items-center gap-3">
+                <input type="checkbox" name="closable" id="closable" checked class="rounded border-[#d1d5db] w-4 h-4 text-[#1a3a6e]">
+                <label for="closable" class="text-sm font-medium text-[#4b5563] cursor-pointer">User Closable (can dismiss announcement)</label>
+            </div>
+            <div class="flex justify-end gap-3">
+                <button type="button" onclick="closeAddModal()" class="btn-21st btn-21st-sm btn-21st-secondary">Cancel</button>
+                <button type="submit" class="btn-21st btn-21st-sm btn-21st-primary">Save Announcement</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openAddModal() {
+        document.getElementById('addModal').classList.add('open');
+    }
+    function closeAddModal() {
+        document.getElementById('addModal').classList.remove('open');
+    }
+    
+    function toggleStatus(id) {
+        fetch('/21st/admin/api/announcements/action/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ action: 'toggle_status', id: id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const badge = document.getElementById(`status-badge-${id}`);
+                if (data.is_active) {
+                    badge.style.background = 'var(--color-teal-100)';
+                    badge.style.color = 'var(--color-teal-500)';
+                    badge.textContent = 'Active';
+                } else {
+                    badge.style.background = '#fee2e2';
+                    badge.style.color = '#ef4444';
+                    badge.textContent = 'Inactive';
+                }
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to toggle announcement status.');
+        });
+    }
+
+    function deleteAnnouncement(id) {
+        if (!confirm('Are you sure you want to delete this announcement?')) return;
+        
+        fetch('/21st/admin/api/announcements/action/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ action: 'delete', id: id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`ann-card-${id}`).remove();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to delete announcement.');
+        });
+    }
+
+    function submitAnnouncement(e) {
+        e.preventDefault();
+        const form = document.getElementById('addAnnForm');
+        const formData = new FormData(form);
+        
+        const payload = {
+            action: 'create',
+            text: formData.get('text'),
+            background_color: formData.get('background_color'),
+            text_color: formData.get('text_color'),
+            closable: document.getElementById('closable').checked
+        };
+        
+        fetch('/21st/admin/api/announcements/action/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to save announcement.');
+        });
+    }
+</script>
+
+{% endblock %}

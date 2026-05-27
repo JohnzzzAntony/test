@@ -24,34 +24,29 @@
 
 {% block admin_content %}
 
-<div class="inventory-alert warning">
+<div class="inventory-alert warning" {% if low_stock_count == 0 %}style="display:none;"{% endif %}>
     <i class="fas fa-exclamation-triangle"></i>
     <div>
-        <strong>Low Stock Alert:</strong> 32 products are running low. <a href="#low-stock" class="underline font-semibold">View details</a>
+        <strong>Low Stock Alert:</strong> {{ low_stock_count }} products are running low. <a href="?status=low_stock" class="underline font-semibold">View details</a>
     </div>
 </div>
 
 <div class="admin-toolbar">
     <div class="admin-toolbar-left">
-        <div class="admin-search">
+        <form method="GET" class="admin-search">
             <i class="fas fa-search"></i>
-            <input type="text" placeholder="Search inventory..." id="inventorySearch">
-        </div>
-        <button class="btn-21st btn-21st-sm btn-21st-secondary"><i class="fas fa-filter"></i> Filter</button>
+            <input type="text" name="q" placeholder="Search inventory..." id="inventorySearch" value="{{ search_query|default:'' }}">
+        </form>
         <div class="flex gap-2">
-            <button class="btn-21st btn-21st-xs btn-21st-secondary active">All</button>
-            <button class="btn-21st btn-21st-xs btn-21st-ghost">In Stock</button>
-            <button class="btn-21st btn-21st-xs btn-21st-ghost">Low Stock</button>
-            <button class="btn-21st btn-21st-xs btn-21st-ghost">Out of Stock</button>
+            <a href="?status=all{% if search_query %}&q={{ search_query }}{% endif %}" class="btn-21st btn-21st-xs {% if selected_status == 'all' or not selected_status %}btn-21st-secondary active{% else %}btn-21st-ghost{% endif %}">All</a>
+            <a href="?status=in_stock{% if search_query %}&q={{ search_query }}{% endif %}" class="btn-21st btn-21st-xs {% if selected_status == 'in_stock' %}btn-21st-secondary active{% else %}btn-21st-ghost{% endif %}">In Stock</a>
+            <a href="?status=low_stock{% if search_query %}&q={{ search_query }}{% endif %}" class="btn-21st btn-21st-xs {% if selected_status == 'low_stock' %}btn-21st-secondary active{% else %}btn-21st-ghost{% endif %}">Low Stock</a>
+            <a href="?status=out_of_stock{% if search_query %}&q={{ search_query }}{% endif %}" class="btn-21st btn-21st-xs {% if selected_status == 'out_of_stock' %}btn-21st-secondary active{% else %}btn-21st-ghost{% endif %}">Out of Stock</a>
         </div>
-    </div>
-    <div class="flex gap-2">
-        <button class="btn-21st btn-21st-sm btn-21st-secondary"><i class="fas fa-download"></i> Export</button>
-        <button class="btn-21st btn-21st-sm btn-21st-primary"><i class="fas fa-plus"></i> Add Stock</button>
     </div>
 </div>
 
-<div class="admin-table-wrap" id="low-stock">
+<div class="admin-table-wrap">
     <div class="overflow-x-auto">
         <table class="admin-data-table" id="inventoryTable">
             <thead>
@@ -61,136 +56,133 @@
                     <th>SKU</th>
                     <th>Category</th>
                     <th>Stock</th>
-                    <th>Reorder Level</th>
                     <th>Status</th>
-                    <th>Last Updated</th>
-                    <th>Actions</th>
+                    <th>Quick Adjust</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                {% for product in products %}
+                <tr id="row-inv-{{ product.id }}">
                     <td><input type="checkbox" class="inv-checkbox rounded"></td>
                     <td>
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-thermometer-half"></i></div>
-                            <div><div class="font-medium text-sm">Digital Thermometer Pro</div><div class="text-xs text-[#9ca3af]">THR-2026-001</div></div>
+                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af] overflow-hidden">
+                                <img src="{{ product.get_image_url }}" alt="{{ product.name }}" class="w-full h-full object-contain p-1">
+                            </div>
+                            <div><div class="font-medium text-sm">{{ product.name }}</div><div class="text-xs text-[#9ca3af]">{{ product.sku_id }}</div></div>
                         </div>
                     </td>
-                    <td class="font-mono text-xs text-[#6b7280]">THR-2026-001</td>
-                    <td>Diagnostic</td>
-                    <td><div class="flex items-center gap-3"><span class="font-semibold w-8">45</span><div class="stock-bar w-24"><div class="stock-bar-fill" style="width: 90%; background: var(--color-teal-500);"></div></div></div></td>
-                    <td>10</td>
-                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>In Stock</span></td>
-                    <td class="text-sm text-[#6b7280]">May 24, 2026</td>
-                    <td><div class="admin-table-actions"><button><i class="fas fa-edit"></i></button><button><i class="fas fa-history"></i></button></div></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" class="inv-checkbox rounded"></td>
+                    <td class="font-mono text-xs text-[#6b7280]">{{ product.sku_id }}</td>
+                    <td>{{ product.category.name|default:"—" }}</td>
                     <td>
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-heart-pulse"></i></div>
-                            <div><div class="font-medium text-sm">Pulse Oximeter Pro</div><div class="text-xs text-[#9ca3af]">OXM-2026-005</div></div>
+                            <span class="font-semibold w-8" id="qty-text-{{ product.id }}">{{ product.quantity }}</span>
+                            <div class="stock-bar w-24">
+                                <div class="stock-bar-fill" id="qty-bar-{{ product.id }}" style="width: {% if product.quantity >= 100 %}100{% else %}{{ product.quantity }}{% endif %}%; background: {% if product.quantity == 0 %}#ef4444{% elif product.quantity <= 10 %}#f59e0b{% else %}var(--color-teal-500){% endif %};"></div>
+                            </div>
                         </div>
                     </td>
-                    <td class="font-mono text-xs text-[#6b7280]">OXM-2026-005</td>
-                    <td>Diagnostic</td>
-                    <td><div class="flex items-center gap-3"><span class="font-semibold w-8 text-red-600">5</span><div class="stock-bar w-24"><div class="stock-bar-fill" style="width: 10%; background: #ef4444;"></div></div></div></td>
-                    <td class="text-red-600 font-semibold">10</td>
-                    <td><span class="admin-status" style="background: #fef3c7; color: #d97706;"><span class="admin-status-dot" style="background: #d97706;"></span>Low Stock</span></td>
-                    <td class="text-sm text-[#6b7280]">May 23, 2026</td>
-                    <td><div class="admin-table-actions"><button><i class="fas fa-edit"></i></button><button><i class="fas fa-history"></i></button></div></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" class="inv-checkbox rounded"></td>
                     <td>
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-stethoscope"></i></div>
-                            <div><div class="font-medium text-sm">Cardiology Stethoscope</div><div class="text-xs text-[#9ca3af]">STH-2026-012</div></div>
-                        </div>
+                        <span class="admin-status" id="badge-status-{{ product.id }}" style="background: {% if product.quantity == 0 %}#fee2e2{% elif product.quantity <= 10 %}#fef3c7{% else %}var(--color-teal-100){% endif %}; color: {% if product.quantity == 0 %}#ef4444{% elif product.quantity <= 10 %}#d97706{% else %}var(--color-teal-500){% endif %};">
+                            <span class="admin-status-dot" id="dot-status-{{ product.id }}" style="background: {% if product.quantity == 0 %}#ef4444{% elif product.quantity <= 10 %}#d97706{% else %}var(--color-teal-500){% endif %};"></span>
+                            <span id="text-status-{{ product.id }}">{% if product.quantity == 0 %}Out of Stock{% elif product.quantity <= 10 %}Low Stock{% else %}In Stock{% endif %}</span>
+                        </span>
                     </td>
-                    <td class="font-mono text-xs text-[#6b7280]">STH-2026-012</td>
-                    <td>Examination</td>
-                    <td><div class="flex items-center gap-3"><span class="font-semibold w-8">120</span><div class="stock-bar w-24"><div class="stock-bar-fill" style="width: 100%; background: var(--color-teal-500);"></div></div></div></td>
-                    <td>20</td>
-                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>In Stock</span></td>
-                    <td class="text-sm text-[#6b7280]">May 22, 2026</td>
-                    <td><div class="admin-table-actions"><button><i class="fas fa-edit"></i></button><button><i class="fas fa-history"></i></button></div></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" class="inv-checkbox rounded"></td>
                     <td>
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-mask-ventilator"></i></div>
-                            <div><div class="font-medium text-sm">Oxygen Concentrator</div><div class="text-xs text-[#9ca3af]">OCN-2026-008</div></div>
+                        <div class="flex items-center gap-1">
+                            <input type="number" id="input-qty-{{ product.id }}" value="{{ product.quantity }}" class="form-21st-input" style="width: 70px; padding: 4px 8px; font-size: 13px;" min="0">
+                            <button onclick="adjustInventoryStock({{ product.id }})" class="btn-21st btn-21st-xs btn-21st-primary" style="padding: 6px 10px;"><i class="fas fa-save"></i></button>
                         </div>
                     </td>
-                    <td class="font-mono text-xs text-[#6b7280]">OCN-2026-008</td>
-                    <td>Respiratory</td>
-                    <td><div class="flex items-center gap-3"><span class="font-semibold w-8">32</span><div class="stock-bar w-24"><div class="stock-bar-fill" style="width: 64%; background: var(--color-teal-500);"></div></div></div></td>
-                    <td>5</td>
-                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>In Stock</span></td>
-                    <td class="text-sm text-[#6b7280]">May 20, 2026</td>
-                    <td><div class="admin-table-actions"><button><i class="fas fa-edit"></i></button><button><i class="fas fa-history"></i></button></div></td>
                 </tr>
+                {% empty %}
                 <tr>
-                    <td><input type="checkbox" class="inv-checkbox rounded"></td>
-                    <td>
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-syringe"></i></div>
-                            <div><div class="font-medium text-sm">Surgical Scalpel Set</div><div class="text-xs text-[#9ca3af]">STL-2026-003</div></div>
-                        </div>
-                    </td>
-                    <td class="font-mono text-xs text-[#6b7280]">STL-2026-003</td>
-                    <td>Surgical</td>
-                    <td><div class="flex items-center gap-3"><span class="font-semibold w-8 text-red-600">0</span><div class="stock-bar w-24"><div class="stock-bar-fill" style="width: 0%; background: #ef4444;"></div></div></div></td>
-                    <td class="text-red-600 font-semibold">15</td>
-                    <td><span class="admin-status" style="background: #fee2e2; color: #ef4444;"><span class="admin-status-dot" style="background: #ef4444;"></span>Out of Stock</span></td>
-                    <td class="text-sm text-[#6b7280]">May 18, 2026</td>
-                    <td><div class="admin-table-actions"><button><i class="fas fa-edit"></i></button><button><i class="fas fa-history"></i></button></div></td>
+                    <td colspan="7" class="text-center py-8 text-[#9ca3af]">No inventory items found.</td>
                 </tr>
-                <tr>
-                    <td><input type="checkbox" class="inv-checkbox rounded"></td>
-                    <td>
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-[#f6f8fa] rounded-lg flex items-center justify-center text-[#9ca3af]"><i class="fas fa-heartbeat"></i></div>
-                            <div><div class="font-medium text-sm">Blood Pressure Monitor</div><div class="text-xs text-[#9ca3af]">BPM-2026-009</div></div>
-                        </div>
-                    </td>
-                    <td class="font-mono text-xs text-[#6b7280]">BPM-2026-009</td>
-                    <td>Diagnostic</td>
-                    <td><div class="flex items-center gap-3"><span class="font-semibold w-8">8</span><div class="stock-bar w-24"><div class="stock-bar-fill" style="width: 16%; background: #f59e0b;"></div></div></div></td>
-                    <td class="text-amber-600 font-semibold">10</td>
-                    <td><span class="admin-status" style="background: #fef3c7; color: #d97706;"><span class="admin-status-dot" style="background: #d97706;"></span>Low Stock</span></td>
-                    <td class="text-sm text-[#6b7280]">May 24, 2026</td>
-                    <td><div class="admin-table-actions"><button><i class="fas fa-edit"></i></button><button><i class="fas fa-history"></i></button></div></td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
+    
+    {% if products.has_other_pages %}
     <div class="admin-pagination">
-        <span class="text-sm text-[#6b7280]">Showing 1 to 6 of 2,526 results</span>
+        <span class="text-sm text-[#6b7280]">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
         <div class="pagination-21st">
+            {% if products.has_previous %}
+            <a href="?page={{ products.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}" class="pagination-21st-btn"><i class="fas fa-chevron-left text-xs"></i></a>
+            {% else %}
             <button class="pagination-21st-btn" disabled><i class="fas fa-chevron-left text-xs"></i></button>
-            <button class="pagination-21st-btn active">1</button>
-            <button class="pagination-21st-btn">2</button>
-            <button class="pagination-21st-btn">3</button>
-            <span class="flex items-center px-2 text-sm text-[#9ca3af]">...</span>
-            <button class="pagination-21st-btn">422</button>
-            <button class="pagination-21st-btn"><i class="fas fa-chevron-right text-xs"></i></button>
+            {% endif %}
+            
+            <button class="pagination-21st-btn active">{{ products.number }}</button>
+            
+            {% if products.has_next %}
+            <a href="?page={{ products.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}" class="pagination-21st-btn"><i class="fas fa-chevron-right text-xs"></i></a>
+            {% else %}
+            <button class="pagination-21st-btn" disabled><i class="fas fa-chevron-right text-xs"></i></button>
+            {% endif %}
         </div>
     </div>
+    {% endif %}
 </div>
 
 <script>
-    document.getElementById('selectAllInv').addEventListener('change', function() {
-        document.querySelectorAll('.inv-checkbox').forEach(cb => cb.checked = this.checked);
-    });
-    document.getElementById('inventorySearch').addEventListener('input', function() {
-        const term = this.value.toLowerCase();
-        document.querySelectorAll('#inventoryTable tbody tr').forEach(row => {
-            row.style.display = row.textContent.toLowerCase().includes(term) ? '' : 'none';
+    const selectAllInv = document.getElementById('selectAllInv');
+    if (selectAllInv) {
+        selectAllInv.addEventListener('change', function() {
+            document.querySelectorAll('.inv-checkbox').forEach(cb => cb.checked = this.checked);
         });
-    });
+    }
+
+    function adjustInventoryStock(id) {
+        const input = document.getElementById(`input-qty-${id}`);
+        const qtyVal = parseInt(input.value) || 0;
+        
+        fetch(`/21st/admin/api/inventory/${id}/adjust/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ quantity: qtyVal })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update table values
+                document.getElementById(`qty-text-${id}`).textContent = data.quantity;
+                const fillBar = document.getElementById(`qty-bar-${id}`);
+                const percent = Math.min(100, data.quantity);
+                fillBar.style.width = `${percent}%`;
+                
+                const badge = document.getElementById(`badge-status-${id}`);
+                const dot = document.getElementById(`dot-status-${id}`);
+                const text = document.getElementById(`text-status-${id}`);
+                
+                if (data.quantity === 0) {
+                    badge.style.background = '#fee2e2';
+                    badge.style.color = '#ef4444';
+                    dot.style.background = '#ef4444';
+                    fillBar.style.background = '#ef4444';
+                    text.textContent = 'Out of Stock';
+                } else if (data.quantity <= 10) {
+                    badge.style.background = '#fef3c7';
+                    badge.style.color = '#d97706';
+                    dot.style.background = '#d97706';
+                    fillBar.style.background = '#f59e0b';
+                    text.textContent = 'Low Stock';
+                } else {
+                    badge.style.background = 'var(--color-teal-100)';
+                    badge.style.color = 'var(--color-teal-500)';
+                    dot.style.background = 'var(--color-teal-500)';
+                    fillBar.style.background = 'var(--color-teal-500)';
+                    text.textContent = 'In Stock';
+                }
+            } else {
+                alert('Error: ' + data.error);
+            }
+        });
+    }
 </script>
 
 {% endblock %}

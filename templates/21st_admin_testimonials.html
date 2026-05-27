@@ -1,0 +1,199 @@
+{% extends '21st_admin_base.html' %}
+{% load static %}
+
+{% block admin_title %}Testimonials{% endblock %}
+{% block breadcrumb %}Dashboard / Testimonials{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .testimonial-card { background: white; border: 1px solid var(--color-surface-lightest); border-radius: var(--radius-xl); padding: 24px; display: flex; flex-direction: column; justify-content: space-between; }
+    .testimonial-grid { display: grid; grid-template-cols: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+    .stars { color: #f59e0b; margin-bottom: 12px; }
+    .avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--color-primary-600), var(--color-teal-500)); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+    .modal.open { display: flex; }
+    .modal-content { background: white; border-radius: var(--radius-xl); padding: 32px; width: 500px; max-width: 90%; }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="admin-toolbar">
+    <div></div>
+    <button onclick="openAddModal()" class="btn-21st btn-21st-sm btn-21st-primary"><i class="fas fa-plus"></i> Add Testimonial</button>
+</div>
+
+<div class="testimonial-grid">
+    {% for item in testimonials %}
+    <div class="testimonial-card" id="t-card-{{ item.id }}">
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="avatar">{{ item.client_name|slice:":2"|upper }}</div>
+                    <div>
+                        <h4 class="font-semibold text-[#0a1628]">{{ item.client_name }}</h4>
+                        <p class="text-xs text-[#9ca3af]">{{ item.position|default:"Client" }}</p>
+                    </div>
+                </div>
+                <span class="admin-status" id="status-badge-{{ item.id }}" style="background: {% if item.is_active %}var(--color-teal-100){% else %}#fee2e2{% endif %}; color: {% if item.is_active %}var(--color-teal-500){% else %}#ef4444{% endif %};">
+                    {{ item.is_active|yesno:"Active,Inactive" }}
+                </span>
+            </div>
+            <div class="stars">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= item.rating %}
+                        <i class="fas fa-star text-xs"></i>
+                    {% else %}
+                        <i class="far fa-star text-xs"></i>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <p class="text-sm text-[#4b5563] italic mb-6">"{{ item.content }}"</p>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="toggleStatus({{ item.id }})" class="btn-21st btn-21st-sm btn-21st-secondary flex-1">Toggle Status</button>
+            <button onclick="deleteTestimonial({{ item.id }})" class="btn-21st btn-21st-sm btn-21st-ghost text-red-500" style="color: var(--color-error);"><i class="fas fa-trash"></i></button>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-16 text-[#9ca3af]">No testimonials found. Click "Add Testimonial" to create one.</div>
+    {% endfor %}
+</div>
+
+<!-- Add Modal -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <h3 class="font-display text-xl font-semibold mb-6">Add Testimonial</h3>
+        <form id="addTForm" onsubmit="submitTestimonial(event)">
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">Client Name</label>
+                <input type="text" name="client_name" class="form-21st-input" required placeholder="e.g. Dr. Sarah Jenkins">
+            </div>
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">Position / Company</label>
+                <input type="text" name="position" class="form-21st-input" placeholder="e.g. Chief of Cardiology at City Hospital">
+            </div>
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">Rating (1 to 5 Stars)</label>
+                <input type="number" name="rating" class="form-21st-input" value="5" min="1" max="5" required>
+            </div>
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">Review Content</label>
+                <textarea name="content" class="form-21st-input" rows="4" required placeholder="Paste testimonial text here..."></textarea>
+            </div>
+            <div class="form-21st-group mb-6">
+                <label class="form-21st-label">Sort Order</label>
+                <input type="number" name="order" class="form-21st-input" value="0" min="0">
+            </div>
+            <div class="flex justify-end gap-3">
+                <button type="button" onclick="closeAddModal()" class="btn-21st btn-21st-sm btn-21st-secondary">Cancel</button>
+                <button type="submit" class="btn-21st btn-21st-sm btn-21st-primary">Save Testimonial</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openAddModal() {
+        document.getElementById('addModal').classList.add('open');
+    }
+    function closeAddModal() {
+        document.getElementById('addModal').classList.remove('open');
+    }
+    
+    function toggleStatus(id) {
+        fetch('/21st/admin/api/testimonials/action/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ action: 'toggle_status', id: id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const badge = document.getElementById(`status-badge-${id}`);
+                if (data.is_active) {
+                    badge.style.background = 'var(--color-teal-100)';
+                    badge.style.color = 'var(--color-teal-500)';
+                    badge.textContent = 'Active';
+                } else {
+                    badge.style.background = '#fee2e2';
+                    badge.style.color = '#ef4444';
+                    badge.textContent = 'Inactive';
+                }
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to toggle testimonial status.');
+        });
+    }
+
+    function deleteTestimonial(id) {
+        if (!confirm('Are you sure you want to delete this testimonial?')) return;
+        
+        fetch('/21st/admin/api/testimonials/action/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ action: 'delete', id: id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`t-card-${id}`).remove();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to delete testimonial.');
+        });
+    }
+
+    function submitTestimonial(e) {
+        e.preventDefault();
+        const form = document.getElementById('addTForm');
+        const formData = new FormData(form);
+        
+        const payload = {
+            action: 'create',
+            client_name: formData.get('client_name'),
+            position: formData.get('position'),
+            rating: parseInt(formData.get('rating')),
+            content: formData.get('content'),
+            order: parseInt(formData.get('order'))
+        };
+        
+        fetch('/21st/admin/api/testimonials/action/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to save testimonial.');
+        });
+    }
+</script>
+
+{% endblock %}

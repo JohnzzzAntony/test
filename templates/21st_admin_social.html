@@ -1,0 +1,145 @@
+{% extends '21st_admin_base.html' %}
+{% load static %}
+
+{% block admin_title %}Social Posts{% endblock %}
+{% block breadcrumb %}Dashboard / Social Feed{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .social-grid { display: grid; grid-template-cols: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+    .social-card { background: white; border: 1px solid var(--color-surface-lightest); border-radius: var(--radius-xl); overflow: hidden; display: flex; flex-direction: column; }
+    .social-img-wrap { aspect-ratio: 1; position: relative; background: var(--color-surface-lightest); }
+    .social-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .social-details { padding: 16px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+    .modal.open { display: flex; }
+    .modal-content { background: white; border-radius: var(--radius-xl); padding: 32px; width: 480px; max-width: 90%; }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="admin-toolbar">
+    <div></div>
+    <button onclick="openAddModal()" class="btn-21st btn-21st-sm btn-21st-primary"><i class="fas fa-plus"></i> Add Post</button>
+</div>
+
+<div class="social-grid">
+    {% for post in posts %}
+    <div class="social-card" id="post-card-{{ post.id }}">
+        <div class="social-img-wrap">
+            <img src="{{ post.get_image_url }}" alt="{{ post.image_alt|default:'Social Feed' }}">
+        </div>
+        <div class="social-details">
+            <div class="mb-4">
+                <div class="text-xs text-[#9ca3af] font-semibold mb-1">SORT ORDER: {{ post.order }}</div>
+                <a href="{{ post.link }}" target="_blank" class="text-sm font-medium text-[#1a3a6e] hover:underline truncate block"><i class="fab fa-instagram mr-1"></i> {{ post.link|default:"No Link" }}</a>
+            </div>
+            <button onclick="deletePost({{ post.id }})" class="btn-21st btn-21st-sm btn-21st-ghost text-red-500 w-full" style="color: var(--color-error);"><i class="fas fa-trash"></i> Delete Post</button>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-16 text-[#9ca3af]">No social posts found. Click "Add Post" to insert a new one.</div>
+    {% endfor %}
+</div>
+
+<!-- Add Modal -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <h3 class="font-display text-xl font-semibold mb-6">Add Social Post</h3>
+        <form id="addPostForm" onsubmit="submitPost(event)">
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">Instagram Link / URL</label>
+                <input type="url" name="link" class="form-21st-input" required placeholder="https://instagram.com/p/...">
+            </div>
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">Image URL</label>
+                <input type="url" name="image_url" class="form-21st-input" required placeholder="https://via.placeholder.com/400">
+            </div>
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">Image Alt Description</label>
+                <input type="text" name="image_alt" class="form-21st-input" placeholder="e.g. Doctor stethoscope background">
+            </div>
+            <div class="form-21st-group mb-6">
+                <label class="form-21st-label">Order</label>
+                <input type="number" name="order" class="form-21st-input" value="0" min="0">
+            </div>
+            <div class="flex justify-end gap-3">
+                <button type="button" onclick="closeAddModal()" class="btn-21st btn-21st-sm btn-21st-secondary">Cancel</button>
+                <button type="submit" class="btn-21st btn-21st-sm btn-21st-primary">Save Post</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openAddModal() {
+        document.getElementById('addModal').classList.add('open');
+    }
+    function closeAddModal() {
+        document.getElementById('addModal').classList.remove('open');
+    }
+    
+    function deletePost(id) {
+        if (!confirm('Are you sure you want to delete this social post?')) return;
+        
+        fetch('/21st/admin/api/social/action/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ action: 'delete', id: id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`post-card-${id}`).remove();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to delete post.');
+        });
+    }
+
+    function submitPost(e) {
+        e.preventDefault();
+        const form = document.getElementById('addPostForm');
+        const formData = new FormData(form);
+        
+        const payload = {
+            action: 'create',
+            link: formData.get('link'),
+            image_url: formData.get('image_url'),
+            image_alt: formData.get('image_alt'),
+            order: parseInt(formData.get('order'))
+        };
+        
+        fetch('/21st/admin/api/social/action/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to save post.');
+        });
+    }
+</script>
+
+{% endblock %}

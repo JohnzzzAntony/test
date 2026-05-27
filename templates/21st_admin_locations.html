@@ -1,0 +1,198 @@
+{% extends '21st_admin_base.html' %}
+{% load static %}
+
+{% block admin_title %}Store Locations{% endblock %}
+{% block breadcrumb %}Dashboard / Locations{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .location-grid { display: grid; grid-template-cols: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+    .location-card { background: white; border: 1px solid var(--color-surface-lightest); border-radius: var(--radius-xl); padding: 24px; display: flex; flex-direction: column; justify-content: space-between; }
+    .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+    .modal.open { display: flex; }
+    .modal-content { background: white; border-radius: var(--radius-xl); padding: 32px; width: 500px; max-width: 90%; }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="admin-toolbar">
+    <div></div>
+    <button onclick="openAddModal()" class="btn-21st btn-21st-sm btn-21st-primary"><i class="fas fa-plus"></i> Add Location</button>
+</div>
+
+<div class="location-grid">
+    {% for item in locations %}
+    <div class="location-card" id="loc-card-{{ item.id }}">
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h4 class="font-semibold text-[#0a1628] text-lg">{{ item.name }}</h4>
+                    <p class="text-xs text-[#9ca3af] font-semibold">{{ item.city }}</p>
+                </div>
+                <span class="admin-status" id="status-badge-{{ item.id }}" style="background: {% if item.is_active %}var(--color-teal-100){% else %}#fee2e2{% endif %}; color: {% if item.is_active %}var(--color-teal-500){% else %}#ef4444{% endif %};">
+                    {{ item.is_active|yesno:"Active,Inactive" }}
+                </span>
+            </div>
+            
+            <div class="space-y-2 text-sm text-[#4b5563] mb-6">
+                <div><i class="fas fa-map-marker-alt mr-2 text-primary-500"></i> {{ item.address }}</div>
+                <div><i class="fas fa-phone mr-2 text-primary-500"></i> {{ item.phone }}</div>
+                {% if item.map_url %}
+                <a href="{{ item.map_url }}" target="_blank" class="text-primary-600 hover:underline inline-block mt-2"><i class="fas fa-directions mr-1"></i> Get Directions</a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="flex gap-2">
+            <button onclick="toggleStatus({{ item.id }})" class="btn-21st btn-21st-sm btn-21st-secondary flex-1">Toggle Status</button>
+            <button onclick="deleteLocation({{ item.id }})" class="btn-21st btn-21st-sm btn-21st-ghost text-red-500" style="color: var(--color-error);"><i class="fas fa-trash"></i></button>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-16 text-[#9ca3af]">No locations found. Click "Add Location" to create one.</div>
+    {% endfor %}
+</div>
+
+<!-- Add Modal -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <h3 class="font-display text-xl font-semibold mb-6">Add Store Location</h3>
+        <form id="addLocForm" onsubmit="submitLocation(event)">
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">Branch Name</label>
+                <input type="text" name="name" class="form-21st-input" required placeholder="e.g. Dubai Marina Branch">
+            </div>
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">City</label>
+                <input type="text" name="city" class="form-21st-input" required placeholder="e.g. Dubai">
+            </div>
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">Address</label>
+                <textarea name="address" class="form-21st-input" rows="2" required placeholder="e.g. Shop 42, Marina Walk"></textarea>
+            </div>
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">Phone Number</label>
+                <input type="text" name="phone" class="form-21st-input" required placeholder="e.g. +971 4 123 4567">
+            </div>
+            <div class="form-21st-group mb-4">
+                <label class="form-21st-label">Google Maps URL</label>
+                <input type="url" name="map_url" class="form-21st-input" placeholder="https://maps.google.com/?q=...">
+            </div>
+            <div class="form-21st-group mb-6">
+                <label class="form-21st-label">Sort Order</label>
+                <input type="number" name="order" class="form-21st-input" value="0" min="0">
+            </div>
+            <div class="flex justify-end gap-3">
+                <button type="button" onclick="closeAddModal()" class="btn-21st btn-21st-sm btn-21st-secondary">Cancel</button>
+                <button type="submit" class="btn-21st btn-21st-sm btn-21st-primary">Save Location</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openAddModal() {
+        document.getElementById('addModal').classList.add('open');
+    }
+    function closeAddModal() {
+        document.getElementById('addModal').classList.remove('open');
+    }
+    
+    function toggleStatus(id) {
+        fetch('/21st/admin/api/locations/action/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ action: 'toggle_status', id: id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const badge = document.getElementById(`status-badge-${id}`);
+                if (data.is_active) {
+                    badge.style.background = 'var(--color-teal-100)';
+                    badge.style.color = 'var(--color-teal-500)';
+                    badge.textContent = 'Active';
+                } else {
+                    badge.style.background = '#fee2e2';
+                    badge.style.color = '#ef4444';
+                    badge.textContent = 'Inactive';
+                }
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to toggle location status.');
+        });
+    }
+
+    function deleteLocation(id) {
+        if (!confirm('Are you sure you want to delete this location?')) return;
+        
+        fetch('/21st/admin/api/locations/action/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ action: 'delete', id: id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`loc-card-${id}`).remove();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to delete location.');
+        });
+    }
+
+    function submitLocation(e) {
+        e.preventDefault();
+        const form = document.getElementById('addLocForm');
+        const formData = new FormData(form);
+        
+        const payload = {
+            action: 'create',
+            name: formData.get('name'),
+            city: formData.get('city'),
+            address: formData.get('address'),
+            phone: formData.get('phone'),
+            map_url: formData.get('map_url'),
+            order: parseInt(formData.get('order'))
+        };
+        
+        fetch('/21st/admin/api/locations/action/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to save location.');
+        });
+    }
+</script>
+
+{% endblock %}

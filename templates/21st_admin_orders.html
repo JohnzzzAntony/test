@@ -9,9 +9,9 @@
     .admin-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
     .admin-toolbar-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .admin-status-filter { display: flex; gap: 2px; background: var(--color-surface-lightest); border-radius: var(--radius-md); padding: 3px; }
-    .admin-status-filter button { padding: 6px 16px; border-radius: var(--radius-sm); border: none; background: none; font-size: 13px; font-weight: 500; color: var(--color-surface-medium); cursor: pointer; transition: all 0.2s; }
-    .admin-status-filter button.active { background: white; color: var(--color-primary-700); box-shadow: var(--shadow-sm); }
-    .admin-status-filter button:hover:not(.active) { color: var(--color-primary-600); }
+    .admin-status-filter button, .admin-status-filter a { padding: 6px 16px; border-radius: var(--radius-sm); border: none; background: none; font-size: 13px; font-weight: 500; color: var(--color-surface-medium); text-decoration: none; cursor: pointer; transition: all 0.2s; display: inline-block; }
+    .admin-status-filter button.active, .admin-status-filter a.active { background: white; color: var(--color-primary-700); box-shadow: var(--shadow-sm); }
+    .admin-status-filter button:hover:not(.active), .admin-status-filter a:hover:not(.active) { color: var(--color-primary-600); }
     .admin-search { position: relative; }
     .admin-search input { padding: 10px 16px 10px 40px; border: 1px solid var(--color-surface-lighter); border-radius: var(--radius-lg); font-size: 14px; background: white; width: 240px; }
     .admin-search i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-surface-medium); }
@@ -27,21 +27,17 @@
 
 <div class="admin-toolbar">
     <div class="admin-toolbar-left">
-        <div class="admin-search">
+        <form method="GET" class="admin-search">
             <i class="fas fa-search"></i>
-            <input type="text" placeholder="Search orders...">
-        </div>
+            <input type="text" name="q" placeholder="Search orders..." value="{{ search_query|default:'' }}">
+        </form>
         <div class="admin-status-filter">
-            <button class="active">All</button>
-            <button>Processing</button>
-            <button>Shipped</button>
-            <button>Delivered</button>
-            <button>Cancelled</button>
+            <a href="?status=all{% if search_query %}&q={{ search_query }}{% endif %}" class="{% if selected_status == 'all' %}active{% endif %}">All</a>
+            <a href="?status=pending{% if search_query %}&q={{ search_query }}{% endif %}" class="{% if selected_status == 'pending' %}active{% endif %}">Pending</a>
+            <a href="?status=shipped{% if search_query %}&q={{ search_query }}{% endif %}" class="{% if selected_status == 'shipped' %}active{% endif %}">Shipped</a>
+            <a href="?status=delivered{% if search_query %}&q={{ search_query }}{% endif %}" class="{% if selected_status == 'delivered' %}active{% endif %}">Delivered</a>
+            <a href="?status=refund{% if search_query %}&q={{ search_query }}{% endif %}" class="{% if selected_status == 'refund' %}active{% endif %}">Refunded</a>
         </div>
-    </div>
-    <div class="flex gap-2">
-        <button class="btn-21st btn-21st-sm btn-21st-secondary"><i class="fas fa-download"></i> Export</button>
-        <button class="btn-21st btn-21st-sm btn-21st-primary"><i class="fas fa-plus"></i> Create Order</button>
     </div>
 </div>
 
@@ -54,127 +50,115 @@
                     <th>Order #</th>
                     <th>Customer</th>
                     <th>Date</th>
-                    <th>Items</th>
                     <th>Amount</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th>Change Status</th>
                 </tr>
             </thead>
             <tbody>
+                {% for order in orders %}
                 <tr>
                     <td><input type="checkbox" class="rounded"></td>
-                    <td><a href="#" class="admin-order-id hover:underline">#ORD-78945</a></td>
+                    <td><a href="#" class="admin-order-id hover:underline">#ORD-{{ order.id }}</a></td>
                     <td>
                         <div class="admin-order-customer">
-                            <div class="admin-order-customer-avatar" style="background: linear-gradient(135deg, #1a3a6e, #2dd4bf);">JD</div>
-                            <div><div class="font-medium text-sm">James Davidson</div><div class="text-xs text-[#9ca3af]">james@example.com</div></div>
+                            <div class="admin-order-customer-avatar" style="background: linear-gradient(135deg, #1a3a6e, #2dd4bf);">
+                                {{ order.first_name|slice:":1"|upper }}{{ order.last_name|slice:":1"|upper }}
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">{{ order.full_name }}</div>
+                                <div class="text-xs text-[#9ca3af]">{{ order.email }}</div>
+                            </div>
                         </div>
                     </td>
-                    <td><span class="admin-order-date">May 24, 2026</span></td>
-                    <td>4 items</td>
-                    <td class="admin-order-total">AED 2,490</td>
-                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Delivered</span></td>
-                    <td><div class="admin-table-actions"><button><i class="fas fa-eye"></i></button><button><i class="fas fa-pen"></i></button></div></td>
+                    <td><span class="admin-order-date">{{ order.created_at|date:"M d, Y H:i" }}</span></td>
+                    <td class="admin-order-total">AED {{ order.total_amount|floatformat:2 }}</td>
+                    <td>
+                        <span class="admin-status" id="badge-status-{{ order.id }}" style="background: {% if order.status == 'delivered' %}var(--color-teal-100){% elif order.status == 'shipped' %}#fef3c7{% elif order.status == 'pending' %}#e0e7ff{% else %}#fee2e2{% endif %}; color: {% if order.status == 'delivered' %}var(--color-teal-500){% elif order.status == 'shipped' %}#d97706{% elif order.status == 'pending' %}#4f46e5{% else %}#ef4444{% endif %};">
+                            <span class="admin-status-dot" id="dot-status-{{ order.id }}" style="background: {% if order.status == 'delivered' %}var(--color-teal-500){% elif order.status == 'shipped' %}#d97706{% elif order.status == 'pending' %}#4f46e5{% else %}#ef4444{% endif %};"></span>
+                            <span id="text-status-{{ order.id }}">{{ order.get_status_display }}</span>
+                        </span>
+                    </td>
+                    <td>
+                        <select onchange="updateOrderStatus({{ order.id }}, this.value)" class="form-21st-input" style="padding: 4px 8px; font-size: 12px; width: auto; display: inline-block;">
+                            {% for val, label in order.ORDER_STATUS_CHOICES %}
+                            <option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
                 </tr>
+                {% empty %}
                 <tr>
-                    <td><input type="checkbox" class="rounded"></td>
-                    <td><a href="#" class="admin-order-id hover:underline">#ORD-78944</a></td>
-                    <td>
-                        <div class="admin-order-customer">
-                            <div class="admin-order-customer-avatar" style="background: linear-gradient(135deg, #b8860b, #f59e0b);">SK</div>
-                            <div><div class="font-medium text-sm">Sarah Kim</div><div class="text-xs text-[#9ca3af]">sarah@example.com</div></div>
-                        </div>
-                    </td>
-                    <td><span class="admin-order-date">May 23, 2026</span></td>
-                    <td>2 items</td>
-                    <td class="admin-order-total">AED 1,250</td>
-                    <td><span class="admin-status" style="background: #fef3c7; color: #d97706;"><span class="admin-status-dot" style="background: #d97706;"></span>Shipped</span></td>
-                    <td><div class="admin-table-actions"><button><i class="fas fa-eye"></i></button><button><i class="fas fa-pen"></i></button></div></td>
+                    <td colspan="7" class="text-center py-8 text-[#9ca3af]">No orders found.</td>
                 </tr>
-                <tr>
-                    <td><input type="checkbox" class="rounded"></td>
-                    <td><a href="#" class="admin-order-id hover:underline">#ORD-78943</a></td>
-                    <td>
-                        <div class="admin-order-customer">
-                            <div class="admin-order-customer-avatar" style="background: linear-gradient(135deg, #374151, #6b7280);">AM</div>
-                            <div><div class="font-medium text-sm">Ahmed Mohammad</div><div class="text-xs text-[#9ca3af]">ahmed@example.com</div></div>
-                        </div>
-                    </td>
-                    <td><span class="admin-order-date">May 22, 2026</span></td>
-                    <td>6 items</td>
-                    <td class="admin-order-total">AED 4,850</td>
-                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Delivered</span></td>
-                    <td><div class="admin-table-actions"><button><i class="fas fa-eye"></i></button><button><i class="fas fa-pen"></i></button></div></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" class="rounded"></td>
-                    <td><a href="#" class="admin-order-id hover:underline">#ORD-78942</a></td>
-                    <td>
-                        <div class="admin-order-customer">
-                            <div class="admin-order-customer-avatar" style="background: linear-gradient(135deg, #14b8a6, #2dd4bf);">LW</div>
-                            <div><div class="font-medium text-sm">Linda Wang</div><div class="text-xs text-[#9ca3af]">linda@example.com</div></div>
-                        </div>
-                    </td>
-                    <td><span class="admin-order-date">May 22, 2026</span></td>
-                    <td>1 item</td>
-                    <td class="admin-order-total">AED 890</td>
-                    <td><span class="admin-status" style="background: #e0e7ff; color: #4f46e5;"><span class="admin-status-dot" style="background: #4f46e5;"></span>Processing</span></td>
-                    <td><div class="admin-table-actions"><button><i class="fas fa-eye"></i></button><button><i class="fas fa-pen"></i></button></div></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" class="rounded"></td>
-                    <td><a href="#" class="admin-order-id hover:underline">#ORD-78941</a></td>
-                    <td>
-                        <div class="admin-order-customer">
-                            <div class="admin-order-customer-avatar" style="background: linear-gradient(135deg, #ef4444, #f87171);">RJ</div>
-                            <div><div class="font-medium text-sm">Robert Johnson</div><div class="text-xs text-[#9ca3af]">robert@example.com</div></div>
-                        </div>
-                    </td>
-                    <td><span class="admin-order-date">May 21, 2026</span></td>
-                    <td>3 items</td>
-                    <td class="admin-order-total">AED 3,120</td>
-                    <td><span class="admin-status" style="background: var(--color-teal-100); color: var(--color-teal-500);"><span class="admin-status-dot" style="background: var(--color-teal-500);"></span>Delivered</span></td>
-                    <td><div class="admin-table-actions"><button><i class="fas fa-eye"></i></button><button><i class="fas fa-pen"></i></button></div></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" class="rounded"></td>
-                    <td><a href="#" class="admin-order-id hover:underline">#ORD-78940</a></td>
-                    <td>
-                        <div class="admin-order-customer">
-                            <div class="admin-order-customer-avatar" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">EC</div>
-                            <div><div class="font-medium text-sm">Emily Chen</div><div class="text-xs text-[#9ca3af]">emily@example.com</div></div>
-                        </div>
-                    </td>
-                    <td><span class="admin-order-date">May 21, 2026</span></td>
-                    <td>5 items</td>
-                    <td class="admin-order-total">AED 5,670</td>
-                    <td><span class="admin-status" style="background: #fee2e2; color: #ef4444;"><span class="admin-status-dot" style="background: #ef4444;"></span>Cancelled</span></td>
-                    <td><div class="admin-table-actions"><button><i class="fas fa-eye"></i></button><button><i class="fas fa-pen"></i></button></div></td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
+    
+    {% if orders.has_other_pages %}
     <div class="admin-pagination">
-        <span class="text-sm text-[#6b7280]">Showing 1 to 6 of 847 results</span>
+        <span class="text-sm text-[#6b7280]">Page {{ orders.number }} of {{ orders.paginator.num_pages }}</span>
         <div class="pagination-21st">
+            {% if orders.has_previous %}
+            <a href="?page={{ orders.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}" class="pagination-21st-btn"><i class="fas fa-chevron-left text-xs"></i></a>
+            {% else %}
             <button class="pagination-21st-btn" disabled><i class="fas fa-chevron-left text-xs"></i></button>
-            <button class="pagination-21st-btn active">1</button>
-            <button class="pagination-21st-btn">2</button>
-            <button class="pagination-21st-btn">3</button>
-            <span class="flex items-center px-2 text-sm text-[#9ca3af]">...</span>
-            <button class="pagination-21st-btn">142</button>
-            <button class="pagination-21st-btn"><i class="fas fa-chevron-right text-xs"></i></button>
+            {% endif %}
+            
+            <button class="pagination-21st-btn active">{{ orders.number }}</button>
+            
+            {% if orders.has_next %}
+            <a href="?page={{ orders.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}" class="pagination-21st-btn"><i class="fas fa-chevron-right text-xs"></i></a>
+            {% else %}
+            <button class="pagination-21st-btn" disabled><i class="fas fa-chevron-right text-xs"></i></button>
+            {% endif %}
         </div>
     </div>
+    {% endif %}
 </div>
 
 <script>
-    document.querySelectorAll('.admin-status-filter button').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.admin-status-filter button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+    function updateOrderStatus(id, val) {
+        fetch(`/21st/admin/api/orders/${id}/status/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: val })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const badge = document.getElementById(`badge-status-${id}`);
+                const dot = document.getElementById(`dot-status-${id}`);
+                const text = document.getElementById(`text-status-${id}`);
+                
+                text.textContent = val.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                
+                if (val === 'delivered') {
+                    badge.style.background = 'var(--color-teal-100)';
+                    badge.style.color = 'var(--color-teal-500)';
+                    dot.style.background = 'var(--color-teal-500)';
+                } else if (val === 'shipped') {
+                    badge.style.background = '#fef3c7';
+                    badge.style.color = '#d97706';
+                    dot.style.background = '#d97706';
+                } else if (val === 'pending' || val === 'packaging') {
+                    badge.style.background = '#e0e7ff';
+                    badge.style.color = '#4f46e5';
+                    dot.style.background = '#4f46e5';
+                } else {
+                    badge.style.background = '#fee2e2';
+                    badge.style.color = '#ef4444';
+                    dot.style.background = '#ef4444';
+                }
+            } else {
+                alert('Error: ' + data.error);
+            }
         });
-    });
+    }
 </script>
 
 {% endblock %}
