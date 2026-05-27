@@ -2,7 +2,7 @@ from django.contrib import admin, messages
 from django.utils.html import mark_safe, format_html
 from django.conf import settings
 from django.db.models import Q
-from .models import CustomerOrder, CustomerOrderItem, OrderStatusHistory
+from .models import CustomerOrder, CustomerOrderItem, OrderStatusHistory, QuoteEnquiry, QuoteItem
 from import_export import resources, fields
 from import_export.admin import ImportExportModelAdmin
 from import_export.widgets import ForeignKeyWidget
@@ -530,3 +530,20 @@ class CustomerOrderAdmin(ImportExportModelAdmin):
         elements.append(table)
         doc.build(elements)
         return response
+
+
+# ─── Quote Enquiry Admin ──────────────────────────────────────────────────────
+
+class QuoteItemInline(admin.TabularInline):
+    model = QuoteItem
+    extra = 0
+    fields = ('product', 'quantity')
+
+@admin.register(QuoteEnquiry)
+class QuoteEnquiryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'first_name', 'last_name', 'email', 'phone', 'department', 'status', 'created_at')
+    list_filter = ('status', 'country', 'city')
+    search_fields = ('first_name', 'last_name', 'email', 'phone')
+    list_editable = ('status',)
+    inlines = [QuoteItemInline]
+    readonly_fields = ('created_at',)

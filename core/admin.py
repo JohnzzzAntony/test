@@ -388,3 +388,8 @@ class NewsletterSubscriptionAdmin(admin.ModelAdmin):
     readonly_fields = ('subscribed_at',)
     date_hierarchy = 'subscribed_at'
 
+
+@admin.register(SearchIndex)
+class SearchIndexAdmin(admin.ModelAdmin):
+    list_display = ('product_name', 'category', 'slug')
+    search_fields = ('product_name', 'keywords', 'category')
