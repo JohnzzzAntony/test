@@ -1,74 +1,56 @@
-## Architectural Summary of FlowerDistrict.ae Homepage
+## Architectural Summary
 
 ### CSS Design Tokens
 
-*   **Colors:** Not explicitly defined as design tokens in the provided text. The dominant colors appear to be white, black, and various shades of pink, red, and green associated with flowers and branding.
-*   **Font Families:** Not explicitly defined.
-*   **Font Sizes:** Not explicitly defined.
-*   **Spacing:** Not explicitly defined.
+*   **Colors:** Specific color tokens are not explicitly listed. The design primarily uses a neutral palette with accents of floral colors (pinks, reds, purples, whites, greens) as seen in product imagery. Backgrounds appear to be white or light gray.
+*   **Font Families:** Not explicitly defined in the provided text.
+*   **Font Sizes:** Not explicitly defined in the provided text.
+*   **Spacing:** Not explicitly defined in the provided text.
 
 ### UI Components
 
 *   **Header:**
-    *   Language selector (Arabic/English)
-    *   Social media links (TikTok)
-    *   Logo
-    *   Navigation menu (collapsible)
-    *   Login/Account link
-    *   Wishlist icon
-    *   Shopping Basket icon
-    *   Store Locations link
-*   **Navigation:**
-    *   Primary navigation list (Eid al-Adha, Hajj, Shop, Flower, etc.)
-    *   Secondary navigation/category links within sections (e.g., specific types of bouquets, arrangements).
+    *   Logo: Flower District logo image.
+    *   Navigation Menu: Collapsible menu indicated by "[Menu]".
+    *   Language Selector: "En\|Ar".
+    *   Social Media Links: TikTok icon.
+    *   User Actions: "Log in", "Account", "Wishlist", "Basket".
+    *   Store Locator Link.
 *   **Banners:**
-    *   Image banners with links, likely for promotions or featured collections (e.g., Eid al-Adha, Hajj).
-    *   Carousel/slider functionality indicated by "Previous" and "Next" buttons.
-*   **Product Cards:**
-    *   Product images
-    *   Product names (links)
-    *   Prices (e.g., "369 AED")
-    *   Action buttons ("Add to cart", "Wishlist", "Shop Now")
-*   **Buttons:** "Add to cart", "Wishlist", "Shop Now", "VIEW ALL", "Submit", "Menu", "Log in", "En\|Ar", "Previous", "Next".
+    *   Promotional Banners: Rotating banners showcasing specific occasions (e.g., Eid al-Adha, Hajj).
+*   **Product Grids:**
+    *   "Latest Products" section.
+    *   "Our Best Seller" section.
+    *   Each product displays:
+        *   Product Image.
+        *   Product Name.
+        *   Price (e.g., "369 AED").
+        *   Action Buttons: "Add to cart", "Wishlist", "Shop Now".
 *   **Footer:**
-    *   Delivery/Payment/Support information (icons and text)
-    *   Promotional banners/images with links.
-    *   "Our Best Seller" section with product cards.
-    *   "Welcome to FlowerDistrict" descriptive text.
-    *   Newsletter subscription form.
-    *   "Categories" list.
-    *   "Informations" list (links to various policy/account pages).
-    *   Contact Information (Address, Email, Phone).
-    *   Payment Options logos.
-    *   Social Media links.
-    *   "Download our Apps" links.
-    *   Copyright information.
-    *   Website Designer credit.
-    *   Quick links (Home, Shop, Cart, Wishlist, Account).
-*   **Forms:** Newsletter subscription.
-*   **Icons:** Language selector, social media, cart, wishlist, payment options, app download.
+    *   Delivery Information: "Fast Delivery", "Secure Payment", "Customer Support".
+    *   Category Links: Eid al-Adha, Hajj, Shop, Flowers, Flower Set, etc.
+    *   Information Links: Store Location, My Account, Policies, About Us, Contact Us, etc.
+    *   Contact Information: Address, Email, Phone Number.
+    *   Payment Options: Tabby, Tamara, Network, COD logos.
+    *   Social Media Links: TikTok icon.
+    *   App Download Links: Google Play, App Store.
+    *   Copyright Information.
+    *   Website Designer Credit.
+*   **Buttons:** Primary action buttons (e.g., "Shop Now", "Add to cart", "View All"), navigation links, menu items.
+*   **Cards:** Product cards displaying image, title, price, and actions.
+*   **Miscellaneous:** Language translation tool integration.
 
 ### Layout Structure
 
-The homepage follows a common e-commerce layout:
+The homepage follows a typical e-commerce layout:
 
-1.  **Top Bar:** Contains essential utility links such as language selection, social media links, and the main navigation.
-2.  **Hero Section:** Features a prominent banner, likely a slider or carousel, showcasing promotions or key offerings.
-3.  **Promotional Banners:** Additional banners may be present, highlighting specific collections or offers.
-4.  **Product Showcase Sections:**
-    *   "Latest Products" and "Our Best Seller" sections display products in a grid or carousel format. Each product is presented with an image, name, price, and action buttons.
-5.  **Content Blocks:**
-    *   Descriptive text about the brand, services (e.g., "Welcome to FlowerDistrict – Premium Flower Shop in Dubai"), and value propositions (e.g., "Luxury Flower Arrangements for Every Occasion," "Seamless Flower Delivery Dubai"). This content is broken down into sections with headings.
-6.  **Informational/Utility Sections:**
-    *   Key service highlights (Fast Delivery, Secure Payment, Customer Support).
-    *   Further promotional image links.
-7.  **Footer:** A comprehensive section containing:
-    *   Links to various categories and informational pages.
-    *   Contact details.
-    *   Payment method logos.
-    *   Social media links.
-    *   App download links.
-    *   Copyright and website design credits.
-    *   Quick navigation links.
+1.  **Top Bar/Header:** Contains essential navigation, branding, user account access, and utility links (language, login, cart, wishlist).
+2.  **Hero Section:** Features prominent promotional banners, likely a carousel, highlighting special offers or categories.
+3.  **Featured/Categorized Sections:** Dedicated areas for showcasing specific product collections, such as "Latest Products" and "Our Best Seller". These sections typically display products in a grid or carousel format.
+4.  **Content Blocks:** Informational sections detailing services like "Luxury Flower Arrangements," "Seamless Flower Delivery," and "Designed for Modern Gifting." These often include descriptive text and possibly supporting imagery.
+5.  **Trust & Service Section:** Highlights key service aspects like "Fast Delivery," "Secure Payment," and "Customer Support," often accompanied by icons.
+6.  **Footer:** Comprehensive section containing secondary navigation, contact details, social media links, payment options, app download links, and copyright information.
 
-The layout appears to be responsive, adapting to different screen sizes, with a clear visual hierarchy guiding the user through featured products, promotions, and essential information. Navigation is accessible at the top, and product discovery is facilitated through carousels and dedicated sections.
+The layout appears to be responsive, adapting to different screen sizes, with a clear hierarchy guiding the user through the site's offerings and information.
+
+**Note:** Specific CSS design tokens (colors, font families, sizes, spacing) are not directly available from the provided HTML/markdown content. This information would typically be found in CSS files.

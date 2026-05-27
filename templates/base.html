@@ -98,22 +98,25 @@ Open Graph / Social #}
     <link rel="icon" type="image/png" href="{{ site_settings.favicon.url }}" />
     {% endif %}
 
-    <!-- Fonts Cache - Updated Typography Hierarchy -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700;800&family=Oswald:wght@500;600;700&family=Playfair+Display:wght@700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet">
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <!-- 21st Century Premium Design System -->
-    <link rel="stylesheet" href="{% static 'css/21st-design-system.css' %}?v=2.0">
-    <link rel="stylesheet" href="{% static 'css/21st-components.css' %}?v=2.0">
+    <!-- Core Theme CSS (FlowerDistrict) -->
+    <link rel="stylesheet" href="{% static 'css/flower-district-new.css' %}?v=2.4">
+    <link rel="stylesheet" href="{% static 'css/header_hero.css' %}?v=2.4">
 
-    <!-- Premium Design System (Compiled Tailwind) -->
-    <link rel="stylesheet" href="{% static 'css/main.min.css' %}?v=1.0">
+    <!-- 21st Century Premium Design System -->
+    <link rel="stylesheet" href="{% static 'css/21st-design-system.css' %}?v=2.1">
+    <link rel="stylesheet" href="{% static 'css/21st-components.css' %}?v=2.1">
+
+    <!-- Compiled Utility CSS -->
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}?v=1.2">
 
     <!-- Modern UI Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
@@ -173,14 +176,21 @@ Open Graph / Social #}
             --txt-inverse: #ffffff;
             --text-inverse: #ffffff;
 
-            --font-ui: {{ design_settings.font_main|safe|default:"'Inter', 'Montserrat', sans-serif" }};
-            --font-display: {{ design_settings.font_heading|safe|default:"'Montserrat', sans-serif" }};
-            --font-accent: {{ design_settings.font_accent|safe|default:"'Playfair Display', serif" }};
+            --font-ui: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+            --font-display: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+            --font-accent: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
             --font-main: var(--font-ui);
 
             /* Fallbacks for older references */
             --font-sans: var(--font-ui);
             --font-heading: var(--font-display);
+
+            /* Font weight scale — body:400, labels:500, headings:700 */
+            --fw-light: 300;
+            --fw-regular: 400;
+            --fw-medium: 500;
+            --fw-semibold: 600;
+            --fw-bold: 700;
 
             --radius-sm: 0px;
             --radius-md: 0px;
@@ -524,9 +534,9 @@ Theme styles (Flower District
             <div class="hidden lg:block flex-grow max-w-2xl">
                 <form action="{% url 'products:product_list' %}" method="GET" class="relative group">
                     <input type="text" name="q" placeholder="What are you looking for?"
-                        class="w-full h-11 pl-5 pr-14 bg-gray-50 border border-transparent rounded-full text-[13px] text-[var(--text-primary)] placeholder-gray-400 focus:outline-none focus:border-[var(--primary)] focus:bg-white transition-all group-hover:bg-white group-hover:border-gray-200">
+                        class="w-full h-11 pl-5 pr-14 bg-gray-50 border border-gray-300 rounded-md text-[13px] text-[var(--text-primary)] placeholder-gray-400 focus:outline-none focus:border-[var(--primary)] focus:bg-white transition-all">
                     <button type="submit"
-                        class="absolute right-1 top-1 bottom-1 w-10 flex items-center justify-center bg-[var(--primary)] text-white rounded-full hover:bg-[var(--primary-hover)] transition-colors shadow-sm">
+                        class="absolute right-1 top-1 bottom-1 w-10 flex items-center justify-center bg-[var(--primary)] text-white rounded-md hover:bg-[var(--primary-hover)] transition-colors shadow-sm">
                         <i class="fas fa-search text-xs"></i>
                     </button>
                 </form>
@@ -564,7 +574,7 @@ Theme styles (Flower District
                 <!-- Wishlist -->
                 {% if design_settings.show_header_wishlist %}
                 <a href="{% url 'products:wishlist' %}"
-                    class="flex flex-col items-center gap-1.5 text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors text-center w-14 relative">
+                     class="flex flex-col items-center gap-1.5 text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors text-center w-14 relative">
                     <div class="relative">
                         <i class="far fa-heart text-[20px]"></i>
                         <span class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center shadow-sm {% if not wishlist_count %}hidden{% endif %}">
@@ -614,115 +624,131 @@ Theme styles (Flower District
             </div>
         </div>
 
-        <!-- Tier 3: Navigation Bar (Desktop Only) -->
-        <div class="border-t border-[var(--border-light)] bg-white hidden lg:block">
-            <div class="container h-[50px] flex items-center">
-                
-                <!-- Left: Static Links -->
-                <nav class="flex items-center gap-6 h-full border-r border-gray-200 pr-6 mr-6 flex-shrink-0">
-                    {% if nav_brands %}
-                    <div class="relative group/brands h-full flex items-center">
-                        <button class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">
-                            Brands <i class="fas fa-chevron-down text-[8px] opacity-70 group-hover/brands:rotate-180 transition-transform"></i>
-                        </button>
-                        <div class="absolute left-0 top-full pt-0 hidden group-hover/brands:block z-50">
-                            <div class="bg-white border border-gray-200 shadow-xl p-4 grid grid-cols-3 gap-3 rounded-b-md" style="min-width:360px">
-                                {% for brand in nav_brands %}
-                                <a href="{{ brand.get_absolute_url }}" class="flex flex-col items-center gap-2 p-3 border border-transparent hover:bg-gray-50 rounded-md transition-all">
-                                    <img src="{{ brand.get_image_url }}" alt="{{ brand.name }}" class="h-8 object-contain opacity-70 hover:opacity-100 transition-opacity">
-                                    <span class="text-[9px] text-center font-bold text-gray-600">{{ brand.name }}</span>
-                                </a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                    
-                    {% if nav_collections %}
-                    <div class="relative group/cols h-full flex items-center">
-                        <button class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">
-                            Collections <i class="fas fa-chevron-down text-[8px] opacity-70 group-hover/cols:rotate-180 transition-transform"></i>
-                        </button>
-                        <div class="absolute left-0 top-full pt-0 hidden group-hover/cols:block z-50">
-                            <div class="bg-white border border-gray-200 shadow-xl py-2 rounded-b-md" style="min-width:200px">
-                                {% for col in nav_collections %}
-                                <a href="{{ col.get_absolute_url }}" class="block px-5 py-2.5 text-[11px] font-bold text-gray-600 hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">{{ col.name }}</a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
+        <!-- Tier 3A: Main Navigation Links (Desktop Only) -->
+        <div class="fd-nav-tier fd-nav-tier--links border-t border-[var(--border-light)] bg-white hidden lg:block">
+            <div class="container h-[46px] flex items-center justify-center gap-1">
 
-                    {% if nav_offers %}
-                    <a href="{% url 'products:product_list' %}?on_sale=1" class="text-[10px] font-bold uppercase tracking-widest text-red-600 hover:text-red-700 flex items-center gap-1.5 transition-colors">
-                        <i class="fas fa-tag"></i> Offers
-                    </a>
-                    {% endif %}
-                    
-                    <a href="{% url 'blog:post_list' %}" class="text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Blog</a>
-                    <a href="{% url 'core:about_us' %}" class="text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">About Us</a>
-                    <a href="{% url 'contact:contact' %}" class="text-[10px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Contact</a>
-                </nav>
-
-                <!-- Right: Scrollable Categories -->
-                <div class="flex-grow relative h-full flex items-center min-w-0">
-                    <!-- Left Scroll Arrow -->
-                    <button id="cat-scroll-left" class="absolute left-0 top-0 bottom-0 z-20 w-10 bg-gradient-to-r from-white via-white to-transparent flex items-center justify-start text-gray-400 hover:text-[var(--primary)] opacity-0 transition-opacity pointer-events-none" aria-label="Scroll left">
-                        <i class="fas fa-chevron-left text-[10px] bg-white rounded-full shadow-sm w-6 h-6 flex items-center justify-center border border-gray-100"></i>
+                <!-- Brands Dropdown -->
+                {% if nav_brands %}
+                <div class="fd-nav-item relative group/brands h-full flex items-center">
+                    <button class="fd-nav-link flex items-center gap-1.5" aria-haspopup="true" aria-expanded="false">
+                        Brands
+                        <i class="fas fa-chevron-down fd-nav-chevron group-hover/brands:rotate-180" aria-hidden="true"></i>
                     </button>
-
-                    <!-- Categories Scroll Area -->
-                    <div id="header-category-scroll" class="flex items-center gap-7 overflow-x-auto no-scrollbar scroll-smooth h-full w-full px-4">
-                        {% for cat in categories %}
-                        <div class="relative group/nav-item h-full flex items-center flex-shrink-0">
-                            <a href="{{ cat.get_absolute_url }}" class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors">
-                                {{ cat.name }}
-                                {% if cat.active_subcategories %}
-                                <i class="fas fa-chevron-down text-[8px] text-gray-400 group-hover/nav-item:rotate-180 transition-transform"></i>
-                                {% endif %}
+                    <div class="fd-mega-drop fd-brands-drop absolute left-0 top-full hidden group-hover/brands:block z-50 pt-px">
+                        <div class="fd-drop-glass p-4 grid grid-cols-3 gap-3" style="min-width:340px">
+                            {% for brand in nav_brands %}
+                            <a href="{{ brand.get_absolute_url }}" class="fd-brand-item flex flex-col items-center gap-2 p-3">
+                                <img src="{{ brand.get_image_url }}" alt="{{ brand.name }}" class="h-8 object-contain" loading="lazy">
+                                <span class="text-[9px] text-center font-bold text-gray-600">{{ brand.name }}</span>
                             </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
 
+                <!-- Collections Dropdown -->
+                {% if nav_collections %}
+                <div class="fd-nav-item relative group/cols h-full flex items-center">
+                    <button class="fd-nav-link flex items-center gap-1.5" aria-haspopup="true" aria-expanded="false">
+                        Collections
+                        <i class="fas fa-chevron-down fd-nav-chevron group-hover/cols:rotate-180" aria-hidden="true"></i>
+                    </button>
+                    <div class="fd-mega-drop absolute left-0 top-full hidden group-hover/cols:block z-50 pt-px">
+                        <div class="fd-drop-glass py-2" style="min-width:200px">
+                            {% for col in nav_collections %}
+                            <a href="{{ col.get_absolute_url }}" class="block px-5 py-2.5 text-[11px] font-bold text-gray-600 hover:bg-white/60 hover:text-[var(--primary)] transition-colors">{{ col.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Offers -->
+                {% if nav_offers %}
+                <a href="{% url 'products:product_list' %}?on_sale=1" class="fd-nav-link fd-nav-link--offers flex items-center gap-1.5">
+                    <i class="fas fa-tag text-[9px]" aria-hidden="true"></i>
+                    Offers
+                </a>
+                {% endif %}
+
+                <!-- Separator -->
+                <div class="fd-nav-sep" aria-hidden="true"></div>
+
+                <a href="{% url 'blog:post_list' %}" class="fd-nav-link">Blog</a>
+                <a href="{% url 'core:about_us' %}" class="fd-nav-link">About Us</a>
+                <a href="{% url 'contact:contact' %}" class="fd-nav-link">Contact</a>
+
+            </div>
+        </div>
+
+        <!-- Tier 3B: Scrollable Categories Bar (Desktop Only) -->
+        <div class="fd-nav-tier fd-nav-tier--cats border-t border-[var(--border-light)] bg-[var(--surface-light)] hidden lg:block">
+            <div class="container h-[44px] flex items-center relative">
+
+                <!-- Left Scroll Arrow -->
+                <button id="cat-scroll-left"
+                    class="absolute left-0 top-0 bottom-0 z-20 w-10 bg-gradient-to-r from-[var(--surface-light)] via-[var(--surface-light)] to-transparent flex items-center justify-start text-gray-400 hover:text-[var(--primary)] opacity-0 transition-opacity pointer-events-none"
+                    aria-label="Scroll categories left">
+                    <i class="fas fa-chevron-left text-[10px] bg-white rounded-full shadow-sm w-6 h-6 flex items-center justify-center border border-gray-100" aria-hidden="true"></i>
+                </button>
+
+                <!-- Categories Scroll Area -->
+                <div id="header-category-scroll"
+                    class="flex items-center gap-6 overflow-x-auto no-scrollbar scroll-smooth h-full w-full px-3">
+                    {% for cat in categories %}
+                    <div class="relative group/nav-item h-full flex items-center flex-shrink-0">
+                        <a href="{{ cat.get_absolute_url }}"
+                           class="flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-wider text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-1 border-b-2 border-transparent hover:border-[var(--primary)] whitespace-nowrap">
+                            {{ cat.name }}
                             {% if cat.active_subcategories %}
-                            <div class="absolute left-1/2 -translate-x-1/2 top-full pt-0 hidden group-hover/nav-item:flex flex-col w-[800px] z-50">
-                                <div class="bg-white border border-gray-200 shadow-xl rounded-b-xl overflow-hidden mt-0">
-                                    <div class="grid grid-cols-4 gap-0 p-6">
-                                        {% for sub in cat.active_subcategories %}
-                                        <div class="px-4 border-l border-gray-100 first:border-0">
-                                            <a href="{{ sub.get_absolute_url }}" class="block group">
-                                                <h5 class="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--primary)] mb-3 pb-2 border-b border-gray-100 group-hover:text-[var(--primary-hover)]">
-                                                    {{ sub.name }}
-                                                </h5>
-                                                {% if sub.active_subcategories %}
-                                                <div class="space-y-2">
-                                                    {% for subsub in sub.active_subcategories %}
-                                                    <a href="{{ subsub.get_absolute_url }}" class="block text-xs font-medium text-gray-500 hover:text-[var(--primary)] hover:translate-x-1 transition-transform">
-                                                        {{ subsub.name }}
-                                                    </a>
-                                                    {% endfor %}
-                                                </div>
-                                                {% endif %}
-                                            </a>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="border-t border-gray-100 px-6 py-4 bg-gray-50 text-center">
-                                        <a href="{{ cat.get_absolute_url }}" class="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors">
-                                            <span>Shop All {{ cat.name }}</span>
-                                            <i class="fas fa-arrow-right text-[10px]"></i>
+                            <i class="fas fa-chevron-down text-[7px] text-gray-400 group-hover/nav-item:rotate-180 transition-transform" aria-hidden="true"></i>
+                            {% endif %}
+                        </a>
+
+                        {% if cat.active_subcategories %}
+                        <div class="absolute left-1/2 -translate-x-1/2 top-full hidden group-hover/nav-item:flex flex-col w-[800px] z-50 pt-px">
+                            <div class="fd-mega-panel">
+                                <div class="grid grid-cols-4 gap-0 p-6">
+                                    {% for sub in cat.active_subcategories %}
+                                    <div class="px-4 border-l border-gray-100 first:border-0">
+                                        <a href="{{ sub.get_absolute_url }}" class="block group/sub">
+                                            <h5 class="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--primary)] mb-3 pb-2 border-b border-gray-100 group-hover/sub:text-[var(--primary-hover)] transition-colors">
+                                                {{ sub.name }}
+                                            </h5>
+                                            {% if sub.active_subcategories %}
+                                            <div class="space-y-2">
+                                                {% for subsub in sub.active_subcategories %}
+                                                <a href="{{ subsub.get_absolute_url }}" class="block text-xs font-medium text-gray-500 hover:text-[var(--primary)] hover:translate-x-1 transition-all">
+                                                    {{ subsub.name }}
+                                                </a>
+                                                {% endfor %}
+                                            </div>
+                                            {% endif %}
                                         </a>
                                     </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="border-t border-gray-100 px-6 py-3 bg-gray-50/80 text-center">
+                                    <a href="{{ cat.get_absolute_url }}" class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors">
+                                        <span>Shop All {{ cat.name }}</span>
+                                        <i class="fas fa-arrow-right text-[9px]" aria-hidden="true"></i>
+                                    </a>
                                 </div>
                             </div>
-                            {% endif %}
                         </div>
-                        {% endfor %}
+                        {% endif %}
                     </div>
-
-                    <!-- Right Scroll Arrow -->
-                    <button id="cat-scroll-right" class="absolute right-0 top-0 bottom-0 z-20 w-10 bg-gradient-to-l from-white via-white to-transparent flex items-center justify-end text-gray-400 hover:text-[var(--primary)] transition-colors" aria-label="Scroll right">
-                        <i class="fas fa-chevron-right text-[10px] bg-white rounded-full shadow-sm w-6 h-6 flex items-center justify-center border border-gray-100"></i>
-                    </button>
+                    {% endfor %}
                 </div>
+
+                <!-- Right Scroll Arrow -->
+                <button id="cat-scroll-right"
+                    class="absolute right-0 top-0 bottom-0 z-20 w-10 bg-gradient-to-l from-[var(--surface-light)] via-[var(--surface-light)] to-transparent flex items-center justify-end text-gray-400 hover:text-[var(--primary)] transition-colors"
+                    aria-label="Scroll categories right">
+                    <i class="fas fa-chevron-right text-[10px] bg-white rounded-full shadow-sm w-6 h-6 flex items-center justify-center border border-gray-100" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
 
@@ -882,7 +908,7 @@ Theme styles (Flower District
     </header>
 
     <!-- Main Content -->
-    <main class="min-h-[70vh] pt-[120px] lg:pt-[160px]">
+    <main class="min-h-[70vh] pt-[120px] lg:pt-[204px]">
         {% block content %}{% endblock %}
     </main>
 

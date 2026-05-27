@@ -20,6 +20,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('subscriptions/', include('subscriptions.urls')),
     path('api/', include('jkr.api_urls')),
+    path('', include('core.urls')),   # root → core.views.home
 ]
 
 if settings.DEBUG:

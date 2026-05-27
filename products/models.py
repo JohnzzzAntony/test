@@ -53,7 +53,10 @@ class Category(models.Model):
     def get_image_url(self):
         if self.image:
             try:
-                return self.image.url
+                url = self.image.url
+                if url.startswith('/media/media/'):
+                    return url.replace('/media/media/', '/media/', 1)
+                return url
             except (ValueError, AttributeError):
                 pass
         if self.image_url:
@@ -174,7 +177,10 @@ class Brand(models.Model):
     def get_image_url(self):
         if self.logo:
             try:
-                return self.logo.url
+                url = self.logo.url
+                if url.startswith('/media/media/'):
+                    return url.replace('/media/media/', '/media/', 1)
+                return url
             except (ValueError, AttributeError):
                 pass
         if self.logo_url:
@@ -281,7 +287,10 @@ class Product(models.Model):
     def get_image_url(self):
         if self.image:
             try:
-                return self.image.url
+                url = self.image.url
+                if url.startswith('/media/media/'):
+                    return url.replace('/media/media/', '/media/', 1)
+                return url
             except (ValueError, AttributeError):
                 pass
         if self.image_url:
@@ -436,6 +445,10 @@ class Product(models.Model):
                 super().save(*args, **kwargs)
         except transaction.TransactionManagementError:
             super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('products:product_detail', kwargs={'slug': self.slug})
 
     def __str__(self): return self.name
 

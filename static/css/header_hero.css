@@ -1,119 +1,306 @@
-/* Redesigned Header System - White Minimalist Style */
+/* ==========================================================================
+   FlowerDistrict — Header & Navigation System
+   Tasks: Nav Tiers · Glassmorphism · Font Unification · Production Polish
+   ========================================================================== */
 
-/* Logo Box styling to recreate Flower District style fallback */
+/* ── 1. GLOBAL FONT ENFORCEMENT ─────────────────────────────────────────── */
+/* Cormorant Garamond: body=400, labels=500/600, headings=700              */
+*, *::before, *::after { box-sizing: border-box; }
+
+body,
+input, button, select, textarea {
+    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--text-primary, #1a1a1a);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1, 'liga' 1, 'onum' 1;
+}
+
+h1, h2, h3, h4, h5, h6,
+.section-title, .hp-section-title, .fd-promo-title,
+.hero-title, .product-card-name, .fd-nav-link,
+[class*="heading"], [class*="title"] {
+    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+}
+
+/* Navigation, labels, small caps — semibold */
+.fd-nav-link,
+.hp-section-label,
+.product-badge,
+.announcement-bar-content {
+    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-weight: 600;
+}
+
+/* ── 2. LOGO BOX ────────────────────────────────────────────────────────── */
 .logo-box {
-    border: 2px solid #000000;
+    border: 2px solid var(--primary, #114084);
     padding: 6px 12px;
-    background: #ffffff;
+    background: #fff;
     display: inline-block;
-    transition: transform 0.2s ease-in-out;
+    transition: transform 0.2s ease;
 }
 
-/* Category Navigation Scrollbar Hiding */
-.no-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+/* ── 3. NO-SCROLLBAR UTILITY ────────────────────────────────────────────── */
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ── 4. HEADER SCROLL STATE ─────────────────────────────────────────────── */
+#main-header {
+    transition: box-shadow 0.3s ease, background 0.3s ease;
 }
-.no-scrollbar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+#main-header.scrolled {
+    box-shadow: 0 2px 20px rgba(17, 64, 132, 0.1);
 }
 
-/* ── Mega Menu hover animations ── */
-.nav-item-mega:hover .mega-menu {
-    display: block;
+/* ── 5. TIER 3A — MAIN NAV LINKS ROW ────────────────────────────────────── */
+.fd-nav-tier--links {
+    background: #fff;
+    position: relative;
 }
 
-/* Hover bridge for mega menu */
-.nav-item-mega .absolute::before {
+/* Nav link base style */
+.fd-nav-link {
+    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-primary, #1a1a1a);
+    text-decoration: none;
+    padding: 0 14px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+    white-space: nowrap;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: color 0.18s ease;
+}
+
+.fd-nav-link::after {
     content: '';
     position: absolute;
-    top: -12px;
+    bottom: 0;
+    left: 14px;
+    right: 14px;
+    height: 2px;
+    background: var(--primary, #114084);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.2s ease;
+}
+
+.fd-nav-link:hover,
+.fd-nav-link:focus-visible {
+    color: var(--primary, #114084);
+}
+
+.fd-nav-link:hover::after { transform: scaleX(1); }
+
+/* Offers link — red accent */
+.fd-nav-link--offers {
+    color: #dc2626;
+}
+.fd-nav-link--offers::after { background: #dc2626; }
+.fd-nav-link--offers:hover { color: #b91c1c; }
+
+/* Chevron */
+.fd-nav-chevron {
+    font-size: 8px;
+    opacity: 0.6;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Vertical separator */
+.fd-nav-sep {
+    width: 1px;
+    height: 18px;
+    background: var(--border, #e5e5e5);
+    flex-shrink: 0;
+    margin: 0 6px;
+}
+
+/* Nav item wrapper */
+.fd-nav-item {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* ── 6. GLASSMORPHISM DROPDOWN PANELS ───────────────────────────────────── */
+/* Used for Brands, Collections dropdowns from Tier 3A                       */
+.fd-drop-glass {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-top: none;
+    box-shadow:
+        0 8px 32px rgba(17, 64, 132, 0.12),
+        0 2px 8px rgba(0, 0, 0, 0.06);
+    border-radius: 0 0 8px 8px;
+}
+
+.fd-mega-drop {
+    position: absolute;
     left: 0;
-    right: 0;
-    height: 12px;
-    background: transparent;
-    z-index: -1;
+    top: 100%;
+    z-index: 50;
 }
 
-/* Mega menu open on hover with transition */
-.nav-item-mega:hover .absolute {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
+/* Brand item inside glass panel */
+.fd-brand-item {
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+.fd-brand-item:hover {
+    background: rgba(17, 64, 132, 0.05);
+    border-color: rgba(17, 64, 132, 0.12);
 }
 
-/* ── Mobile nav mega menu sub-items ── */
-.mobile-nav-mega .mobile-sub-category {
-    border-left: 2px solid #E8E0DC;
-    margin-left: 8px;
-    padding-left: 8px;
-    margin-bottom: 4px;
-}
-.mobile-nav-mega .mobile-sub-category a {
-    display: block;
-    padding: 6px 8px;
-    font-size: 13px;
-    color: #7A7A7A;
-    font-weight: 500;
-    transition: all 0.15s;
-}
-.mobile-nav-mega .mobile-sub-category a:hover {
-    color: #8B4557;
-    padding-left: 12px;
+/* ── 7. TIER 3B — CATEGORIES BAR ────────────────────────────────────────── */
+.fd-nav-tier--cats {
+    background: var(--surface-light, #f8f9fa);
+    position: relative;
 }
 
-/* Accordion trigger styling */
-.mobile-accordion button {
-    text-align: left;
+/* ── 8. MEGA MENU — CATEGORY PANELS ────────────────────────────────────── */
+.fd-mega-panel {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(17, 64, 132, 0.08);
+    border-top: 3px solid var(--primary, #114084);
+    border-radius: 0 0 12px 12px;
+    box-shadow:
+        0 16px 48px rgba(17, 64, 132, 0.14),
+        0 4px 12px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
 }
 
-/* Search bar styling */
-.search-input-wrapper input {
-    border-radius: 2px;
-    border: 1px solid #cbd5e1;
-    font-family: inherit;
-    transition: border-color 0.2s ease;
+/* ── 9. HEADER SEARCH BAR ───────────────────────────────────────────────── */
+.search-input-wrapper input,
+#main-header input[type="text"] {
+    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-size: 14px;
+    border: 1px solid #d1d5db !important;
+    border-radius: 6px !important;
+    background-color: #f9fafb !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-.search-input-wrapper input:focus {
-    border-color: #0f172a;
-    outline: none;
+#main-header input[type="text"]:focus {
+    border-color: var(--primary, #114084) !important;
+    background-color: #fff !important;
+    box-shadow: 0 0 0 3px rgba(17, 64, 132, 0.15) !important;
 }
 
-/* Adjust announcement bar font family */
-.announcement-bar-content {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+/* ── 10. UTILITY ICONS ──────────────────────────────────────────────────── */
+.utility-link { transition: color 0.2s ease; }
+.utility-link:hover { color: var(--primary, #114084); }
+
+/* ── 11. GLASSMORPHISM — HERO BADGE ─────────────────────────────────────── */
+.hero-badge {
+    background: rgba(17, 64, 132, 0.78) !important;
+    backdrop-filter: blur(12px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
 }
 
-/* Custom layout fixes for category dropdowns */
-.dropdown-menu {
-    border-radius: 4px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+/* ── 12. GLASSMORPHISM — PRODUCT WISHLIST BUTTON ────────────────────────── */
+.product-card-wishlist {
+    background: rgba(255, 255, 255, 0.88) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-/* Smooth transitions for utility icons */
-.utility-link {
-    transition: color 0.2s ease;
-}
-.utility-link:hover {
-    color: var(--primary, #B85C4A);
+/* ── 13. GLASSMORPHISM — FLOATING WHATSAPP ──────────────────────────────── */
+.floating-whatsapp {
+    background: rgba(37, 211, 102, 0.92) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+    box-shadow:
+        0 8px 24px rgba(37, 211, 102, 0.35),
+        0 2px 8px rgba(0, 0, 0, 0.12) !important;
 }
 
-/* Animations for Mobile Menu */
+/* ── 14. GLASSMORPHISM — ACCOUNT DROPDOWN ──────────────────────────────── */
+#main-header .group:hover > div > div,
+#main-header .group > div > div {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+        0 8px 32px rgba(17, 64, 132, 0.12),
+        0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* ── 15. GLASSMORPHISM — TRUST STRIP ICON HOVER ─────────────────────────── */
+.fd-trust-item:hover .fd-trust-icon {
+    background: rgba(17, 64, 132, 0.92) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* ── 16. MOBILE MENU ────────────────────────────────────────────────────── */
 @keyframes slideDownFade {
-    from { 
-        opacity: 0; 
-        transform: translateY(-10px); 
-    }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
-    }
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
-
 #mobile-menu:not(.hidden) {
-    animation: slideDownFade 0.3s ease-out forwards;
+    animation: slideDownFade 0.25s ease-out forwards;
 }
 
+/* Mobile accordion */
+.mobile-accordion button { text-align: left; }
+
+/* ── 17. ANNOUNCEMENT BAR ───────────────────────────────────────────────── */
+.announcement-bar-content {
+    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-size: 12px;
+}
+
+/* ── 18. FOOTER FONT UNIFICATION ────────────────────────────────────────── */
+footer {
+    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+}
+footer h4 {
+    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+}
+
+/* ── 19. PRODUCTION: REDUCED MOTION ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .fd-drop-glass,
+    .fd-mega-panel,
+    .fd-nav-link::after,
+    .fd-nav-chevron,
+    #main-header {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* ── 20. PRINT STYLES ───────────────────────────────────────────────────── */
+@media print {
+    #main-header,
+    .floating-whatsapp,
+    .fd-nav-tier { display: none !important; }
+    main { padding-top: 0 !important; }
+}

@@ -213,11 +213,13 @@ class DesignSettingsAdmin(admin.ModelAdmin):
                 'show_hp_testimonials',
                 'show_hp_clients',
                 'show_hp_social',
+                'show_hp_trust_strip',
+                'show_hp_promo_banners',
                 'pd_show_related',
                 'pd_related_title',
                 'pd_related_count',
             ),
-            'description': 'Toggle sections and features site-wide.'
+            'description': 'Toggle sections and features site-wide. Changes reflect immediately on the frontend.'
         }),
         ('Counter Animations', {
             'fields': (
@@ -247,6 +249,8 @@ class DesignSettingsAdmin(admin.ModelAdmin):
         "show_hp_testimonials": admin.HORIZONTAL,
         "show_hp_clients": admin.HORIZONTAL,
         "show_hp_social": admin.HORIZONTAL,
+        "show_hp_trust_strip": admin.HORIZONTAL,
+        "show_hp_promo_banners": admin.HORIZONTAL,
     }
 
     def save_model(self, request, obj, form, change):

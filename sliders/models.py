@@ -85,7 +85,11 @@ class BannerItem(models.Model):
     @property
     def get_image_url(self):
         try:
-            if self.image: return self.image.url
+            if self.image:
+                url = self.image.url
+                if url.startswith('/media/media/'):
+                    return url.replace('/media/media/', '/media/', 1)
+                return url
             if self.image_url: return self.image_url
         except Exception: pass
         return "https://via.placeholder.com/600x400"

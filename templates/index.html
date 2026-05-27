@@ -5,21 +5,19 @@
 {% block meta_description %}{{ site_settings.meta_description|default:"" }}{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/homepage-sections.css' %}">
+<link rel="stylesheet" href="{% static 'css/homepage-sections.css' %}?v=2.4">
 {% endblock %}
 
 {% block content %}
 
-{# ═══════════════════════════════════════════════════════
-   1. HERO SLIDER — Full-width with gradient overlay
-════════════════════════════════════════════════════════ #}
+{# ── 1. HERO SLIDER ─────────────────────────────────────────── #}
 {% if sliders %}
 <section class="hero-section" aria-label="Hero Banner">
   <div class="swiper hero-swiper">
     <div class="swiper-wrapper">
       {% for slide in sliders %}
       <div class="swiper-slide"
-           style="background-color:{{ slide.background_color|default:'#0f4c8a' }};"
+           style="background-color:{{ slide.background_color|default:'#114084' }};"
            aria-label="{{ slide.title|default:'Slide' }}">
 
         {% if slide.image or slide.image_url %}
@@ -28,8 +26,6 @@
              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
              fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}">
         {% endif %}
-
-
 
         <div class="hero-content">
           {% if slide.subtitle %}
@@ -46,17 +42,15 @@
 
           <div class="hero-ctas">
             {% if slide.btn_text and slide.btn_link %}
-            <a href="{{ slide.btn_link }}" class="hero-btn-primary">
+            <a href="{{ slide.btn_link }}" class="hero-btn-primary" id="hero-cta-primary-{{ forloop.counter }}">
               {{ slide.btn_text }}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
             {% endif %}
             {% if slide.btn2_text and slide.btn2_link %}
-            <a href="{{ slide.btn2_link }}" class="hero-btn-secondary">{{ slide.btn2_text }}</a>
+            <a href="{{ slide.btn2_link }}" class="hero-btn-secondary" id="hero-cta-secondary-{{ forloop.counter }}">{{ slide.btn2_text }}</a>
             {% endif %}
           </div>
-
-
         </div>
 
       </div>
@@ -67,7 +61,6 @@
     <div class="swiper-button-prev" aria-label="Previous slide"></div>
   </div>
 </section>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   if (typeof Swiper !== 'undefined') {
@@ -76,10 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
       speed: 900,
       autoplay: { delay: 5500, disableOnInteraction: false, pauseOnMouseEnter: true },
       pagination: { el: '.hero-swiper .swiper-pagination', clickable: true },
-      navigation: {
-        nextEl: '.hero-swiper .swiper-button-next',
-        prevEl: '.hero-swiper .swiper-button-prev',
-      },
+      navigation: { nextEl: '.hero-swiper .swiper-button-next', prevEl: '.hero-swiper .swiper-button-prev' },
       effect: 'fade',
       fadeEffect: { crossFade: true },
       a11y: { prevSlideMessage: 'Previous slide', nextSlideMessage: 'Next slide' },
@@ -90,73 +80,71 @@ document.addEventListener('DOMContentLoaded', function () {
 {% endif %}
 
 
+{# ── 2. TRUST STRIP (Admin: Visibility > Trust Strip) ────────────────── #}
+{% if design_settings.show_hp_trust_strip != False %}
+{% include 'partials/_fd_trust_strip.html' %}
+{% endif %}
 
 
+{# ── 3. PROMO BANNER GRID (Admin: Visibility > Promo Banner Grid) ───── #}
+{% if design_settings.show_hp_promo_banners != False %}
+{% include 'partials/_fd_promo_grid.html' %}
+{% endif %}
 
-{# ═══════════════════════════════════════════════════════
-   4. LATEST PRODUCTS SLIDER
-════════════════════════════════════════════════════════ #}
+
+{# ── 4. LATEST PRODUCTS ─────────────────────────────────────── #}
 {% with section_title=design_settings.hp_latest_products_title|default:"Latest Products" section_subtitle=design_settings.hp_latest_products_subtitle products=latest_products slider_id="latest" section_link="/products/" %}
 {% include 'partials/_product_slider.html' %}
 {% endwith %}
 
 
-
-{# ═══════════════════════════════════════════════════════
-   6. COLLECTIONS TABS — Products by collection
-════════════════════════════════════════════════════════ #}
+{# ── 5. COLLECTIONS TABS ────────────────────────────────────── #}
 {% include 'partials/_collections_tabs.html' %}
 
-{# ═══════════════════════════════════════════════════════
-   7. OFFERS / FEATURED PRODUCTS
-════════════════════════════════════════════════════════ #}
+
+{# ── 6. BEST SELLERS / OFFERS ───────────────────────────────── #}
 {% if active_offers_products %}
 {% with section_title="On Sale Now" section_subtitle="Limited-time offers on our top products" products=active_offers_products slider_id="offers" section_link="/products/" %}
 {% include 'partials/_product_slider.html' %}
 {% endwith %}
 {% elif featured_products %}
-{% with section_title=design_settings.hp_bestsellers_title|default:"Featured Products" section_subtitle="" products=featured_products slider_id="featured" section_link="/products/" %}
+{% with section_title=design_settings.hp_bestsellers_title|default:"Our Best Sellers" section_subtitle="Crafted with precision, loved by all" products=featured_products slider_id="featured" section_link="/products/" %}
 {% include 'partials/_product_slider.html' %}
 {% endwith %}
 {% endif %}
 
 
+{# ── 7. WHY US STRIP ────────────────────────────────────────── #}
+{% include 'partials/_why_us.html' %}
 
-{# ═══════════════════════════════════════════════════════
-   11. TESTIMONIALS CAROUSEL
-════════════════════════════════════════════════════════ #}
+
+{# ── 8. TESTIMONIALS ────────────────────────────────────────── #}
 {% if design_settings.show_hp_testimonials %}
 {% include 'partials/_testimonials_carousel.html' %}
 {% endif %}
 
 
-
-{# ═══════════════════════════════════════════════════════
-   13. BLOG GRID
-════════════════════════════════════════════════════════ #}
+{# ── 9. BLOG GRID ───────────────────────────────────────────── #}
 {% include 'partials/_blog_grid.html' %}
 
-{# ═══════════════════════════════════════════════════════
-   14. NEWSLETTER SIGNUP
-════════════════════════════════════════════════════════ #}
+
+{# ── 10. NEWSLETTER ─────────────────────────────────────────── #}
 {% include 'partials/_newsletter_bar.html' %}
 
-{# ═══════════════════════════════════════════════════════
-   15. SOCIAL POSTS GRID
-════════════════════════════════════════════════════════ #}
+
+{# ── 11. SOCIAL GRID ────────────────────────────────────────── #}
 {% include 'partials/_social_grid.html' %}
 
-{# ═══════════════════════════════════════════════════════
-   16. GALLERY
-════════════════════════════════════════════════════════ #}
+
+{# ── 12. GALLERY ────────────────────────────────────────────── #}
 {% include 'partials/_gallery_grid.html' %}
 
-{# ═══════════════════════════════════════════════════════
-   FLOATING WHATSAPP — Always-visible contact shortcut
-════════════════════════════════════════════════════════ #}
+
+{# ── FLOATING WHATSAPP ──────────────────────────────────────── #}
 {% if site_settings.whatsapp %}
 <a href="https://wa.me/{{ site_settings.whatsapp|cut:'+' }}"
    class="floating-whatsapp"
+   id="floating-whatsapp-btn"
    target="_blank"
    rel="noopener noreferrer"
    aria-label="Chat with us on WhatsApp">

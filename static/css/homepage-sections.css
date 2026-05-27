@@ -67,12 +67,22 @@
 
 .hp-section-header {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   margin-bottom: var(--hp-s5);
   gap: var(--hp-s2);
-  flex-wrap: wrap;
+  width: 100%;
 }
+
+.hp-section-header > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
 
 .hp-section-label {
   display: inline-block;
@@ -126,6 +136,26 @@
 .hero-section {
   position: relative;
   overflow: hidden;
+  max-width: 1400px;
+  margin: 24px auto 48px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+}
+
+@media (max-width: 1440px) {
+  .hero-section {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    margin: 16px auto 32px;
+    margin-left: 12px;
+    margin-right: 12px;
+    border-radius: 12px;
+  }
 }
 
 .hero-swiper {
@@ -792,10 +822,20 @@
   color: #fff !important;
 }
 
+.product-swiper .swiper-pagination {
+  bottom: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  gap: 2px !important;
+}
+
 .swiper-pagination-bullet {
   background: var(--hp-gray-200) !important;
   opacity: 1 !important;
   transition: background var(--hp-transition), transform var(--hp-transition) !important;
+  margin: 0 4px !important;
 }
 
 .swiper-pagination-bullet-active {
@@ -1272,10 +1312,30 @@
   font-weight: 800;
   color: var(--hp-gray-900);
   letter-spacing: -0.02em;
-  margin: 0 0 var(--hp-s5);
+  margin: 0 auto var(--hp-s5);
+  text-align: center;
 }
 
 .fd-section-title.text-center { text-align: center; }
+
+.fd-section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: var(--hp-s5);
+  gap: var(--hp-s1);
+  width: 100%;
+}
+
+.fd-section-subtitle {
+  font-size: 15px;
+  color: var(--hp-gray-600);
+  margin: var(--hp-s1) auto 0;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 600px;
+}
 
 .fd-clients-group { margin-bottom: var(--hp-s5); }
 
@@ -1753,7 +1813,7 @@
   height: 3px;
   background: linear-gradient(90deg, var(--hp-blue), var(--hp-teal));
   border-radius: 100px;
-  margin: var(--hp-s1) 0 var(--hp-s3);
+  margin: var(--hp-s1) auto var(--hp-s3);
 }
 
 .hp-divider.center { margin-left: auto; margin-right: auto; }
@@ -1769,4 +1829,306 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FD TRUST STRIP — Horizontal white bar with 3 service pillars
+   Architecture: flowerdistrict.ae (Scrape ID: 019e6585-ba5f-7719-8dea-782c4bc842de)
+   "Fast Delivery | Secure Payment | Customer Support"
+═══════════════════════════════════════════════════════════════════════════ */
+.fd-trust-strip {
+  background: var(--hp-white);
+  border-top: 1px solid var(--hp-gray-100);
+  border-bottom: 1px solid var(--hp-gray-100);
+  padding: var(--hp-s4) 0;
+}
+
+.fd-trust-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--hp-s4);
+}
+
+.fd-trust-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.fd-trust-item {
+  display: flex;
+  align-items: center;
+  gap: var(--hp-s2);
+  padding: var(--hp-s3) var(--hp-s5);
+  flex: 1;
+  min-width: 200px;
+  max-width: 360px;
+  justify-content: center;
+}
+
+.fd-trust-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--hp-gray-50);
+  border: 1.5px solid var(--hp-gray-100);
+  border-radius: var(--hp-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--hp-blue);
+  flex-shrink: 0;
+  transition: background var(--hp-transition), border-color var(--hp-transition);
+}
+
+.fd-trust-item:hover .fd-trust-icon {
+  background: var(--hp-blue);
+  border-color: var(--hp-blue);
+  color: #fff;
+}
+
+.fd-trust-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.fd-trust-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fd-trust-title {
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hp-gray-900);
+  display: block;
+  line-height: 1.2;
+}
+
+.fd-trust-desc {
+  font-size: 12px;
+  color: var(--hp-gray-600);
+  display: block;
+  line-height: 1.4;
+}
+
+.fd-trust-divider {
+  width: 1px;
+  height: 48px;
+  background: var(--hp-gray-200);
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .fd-trust-grid {
+    flex-direction: column;
+    gap: 0;
+  }
+  .fd-trust-divider {
+    width: 100%;
+    height: 1px;
+  }
+  .fd-trust-item {
+    width: 100%;
+    max-width: 100%;
+    justify-content: flex-start;
+    padding: var(--hp-s2) var(--hp-s4);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FD PROMO GRID — 2-column photo banner entry points
+   Architecture: flowerdistrict.ae 459x460 + 951x460 layout
+   Left: portrait banner → Vase Arrangements
+   Right: landscape banner → Basket Arrangements
+═══════════════════════════════════════════════════════════════════════════ */
+.fd-promo-grid-section {
+  padding: var(--hp-s4) 0;
+  background: var(--hp-white);
+}
+
+.fd-promo-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--hp-s4);
+}
+
+.fd-promo-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;   /* ~459 : 951 ratio */
+  gap: var(--hp-s2);
+  align-items: stretch;
+}
+
+@media (max-width: 768px) {
+  .fd-promo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fd-promo-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+  background: var(--hp-gray-100);
+  cursor: pointer;
+}
+
+.fd-promo-card:focus-visible {
+  outline: 3px solid var(--hp-blue);
+  outline-offset: 2px;
+}
+
+/* Portrait — left, taller, narrower */
+.fd-promo-card--portrait {
+  aspect-ratio: 1 / 1;
+}
+
+/* Landscape — right, shorter, wider */
+.fd-promo-card--landscape {
+  aspect-ratio: 2.07 / 1;  /* 951/460 */
+}
+
+@media (max-width: 768px) {
+  .fd-promo-card--portrait,
+  .fd-promo-card--landscape {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.fd-promo-card > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.fd-promo-card:hover > img {
+  transform: scale(1.04);
+}
+
+/* Placeholder gradient (when no image is set) */
+.fd-promo-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.fd-promo-placeholder--blue {
+  background: linear-gradient(145deg, #1a3a6e 0%, #0f4c8a 50%, #0081ff 100%);
+}
+
+.fd-promo-placeholder--navy {
+  background: linear-gradient(145deg, #0d1f3c 0%, #114084 50%, #1a5cb8 100%);
+}
+
+.fd-promo-card:hover .fd-promo-placeholder {
+  transform: scale(1.04);
+}
+
+.fd-promo-placeholder-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fd-promo-placeholder-icon {
+  font-size: 64px;
+  color: rgba(255, 255, 255, 0.12);
+}
+
+/* Overlay text panel — slides up from bottom on hover */
+.fd-promo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(17, 64, 132, 0.72) 0%,
+    rgba(17, 64, 132, 0.25) 50%,
+    transparent 100%
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: var(--hp-s4) var(--hp-s4) var(--hp-s5);
+  transition: background 300ms ease;
+}
+
+.fd-promo-card:hover .fd-promo-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(17, 64, 132, 0.82) 0%,
+    rgba(17, 64, 132, 0.35) 60%,
+    transparent 100%
+  );
+}
+
+.fd-promo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transform: translateY(8px);
+  transition: transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.fd-promo-card:hover .fd-promo-text {
+  transform: translateY(0);
+}
+
+.fd-promo-eyebrow {
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+  display: block;
+}
+
+.fd-promo-title {
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-size: clamp(20px, 2.8vw, 32px);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.fd-promo-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 4px;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+
+.fd-promo-card:hover .fd-promo-cta {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fd-promo-cta svg {
+  transition: transform 200ms ease;
+}
+
+.fd-promo-card:hover .fd-promo-cta svg {
+  transform: translateX(3px);
 }

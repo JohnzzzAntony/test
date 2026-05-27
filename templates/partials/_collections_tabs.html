@@ -1,9 +1,4 @@
 {% load static %}
-{% comment %}
-================================================================
-   _collections_tabs.html — Collections Tab Section
-   ================================================================
-{% endcomment %}
 {% if collections %}
 <section class="fd-collections-section">
   <div class="container">
@@ -33,7 +28,7 @@
         <div class="swiper-wrapper">
           {% for product in col_products|slice:":12" %}
           <div class="swiper-slide">
-            <div class="product-card" onclick="window.location.href='{{ product.get_absolute_url }}'">
+            <div class="product-card" onclick="window.location.href='{{ product.get_absolute_url }}'" style="cursor:pointer;">
               <div class="product-card-image">
                 {% if product.price_info.has_offer %}
                 <div class="product-card-badges">

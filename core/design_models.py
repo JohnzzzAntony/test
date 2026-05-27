@@ -130,6 +130,8 @@ class DesignSettings(models.Model):
     show_hp_testimonials = models.BooleanField(default=True, verbose_name="Home Testimonials", choices=((True, 'Show'), (False, 'Hide')))
     show_hp_clients = models.BooleanField(default=True, verbose_name="Home Clients", choices=((True, 'Show'), (False, 'Hide')))
     show_hp_social = models.BooleanField(default=True, verbose_name="Home Social", choices=((True, 'Show'), (False, 'Hide')))
+    show_hp_trust_strip = models.BooleanField(default=True, verbose_name="Trust Strip", choices=((True, 'Show'), (False, 'Hide')), help_text="White horizontal 3-pillar trust bar below hero (Delivery, Payment, Support).")
+    show_hp_promo_banners = models.BooleanField(default=True, verbose_name="Promo Banner Grid", choices=((True, 'Show'), (False, 'Hide')), help_text="2-column photo banner grid (Vase / Basket category entry points).")
 
     # ── Product Display Settings ────────────────────────────────────────────
     pd_related_title = models.CharField(max_length=255, default="You May Also Like")

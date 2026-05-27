@@ -1,0 +1,81 @@
+{% load static %}
+{% if home_banners or design_settings.show_promo_banners != False %}
+<section class="fd-promo-grid-section" aria-label="Featured Collections">
+  <div class="fd-promo-container">
+    <div class="fd-promo-grid">
+
+      {# ── Dynamic banners from DB ── #}
+      {% if home_banners %}
+        {% for banner in home_banners|slice:":2" %}
+        <a href="{{ banner.link|default:'#' }}"
+           class="fd-promo-card {% if forloop.first %}fd-promo-card--portrait{% else %}fd-promo-card--landscape{% endif %}"
+           aria-label="{{ banner.title|default:'Shop Collection' }}">
+          {% if banner.get_image_url %}
+          <img src="{{ banner.get_image_url }}"
+               alt="{{ banner.title|default:'' }}"
+               loading="lazy">
+          {% endif %}
+          {% if banner.title %}
+          <div class="fd-promo-overlay">
+            <div class="fd-promo-text">
+              {% if banner.subtitle %}
+              <span class="fd-promo-eyebrow">{{ banner.subtitle }}</span>
+              {% endif %}
+              <h3 class="fd-promo-title">{{ banner.title }}</h3>
+              <span class="fd-promo-cta">
+                Shop Now
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </div>
+          {% endif %}
+        </a>
+        {% endfor %}
+
+      {# ── Fallback — static FlowerDistrict category links ── #}
+      {% else %}
+        <a href="{% url 'products:product_list' %}?category=vase-arrangement"
+           class="fd-promo-card fd-promo-card--portrait"
+           aria-label="Shop Vase Arrangements">
+          <div class="fd-promo-placeholder fd-promo-placeholder--blue">
+            <div class="fd-promo-placeholder-inner">
+              <i class="fas fa-spa fd-promo-placeholder-icon" aria-hidden="true"></i>
+            </div>
+          </div>
+          <div class="fd-promo-overlay">
+            <div class="fd-promo-text">
+              <span class="fd-promo-eyebrow">New Arrivals</span>
+              <h3 class="fd-promo-title">Vase<br>Arrangements</h3>
+              <span class="fd-promo-cta">
+                Explore
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <a href="{% url 'products:product_list' %}?category=basket-arrangement"
+           class="fd-promo-card fd-promo-card--landscape"
+           aria-label="Shop Basket Arrangements">
+          <div class="fd-promo-placeholder fd-promo-placeholder--navy">
+            <div class="fd-promo-placeholder-inner">
+              <i class="fas fa-gift fd-promo-placeholder-icon" aria-hidden="true"></i>
+            </div>
+          </div>
+          <div class="fd-promo-overlay">
+            <div class="fd-promo-text">
+              <span class="fd-promo-eyebrow">Bestseller</span>
+              <h3 class="fd-promo-title">Basket<br>Arrangements</h3>
+              <span class="fd-promo-cta">
+                Explore
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+{% endif %}
