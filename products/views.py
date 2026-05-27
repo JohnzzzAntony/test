@@ -569,3 +569,8 @@ def brand_detail(request, slug):
         }
     })
 
+
+def collection_list(request):
+    """Shows all active collections."""
+    collections = Collection.objects.filter(is_active=True).order_by('display_order')
+    return render(request, 'products/collection_list.html', {'collections': collections})

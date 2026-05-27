@@ -171,7 +171,7 @@ class TestOfferModel:
     def test_offer_creation(self, active_offer):
         assert active_offer.name == 'Test Offer'
         assert active_offer.offer_type == 'percentage'
-        assert active_offer.discount_value == Decimal('20')
+        assert active_offer.discount_value == Decimal('25')
 
     def test_offer_str_representation(self, active_offer):
         assert str(active_offer) == 'Test Offer'

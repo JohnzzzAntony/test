@@ -43,7 +43,7 @@
 <body class="antialiased">
 
     <!-- ===== HEADER (21st Design) ===== -->
-    <header id="main-header" class="fixed top-0 left-0 right-0 z-[300] bg-white/90 backdrop-blur-xl border-b border-[#d0d7de]">
+    <header id="main-header" class="relative bg-white/90 backdrop-blur-xl border-b border-[#d0d7de]">
         <!-- Top Bar -->
         <div class="bg-primary-900 text-white text-[11px]">
             <div class="container-21st flex items-center justify-between h-9">
@@ -98,7 +98,7 @@
                 </a>
 
                 <a href="{% url 'orders:enquiry_cart' %}" class="relative p-2.5 rounded-xl text-primary-800 hover:bg-[#f6f8fa] transition-colors">
-                    <i class="far fa-shopping-bag text-lg"></i>
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
                     {% if cart_count %}<span class="absolute top-1 right-1 w-4 h-4 bg-accent-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">{{ cart_count }}</span>{% endif %}
                 </a>
 
@@ -165,7 +165,7 @@
     </div>
 
     <!-- Main Content -->
-    <main class="min-h-[70vh] pt-[162px]">
+    <main class="min-h-[70vh] pt-4 lg:pt-8">
         {% block content %}{% endblock %}
     </main>
 

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-surface min-h-screen">
+    <!-- Cinematic Hero Section -->
+    <div class="relative h-[40vh] min-h-[300px] overflow-hidden bg-white">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-primary/5 via-white/40 to-surface z-20"></div>
+            <img src="{{ page_heroes.collections.display_image|default:'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069' }}" class="w-full h-full object-cover opacity-20">
+            
+            <!-- Decorative Elements -->
+            <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -mr-48 -mt-48 animate-pulse"></div>
+            <div class="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl -ml-48 -mb-48 animate-pulse" style="animation-delay: 2s"></div>
+        </div>
+
+        <div class="relative z-30 h-full flex flex-col items-{{ page_heroes.collections.alignment|default:'center' }} justify-center text-{{ page_heroes.collections.alignment|default:'center' }} p-6">
+            <span class="px-5 py-2 bg-primary/10 rounded-full text-primary text-[10px] font-black uppercase tracking-[0.4em] mb-6 animate__animated animate__fadeInDown">Curated</span>
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-slate-700 tracking-tighter mb-4 animate__animated animate__fadeInUp">
+                {{ page_heroes.collections.display_title|default:"Our Collections" }}
+            </h1>
+            <p class="text-slate-500 max-w-2xl font-medium leading-relaxed animate__animated animate__fadeInUp animate__delay-1s">
+                {{ page_heroes.collections.display_subtitle|default:"Explore our curated groups of premium products selected for your healthcare needs." }}
+            </p>
+            <nav class="flex items-center gap-3 text-slate-400 text-[10px] font-black uppercase tracking-widest animate__animated animate__fadeInUp animate__delay-1s">
+                <a href="/" class="hover:text-primary transition-colors">Home</a>
+                <span class="w-1 h-1 rounded-full bg-slate-200"></span>
+                <span class="text-slate-600">Collections</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Collections Grid -->
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 py-12 md:py-24">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {% for collection in collections %}
+            <a href="{{ collection.get_absolute_url }}" class="group block h-full">
+                <div class="relative h-full bg-white rounded-[32px] border border-slate-100 p-8 flex flex-col items-center justify-between text-center transition-all duration-500 hover:shadow-2xl hover:shadow-black/5 hover:-translate-y-2">
+                    <div class="h-48 w-full flex items-center justify-center mb-6 opacity-85 group-hover:opacity-100 transition-all duration-500 overflow-hidden rounded-[20px]">
+                        <img src="{{ collection.get_image_url }}" alt="{{ collection.name }}" class="max-h-full w-full object-cover transform transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                    
+                    <div class="space-y-1 mb-4">
+                        <h3 class="text-lg font-black text-slate-900 uppercase tracking-widest group-hover:text-primary transition-colors">{{ collection.name }}</h3>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ collection.products.count }} Products</p>
+                    </div>
+
+                    <!-- Subtle Indicator -->
+                    <div class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-primary">
+                        <span>Explore</span>
+                        <i class="fas fa-arrow-right text-[10px]"></i>
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+            <div class="col-span-full py-24 text-center">
+                <div class="inline-flex w-20 h-20 items-center justify-center rounded-full bg-slate-50 text-slate-300 mb-6">
+                    <i class="fas fa-folder-open text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-black text-slate-900 tracking-tight mb-2">No Collections Found</h3>
+                <p class="text-slate-500 max-w-md mx-auto mb-8 font-medium">Check back soon for our new curated collections.</p>
+                <a href="{% url 'products:product_list' %}" class="inline-flex h-14 items-center px-10 bg-slate-950 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-primary transition-all">Browse Products</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<style>
+    .bg-surface { background-color: #f8fafc; }
+</style>
+{% endblock %}

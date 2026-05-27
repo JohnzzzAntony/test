@@ -17,6 +17,8 @@ urlpatterns = [
     
     path('brands/', views.brand_list, name='brand_list'),
     path('brand/<slug:slug>/', views.brand_detail, name='brand_detail'),
+    path('collections/', views.collection_list, name='collection_list'),
+
     
     # Internal Admin APIs
     path('api/media/delete/<int:pk>/', views.delete_product_media, name='delete_product_media'),

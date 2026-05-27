@@ -62,11 +62,12 @@ def active_offer(db, category, brand, product):
     from products.models import Offer
     from datetime import timedelta
     from django.utils import timezone
+    from decimal import Decimal
     now = timezone.now()
     offer = Offer.objects.create(
         name='Test Offer',
         offer_type='percentage',
-        discount_value='20',
+        discount_value=Decimal('25'),
         start_date=now - timedelta(days=1),
         end_date=now + timedelta(days=30),
     )

@@ -478,7 +478,7 @@ Theme styles (Flower District
 
     <!-- ===== FLOWER DISTRICT STYLE HEADER ===== -->
     <header id="main-header"
-        class="fixed top-0 left-0 right-0 z-[2000] bg-white border-b border-[var(--border-custom)] transition-all duration-300">
+        class="relative z-[2000] bg-white border-b border-[var(--border-custom)] transition-all duration-300">
         <!-- Tier 1: Announcement & Social Bar -->
         <div class="border-b border-[var(--border-light)] bg-gray-50">
             <div class="container h-9 flex items-center justify-between text-[11px] font-medium text-[var(--text-secondary)]">
@@ -520,7 +520,7 @@ Theme styles (Flower District
             <div class="flex-shrink-0">
                 <a href="{% url 'core:home' %}" class="block group">
                     {% if site_settings.logo %}
-                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="h-10 lg:h-12 w-auto object-contain transition-transform group-hover:scale-105">
+                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="logo-img h-10 lg:h-12 w-auto object-contain transition-transform group-hover:scale-105">
                     {% else %}
                     <div class="logo-box border-2 border-[var(--primary)] px-4 py-1.5 text-center relative inline-block transition-transform group-hover:scale-105">
                         <div class="text-[15px] font-black tracking-[0.2em] uppercase leading-none text-[var(--primary)]">JKR</div>
@@ -590,7 +590,7 @@ Theme styles (Flower District
                 <a href="{% url 'orders:enquiry_cart' %}"
                     class="flex flex-col items-center gap-1.5 text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors text-center w-14 relative">
                     <div class="relative">
-                        <i class="far fa-shopping-bag text-[20px]"></i>
+                        <i class="fa-solid fa-cart-shopping text-[20px]"></i>
                         <span class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center shadow-sm {% if not cart_count %}hidden{% endif %}">
                             {{ cart_count|default:"0" }}
                         </span>
@@ -602,7 +602,7 @@ Theme styles (Flower District
                 <!-- Store Locations -->
                 <a href="{% url 'core:store_locations' %}"
                     class="flex flex-col items-center gap-1.5 text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors text-center w-14">
-                    <i class="far fa-map-marker-alt text-[20px]"></i>
+                    <i class="fa-solid fa-store text-[20px]"></i>
                     <span class="text-[9px] font-bold tracking-widest uppercase">Stores</span>
                 </a>
             </div>
@@ -612,7 +612,7 @@ Theme styles (Flower District
                 {% if design_settings.show_header_cart %}
                 <a href="{% url 'orders:enquiry_cart' %}"
                     class="relative hover:text-[var(--primary)] transition-colors p-2 text-[var(--primary)]">
-                    <i class="far fa-shopping-bag text-xl"></i>
+                    <i class="fa-solid fa-cart-shopping text-xl"></i>
                     <span class="cart-count-badge absolute top-1 right-1 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center shadow-sm {% if not cart_count %}hidden{% endif %}">
                         {{ cart_count|default:"0" }}
                     </span>
@@ -631,10 +631,10 @@ Theme styles (Flower District
                 <!-- Brands Dropdown -->
                 {% if nav_brands %}
                 <div class="fd-nav-item relative group/brands h-full flex items-center">
-                    <button class="fd-nav-link flex items-center gap-1.5" aria-haspopup="true" aria-expanded="false">
+                    <a href="{% url 'products:brand_list' %}" class="fd-nav-link flex items-center gap-1.5" aria-haspopup="true" aria-expanded="false">
                         Brands
                         <i class="fas fa-chevron-down fd-nav-chevron group-hover/brands:rotate-180" aria-hidden="true"></i>
-                    </button>
+                    </a>
                     <div class="fd-mega-drop fd-brands-drop absolute left-0 top-full hidden group-hover/brands:block z-50 pt-px">
                         <div class="fd-drop-glass p-4 grid grid-cols-3 gap-3" style="min-width:340px">
                             {% for brand in nav_brands %}
@@ -651,10 +651,10 @@ Theme styles (Flower District
                 <!-- Collections Dropdown -->
                 {% if nav_collections %}
                 <div class="fd-nav-item relative group/cols h-full flex items-center">
-                    <button class="fd-nav-link flex items-center gap-1.5" aria-haspopup="true" aria-expanded="false">
+                    <a href="{% url 'products:collection_list' %}" class="fd-nav-link flex items-center gap-1.5" aria-haspopup="true" aria-expanded="false">
                         Collections
                         <i class="fas fa-chevron-down fd-nav-chevron group-hover/cols:rotate-180" aria-hidden="true"></i>
-                    </button>
+                    </a>
                     <div class="fd-mega-drop absolute left-0 top-full hidden group-hover/cols:block z-50 pt-px">
                         <div class="fd-drop-glass py-2" style="min-width:200px">
                             {% for col in nav_collections %}
@@ -774,7 +774,7 @@ Theme styles (Flower District
                     {% for cat in categories %}
                     <div class="mobile-accordion-item"
                         style="border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);overflow:hidden;">
-                        <div style="display:flex;align-items:center;padding:16px;gap:12px;">
+                        <div class="mobile-accordion-header" style="display:flex;align-items:center;padding:16px;gap:12px;cursor:pointer;">
                             <a href="{{ cat.get_absolute_url }}"
                                 style="flex:1;font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--txt-main);text-decoration:none;">{{
                                 cat.name }}</a>
@@ -812,7 +812,7 @@ Theme styles (Flower District
                   <p style="font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;padding-left:8px;">More</p>
                   {% if nav_brands %}
                   <div class="mobile-accordion-item" style="border:1px solid var(--border);background:var(--surface);overflow:hidden;">
-                    <div style="display:flex;align-items:center;padding:14px 16px;gap:12px;">
+                    <div class="mobile-accordion-header" style="display:flex;align-items:center;padding:14px 16px;gap:12px;cursor:pointer;">
                       <span style="flex:1;font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--txt-main);">Brands</span>
                       <button class="accordion-trigger" style="background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;"><i class="fas fa-chevron-down text-[10px] chevron" style="transition:transform 0.25s;"></i></button>
                     </div>
@@ -825,7 +825,7 @@ Theme styles (Flower District
                   {% endif %}
                   {% if nav_collections %}
                   <div class="mobile-accordion-item" style="border:1px solid var(--border);background:var(--surface);overflow:hidden;">
-                    <div style="display:flex;align-items:center;padding:14px 16px;gap:12px;">
+                    <div class="mobile-accordion-header" style="display:flex;align-items:center;padding:14px 16px;gap:12px;cursor:pointer;">
                       <span style="flex:1;font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--txt-main);">Collections</span>
                       <button class="accordion-trigger" style="background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;"><i class="fas fa-chevron-down text-[10px] chevron" style="transition:transform 0.25s;"></i></button>
                     </div>
@@ -896,7 +896,7 @@ Theme styles (Flower District
 
                     <a href="{% url 'core:store_locations' %}"
                         style="display:flex;align-items:center;gap:10px;padding:12px 0;font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:color 0.2s;">
-                        <i class="far fa-map-marker-alt text-lg" style="color:var(--primary);"></i> Store Locations
+                        <i class="fa-solid fa-store text-lg" style="color:var(--primary);"></i> Store Locations
                     </a>
                     <a href="{% url 'core:faq' %}"
                         style="display:flex;align-items:center;gap:10px;padding:12px 0;font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;transition:color 0.2s;">
@@ -908,7 +908,7 @@ Theme styles (Flower District
     </header>
 
     <!-- Main Content -->
-    <main class="min-h-[70vh] pt-[120px] lg:pt-[204px]">
+    <main class="min-h-[70vh] pt-4 lg:pt-8">
         {% block content %}{% endblock %}
     </main>
 
@@ -1106,13 +1106,18 @@ Theme styles (Flower District
                 });
             }
 
-            // 2. Mobile Accordion Logic (Overrides/Fixes broken nextElementSibling logic for redesign HTML)
-            document.querySelectorAll('.accordion-trigger').forEach(trigger => {
-                trigger.addEventListener('click', (e) => {
+            // 2. Mobile Accordion Logic
+            document.querySelectorAll('.mobile-accordion-header').forEach(header => {
+                header.addEventListener('click', (e) => {
+                    // Do not toggle if user clicked directly on a navigation link
+                    if (e.target.tagName === 'A' || e.target.closest('a')) {
+                        e.stopPropagation();
+                        return;
+                    }
                     e.stopPropagation();
-                    const item = trigger.closest('.mobile-accordion-item, .mobile-accordion');
+                    const item = header.closest('.mobile-accordion-item, .mobile-accordion');
                     const panel = item ? item.querySelector('.mobile-sub') : null;
-                    const chevron = trigger.querySelector('.chevron');
+                    const chevron = header.querySelector('.chevron');
                     if (panel) {
                         const isHidden = panel.style.display === 'none' || panel.style.display === '';
                         panel.style.display = isHidden ? 'block' : 'none';

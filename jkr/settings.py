@@ -232,11 +232,10 @@ TEMPLATES = [
 ]
 
 # =============================================================================
-# DATABASE
-# Uses DATABASE_URL (Neon/Supabase) when set, otherwise falls back to SQLite
-# =============================================================================
+# Detect if we are running tests (pytest or manage.py test)
+IS_RUNNING_TESTS = "test" in sys.argv or any("pytest" in arg for arg in sys.argv)
 
-if env("DATABASE_URL", default=None):
+if env("DATABASE_URL", default=None) and not IS_RUNNING_TESTS:
     DATABASES = {"default": env.db()}
     # Neon poolers work better with short-lived connections or 0 in some environments
     DATABASES["default"]["CONN_MAX_AGE"] = 0
@@ -338,13 +337,16 @@ WHITENOISE_KEEP_ONLY_HASHED_FILES = False
 # For local dev, serve from local filesystem
 # For production (IS_PRODUCTION), we serve static via WhiteNoise and media via Cloudinary
 
-if IS_PRODUCTION:
+if IS_PRODUCTION or env("CLOUDINARY_API_KEY", default=None):
     # Use standard Cloudinary storage for media
     MEDIA_STORAGE_BACKEND = "cloudinary_storage.storage.MediaCloudinaryStorage"
+else:
+    MEDIA_STORAGE_BACKEND = "django.core.files.storage.FileSystemStorage"
+
+if IS_PRODUCTION:
     # Use WhiteNoise for static files
     STATIC_STORAGE_BACKEND = "jkr.storage.CustomWhiteNoiseStorage"
 else:
-    MEDIA_STORAGE_BACKEND = "django.core.files.storage.FileSystemStorage"
     STATIC_STORAGE_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 # Django 4.2+ / Django 5.x native way to configure storages.
