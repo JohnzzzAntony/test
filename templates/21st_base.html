@@ -81,8 +81,8 @@
             <div class="hidden lg:block flex-1 max-w-xl mx-8">
                 <form action="{% url 'products:product_list' %}" method="GET" class="relative group">
                     <input type="text" name="q" placeholder="Search medical equipment, supplies..."
-                        class="w-full h-11 pl-12 pr-4 bg-[#f6f8fa] border border-transparent rounded-xl text-[13px] text-primary-900 placeholder-[#9ca3af] focus:outline-none focus:bg-white focus:border-primary-300 focus:shadow-sm transition-all group-hover:bg-white group-hover:border-[#d1d5db]">
-                    <button type="submit" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-primary-600 transition-colors">
+                        class="w-full h-11 pl-12 pr-4 bg-[#f6f8fa] border border-transparent rounded-xl text-[13px] text-primary-900 placeholder-[#9ca3af] focus:outline-none focus:bg-white focus:border-primary-300 focus:shadow-sm transition-all group-hover:bg-white group-hover:border-[#d1d5db] search-input-21st">
+                    <button type="submit" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-primary-600 transition-colors search-btn-21st">
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
@@ -113,32 +113,61 @@
         </div>
 
         <!-- Category Nav -->
-        <nav class="hidden lg:block border-t border-[#f0f0f0] bg-white">
-            <div class="container-21st flex items-center gap-1 h-[44px]">
-                <a href="{% url 'products:category_index' %}" class="px-4 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors">
+        <nav class="hidden lg:block border-t border-[#f0f0f0] bg-white overflow-hidden">
+            <div class="container-21st flex items-center h-[44px] relative">
+                <a href="{% url 'products:category_index' %}" class="px-4 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors bg-white z-10 shrink-0 border-r border-[#f0f0f0] mr-2">
                     <i class="fas fa-th-large mr-2 text-[11px] text-primary-400"></i> All Categories
                 </a>
-                {% for cat in categories|slice:":8" %}
-                <div class="relative group/nav-item">
-                    <a href="{{ cat.get_absolute_url }}" class="px-4 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors">
-                        {{ cat.name }}
-                    </a>
-                    {% if cat.active_subcategories %}
-                    <div class="absolute top-full left-0 pt-2 hidden group-hover/nav-item:block">
-                        <div class="bg-white border border-[#e2e8f0] rounded-xl shadow-xl p-4 min-w-[220px]">
-                            {% for sub in cat.active_subcategories|slice:":8" %}
-                            <a href="{{ sub.get_absolute_url }}" class="block px-3 py-2 text-[13px] font-body font-medium text-primary-700 hover:bg-primary-50 hover:text-primary-900 rounded-lg transition-colors">{{ sub.name }}</a>
+                
+                <div class="flex-1 overflow-hidden h-full relative flex items-center">
+                    <div class="category-marquee-track flex items-center gap-8 whitespace-nowrap h-full">
+                        <div class="category-marquee-list flex items-center gap-8 h-full">
+                            {% for cat in categories %}
+                            <div class="relative group/nav-item h-full flex items-center">
+                                <a href="{{ cat.get_absolute_url }}" class="px-2 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors whitespace-nowrap">
+                                    {{ cat.name }}
+                                </a>
+                                {% if cat.active_subcategories %}
+                                <div class="absolute top-full left-0 pt-2 hidden group-hover/nav-item:block z-50">
+                                    <div class="bg-white border border-[#e2e8f0] rounded-xl shadow-xl p-4 min-w-[220px]">
+                                        {% for sub in cat.active_subcategories|slice:":8" %}
+                                        <a href="{{ sub.get_absolute_url }}" class="block px-3 py-2 text-[13px] font-body font-medium text-primary-700 hover:bg-primary-50 hover:text-primary-900 rounded-lg transition-colors">{{ sub.name }}</a>
+                                        {% endfor %}
+                                        <a href="{{ cat.get_absolute_url }}" class="block px-3 py-2 mt-1 text-[11px] font-body font-bold uppercase tracking-wider text-primary-600 hover:text-primary-800 transition-colors">View All &rarr;</a>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
                             {% endfor %}
-                            <a href="{{ cat.get_absolute_url }}" class="block px-3 py-2 mt-1 text-[11px] font-body font-bold uppercase tracking-wider text-primary-600 hover:text-primary-800 transition-colors">View All &rarr;</a>
+                            <a href="{% url 'blog:post_list' %}" class="px-2 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors whitespace-nowrap">Blog</a>
+                            <a href="{% url 'core:about_us' %}" class="px-2 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors whitespace-nowrap">About</a>
+                            <a href="{% url 'contact:contact' %}" class="px-2 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors whitespace-nowrap">Contact</a>
+                        </div>
+                        
+                        <div class="category-marquee-list flex items-center gap-8 h-full" aria-hidden="true">
+                            {% for cat in categories %}
+                            <div class="relative group/nav-item h-full flex items-center">
+                                <a href="{{ cat.get_absolute_url }}" class="px-2 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors whitespace-nowrap">
+                                    {{ cat.name }}
+                                </a>
+                                {% if cat.active_subcategories %}
+                                <div class="absolute top-full left-0 pt-2 hidden group-hover/nav-item:block z-50">
+                                    <div class="bg-white border border-[#e2e8f0] rounded-xl shadow-xl p-4 min-w-[220px]">
+                                        {% for sub in cat.active_subcategories|slice:":8" %}
+                                        <a href="{{ sub.get_absolute_url }}" class="block px-3 py-2 text-[13px] font-body font-medium text-primary-700 hover:bg-primary-50 hover:text-primary-900 rounded-lg transition-colors">{{ sub.name }}</a>
+                                        {% endfor %}
+                                        <a href="{{ cat.get_absolute_url }}" class="block px-3 py-2 mt-1 text-[11px] font-body font-bold uppercase tracking-wider text-primary-600 hover:text-primary-800 transition-colors">View All &rarr;</a>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            <a href="{% url 'blog:post_list' %}" class="px-2 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors whitespace-nowrap">Blog</a>
+                            <a href="{% url 'core:about_us' %}" class="px-2 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors whitespace-nowrap">About</a>
+                            <a href="{% url 'contact:contact' %}" class="px-2 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors whitespace-nowrap">Contact</a>
                         </div>
                     </div>
-                    {% endif %}
                 </div>
-                {% endfor %}
-                <div class="flex-1"></div>
-                <a href="{% url 'blog:post_list' %}" class="px-4 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors">Blog</a>
-                <a href="{% url 'core:about_us' %}" class="px-4 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors">About</a>
-                <a href="{% url 'contact:contact' %}" class="px-4 h-full flex items-center text-[12px] font-body font-semibold text-primary-700 hover:text-primary-900 hover:bg-[#f6f8fa] rounded-lg transition-colors">Contact</a>
             </div>
         </nav>
     </header>

@@ -262,14 +262,13 @@
     </div>
 </div>
 
-<!-- Hero -->
-<section class="plp-hero">
-    <div class="container-21st relative">
-        <h1>{% if current_category %}{{ current_category.name }}{% else %}All Products{% endif %}</h1>
-        <p>{% if current_category %}{{ current_category.description|default:"Browse our selection"|striptags|truncatewords:20 }}{% else %}Explore our complete catalog of medical equipment and supplies{% endif %}</p>
-        <div class="plp-hero-count">{{ products.paginator.count|default:0 }} products</div>
+<!-- Page Title Block (Minimal) -->
+<div class="py-8 bg-white border-b border-[#e2e8f0]">
+    <div class="container-21st">
+        <h1 class="text-3xl font-display font-semibold text-primary-900">{% if current_category %}{{ current_category.name }}{% else %}All Products{% endif %}</h1>
+        <p class="text-sm text-[#6b7280] mt-2">{% if current_category %}{{ current_category.description|default:"Browse our selection"|striptags|truncatewords:20 }}{% else %}Explore our complete catalog of medical equipment and supplies{% endif %}</p>
     </div>
-</section>
+</div>
 
 <div class="container-21st">
     <div class="plp-layout">
