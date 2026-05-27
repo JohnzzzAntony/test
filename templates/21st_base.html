@@ -64,6 +64,9 @@
         <div class="container-21st flex items-center justify-between h-[72px]">
             <!-- Logo -->
             <a href="{% url 'core:home' %}" class="flex items-center gap-3 group">
+                {% if site_settings.logo %}
+                <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="logo-img h-10 w-auto object-contain transition-transform group-hover:scale-105" style="filter: brightness(0);">
+                {% else %}
                 <div class="w-10 h-10 rounded-lg bg-primary-600 flex items-center justify-center text-white font-display text-xl font-bold shadow-md transition-transform group-hover:scale-105">
                     21
                 </div>
@@ -71,6 +74,7 @@
                     <div class="font-display text-xl font-semibold text-primary-900 leading-none tracking-tight">Healthcare</div>
                     <div class="text-[10px] font-body font-bold tracking-[0.2em] uppercase text-primary-400 mt-0.5">21st Century</div>
                 </div>
+                {% endif %}
             </a>
 
             <!-- Desktop Search -->

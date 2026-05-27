@@ -1,6 +1,7 @@
 import pytest
 from decimal import Decimal
 from django.contrib.auth.models import User
+from django.urls import reverse
 from orders.models import CustomerOrder, CustomerOrderItem
 
 
@@ -91,11 +92,11 @@ class TestCustomerOrderItemModel:
 @pytest.mark.django_db
 class TestCartViews:
     def test_cart_view_loads(self, client):
-        response = client.get('/orders/cart/')
+        response = client.get(reverse('orders:enquiry_cart'))
         assert response.status_code == 200
 
     def test_add_to_cart_redirects(self, client, product):
-        response = client.get(f'/orders/add-to-cart/{product.id}/')
+        response = client.get(reverse('orders:add_to_cart', kwargs={'product_id': product.id}))
         assert response.status_code == 302
 
     def test_remove_from_cart_view(self, client, product):
@@ -103,7 +104,7 @@ class TestCartViews:
         session['enquiry_cart'] = {str(product.id): {'quantity': 2}}
         session.save()
 
-        response = client.get(f'/orders/remove-from-cart/{product.id}/')
+        response = client.get(reverse('orders:remove_from_cart', kwargs={'product_id': product.id}))
         assert response.status_code == 302
 
 
@@ -114,7 +115,7 @@ class TestCheckoutFlow:
         session['enquiry_cart'] = {}
         session.save()
 
-        response = client.get('/orders/checkout/')
+        response = client.get(reverse('orders:checkout_billing'))
         assert response.status_code == 302
 
     def test_checkout_payment_requires_billing(self, client):
@@ -124,5 +125,5 @@ class TestCheckoutFlow:
             del session['checkout_billing']
         session.save()
 
-        response = client.get('/orders/payment/')
+        response = client.get(reverse('orders:checkout_payment'))
         assert response.status_code == 302

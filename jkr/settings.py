@@ -18,7 +18,7 @@ import core.monkeypatch_django
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Detect if we are running locally (development/management tasks)
-IS_RUNNING_LOCALLY = any(arg in sys.argv for arg in ["runserver", "dev", "shell", "check", "migrate", "makemigrations", "test"])
+IS_RUNNING_LOCALLY = any(arg in sys.argv for arg in ["runserver", "dev", "shell", "check", "migrate", "makemigrations", "test"]) or any("pytest" in arg for arg in sys.argv)
 HAS_ENV_LOCAL = os.path.exists(os.path.join(BASE_DIR, ".env.local"))
 
 # =============================================================================
