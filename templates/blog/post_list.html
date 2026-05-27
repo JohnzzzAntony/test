@@ -12,30 +12,21 @@
 <section class="py-12 bg-surface min-h-screen">
     <div class="max-w-screen-xl mx-auto px-6">
         
-        <!-- Premium Header / Hero Area -->
-        <div class="mb-16">
-            <nav class="flex mb-8 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
+        <!-- Breadcrumbs & Page Title Section -->
+        <div class="mb-8">
+            <nav class="flex mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
                 <a href="{% url 'core:home' %}" class="hover:text-primary transition-colors">Home</a>
                 <span class="mx-3 opacity-30">/</span>
                 <span class="text-slate-900">Latest Insights</span>
             </nav>
 
-            <div class="relative h-64 lg:h-96 rounded-[40px] overflow-hidden bg-slate-900 group shadow-2xl">
-                {% if page_heroes.blog.get_image_url %}
-                    <img src="{{ page_heroes.blog.get_image_url }}" class="w-full h-full object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105">
-                {% else %}
-                    <div class="w-full h-full bg-gradient-to-br from-slate-950 to-primary/30"></div>
-                {% endif %}
-                
-                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-                    <span class="px-5 py-2 bg-primary/20 backdrop-blur-md rounded-full text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6 animate__animated animate__fadeInDown">Journal</span>
-                    <h1 class="text-5xl lg:text-7xl font-black text-white tracking-tighter mb-4 animate__animated animate__fadeInUp">
-                        {{ page_heroes.blog.title|default:"Blogs & Insights" }}
-                    </h1>
-                    <p class="text-slate-300 max-w-2xl font-medium leading-relaxed animate__animated animate__fadeInUp animate__delay-1s">
-                        {{ page_heroes.blog.subtitle|default:"Exploring the latest innovations and updates in the medical equipment industry." }}
-                    </p>
-                </div>
+            <div class="page-title-section py-8 text-center border-b border-gray-100">
+                <h1 class="text-3xl font-bold uppercase tracking-wider text-[var(--primary)]">
+                    {{ page_heroes.blog.title|default:"Blogs & Insights" }}
+                </h1>
+                <p class="text-sm text-gray-500 mt-2 max-w-xl mx-auto">
+                    {{ page_heroes.blog.subtitle|default:"Exploring the latest innovations and updates in the medical equipment industry." }}
+                </p>
             </div>
         </div>
 

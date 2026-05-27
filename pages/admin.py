@@ -6,7 +6,7 @@ from .models import (
 )
 from django.utils.html import format_html
 
-@admin.register(PageHero)
+# @admin.register(PageHero)
 class PageHeroAdmin(admin.ModelAdmin):
     list_display = ('page', 'title', 'is_active', 'hero_preview')
     list_editable = ('is_active',)
@@ -460,7 +460,7 @@ class ContactPageAdmin(admin.ModelAdmin):
 
 # ── Hero Slides ─────────────────────────────────────────────────────────────
 
-@admin.register(HeroSlide)
+# @admin.register(HeroSlide)
 class HeroSlideAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'order', 'is_active', 'slide_preview')
     list_editable = ('order', 'is_active')
@@ -494,7 +494,7 @@ class HeroSlideAdmin(admin.ModelAdmin):
 
 # ── Homepage Settings ────────────────────────────────────────────────────────
 
-@admin.register(HomepageSettings)
+# @admin.register(HomepageSettings)
 class HomepageSettingsAdmin(admin.ModelAdmin):
     """
     Singleton admin — only one record is allowed.

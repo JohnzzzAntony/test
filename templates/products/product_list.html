@@ -351,24 +351,17 @@
             {% endif %}
         </nav>
 
-        <!-- Category Banner -->
-        <div class="category-banner">
-            {% if current_category and current_category.image %}
-                <img src="{{ current_category.get_image_url }}" alt="{{ current_category.name }}" class="category-banner-img">
-            {% else %}
-                <div style="position:absolute;inset:0;background:linear-gradient(135deg,#8B4557,#C9A96E);"></div>
+        <!-- Page Title Section -->
+        <div class="page-title-section py-8 mb-8 text-center border-b border-gray-100">
+            <h1 class="text-3xl font-bold uppercase tracking-wider text-[var(--primary)]">
+                {% if current_category %}{{ current_category.name }}
+                {% elif collection %}{{ collection.name }}
+                {% elif current_brand %}{{ current_brand.name }}
+                {% else %}Our Shop{% endif %}
+            </h1>
+            {% if current_category.description %}
+            <p class="text-sm text-gray-500 mt-2 max-w-xl mx-auto">{{ current_category.description|striptags|truncatewords:20 }}</p>
             {% endif %}
-            <div class="category-banner-content">
-                <h1 class="category-banner-title">
-                    {% if current_category %}{{ current_category.name }}
-                    {% elif collection %}{{ collection.name }}
-                    {% elif current_brand %}{{ current_brand.name }}
-                    {% else %}Our Shop{% endif %}
-                </h1>
-                {% if current_category.description %}
-                <p class="category-banner-desc">{{ current_category.description|striptags|truncatewords:20 }}</p>
-                {% endif %}
-            </div>
         </div>
 
         <!-- Mobile Filter Button -->

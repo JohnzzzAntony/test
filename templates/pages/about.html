@@ -97,20 +97,15 @@
      PAGE HERO
   ══════════════════════════════════════
 {% endcomment %}
-  <section class="about-page-hero">
-    {% if page_heroes.about and page_heroes.about.display_image %}
-    <img src="{{ page_heroes.about.display_image }}" alt="About Us" class="about-hero-img">
-    {% endif %}
-    <div class="about-hero-content">
-      <span class="page-hero-eyebrow">Our Story</span>
-      <h1 class="page-hero-title">
-        About <em>{{ site_settings.site_name|default:"JKR International" }}</em>
+  <!-- Page Title Section -->
+  <div class="page-title-section py-8 mb-8 text-center border-b border-gray-100 container">
+      <h1 class="text-3xl font-bold uppercase tracking-wider text-[var(--primary)]">
+          About {{ site_settings.site_name|default:"JKR International" }}
       </h1>
-      <p class="page-hero-subtitle">
-        Delivering world-class medical technology and precision equipment to healthcare institutions worldwide.
+      <p class="text-sm text-gray-500 mt-2 max-w-xl mx-auto">
+          Delivering world-class medical technology and precision equipment to healthcare institutions worldwide.
       </p>
-    </div>
-  </section>
+  </div>
 
   {% comment %}
 ══════════════════════════════════════

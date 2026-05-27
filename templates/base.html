@@ -536,8 +536,9 @@ Theme styles (Flower District
                     <input type="text" name="q" placeholder="What are you looking for?"
                         class="w-full h-11 pl-5 pr-14 bg-gray-50 border border-gray-300 rounded-md text-[13px] text-[var(--text-primary)] placeholder-gray-400 focus:outline-none focus:border-[var(--primary)] focus:bg-white transition-all">
                     <button type="submit"
-                        class="absolute right-1 top-1 bottom-1 w-10 flex items-center justify-center bg-[var(--primary)] text-white rounded-md hover:bg-[var(--primary-hover)] transition-colors shadow-sm">
-                        <i class="fas fa-search text-xs"></i>
+                        class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors"
+                        style="background: none; border: none; font-size: 20px;">
+                        <i class="fas fa-search"></i>
                     </button>
                 </form>
             </div>
@@ -684,71 +685,105 @@ Theme styles (Flower District
         </div>
 
         <!-- Tier 3B: Scrollable Categories Bar (Desktop Only) -->
-        <div class="fd-nav-tier fd-nav-tier--cats border-t border-[var(--border-light)] bg-[var(--surface-light)] hidden lg:block">
-            <div class="container h-[44px] flex items-center relative">
+        <div class="fd-nav-tier fd-nav-tier--cats border-t border-[var(--border-light)] bg-[var(--surface-light)] hidden lg:block overflow-hidden">
+            <div class="container h-[44px] flex items-center relative overflow-hidden">
+                <!-- Categories Marquee Area -->
+                <div class="category-marquee-track flex items-center h-full w-max">
+                    <div class="category-marquee-list flex items-center gap-8 h-full">
+                        {% for cat in categories %}
+                        <div class="relative group/nav-item h-full flex items-center flex-shrink-0">
+                            <a href="{{ cat.get_absolute_url }}"
+                               class="flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-wider text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-1 border-b-2 border-transparent hover:border-[var(--primary)] whitespace-nowrap">
+                                {{ cat.name }}
+                                {% if cat.active_subcategories %}
+                                <i class="fas fa-chevron-down text-[7px] text-gray-400 group-hover/nav-item:rotate-180 transition-transform" aria-hidden="true"></i>
+                                {% endif %}
+                            </a>
 
-                <!-- Left Scroll Arrow -->
-                <button id="cat-scroll-left"
-                    class="absolute left-0 top-0 bottom-0 z-20 w-10 bg-gradient-to-r from-[var(--surface-light)] via-[var(--surface-light)] to-transparent flex items-center justify-start text-gray-400 hover:text-[var(--primary)] opacity-0 transition-opacity pointer-events-none"
-                    aria-label="Scroll categories left">
-                    <i class="fas fa-chevron-left text-[10px] bg-white rounded-full shadow-sm w-6 h-6 flex items-center justify-center border border-gray-100" aria-hidden="true"></i>
-                </button>
-
-                <!-- Categories Scroll Area -->
-                <div id="header-category-scroll"
-                    class="flex items-center gap-6 overflow-x-auto no-scrollbar scroll-smooth h-full w-full px-3">
-                    {% for cat in categories %}
-                    <div class="relative group/nav-item h-full flex items-center flex-shrink-0">
-                        <a href="{{ cat.get_absolute_url }}"
-                           class="flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-wider text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-1 border-b-2 border-transparent hover:border-[var(--primary)] whitespace-nowrap">
-                            {{ cat.name }}
                             {% if cat.active_subcategories %}
-                            <i class="fas fa-chevron-down text-[7px] text-gray-400 group-hover/nav-item:rotate-180 transition-transform" aria-hidden="true"></i>
-                            {% endif %}
-                        </a>
-
-                        {% if cat.active_subcategories %}
-                        <div class="absolute left-1/2 -translate-x-1/2 top-full hidden group-hover/nav-item:flex flex-col w-[800px] z-50 pt-px">
-                            <div class="fd-mega-panel">
-                                <div class="grid grid-cols-4 gap-0 p-6">
-                                    {% for sub in cat.active_subcategories %}
-                                    <div class="px-4 border-l border-gray-100 first:border-0">
-                                        <a href="{{ sub.get_absolute_url }}" class="block group/sub">
-                                            <h5 class="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--primary)] mb-3 pb-2 border-b border-gray-100 group-hover/sub:text-[var(--primary-hover)] transition-colors">
-                                                {{ sub.name }}
-                                            </h5>
-                                            {% if sub.active_subcategories %}
-                                            <div class="space-y-2">
-                                                {% for subsub in sub.active_subcategories %}
-                                                <a href="{{ subsub.get_absolute_url }}" class="block text-xs font-medium text-gray-500 hover:text-[var(--primary)] hover:translate-x-1 transition-all">
-                                                    {{ subsub.name }}
-                                                </a>
-                                                {% endfor %}
-                                            </div>
-                                            {% endif %}
+                            <div class="absolute left-1/2 -translate-x-1/2 top-full hidden group-hover/nav-item:flex flex-col w-[800px] z-50 pt-px">
+                                <div class="fd-mega-panel">
+                                    <div class="grid grid-cols-4 gap-0 p-6">
+                                        {% for sub in cat.active_subcategories %}
+                                        <div class="px-4 border-l border-gray-100 first:border-0">
+                                            <a href="{{ sub.get_absolute_url }}" class="block group/sub">
+                                                <h5 class="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--primary)] mb-3 pb-2 border-b border-gray-100 group-hover/sub:text-[var(--primary-hover)] transition-colors">
+                                                    {{ sub.name }}
+                                                </h5>
+                                                {% if sub.active_subcategories %}
+                                                <div class="space-y-2">
+                                                    {% for subsub in sub.active_subcategories %}
+                                                    <a href="{{ subsub.get_absolute_url }}" class="block text-xs font-medium text-gray-500 hover:text-[var(--primary)] hover:translate-x-1 transition-all">
+                                                        {{ subsub.name }}
+                                                    </a>
+                                                    {% endfor %}
+                                                </div>
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="border-t border-gray-100 px-6 py-3 bg-gray-50/80 text-center">
+                                        <a href="{{ cat.get_absolute_url }}" class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors">
+                                            <span>Shop All {{ cat.name }}</span>
+                                            <i class="fas fa-arrow-right text-[9px]" aria-hidden="true"></i>
                                         </a>
                                     </div>
-                                    {% endfor %}
-                                </div>
-                                <div class="border-t border-gray-100 px-6 py-3 bg-gray-50/80 text-center">
-                                    <a href="{{ cat.get_absolute_url }}" class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors">
-                                        <span>Shop All {{ cat.name }}</span>
-                                        <i class="fas fa-arrow-right text-[9px]" aria-hidden="true"></i>
-                                    </a>
                                 </div>
                             </div>
+                            {% endif %}
                         </div>
-                        {% endif %}
+                        {% endfor %}
                     </div>
-                    {% endfor %}
-                </div>
 
-                <!-- Right Scroll Arrow -->
-                <button id="cat-scroll-right"
-                    class="absolute right-0 top-0 bottom-0 z-20 w-10 bg-gradient-to-l from-[var(--surface-light)] via-[var(--surface-light)] to-transparent flex items-center justify-end text-gray-400 hover:text-[var(--primary)] transition-colors"
-                    aria-label="Scroll categories right">
-                    <i class="fas fa-chevron-right text-[10px] bg-white rounded-full shadow-sm w-6 h-6 flex items-center justify-center border border-gray-100" aria-hidden="true"></i>
-                </button>
+                    <!-- Duplicate list for infinite loop effect -->
+                    <div class="category-marquee-list flex items-center gap-8 h-full" aria-hidden="true">
+                        {% for cat in categories %}
+                        <div class="relative group/nav-item h-full flex items-center flex-shrink-0">
+                            <a href="{{ cat.get_absolute_url }}"
+                               class="flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-wider text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-1 border-b-2 border-transparent hover:border-[var(--primary)] whitespace-nowrap">
+                                {{ cat.name }}
+                                {% if cat.active_subcategories %}
+                                <i class="fas fa-chevron-down text-[7px] text-gray-400 group-hover/nav-item:rotate-180 transition-transform" aria-hidden="true"></i>
+                                {% endif %}
+                            </a>
+
+                            {% if cat.active_subcategories %}
+                            <div class="absolute left-1/2 -translate-x-1/2 top-full hidden group-hover/nav-item:flex flex-col w-[800px] z-50 pt-px">
+                                <div class="fd-mega-panel">
+                                    <div class="grid grid-cols-4 gap-0 p-6">
+                                        {% for sub in cat.active_subcategories %}
+                                        <div class="px-4 border-l border-gray-100 first:border-0">
+                                            <a href="{{ sub.get_absolute_url }}" class="block group/sub">
+                                                <h5 class="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--primary)] mb-3 pb-2 border-b border-gray-100 group-hover/sub:text-[var(--primary-hover)] transition-colors">
+                                                    {{ sub.name }}
+                                                </h5>
+                                                {% if sub.active_subcategories %}
+                                                <div class="space-y-2">
+                                                    {% for subsub in sub.active_subcategories %}
+                                                    <a href="{{ subsub.get_absolute_url }}" class="block text-xs font-medium text-gray-500 hover:text-[var(--primary)] hover:translate-x-1 transition-all">
+                                                        {{ subsub.name }}
+                                                    </a>
+                                                    {% endfor %}
+                                                </div>
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="border-t border-gray-100 px-6 py-3 bg-gray-50/80 text-center">
+                                        <a href="{{ cat.get_absolute_url }}" class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors">
+                                            <span>Shop All {{ cat.name }}</span>
+                                            <i class="fas fa-arrow-right text-[9px]" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
 

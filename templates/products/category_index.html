@@ -2,23 +2,15 @@
 {% load static %}
 
 {% block content %}
-    <!-- Hero Header -->
-    <section class="py-5 mt-5 position-relative overflow-hidden text-{{ page_heroes.products.alignment|default:'center' }} text-white hero-section">
-        <div class="container py-5">
-            <h1 class="display-3 font-weight-bold hero-title">{% if page_heroes.products.title_html %}{{ page_heroes.products.title_html|safe }}{% else %}{{ page_heroes.products.title|default:"Our Products" }}{% endif %}</h1>
-            <p class="lead" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.5);">{{ page_heroes.products.subtitle }}</p>
-            {% if page_heroes.products.button_text or page_heroes.products.button_2_text %}
-            <div class="mt-4 d-flex gap-3 justify-content-{% if page_heroes.products.alignment == 'left' %}start{% elif page_heroes.products.alignment == 'right' %}end{% else %}center{% endif %}">
-                {% if page_heroes.products.button_text %}
-                <a href="{{ page_heroes.products.button_link }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-sm">{{ page_heroes.products.button_text }}</a>
-                {% endif %}
-                {% if page_heroes.products.button_2_text %}
-                <a href="{{ page_heroes.products.button_2_link }}" class="btn btn-outline-light rounded-pill px-4 py-2 font-weight-bold shadow-sm">{{ page_heroes.products.button_2_text }}</a>
-                {% endif %}
-            </div>
-            {% endif %}
-        </div>
-    </section>
+    <!-- Page Title Section -->
+    <div class="page-title-section py-8 mb-8 text-center border-b border-gray-100 container">
+        <h1 class="text-3xl font-bold uppercase tracking-wider text-[var(--primary)]">
+            {% if page_heroes.products.title_html %}{{ page_heroes.products.title_html|safe }}{% else %}{{ page_heroes.products.title|default:"Our Products" }}{% endif %}
+        </h1>
+        {% if page_heroes.products.subtitle %}
+        <p class="text-sm text-gray-500 mt-2 max-w-xl mx-auto">{{ page_heroes.products.subtitle }}</p>
+        {% endif %}
+    </div>
 
     <!-- Categories Grid Section -->
     <section class="py-5 bg-white">

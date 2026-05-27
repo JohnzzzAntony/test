@@ -38,26 +38,18 @@
      PAGE HERO
   ══════════════════════════════════════
 {% endcomment %}
-  <section class="page-hero" style="min-height:50vh;background:#114084;">
-    {% if page_heroes.contact and page_heroes.contact.display_image %}
-    <img src="{{ page_heroes.contact.display_image }}" alt="Contact" class="page-hero-img">
-    <div class="page-hero-overlay"></div>
-    {% else %}
-    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#114084,#1a5cb8,#000000);opacity:0.75;"></div>
-    {% endif %}
-    <div class="page-hero-content" style="position:relative;z-index:10;">
-      <span class="page-hero-eyebrow">Get in Touch</span>
-      <h1 class="page-hero-title">Contact <em>Us</em></h1>
-      <p class="page-hero-subtitle">Reach out for product inquiries, technical support, partnerships, or to discuss your healthcare technology needs.</p>
-    </div>
-  </section>
+  <!-- Page Title Section -->
+  <div class="page-title-section py-8 mb-8 text-center border-b border-gray-100 container">
+      <h1 class="text-3xl font-bold uppercase tracking-wider text-[var(--primary)]">Contact Us</h1>
+      <p class="text-sm text-gray-500 mt-2 max-w-xl mx-auto">Reach out for product inquiries, technical support, partnerships, or to discuss your healthcare technology needs.</p>
+  </div>
 
   {% comment %}
-══════════════════════════════════════
-     CONTACT INFO CARDS
   ══════════════════════════════════════
-{% endcomment %}
-  <section style="padding:80px 0 -40px;position:relative;z-index:20;margin-top:-60px;">
+       CONTACT INFO CARDS
+  ══════════════════════════════════════
+  {% endcomment %}
+  <section style="padding:40px 0;position:relative;z-index:20;margin-top:0;">
     <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
       <div class="trust-badges" style="grid-template-columns:repeat(3,1fr);gap:24px;padding:0;background:transparent;border:none;margin-bottom:48px;">
         <div class="contact-card">
