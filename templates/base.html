@@ -486,52 +486,35 @@ Theme styles (Flower District
         <!-- Tier 1: Announcement & Social Bar -->
         <div class="border-b border-[var(--border-light)] bg-gray-50">
             <div class="container h-9 flex items-center justify-between text-[11px] font-medium text-[var(--text-secondary)]">
-                <div class="flex items-center gap-2 truncate">
-                    <span class="font-bold text-[var(--primary)] uppercase tracking-wider">Enjoy Free Shipping!</span>
-                    <span class="text-[var(--border-hover)]">|</span>
-                    <div class="relative h-4 overflow-hidden w-64 md:w-80 lg:w-96 text-gray-500" id="announcement-ticker" style="display: inline-block; vertical-align: middle;">
-                        {% if announcement_bar_list %}
-                            {% for bar in announcement_bar_list %}
-                            <span class="announcement-item absolute left-0 top-0 w-full truncate transition-all duration-500 ease-in-out opacity-0" data-index="{{ forloop.counter0 }}">
-                                {{ bar.text }}
-                            </span>
-                            {% endfor %}
-                        {% else %}
-                            <span class="announcement-item absolute left-0 top-0 w-full truncate transition-all duration-500 ease-in-out opacity-0" data-index="0">
-                                Free UAE Delivery on Purchases Above AED 2000
-                            </span>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="flex items-center gap-5 flex-shrink-0">
+                <div class="flex items-center gap-6 truncate">
+                    <span class="text-gray-700">Free Shipping on orders above 100 AED</span>
                     <div class="flex items-center gap-2">
                         <a href="#" id="lang-en" class="hover:text-[var(--primary)] transition-colors text-[var(--text-primary)] font-bold">En</a>
                         <span class="text-[var(--border-hover)]">|</span>
                         <a href="#" id="lang-ar" class="hover:text-[var(--primary)] transition-colors">Ar</a>
                     </div>
-                    <div class="flex items-center gap-4 pl-5 border-l border-gray-200">
-                        {% if site_settings.instagram %}
-                        <a href="{{ site_settings.instagram }}" target="_blank" class="hover:text-[var(--primary)] transition-colors text-gray-500" aria-label="Instagram"><i class="fab fa-instagram text-sm"></i></a>
-                        {% endif %}
-                        {% if site_settings.whatsapp %}
-                        <a href="https://wa.me/{{ site_settings.whatsapp }}" target="_blank" class="hover:text-[var(--primary)] transition-colors text-gray-500" aria-label="WhatsApp"><i class="fab fa-whatsapp text-sm"></i></a>
-                        {% elif site_settings.phone %}
-                        <a href="https://wa.me/{{ site_settings.phone }}" target="_blank" class="hover:text-[var(--primary)] transition-colors text-gray-500" aria-label="WhatsApp"><i class="fab fa-whatsapp text-sm"></i></a>
-                        {% endif %}
-                        <a href="#" class="hover:text-[var(--primary)] transition-colors text-gray-500" aria-label="TikTok"><i class="fab fa-tiktok text-sm"></i></a>
-                    </div>
+                </div>
+                <div class="flex items-center gap-4 text-gray-500">
+                    {% if site_settings.instagram %}
+                    <a href="{{ site_settings.instagram }}" target="_blank" class="hover:text-[var(--primary)] transition-colors" aria-label="Instagram"><i class="fab fa-instagram text-sm"></i></a>
+                    {% endif %}
+                    <a href="#" class="hover:text-[var(--primary)] transition-colors" aria-label="Facebook"><i class="fab fa-facebook-f text-sm"></i></a>
+                    {% if site_settings.whatsapp %}
+                    <a href="https://wa.me/{{ site_settings.whatsapp }}" target="_blank" class="hover:text-[var(--primary)] transition-colors" aria-label="WhatsApp"><i class="fab fa-whatsapp text-sm"></i></a>
+                    {% endif %}
+                    <a href="#" class="hover:text-[var(--primary)] transition-colors" aria-label="TikTok"><i class="fab fa-tiktok text-sm"></i></a>
                 </div>
             </div>
         </div>
-              <!-- Premium Main Header (Logo, Navigation, Search, Cart, Locale) -->
+              <!-- Premium Main Header (Logo, Search, Utilities) -->
         <div class="border-b border-[var(--border-light)] bg-white sticky top-0 z-50">
-            <div class="container py-3.5 flex items-center justify-between gap-6">
+            <div class="container py-4 flex items-center justify-between gap-8">
                 
                 <!-- Left: Logo -->
                 <div class="flex-shrink-0">
                     <a href="{% url 'core:home' %}" class="block group">
                         {% if site_settings.logo %}
-                        <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="logo-img h-8 lg:h-9 w-auto object-contain transition-transform group-hover:scale-105 brightness-0" style="filter: brightness(0);">
+                        <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="logo-img h-12 w-auto object-contain transition-transform group-hover:scale-105 brightness-0" style="filter: brightness(0);">
                         {% else %}
                         <div class="logo-box border border-[var(--primary)] px-3 py-1 text-center relative inline-block transition-transform group-hover:scale-105">
                             <div class="text-[13px] font-black tracking-[0.18em] uppercase leading-none text-[var(--primary)]">JKR</div>
@@ -541,41 +524,26 @@ Theme styles (Flower District
                     </a>
                 </div>
 
-                <!-- Center: Navigation Links (Desktop) -->
-                <nav class="hidden lg:flex items-center gap-7">
-                    <a href="{% url 'core:home' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Home</a>
-                    <a href="{% url 'products:brand_list' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Brands</a>
-                    <a href="{% url 'products:collection_list' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Collections</a>
-                    <a href="{% url 'products:product_list' %}?on_sale=1" class="text-[11px] font-bold uppercase tracking-widest text-red-600 hover:text-red-700 transition-colors">Offers</a>
-                    <a href="{% url 'blog:post_list' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Blog</a>
-                    <a href="{% url 'core:about_us' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">About</a>
-                    <a href="{% url 'contact:contact' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Contact</a>
-                </nav>
-
-                <!-- Right: Search Bar, Locale, Account, Cart (Desktop) -->
-                <div class="hidden lg:flex items-center gap-6">
-                    
-                    <!-- Visible Search Bar -->
-                    <form action="{% url 'products:product_list' %}" method="GET" class="relative w-64 lg:w-72">
-                        <input type="text" name="q" placeholder="Search products..."
-                            class="h-9.5 w-full pl-4 pr-10 bg-gray-50 border border-gray-200 rounded-full text-xs text-[var(--text-primary)] placeholder-gray-400 focus:outline-none focus:border-[var(--primary)] focus:bg-white focus:shadow-[0_0_0_3px_rgba(17,64,132,0.08)] transition-all">
-                        <button type="submit" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[var(--primary)] transition-colors" style="background:none; border:none; padding:0;">
-                            <i class="fas fa-search text-xs"></i>
+                <!-- Center: Large Search Bar -->
+                <div class="hidden lg:block flex-grow max-w-lg mx-auto">
+                    <form action="{% url 'products:product_list' %}" method="GET" class="relative">
+                        <input type="text" name="q" placeholder="What are you looking for?"
+                            class="h-11 w-full pl-4 pr-12 bg-white border border-gray-300 rounded text-sm text-[var(--text-primary)] placeholder-gray-400 focus:outline-none focus:border-[var(--primary)] transition-all">
+                        <button type="submit" class="absolute right-0 top-0 h-11 w-12 flex items-center justify-center text-gray-400 hover:text-[var(--primary)] transition-colors" style="background:none; border:none; padding:0;">
+                            <i class="fas fa-search text-base"></i>
                         </button>
                     </form>
+                </div>
 
-                    <!-- Locale Switch -->
-                    <div class="flex items-center gap-1.5 text-xs">
-                        <a href="#" id="lang-en" class="hover:text-[var(--primary)] transition-colors font-bold text-[var(--text-primary)]">EN</a>
-                        <span class="text-gray-300">|</span>
-                        <a href="#" id="lang-ar" class="hover:text-[var(--primary)] transition-colors text-gray-400">AR</a>
-                    </div>
-
+                <!-- Right: Vertical Icon Buttons (Desktop) -->
+                <div class="hidden lg:flex items-center gap-8 text-gray-700">
+                    
                     <!-- User Account -->
                     {% if design_settings.show_header_account %}
                     <div class="group relative">
-                        <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}" class="text-gray-700 hover:text-[var(--primary)] transition-colors block py-1" aria-label="Account">
-                            <i class="far fa-user text-lg"></i>
+                        <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center block py-1" aria-label="Account">
+                            <i class="far fa-user text-xl"></i>
+                            <span class="text-[10px] font-bold tracking-wide uppercase mt-1">Account</span>
                         </a>
                         <div class="absolute right-1/2 translate-x-1/2 top-full pt-3 hidden group-hover:block z-50">
                             <div class="w-44 bg-white border border-[var(--border)] shadow-[var(--shadow-md)] rounded-md py-1">
@@ -597,27 +565,39 @@ Theme styles (Flower District
 
                     <!-- Wishlist -->
                     {% if design_settings.show_header_wishlist %}
-                    <a href="{% url 'products:wishlist' %}" class="relative hover:text-[var(--primary)] transition-colors text-gray-700 block py-1" aria-label="Wishlist">
-                        <i class="far fa-heart text-lg"></i>
-                        {% if wishlist_count %}
-                        <span class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm">
-                            {{ wishlist_count }}
-                        </span>
-                        {% endif %}
+                    <a href="{% url 'products:wishlist' %}" class="relative flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center text-gray-700 block py-1" aria-label="Wishlist">
+                        <div class="relative">
+                            <i class="far fa-heart text-xl"></i>
+                            {% if wishlist_count %}
+                            <span class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm">
+                                {{ wishlist_count }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <span class="text-[10px] font-bold tracking-wide uppercase mt-1">Wishlist</span>
                     </a>
                     {% endif %}
 
                     <!-- Shopping Cart -->
                     {% if design_settings.show_header_cart %}
-                    <a href="{% url 'orders:enquiry_cart' %}" class="relative hover:text-[var(--primary)] transition-colors text-gray-700 block py-1" aria-label="Cart">
-                        <i class="fa-solid fa-cart-shopping text-lg"></i>
-                        {% if cart_count %}
-                        <span class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm">
-                            {{ cart_count }}
-                        </span>
-                        {% endif %}
+                    <a href="{% url 'orders:enquiry_cart' %}" class="relative flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center text-gray-700 block py-1" aria-label="Cart">
+                        <div class="relative">
+                            <i class="fa-solid fa-cart-shopping text-xl"></i>
+                            {% if cart_count %}
+                            <span class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm">
+                                {{ cart_count }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <span class="text-[10px] font-bold tracking-wide uppercase mt-1">Shopping</span>
                     </a>
                     {% endif %}
+
+                    <!-- Store Locations -->
+                    <a href="{% url 'core:store_locations' %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center text-gray-700 block py-1" aria-label="Store Locations">
+                        <i class="fa-solid fa-location-dot text-xl"></i>
+                        <span class="text-[10px] font-bold tracking-wide uppercase mt-1">Store Locations</span>
+                    </a>
                 </div>
 
                 <!-- Mobile Header Utilities -->
@@ -638,6 +618,21 @@ Theme styles (Flower District
                     </button>
                 </div>
 
+            </div>
+        </div>
+
+        <!-- Tier 3A: Desktop Navigation Menu -->
+        <div class="border-b border-[var(--border-light)] bg-white hidden lg:block py-3">
+            <div class="container flex justify-center">
+                <nav class="flex items-center gap-9">
+                    <a href="{% url 'core:home' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Home</a>
+                    <a href="{% url 'products:brand_list' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Brands</a>
+                    <a href="{% url 'products:collection_list' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Collections</a>
+                    <a href="{% url 'products:product_list' %}?on_sale=1" class="text-[11px] font-bold uppercase tracking-widest text-red-600 hover:text-red-700 transition-colors">Offers</a>
+                    <a href="{% url 'blog:post_list' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Blog</a>
+                    <a href="{% url 'core:about_us' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">About</a>
+                    <a href="{% url 'contact:contact' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Contact</a>
+                </nav>
             </div>
         </div>
 
@@ -836,7 +831,7 @@ Theme styles (Flower District
     </header>
 
     <!-- Main Content -->
-    <main class="min-h-[70vh] pt-[148px]">
+    <main class="min-h-[70vh] pt-[205px]">
         {% block content %}{% endblock %}
     </main>
 
