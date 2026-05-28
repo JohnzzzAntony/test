@@ -71,25 +71,25 @@
     <div class="text-center mb-12">
       <span class="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--primary)] mb-2 block">Our Categories</span>
       <h2 class="text-3xl lg:text-4xl font-light text-gray-900 tracking-tight" style="font-family:'Cormorant Garamond', serif;">
-        Shop by <span class="font-bold italic">Department</span>
+        Shop by <span class="font-bold italic">Categories</span>
       </h2>
       <div class="w-12 h-0.5 bg-[var(--primary)] mx-auto mt-4 opacity-30"></div>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
       {% for cat in shop_by_categories %}
       <a href="{{ cat.get_absolute_url }}" class="group block text-center">
-        <div class="relative overflow-hidden bg-gray-50 border border-gray-100 rounded-2xl aspect-square flex items-center justify-center p-6 mb-4 transition-all duration-300 group-hover:bg-white group-hover:border-[var(--primary)] group-hover:shadow-[0_12px_24px_rgba(17,64,132,0.06)] group-hover:-translate-y-1">
+        <div class="relative overflow-hidden bg-gray-50 border border-gray-100 rounded-xl aspect-square flex items-center justify-center mb-3 transition-all duration-300 group-hover:bg-white group-hover:border-[var(--primary)] group-hover:shadow-[0_12px_24px_rgba(17,64,132,0.06)] group-hover:-translate-y-1">
           {% if cat.get_image_url %}
-            <img src="{{ cat.get_image_url }}" alt="{{ cat.name }}" class="max-w-[75%] max-h-[75%] object-contain transition-transform duration-500 group-hover:scale-105">
+            <img src="{{ cat.get_image_url }}" alt="{{ cat.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
           {% else %}
             <!-- Fallback Icon / SVG -->
-            <div class="w-12 h-12 rounded-full bg-[var(--primary)]/5 flex items-center justify-center text-[var(--primary)] transition-transform duration-500 group-hover:scale-110">
-              <i class="fa-solid fa-stethoscope text-xl"></i>
+            <div class="w-10 h-10 rounded-full bg-[var(--primary)]/5 flex items-center justify-center text-[var(--primary)] transition-transform duration-500 group-hover:scale-110">
+              <i class="fa-solid fa-stethoscope text-base"></i>
             </div>
           {% endif %}
         </div>
-        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-700 group-hover:text-[var(--primary)] transition-colors line-clamp-1 px-1">
+        <h3 class="text-[10px] font-bold uppercase tracking-wider text-gray-600 group-hover:text-[var(--primary)] transition-colors line-clamp-1 px-1">
           {{ cat.name }}
         </h3>
       </a>
