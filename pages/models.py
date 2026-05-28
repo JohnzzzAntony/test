@@ -484,6 +484,19 @@ class HomepageSettings(models.Model):
         choices=((True, 'Show'), (False, 'Hide'))
     )
 
+    exclusive_products = models.ManyToManyField(
+        'products.Product',
+        blank=True,
+        related_name='homepage_exclusive_settings',
+        help_text="Select products to manually showcase in the Exclusive Products / Latest Arrivals section."
+    )
+    onsale_products = models.ManyToManyField(
+        'products.Product',
+        blank=True,
+        related_name='homepage_onsale_settings',
+        help_text="Select products to manually showcase in the On Sale Now section."
+    )
+
     class Meta:
         verbose_name = "Homepage Settings"
         verbose_name_plural = "Homepage Settings"

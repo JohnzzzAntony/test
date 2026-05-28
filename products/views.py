@@ -117,6 +117,14 @@ def product_list(request):
     ).annotate(
         effective_price=Coalesce('sale_price', 'regular_price')
     ).distinct()
+
+    # Filter by active offers if on_sale=1 is passed
+    on_sale = request.GET.get('on_sale')
+    if on_sale == '1':
+        products = products.filter(
+            Q(offers__start_date__lte=now, offers__end_date__gte=now) |
+            Q(sale_price__isnull=False, sale_price__lt=models.F('regular_price'))
+        ).distinct()
     
     # Calculate global price bounds for the filter UI
     price_bounds = products.aggregate(

@@ -34,7 +34,7 @@ def home(request):
     sliders = HeroSlider.objects.filter(is_active=True).order_by('order')
 
     # Promo Banners / Promo Sections from admin (sliders app)
-    promo_sections = PromoBanner.objects.filter(is_active=True).prefetch_related('items').order_by('homepage_order')
+    promo_sections = list(PromoBanner.objects.filter(is_active=True).prefetch_related('items').order_by('homepage_order'))
 
     # Categories for homepage - top-level only (no parent)
     categories = Category.objects.filter(parent__isnull=True, is_active=True).order_by('homepage_order', 'name')[:12]
@@ -76,21 +76,27 @@ def home(request):
     private_clients = Client.objects.filter(category='Private', is_active=True).order_by('order')
     social_posts = SocialPost.objects.all().order_by('order')[:6]
     
-    # Optimized latest_products (fallback)
-    latest_products = Product.objects.filter(
-        quantity__gt=0,
-        is_active=True
-    ).select_related('category', 'brand').prefetch_related('offers', 'images').order_by('-id')[:8]
+    # Optimized latest_products (fallback or manual selection)
+    if hp_settings.exclusive_products.exists():
+        latest_products = list(hp_settings.exclusive_products.filter(is_active=True).select_related('category', 'brand').prefetch_related('offers', 'images'))
+    else:
+        latest_products = list(Product.objects.filter(
+            quantity__gt=0,
+            is_active=True
+        ).select_related('category', 'brand').prefetch_related('offers', 'images').order_by('-id')[:8])
 
-    # Fetch Products with active offers (either via Offer model or manual sale_price)
+    # Fetch Products with active offers (either via Offer model or manual sale_price, or manual selection)
     now = timezone.now()
-    active_offers_products = Product.objects.filter(
-        is_active=True,
-        quantity__gt=0,
-    ).filter(
-        models.Q(offers__start_date__lte=now, offers__end_date__gte=now) |
-        models.Q(sale_price__isnull=False, sale_price__lt=models.F('regular_price'))
-    ).distinct().select_related('category', 'brand').prefetch_related('offers', 'images')
+    if hp_settings.onsale_products.exists():
+        active_offers_products = list(hp_settings.onsale_products.filter(is_active=True).select_related('category', 'brand').prefetch_related('offers', 'images'))
+    else:
+        active_offers_products = list(Product.objects.filter(
+            is_active=True,
+            quantity__gt=0,
+        ).filter(
+            models.Q(offers__start_date__lte=now, offers__end_date__gte=now) |
+            models.Q(sale_price__isnull=False, sale_price__lt=models.F('regular_price'))
+        ).distinct().select_related('category', 'brand').prefetch_related('offers', 'images'))
 
     # Featured Products - Only products explicitly marked as featured via admin
     featured_products = Product.objects.filter(

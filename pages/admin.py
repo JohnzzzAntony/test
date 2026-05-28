@@ -531,12 +531,13 @@ class HeroSlideAdmin(admin.ModelAdmin):
 
 # ── Homepage Settings ────────────────────────────────────────────────────────
 
-# @admin.register(HomepageSettings)
+@admin.register(HomepageSettings)
 class HomepageSettingsAdmin(admin.ModelAdmin):
     """
     Singleton admin — only one record is allowed.
     The admin hides the Add button when a record already exists.
     """
+    filter_horizontal = ('exclusive_products', 'onsale_products')
 
     fieldsets = (
         ('📢 Announcement Bar', {
@@ -559,6 +560,10 @@ class HomepageSettingsAdmin(admin.ModelAdmin):
         ('🏷️ Hero — Floating Tag', {
             'fields': ('show_hero_tag', 'hero_tag_label', 'hero_tag_value'),
             'description': 'The small glass card overlaid on the hero image.',
+        }),
+        ('🎯 Custom Homepage Products', {
+            'fields': ('exclusive_products', 'onsale_products'),
+            'description': 'Choose specific products to manually display in the Exclusive Products / Latest Arrivals and On Sale Now sections.',
         }),
         ('📋 Section Labels', {
             'fields': (

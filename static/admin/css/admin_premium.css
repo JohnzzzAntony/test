@@ -187,3 +187,9 @@ form[method="post"] > table,
 
 /* Breadcrumbs in preview */
 .breadcrumb { background: transparent !important; }
+
+/* Enable horizontal scrolling on the change list tables in Django Admin */
+#changelist .results, #changelist-form .results, .change-list .results {
+    overflow-x: auto !important;
+    width: 100% !important;
+}

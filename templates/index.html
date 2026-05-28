@@ -86,14 +86,12 @@ document.addEventListener('DOMContentLoaded', function () {
 {% endif %}
 
 
-{# ── 3. PROMO BANNER SECTIONS (Dynamic Promo Sections from Admin) ───── #}
-{% for section in promo_sections %}
-    {% include 'partials/_banner_section.html' with section=section %}
-{% empty %}
+{# ── 3. PROMO BANNER DEFAULT FALLBACK (If no sections configured) ───── #}
+{% if not promo_sections %}
     {% if design_settings.show_hp_promo_banners != False %}
         {% include 'partials/_fd_promo_grid.html' %}
     {% endif %}
-{% endfor %}
+{% endif %}
 
 
 {# ── 4. LATEST PRODUCTS ─────────────────────────────────────── #}
@@ -101,9 +99,17 @@ document.addEventListener('DOMContentLoaded', function () {
 {% include 'partials/_product_slider.html' %}
 {% endwith %}
 
+{% if promo_sections.0 %}
+    {% include 'partials/_banner_section.html' with section=promo_sections.0 %}
+{% endif %}
+
 
 {# ── 5. COLLECTIONS TABS ────────────────────────────────────── #}
 {% include 'partials/_collections_tabs.html' %}
+
+{% if promo_sections.1 %}
+    {% include 'partials/_banner_section.html' with section=promo_sections.1 %}
+{% endif %}
 
 
 {# ── 6. BEST SELLERS / OFFERS ───────────────────────────────── #}
@@ -117,6 +123,10 @@ document.addEventListener('DOMContentLoaded', function () {
 {% endwith %}
 {% endif %}
 
+{% if promo_sections.2 %}
+    {% include 'partials/_banner_section.html' with section=promo_sections.2 %}
+{% endif %}
+
 
 {# ── 7. WHY US STRIP ────────────────────────────────────────── #}
 {% include 'partials/_why_us.html' %}
@@ -127,13 +137,25 @@ document.addEventListener('DOMContentLoaded', function () {
 {% include 'partials/_testimonials_carousel.html' %}
 {% endif %}
 
+{% if promo_sections.3 %}
+    {% include 'partials/_banner_section.html' with section=promo_sections.3 %}
+{% endif %}
+
 
 {# ── 9. CLIENTS AUTOSLIDER ──────────────────────────────────── #}
 {% include 'partials/_clients_strip.html' %}
 
+{% if promo_sections.4 %}
+    {% include 'partials/_banner_section.html' with section=promo_sections.4 %}
+{% endif %}
+
 
 {# ── 10. BLOG GRID ───────────────────────────────────────────── #}
 {% include 'partials/_blog_grid.html' %}
+
+{% if promo_sections.5 %}
+    {% include 'partials/_banner_section.html' with section=promo_sections.5 %}
+{% endif %}
 
 
 {# ── 10. NEWSLETTER ─────────────────────────────────────────── #}

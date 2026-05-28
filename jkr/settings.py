@@ -362,7 +362,7 @@ STORAGES = {
 }
 
 # Backward-compatibility shim for django-cloudinary-storage 0.3.0
-STATICFILES_STORAGE = STATIC_STORAGE_BACKEND
+# STATICFILES_STORAGE = STATIC_STORAGE_BACKEND
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

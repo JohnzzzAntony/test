@@ -158,9 +158,9 @@ Open Graph / Social #}
             --primary-hover: #0d3a6e;
             --accent: {{ design_settings.accent_color|default:"#0081ff" }};
             --accent-light: #4da8ff;
-            --surface: {{ design_settings.surface_bg_color|default:"#ffffff" }};
-            --surface-light: #f8f9fa;
-            --card: {{ design_settings.card_bg_color|default:"#ffffff" }};
+            --surface: #ffffff;
+            --surface-light: #ffffff;
+            --card: #ffffff;
             --border: {{ design_settings.border_color|default:"#e5e5e5" }};
             --border-custom: {{ design_settings.border_color|default:"#e5e5e5" }};
             --border-light: #f0f0f0;
@@ -229,6 +229,10 @@ Open Graph / Social #}
 
         html {
             overflow-x: hidden;
+        }
+
+        body, html, main, section, .section, .container, .page-wrapper, .bg-gray-50, .bg-gray-100, .bg-light, .category-marquee-track, .fd-nav-tier--cats {
+            background-color: #ffffff !important;
         }
 
         body {
@@ -501,9 +505,9 @@ Theme styles (Flower District
                 </div>
                 <div class="flex items-center gap-5 flex-shrink-0">
                     <div class="flex items-center gap-2">
-                        <a href="#" class="hover:text-[var(--primary)] transition-colors text-[var(--text-primary)] font-bold">En</a>
+                        <a href="#" id="lang-en" class="hover:text-[var(--primary)] transition-colors text-[var(--text-primary)] font-bold">En</a>
                         <span class="text-[var(--border-hover)]">|</span>
-                        <a href="#" class="hover:text-[var(--primary)] transition-colors">Ar</a>
+                        <a href="#" id="lang-ar" class="hover:text-[var(--primary)] transition-colors">Ar</a>
                     </div>
                     <div class="flex items-center gap-4 pl-5 border-l border-gray-200">
                         {% if site_settings.instagram %}
@@ -701,9 +705,6 @@ Theme styles (Flower District
                             <a href="{{ cat.get_absolute_url }}"
                                class="flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-wider text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-1 border-b-2 border-transparent hover:border-[var(--primary)] whitespace-nowrap">
                                 {{ cat.name }}
-                                {% if cat.active_subcategories %}
-                                <i class="fas fa-chevron-down text-[7px] text-gray-400 group-hover/nav-item:rotate-180 transition-transform" aria-hidden="true"></i>
-                                {% endif %}
                             </a>
 
                             {% if cat.active_subcategories %}
@@ -749,9 +750,6 @@ Theme styles (Flower District
                             <a href="{{ cat.get_absolute_url }}"
                                class="flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-wider text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-1 border-b-2 border-transparent hover:border-[var(--primary)] whitespace-nowrap">
                                 {{ cat.name }}
-                                {% if cat.active_subcategories %}
-                                <i class="fas fa-chevron-down text-[7px] text-gray-400 group-hover/nav-item:rotate-180 transition-transform" aria-hidden="true"></i>
-                                {% endif %}
                             </a>
 
                             {% if cat.active_subcategories %}
@@ -1279,6 +1277,90 @@ Theme styles (Flower District
         });
     </script>
 
+    <!-- Google Translate hidden container -->
+    <div id="google_translate_element" style="display:none; position:absolute; visibility:hidden;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ar',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const enBtn = document.getElementById("lang-en");
+            const arBtn = document.getElementById("lang-ar");
+            
+            function setLanguage(lang, triggerTranslate = true) {
+                localStorage.setItem("selected_lang", lang);
+                if (lang === "ar") {
+                    document.documentElement.setAttribute("dir", "rtl");
+                    document.documentElement.setAttribute("lang", "ar");
+                    if (enBtn) {
+                        enBtn.classList.remove("text-[var(--text-primary)]", "font-bold");
+                    }
+                    if (arBtn) {
+                        arBtn.classList.add("text-[var(--text-primary)]", "font-bold");
+                    }
+                    if (triggerTranslate) {
+                        translateTo("ar");
+                    }
+                } else {
+                    document.documentElement.setAttribute("dir", "ltr");
+                    document.documentElement.setAttribute("lang", "en-US");
+                    if (arBtn) {
+                        arBtn.classList.remove("text-[var(--text-primary)]", "font-bold");
+                    }
+                    if (enBtn) {
+                        enBtn.classList.add("text-[var(--text-primary)]", "font-bold");
+                    }
+                    if (triggerTranslate) {
+                        translateTo("en");
+                    }
+                }
+            }
+
+            function translateTo(langCode) {
+                const select = document.querySelector("select.goog-te-combo");
+                if (select) {
+                    select.value = langCode;
+                    select.dispatchEvent(new Event('change'));
+                } else {
+                    // Retry once Google translate loads
+                    setTimeout(() => {
+                        const selectRetry = document.querySelector("select.goog-te-combo");
+                        if (selectRetry) {
+                            selectRetry.value = langCode;
+                            selectRetry.dispatchEvent(new Event('change'));
+                        }
+                    }, 1000);
+                }
+            }
+
+            if (enBtn && arBtn) {
+                enBtn.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    setLanguage("en");
+                });
+                arBtn.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    setLanguage("ar");
+                });
+                
+                // Load initial language state on load
+                const savedLang = localStorage.getItem("selected_lang") || "en";
+                // Let google translate initialize before forcing translation
+                setTimeout(() => {
+                    setLanguage(savedLang, true);
+                }, 1200);
+            }
+        });
+    </script>
 </body>
 
 </html>
