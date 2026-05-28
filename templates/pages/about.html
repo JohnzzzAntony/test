@@ -92,45 +92,41 @@
 {% block content %}
 <div class="about-page">
 
-  {% comment %}
-══════════════════════════════════════
-     PAGE HERO
-  ══════════════════════════════════════
-{% endcomment %}
   <!-- Page Title Section -->
   <div class="page-title-section py-8 mb-8 text-center border-b border-gray-100 container">
       <h1 class="text-3xl font-bold uppercase tracking-wider text-[var(--primary)]">
-          About {{ site_settings.site_name|default:"JKR International" }}
+          {{ about_us.legacy_title|default:"Our Legacy" }}
       </h1>
       <p class="text-sm text-gray-500 mt-2 max-w-xl mx-auto">
-          Delivering world-class medical technology and precision equipment to healthcare institutions worldwide.
+          {{ about_us.legacy_subtitle|default:"Delivering world-class medical technology and precision equipment to healthcare institutions worldwide." }}
       </p>
   </div>
 
-  {% comment %}
-══════════════════════════════════════
-     STORY BLOCK
-  ══════════════════════════════════════
-{% endcomment %}
   <section class="section">
     <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
       <div class="about-block" style="padding:80px 0;">
         <div class="about-block-image">
-          <div style="width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#114084 0%,#1a5cb8 100%);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-2xl);overflow:hidden;">
-            <i class="fas fa-store text-8xl text-white opacity-30"></i>
-          </div>
+          {% if about_us.get_image_url %}
+            <img src="{{ about_us.get_image_url }}" alt="{{ about_us.image_alt|default:'JKR Story Image' }}" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius-2xl);">
+          {% else %}
+            <div style="width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#114084 0%,#1a5cb8 100%);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-2xl);overflow:hidden;">
+              <i class="fas fa-store text-8xl text-white opacity-30"></i>
+            </div>
+          {% endif %}
         </div>
         <div class="about-block-content">
-          <span class="about-block-eyebrow">Our Philosophy</span>
+          <span class="about-block-eyebrow">{{ about_us.title|default:"Our Philosophy" }}</span>
           <h2 class="about-block-title">
-            Precision in Every <em>Device</em>
+            {{ about_us.heading|safe|default:"Precision in Every <em>Device</em>" }}
           </h2>
-          <p class="about-block-text">
-            JKR International has been a trusted partner to hospitals, clinics, and healthcare systems for over 25 years. We deliver integrated medical technology solutions that enhance diagnostic accuracy, surgical outcomes, and operational efficiency across the globe.
-          </p>
-          <p class="about-block-text">
-            Every system we supply is engineered to the highest regulatory standards. As a leading provider of advanced medical equipment in the region, we understand that every clinical environment is unique — our goal is to deliver solutions that truly advance patient care.
-          </p>
+          <div class="about-block-text prose max-w-none text-slate-600">
+            {% if about_us.content %}
+              {{ about_us.content|safe }}
+            {% else %}
+              <p>JKR International has been a trusted partner to hospitals, clinics, and healthcare systems for over 25 years. We deliver integrated medical technology solutions that enhance diagnostic accuracy, surgical outcomes, and operational efficiency across the globe.</p>
+              <p>Every system we supply is engineered to the highest regulatory standards. As a leading provider of advanced medical equipment in the region, we understand that every clinical environment is unique — our goal is to deliver solutions that truly advance patient care.</p>
+            {% endif %}
+          </div>
           <div style="margin-top:32px;display:flex;gap:16px;flex-wrap:wrap;">
             <a href="{% url 'products:product_list' %}" class="btn btn-primary" style="background:var(--primary);border-color:var(--primary);border-radius:9999px;padding:14px 32px;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:white;">
                Explore Solutions
@@ -144,14 +140,15 @@
     </div>
   </section>
 
-  {% comment %}
-══════════════════════════════════════
-     STATS / VALUES
-  ══════════════════════════════════════
-{% endcomment %}
   <section class="section" style="background:white;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);">
     <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;">
+        {% for counter in counters %}
+        <div class="stat-card">
+          <div class="stat-value">{{ counter.value }}</div>
+          <div class="stat-label">{{ counter.title }}</div>
+        </div>
+        {% empty %}
         <div class="stat-card">
           <div class="stat-value">5+</div>
           <div class="stat-label">Store Locations</div>
@@ -168,15 +165,11 @@
           <div class="stat-value">24/7</div>
           <div class="stat-label">Support</div>
         </div>
+        {% endfor %}
       </div>
     </div>
   </section>
 
-  {% comment %}
-══════════════════════════════════════
-     WHY CHOOSE US FEATURES
-  ══════════════════════════════════════
-{% endcomment %}
   <section class="section">
     <div class="container" style="max-width:1200px;margin:0 auto;padding:0 48px;">
       <div class="section-header">
@@ -184,6 +177,19 @@
         <h2 class="section-title">The JKR <em>Difference</em></h2>
       </div>
       <div class="feature-grid" style="grid-template-columns:repeat(3,1fr);gap:32px;">
+        {% for item in why_us %}
+        <div class="feature-item">
+          <div class="feature-icon">
+            {% if item.icon_svg %}
+              {{ item.icon_svg|safe }}
+            {% else %}
+              <i class="fas fa-cogs"></i>
+            {% endif %}
+          </div>
+          <div class="feature-title">{{ item.title }}</div>
+          <div class="feature-desc">{{ item.description }}</div>
+        </div>
+        {% empty %}
         <div class="feature-item">
           <div class="feature-icon"><i class="fas fa-cogs"></i></div>
           <div class="feature-title">Engineering Excellence</div>
@@ -214,6 +220,7 @@
           <div class="feature-title">24/7 Clinical Support</div>
           <div class="feature-desc">Dedicated engineering and clinical specialists available around the clock.</div>
         </div>
+        {% endfor %}
       </div>
     </div>
   </section>

@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 from .design_models import DesignSettings
 
 class SiteSettings(models.Model):
@@ -43,6 +44,9 @@ class SiteSettings(models.Model):
     linkedin = models.URLField(blank=True)
     twitter = models.URLField(blank=True)
     instagram_handle = models.CharField(max_length=100, default="@demo_intl", blank=True)
+    
+    privacy_policy = RichTextField(blank=True, verbose_name="Privacy Policy Content", help_text="Managed via RichText in Website Settings.")
+    terms_and_conditions = RichTextField(blank=True, verbose_name="Terms and Conditions Content", help_text="Managed via RichText in Website Settings.")
     
     
     

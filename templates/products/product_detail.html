@@ -35,18 +35,8 @@
 {% endblock %}
 
 {% block content %}
-<section class="py-8 lg:py-12 bg-surface">
+<section class="pt-4 pb-8 lg:pt-6 lg:pb-12 bg-surface">
     <div class="container mx-auto px-4 lg:px-6">
-        <!-- Breadcrumb -->
-        <nav class="flex mb-10 text-[11px] font-black uppercase tracking-widest text-slate-400">
-            <a href="{% url 'core:home' %}" class="hover:text-primary transition-colors">Home</a>
-            <span class="mx-3 opacity-30">/</span>
-            {% if product.category %}
-            <a href="{{ product.category.get_absolute_url }}" class="hover:text-primary transition-colors">{{ product.category.name }}</a>
-            <span class="mx-3 opacity-30">/</span>
-            {% endif %}
-            <span class="text-slate-900 truncate max-w-[200px]">{{ product.name }}</span>
-        </nav>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
             <!-- Left: Gallery -->

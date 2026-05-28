@@ -159,11 +159,19 @@ def about_us_view(request):
     mission = MissionVision.objects.filter(section_type='mission').first()
     vision = MissionVision.objects.filter(section_type='vision').first()
     counters = Counter.objects.filter(is_active=True).order_by('order')
+    
+    from pages.models import WhyUsCard
+    from products.models import Category
+    why_us = WhyUsCard.objects.filter(is_active=True).order_by('order')
+    categories = Category.objects.filter(parent__isnull=True, is_active=True).order_by('homepage_order', 'name')[:8]
+    
     return render(request, 'pages/about.html', {
         'about_us': about_us,
         'mission': mission,
         'vision': vision,
-        'counters': counters
+        'counters': counters,
+        'why_us': why_us,
+        'categories': categories,
     })
 
 def services_view(request):
@@ -245,3 +253,11 @@ def newsletter_subscribe(request):
 
     from django.shortcuts import redirect
     return redirect('core:home')
+
+def privacy_policy_view(request):
+    """Privacy Policy Page."""
+    return render(request, 'pages/privacy_policy.html', {})
+
+def terms_conditions_view(request):
+    """Terms and Conditions Page."""
+    return render(request, 'pages/terms_conditions.html', {})

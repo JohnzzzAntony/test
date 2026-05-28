@@ -329,27 +329,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="py-10 bg-surface min-h-screen">
+<div class="pt-4 pb-10 bg-surface min-h-screen">
     <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
-
-        <!-- Breadcrumb -->
-        <nav class="breadcrumb">
-            <a href="{% url 'core:home' %}">Home</a>
-            <span>/</span>
-            {% if current_category %}
-                {% if current_category.parent %}
-                <a href="{{ current_category.parent.get_absolute_url }}">{{ current_category.parent.name }}</a>
-                <span>/</span>
-                {% endif %}
-                <span>{{ current_category.name }}</span>
-            {% elif collection %}
-                <span>{{ collection.name }}</span>
-            {% elif current_brand %}
-                <span>{{ current_brand.name }}</span>
-            {% else %}
-                <span>Shop</span>
-            {% endif %}
-        </nav>
 
         <!-- Page Title Section -->
         <div class="page-title-section py-8 mb-8 text-center border-b border-gray-100">

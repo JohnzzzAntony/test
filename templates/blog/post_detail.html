@@ -36,18 +36,9 @@
 {% endblock %}
 
 {% block content %}
-<section class="py-12 bg-surface min-h-screen">
+<section class="pt-6 pb-12 bg-surface min-h-screen">
     <div class="max-w-screen-xl mx-auto px-6">
         
-        <!-- Premium Navigation -->
-        <nav class="flex mb-12 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
-            <a href="{% url 'core:home' %}" class="hover:text-primary transition-colors">Home</a>
-            <span class="mx-3 opacity-30">/</span>
-            <a href="{% url 'blog:post_list' %}" class="hover:text-primary transition-colors">Journal</a>
-            <span class="mx-3 opacity-30">/</span>
-            <span class="text-slate-900 truncate max-w-[200px]">{{ post.title }}</span>
-        </nav>
-
         <article class="max-w-4xl mx-auto">
             <!-- Header section -->
             <header class="text-center mb-16">

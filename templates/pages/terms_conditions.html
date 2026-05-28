@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta_title %}Terms & Conditions | {{ site_settings.site_name }}{% endblock %}
+{% block meta_description %}Terms and conditions of use for {{ site_settings.site_name }}. Learn about your rights and responsibilities when ordering medical equipment.{% endblock %}
+
+{% block content %}
+<div class="about-page bg-surface min-h-screen">
+
+  <!-- Page Title Section -->
+  <div class="page-title-section py-8 mb-8 text-center border-b border-gray-100 container">
+      <h1 class="text-3xl font-bold uppercase tracking-wider text-[var(--primary)]">Terms & Conditions</h1>
+      <p class="text-sm text-gray-500 mt-2 max-w-xl mx-auto">Please read these terms carefully before accessing or using our services at {{ site_settings.site_name }}.</p>
+  </div>
+
+  <section class="section py-8">
+    <div class="container" style="max-width:900px; margin:0 auto; padding:0 24px;">
+      <div class="bg-white border border-gray-100 p-8 md:p-16 shadow-sm rounded-none">
+        <div class="prose prose-slate max-w-none text-slate-600 leading-relaxed" style="font-size: 15px;">
+          {% if site_settings.terms_and_conditions %}
+            {{ site_settings.terms_and_conditions|safe }}
+          {% else %}
+            <h2>1. Terms of Use</h2>
+            <p>By accessing this website, you agree to be bound by these terms and conditions, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site.</p>
+            
+            <h2>2. Product Inquiries and Orders</h2>
+            <p>All products listed on this website are subject to availability and JKR International reserves the right to limit the quantity of products we supply, or to refuse any order. Prices and technical specifications are subject to change at any time without notice.</p>
+            
+            <h2>3. Delivery and Installation</h2>
+            <p>All medical equipment delivery, installation, and commissioning lead times are estimates and depend on local customs clearance, logistics, and site preparation. Customers are responsible for ensuring the site meets all required environmental and utilities specifications prior to installation.</p>
+            
+            <h2>4. Intellectual Property</h2>
+            <p>The materials contained in this website are protected by applicable copyright and trademark law. You may view and print pages for personal or internal clinical references only. Commercial exploitation of website layouts, images, or logos is strictly prohibited.</p>
+            
+            <h2>5. Disclaimer</h2>
+            <p>The materials on JKR International's website are provided on an 'as is' basis. JKR International makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

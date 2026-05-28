@@ -65,6 +65,10 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             'fields': ('footer_quick_links_title', 'footer_support_title', 'footer_legal_title', 'footer_newsletter_title', 'footer_copyright_text', 'enable_email_notifications', 'enable_sms_notifications', 'enable_whatsapp_notifications'),
             'classes': ('collapse',),
         }),
+        ('Legal & Policies', {
+            'fields': ('privacy_policy', 'terms_and_conditions'),
+            'classes': ('collapse',),
+        }),
         ('Social Links', {
             'fields': ('facebook', 'instagram', 'linkedin', 'twitter', 'instagram_handle'),
             'classes': ('collapse',),
