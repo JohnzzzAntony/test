@@ -7,16 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    {% comment %}
-SEO Meta Tags #}
+    <!-- SEO Meta Tags -->
     <title>{% block meta_title %}{{ site_settings.meta_title|default:site_settings.site_name }}{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}{{ site_settings.meta_description }}{% endblock %}" />
     <meta name="keywords" content="{% block meta_keywords %}{{ site_settings.meta_keywords }}{% endblock %}" />
     <meta name="author" content="JKR International" />
     <meta name="robots" content="{% block robots %}index, follow{% endblock %}">
-
-    {# Tracking & Analytics
-{% endcomment %}
     {% if site_settings.google_analytics_id %}
     <!-- Google Analytics (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ site_settings.google_analytics_id }}"></script>
@@ -54,8 +50,7 @@ SEO Meta Tags #}
     {{ site_settings.schema_markup|safe }}
     {% endif %}
 
-    {% comment %}
-Open Graph / Social #}
+    <!-- Open Graph / Social -->
     <meta property="og:type" content="website">
     <meta property="og:title"
         content="{% block og_title %}{{ site_settings.meta_title|default:site_settings.site_name }}{% endblock %}">
@@ -68,8 +63,7 @@ Open Graph / Social #}
     <!-- Technical SEO -->
     <link rel="canonical" href="{{ request.build_absolute_uri }}" />
 
-    {# JSON-LD Schema
-{% endcomment %}
+    <!-- JSON-LD Schema -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
