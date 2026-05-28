@@ -12,71 +12,56 @@
 
 {# ── 1. HERO SLIDER ─────────────────────────────────────────── #}
 {% if sliders %}
-<section class="hero-section" aria-label="Hero Banner">
-  <div class="swiper hero-swiper">
-    <div class="swiper-wrapper">
-      {% for slide in sliders %}
-      <div class="swiper-slide"
-           style="background-color:{{ slide.background_color|default:'#114084' }};"
-           aria-label="{{ slide.title|default:'Slide' }}">
+{% with slide=sliders.0 %}
+<section class="hero-section" aria-label="Hero Banner" style="position:relative;background-color:{{ slide.background_color|default:'#114084' }};overflow:hidden;min-height:540px;display:flex;align-items:center;justify-content:center;">
+  
+  {% if slide.image or slide.image_url %}
+  <img src="{{ slide.get_image_url }}"
+       alt="{{ slide.title|default:'Hero banner' }}"
+       loading="eager"
+       fetchpriority="high"
+       style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;z-index:1;">
+  {% endif %}
 
-        {% if slide.image or slide.image_url %}
-        <img src="{{ slide.get_image_url }}"
-             alt="{{ slide.title|default:'Hero banner' }}"
-             loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-             fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}">
-        {% endif %}
+  <!-- Gradient Overlay for Contrast -->
+  <div style="position:absolute;inset:0;background:linear-gradient(to right, rgba(15,76,138,0.85) 0%, rgba(15,76,138,0.4) 60%, rgba(26,26,26,0.6) 100%);z-index:2;"></div>
 
-        <div class="hero-content">
-          {% if slide.subtitle %}
-          <span class="hero-badge">{{ slide.subtitle }}</span>
-          {% endif %}
+  <div class="hero-content" style="position:relative;z-index:3;max-width:800px;width:100%;padding:80px 24px;text-align:left;color:#ffffff;margin-left:8%;">
+    {% if slide.subtitle %}
+    <span class="hero-badge" style="display:inline-block;margin-bottom:16px;background:rgba(255,255,255,0.12);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:6px 16px;font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;border-radius:4px;">
+        {{ slide.subtitle }}
+    </span>
+    {% endif %}
 
-          {% if slide.title %}
-          <h1 class="hero-title">{{ slide.title }}</h1>
-          {% endif %}
+    {% if slide.title %}
+    <h1 class="hero-title" style="font-family:'Cormorant Garamond', serif;font-size:clamp(36px, 5.5vw, 64px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;margin-bottom:20px;color:#ffffff;text-transform:capitalize;">
+        {{ slide.title|safe }}
+    </h1>
+    {% endif %}
 
-          {% if slide.description %}
-          <p class="hero-subtitle">{{ slide.description }}</p>
-          {% endif %}
+    {% if slide.description %}
+    <p class="hero-subtitle" style="font-size:clamp(15px, 2vw, 18px);line-height:1.6;color:rgba(255,255,255,0.85);margin-bottom:36px;max-width:600px;">
+        {{ slide.description }}
+    </p>
+    {% endif %}
 
-          <div class="hero-ctas">
-            {% if slide.btn_text and slide.btn_link %}
-            <a href="{{ slide.btn_link }}" class="hero-btn-primary" id="hero-cta-primary-{{ forloop.counter }}">
-              {{ slide.btn_text }}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            {% endif %}
-            {% if slide.btn2_text and slide.btn2_link %}
-            <a href="{{ slide.btn2_link }}" class="hero-btn-secondary" id="hero-cta-secondary-{{ forloop.counter }}">{{ slide.btn2_text }}</a>
-            {% endif %}
-          </div>
-        </div>
-
-      </div>
-      {% endfor %}
+    <div class="hero-ctas" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      {% if slide.btn_text and slide.btn_link %}
+      <a href="{{ slide.btn_link }}" class="hero-btn-primary" id="hero-cta-primary" style="display:inline-flex;align-items:center;gap:8px;padding:14px 30px;background:#114084;color:#ffffff;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:4px;transition:all 0.2s;box-shadow:0 4px 12px rgba(17,64,132,0.25);">
+        {{ slide.btn_text }}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      {% endif %}
+      {% if slide.btn2_text and slide.btn2_link %}
+      <a href="{{ slide.btn2_link }}" class="hero-btn-secondary" id="hero-cta-secondary" style="display:inline-flex;align-items:center;padding:14px 30px;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.3);color:#ffffff;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:4px;transition:all 0.2s;">
+        {{ slide.btn2_text }}
+      </a>
+      {% endif %}
     </div>
-    <div class="swiper-pagination" aria-hidden="true"></div>
-    <div class="swiper-button-next" aria-label="Next slide"></div>
-    <div class="swiper-button-prev" aria-label="Previous slide"></div>
   </div>
+  
 </section>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  if (typeof Swiper !== 'undefined') {
-    new Swiper('.hero-swiper', {
-      loop: true,
-      speed: 900,
-      autoplay: { delay: 5500, disableOnInteraction: false, pauseOnMouseEnter: true },
-      pagination: { el: '.hero-swiper .swiper-pagination', clickable: true },
-      navigation: { nextEl: '.hero-swiper .swiper-button-next', prevEl: '.hero-swiper .swiper-button-prev' },
-      effect: 'fade',
-      fadeEffect: { crossFade: true },
-      a11y: { prevSlideMessage: 'Previous slide', nextSlideMessage: 'Next slide' },
-    });
-  }
-});
-</script>
+{% endwith %}
 {% endif %}
 
 

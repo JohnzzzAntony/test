@@ -71,7 +71,10 @@ def home(request):
     partners = Partner.objects.filter(is_active=True).order_by('order')
     gallery = GalleryItem.objects.filter(is_active=True).order_by('order')[:8]
     
-    testimonials = Testimonial.objects.filter(is_active=True).order_by('order')
+    testimonials = list(Testimonial.objects.filter(is_active=True).order_by('order'))
+    for t in testimonials:
+        if t.content:
+            t.content = t.content.replace("MediSupply Pro", "JKR International").replace("Customores", "Customers")
     public_clients = Client.objects.filter(category='Public', is_active=True).order_by('order')
     private_clients = Client.objects.filter(category='Private', is_active=True).order_by('order')
     social_posts = SocialPost.objects.all().order_by('order')[:6]
@@ -116,6 +119,15 @@ def home(request):
         for p in product_list:
             p.price_info = p.get_best_price_info(prefetched_offers=all_active_offers)
             
+    # Ensure no duplicates between the lists and limit them to max 5 items (one row)
+    latest_products = list(latest_products)[:5]
+    latest_ids = {p.id for p in latest_products}
+    
+    featured_products = [p for p in featured_products if p.id not in latest_ids][:5]
+    featured_ids = {p.id for p in featured_products}
+    
+    active_offers_products = [p for p in active_offers_products if p.id not in latest_ids and p.id not in featured_ids][:5]
+
     attach_price_info(latest_products)
     attach_price_info(featured_products)
     attach_price_info(active_offers_products)

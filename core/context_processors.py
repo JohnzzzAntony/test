@@ -49,6 +49,13 @@ def site_settings(request):
             ).order_by('id'))
 
             design, _ = DesignSettings.objects.get_or_create(id=1)
+            # Dynamic replacements to clean up branding and typos in settings
+            for attr in ['hp_testimonials_title', 'hp_testimonials_subtitle', 'hp_hero_title', 'hp_hero_subtitle']:
+                val = getattr(design, attr, "")
+                if val:
+                    new_val = val.replace("Customores", "Customers").replace("MediSupply Pro", "JKR International")
+                    if new_val != val:
+                        setattr(design, attr, new_val)
             latest_posts = list(Post.objects.filter(is_published=True).order_by('-created_at')[:3])
 
             # Nav-level querysets for header mega-menu (all templates)

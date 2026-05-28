@@ -521,175 +521,120 @@ Theme styles (Flower District
                         <a href="#" class="hover:text-[var(--primary)] transition-colors text-gray-500" aria-label="TikTok"><i class="fab fa-tiktok text-sm"></i></a>
                     </div>
                 </div>
-            </div>
-        </div>
+              <!-- Premium Main Header (Logo, Navigation, Search, Cart, Locale) -->
+        <div class="border-b border-[var(--border-light)] bg-white sticky top-0 z-50">
+            <div class="container py-3.5 flex items-center justify-between gap-6">
+                
+                <!-- Left: Logo -->
+                <div class="flex-shrink-0">
+                    <a href="{% url 'core:home' %}" class="block group">
+                        {% if site_settings.logo %}
+                        <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="logo-img h-8 lg:h-9 w-auto object-contain transition-transform group-hover:scale-105 brightness-0" style="filter: brightness(0);">
+                        {% else %}
+                        <div class="logo-box border border-[var(--primary)] px-3 py-1 text-center relative inline-block transition-transform group-hover:scale-105">
+                            <div class="text-[13px] font-black tracking-[0.18em] uppercase leading-none text-[var(--primary)]">JKR</div>
+                            <div class="text-[7px] font-bold tracking-[0.25em] text-[var(--text-secondary)] mt-0.5">INTERNATIONAL</div>
+                        </div>
+                        {% endif %}
+                    </a>
+                </div>
 
-        <!-- Tier 2: Main Branding, Search & Utilities -->
-        <div class="container py-4 flex items-center justify-between gap-8 lg:gap-12">
-            <!-- Left: Logo -->
-            <div class="flex-shrink-0">
-                <a href="{% url 'core:home' %}" class="block group">
-                    {% if site_settings.logo %}
-                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="logo-img h-10 lg:h-12 w-auto object-contain transition-transform group-hover:scale-105 brightness-0" style="filter: brightness(0);">
-                    {% else %}
-                    <div class="logo-box border-2 border-[var(--primary)] px-4 py-1.5 text-center relative inline-block transition-transform group-hover:scale-105">
-                        <div class="text-[15px] font-black tracking-[0.2em] uppercase leading-none text-[var(--primary)]">JKR</div>
-                        <div class="text-[8px] font-bold tracking-[0.3em] text-[var(--text-secondary)] mt-1">INTERNATIONAL</div>
+                <!-- Center: Navigation Links (Desktop) -->
+                <nav class="hidden lg:flex items-center gap-7">
+                    <a href="{% url 'core:home' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Home</a>
+                    <a href="{% url 'products:brand_list' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Brands</a>
+                    <a href="{% url 'products:collection_list' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Collections</a>
+                    <a href="{% url 'products:product_list' %}?on_sale=1" class="text-[11px] font-bold uppercase tracking-widest text-red-600 hover:text-red-700 transition-colors">Offers</a>
+                    <a href="{% url 'blog:post_list' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Blog</a>
+                    <a href="{% url 'core:about_us' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">About</a>
+                    <a href="{% url 'contact:contact' %}" class="text-[11px] font-bold uppercase tracking-widest text-gray-700 hover:text-[var(--primary)] transition-colors">Contact</a>
+                </nav>
+
+                <!-- Right: Search Bar, Locale, Account, Cart (Desktop) -->
+                <div class="hidden lg:flex items-center gap-6">
+                    
+                    <!-- Visible Search Bar -->
+                    <form action="{% url 'products:product_list' %}" method="GET" class="relative">
+                        <input type="text" name="q" placeholder="Search product..."
+                            class="h-8.5 w-40 pl-3 pr-8 bg-gray-50 border border-gray-300 rounded text-xs text-[var(--text-primary)] placeholder-gray-400 focus:outline-none focus:border-[var(--primary)] focus:bg-white transition-all">
+                        <button type="submit" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[var(--primary)] transition-colors" style="background:none; border:none; padding:0;">
+                            <i class="fas fa-search text-xs"></i>
+                        </button>
+                    </form>
+
+                    <!-- Locale Switch -->
+                    <div class="flex items-center gap-1.5 text-xs">
+                        <a href="#" id="lang-en" class="hover:text-[var(--primary)] transition-colors font-bold text-[var(--text-primary)]">EN</a>
+                        <span class="text-gray-300">|</span>
+                        <a href="#" id="lang-ar" class="hover:text-[var(--primary)] transition-colors text-gray-400">AR</a>
+                    </div>
+
+                    <!-- User Account -->
+                    {% if design_settings.show_header_account %}
+                    <div class="group relative">
+                        <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}" class="text-gray-700 hover:text-[var(--primary)] transition-colors block py-1" aria-label="Account">
+                            <i class="far fa-user text-lg"></i>
+                        </a>
+                        <div class="absolute right-1/2 translate-x-1/2 top-full pt-3 hidden group-hover:block z-50">
+                            <div class="w-44 bg-white border border-[var(--border)] shadow-[var(--shadow-md)] rounded-md py-1">
+                                {% if user.is_authenticated %}
+                                <div class="px-4 py-2 text-[10px] font-bold text-[var(--text-primary)] truncate border-b border-[var(--border-light)] mb-1">
+                                    Hi, {{ user.username }}
+                                </div>
+                                <a href="{% url 'accounts:profile' %}" class="block px-4 py-1.5 text-xs text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">Profile</a>
+                                <a href="{% url 'accounts:order_history' %}" class="block px-4 py-1.5 text-xs text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">Orders</a>
+                                <a href="{% url 'accounts:logout' %}" class="block px-4 py-1.5 text-xs text-[var(--error)] hover:bg-gray-50 transition-colors">Logout</a>
+                                {% else %}
+                                <a href="{% url 'accounts:login' %}" class="block px-4 py-1.5 text-xs text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">Login</a>
+                                <a href="{% url 'accounts:register' %}" class="block px-4 py-1.5 text-xs text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">Register</a>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                     {% endif %}
-                </a>
-            </div>
 
-            <!-- Center: Search Input (desktop-only) -->
-            <div class="hidden lg:block flex-grow max-w-2xl">
-                <form action="{% url 'products:product_list' %}" method="GET" class="relative group">
-                    <input type="text" name="q" placeholder="What are you looking for?"
-                        class="w-full h-11 pl-5 pr-14 bg-gray-50 border border-gray-300 rounded-md text-[13px] text-[var(--text-primary)] placeholder-gray-400 focus:outline-none focus:border-[var(--primary)] focus:bg-white transition-all">
-                    <button type="submit"
-                        class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors"
-                        style="background: none; border: none; font-size: 20px;">
-                        <i class="fas fa-search"></i>
+                    <!-- Wishlist -->
+                    {% if design_settings.show_header_wishlist %}
+                    <a href="{% url 'products:wishlist' %}" class="relative hover:text-[var(--primary)] transition-colors text-gray-700 block py-1" aria-label="Wishlist">
+                        <i class="far fa-heart text-lg"></i>
+                        {% if wishlist_count %}
+                        <span class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm">
+                            {{ wishlist_count }}
+                        </span>
+                        {% endif %}
+                    </a>
+                    {% endif %}
+
+                    <!-- Shopping Cart -->
+                    {% if design_settings.show_header_cart %}
+                    <a href="{% url 'orders:enquiry_cart' %}" class="relative hover:text-[var(--primary)] transition-colors text-gray-700 block py-1" aria-label="Cart">
+                        <i class="fa-solid fa-cart-shopping text-lg"></i>
+                        {% if cart_count %}
+                        <span class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm">
+                            {{ cart_count }}
+                        </span>
+                        {% endif %}
+                    </a>
+                    {% endif %}
+                </div>
+
+                <!-- Mobile Header Utilities -->
+                <div class="flex lg:hidden items-center gap-3 text-gray-700">
+                    <!-- Mobile Search toggle or simple text -->
+                    {% if design_settings.show_header_cart %}
+                    <a href="{% url 'orders:enquiry_cart' %}" class="relative p-2 text-gray-700">
+                        <i class="fa-solid fa-cart-shopping text-lg"></i>
+                        {% if cart_count %}
+                        <span class="cart-count-badge absolute top-1.5 right-1 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm">
+                            {{ cart_count }}
+                        </span>
+                        {% endif %}
+                    </a>
+                    {% endif %}
+                    <button id="mobile-menu-trigger" class="p-2 text-gray-700" aria-label="Menu">
+                        <i class="fas fa-bars text-lg" id="hamburger-icon"></i>
                     </button>
-                </form>
-            </div>
-
-            <!-- Right: Utilities (desktop-only) -->
-            <div class="hidden lg:flex items-center gap-7 text-[var(--primary)]">
-                <!-- User Account -->
-                {% if design_settings.show_header_account %}
-                <div class="group relative">
-                    <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}"
-                        class="flex flex-col items-center gap-1.5 text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors text-center w-14">
-                        <i class="far fa-user text-[20px]"></i>
-                        <span class="text-[9px] font-bold tracking-widest uppercase">Account</span>
-                    </a>
-                    <!-- Account Dropdown -->
-                    <div class="absolute right-1/2 translate-x-1/2 top-full pt-4 hidden group-hover:block z-50">
-                        <div class="w-48 bg-white border border-[var(--border)] shadow-[var(--shadow-md)] rounded-md py-1">
-                            {% if user.is_authenticated %}
-                            <div class="px-4 py-2 text-xs font-bold text-[var(--text-primary)] truncate border-b border-[var(--border-light)] mb-1">
-                                Hi, {{ user.username }}
-                            </div>
-                            <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">Profile</a>
-                            <a href="{% url 'accounts:order_history' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">Orders</a>
-                            <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-xs text-[var(--error)] hover:bg-gray-50 transition-colors">Logout</a>
-                            {% else %}
-                            <a href="{% url 'accounts:login' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">Login</a>
-                            <a href="{% url 'accounts:register' %}" class="block px-4 py-2 text-xs text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--primary)] transition-colors">Register</a>
-                            {% endif %}
-                        </div>
-                    </div>
                 </div>
-                {% endif %}
-
-                <!-- Wishlist -->
-                {% if design_settings.show_header_wishlist %}
-                <a href="{% url 'products:wishlist' %}"
-                     class="flex flex-col items-center gap-1.5 text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors text-center w-14 relative">
-                    <div class="relative">
-                        <i class="far fa-heart text-[20px]"></i>
-                        <span class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center shadow-sm {% if not wishlist_count %}hidden{% endif %}">
-                            {{ wishlist_count|default:"0" }}
-                        </span>
-                    </div>
-                    <span class="text-[9px] font-bold tracking-widest uppercase">Wishlist</span>
-                </a>
-                {% endif %}
-
-                <!-- Shopping Cart -->
-                {% if design_settings.show_header_cart %}
-                <a href="{% url 'orders:enquiry_cart' %}"
-                    class="flex flex-col items-center gap-1.5 text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors text-center w-14 relative">
-                    <div class="relative">
-                        <i class="fa-solid fa-cart-shopping text-[20px]"></i>
-                        <span class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center shadow-sm {% if not cart_count %}hidden{% endif %}">
-                            {{ cart_count|default:"0" }}
-                        </span>
-                    </div>
-                    <span class="text-[9px] font-bold tracking-widest uppercase">Cart</span>
-                </a>
-                {% endif %}
-
-                <!-- Store Locations -->
-                <a href="{% url 'core:store_locations' %}"
-                    class="flex flex-col items-center gap-1.5 text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors text-center w-14">
-                    <i class="fa-solid fa-store text-[20px]"></i>
-                    <span class="text-[9px] font-bold tracking-widest uppercase">Stores</span>
-                </a>
-            </div>
-
-            <!-- Mobile utility icons (visible on mobile, hidden on lg) -->
-            <div class="flex lg:hidden items-center gap-3 text-[var(--text-primary)]">
-                {% if design_settings.show_header_cart %}
-                <a href="{% url 'orders:enquiry_cart' %}"
-                    class="relative hover:text-[var(--primary)] transition-colors p-2 text-[var(--primary)]">
-                    <i class="fa-solid fa-cart-shopping text-xl"></i>
-                    <span class="cart-count-badge absolute top-1 right-1 bg-[var(--error)] text-white rounded-full text-[9px] font-bold w-4 h-4 flex items-center justify-center shadow-sm {% if not cart_count %}hidden{% endif %}">
-                        {{ cart_count|default:"0" }}
-                    </span>
-                </a>
-                {% endif %}
-                <button id="mobile-menu-trigger" class="hover:text-[var(--primary)] transition-colors p-2 text-[var(--primary)]" aria-label="Menu">
-                    <i class="fas fa-bars text-xl" id="hamburger-icon"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Tier 3A: Main Navigation Links (Desktop Only) -->
-        <div class="fd-nav-tier fd-nav-tier--links border-t border-[var(--border-light)] bg-white hidden lg:block">
-            <div class="container h-[46px] flex items-center justify-center gap-1">
-
-                <!-- Brands Dropdown -->
-                {% if nav_brands %}
-                <div class="fd-nav-item relative group/brands h-full flex items-center">
-                    <a href="{% url 'products:brand_list' %}" class="fd-nav-link flex items-center gap-1.5" aria-haspopup="true" aria-expanded="false">
-                        Brands
-                        <i class="fas fa-chevron-down fd-nav-chevron group-hover/brands:rotate-180" aria-hidden="true"></i>
-                    </a>
-                    <div class="fd-mega-drop fd-brands-drop absolute left-0 top-full hidden group-hover/brands:block z-50 pt-px">
-                        <div class="fd-drop-glass p-4 grid grid-cols-3 gap-3" style="min-width:340px">
-                            {% for brand in nav_brands %}
-                            <a href="{{ brand.get_absolute_url }}" class="fd-brand-item flex flex-col items-center gap-2 p-3">
-                                <img src="{{ brand.get_image_url }}" alt="{{ brand.name }}" class="h-8 object-contain" loading="lazy">
-                                <span class="text-[9px] text-center font-bold text-gray-600">{{ brand.name }}</span>
-                            </a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-
-                <!-- Collections Dropdown -->
-                {% if nav_collections %}
-                <div class="fd-nav-item relative group/cols h-full flex items-center">
-                    <a href="{% url 'products:collection_list' %}" class="fd-nav-link flex items-center gap-1.5" aria-haspopup="true" aria-expanded="false">
-                        Collections
-                        <i class="fas fa-chevron-down fd-nav-chevron group-hover/cols:rotate-180" aria-hidden="true"></i>
-                    </a>
-                    <div class="fd-mega-drop absolute left-0 top-full hidden group-hover/cols:block z-50 pt-px">
-                        <div class="fd-drop-glass py-2" style="min-width:200px">
-                            {% for col in nav_collections %}
-                            <a href="{{ col.get_absolute_url }}" class="block px-5 py-2.5 text-[11px] font-bold text-gray-600 hover:bg-white/60 hover:text-[var(--primary)] transition-colors">{{ col.name }}</a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-
-                <!-- Offers -->
-                {% if nav_offers %}
-                <a href="{% url 'products:product_list' %}?on_sale=1" class="fd-nav-link fd-nav-link--offers flex items-center gap-1.5">
-                    <i class="fas fa-tag text-[9px]" aria-hidden="true"></i>
-                    Offers
-                </a>
-                {% endif %}
-
-                <!-- Separator -->
-                <div class="fd-nav-sep" aria-hidden="true"></div>
-
-                <a href="{% url 'blog:post_list' %}" class="fd-nav-link">Blog</a>
-                <a href="{% url 'core:about_us' %}" class="fd-nav-link">About Us</a>
-                <a href="{% url 'contact:contact' %}" class="fd-nav-link">Contact</a>
 
             </div>
         </div>

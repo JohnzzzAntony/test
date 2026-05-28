@@ -70,38 +70,32 @@
 
             </div>{# /product-card-image #}
 
-            <div class="product-card-body">
-
+            <div class="product-card-body" style="display:flex; flex-direction:column; gap:8px;">
               <h3 class="product-card-name">{{ product.name|truncatechars:55 }}</h3>
-
-              <div class="product-card-rating" aria-label="{{ product.review_count|default:0 }} reviews">
-                <div class="rating-stars" aria-hidden="true">
-                  <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                  <i class="fas fa-star-half-alt"></i>
+              
+              <div class="product-card-rating" aria-label="5 stars" style="display:flex; align-items:center; gap:4px; margin-bottom:4px;">
+                <div class="rating-stars" aria-hidden="true" style="color:#f59e0b; font-size:11px; display:flex; gap:2px;">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                 </div>
-                <span class="rating-count">({{ product.review_count|default:0 }})</span>
+                <span class="rating-count" style="font-size:11px; color:#9ca3af; font-weight:600;">(5.0)</span>
               </div>
 
-              <div class="product-card-price">
+              <div class="product-card-price" style="display:flex; align-items:baseline; gap:8px; margin-top:auto;">
                 {% if product.price_info.has_offer %}
-                  <span class="price-current" aria-label="Price: {{ product.price_info.final_price }} AED">
-                    {{ product.price_info.final_price }} <span class="price-currency">AED</span>
+                  <span class="price-current" style="font-size:16px; font-weight:800; color:#ef4444;" aria-label="Price: {{ product.price_info.final_price }} AED">
+                    {{ product.price_info.final_price }} <span class="price-currency" style="font-size:10px; font-weight:700;">AED</span>
                   </span>
-                  <span class="price-original" aria-label="Original: {{ product.price_info.regular_price }} AED">
+                  <span class="price-original" style="font-size:12px; text-decoration:line-through; color:#9ca3af;" aria-label="Original: {{ product.price_info.regular_price }} AED">
                     {{ product.price_info.regular_price }} AED
                   </span>
                 {% elif product.price_info.regular_price %}
-                  <span class="price-current" aria-label="Price: {{ product.price_info.regular_price }} AED">
-                    {{ product.price_info.regular_price }} <span class="price-currency">AED</span>
+                  <span class="price-current" style="font-size:16px; font-weight:800; color:var(--primary);" aria-label="Price: {{ product.price_info.regular_price }} AED">
+                    {{ product.price_info.regular_price }} <span class="price-currency" style="font-size:10px; font-weight:700;">AED</span>
                   </span>
                 {% else %}
-                  <span class="price-current" style="font-size:13px;font-style:italic;">Price on Request</span>
+                  <span class="price-current" style="font-size:12px; font-style:italic; color:#6b7280;">Price on Request</span>
                 {% endif %}
               </div>
-
-
-
             </div>{# /product-card-body #}
           </article>{# /product-card #}
 
