@@ -20,3 +20,31 @@ django.template.context.RequestContext.__copy__ = patched_copy
 django.template.context.RenderContext.__copy__ = patched_copy
 
 print("Improved Django Context monkeypatch applied (Python 3.14 compatible).")
+
+import django.conf
+# Disable Django 5/6 check for mutually exclusive STORAGES vs STATICFILES_STORAGE/DEFAULT_FILE_STORAGE
+original_settings_init = django.conf.Settings.__init__
+
+def patched_settings_init(self, settings_module):
+    original_is_overridden = self.is_overridden
+    
+    def temp_is_overridden(setting):
+        if setting in ("STATICFILES_STORAGE", "DEFAULT_FILE_STORAGE"):
+            return False
+        return original_is_overridden(setting)
+        
+    self.is_overridden = temp_is_overridden
+    try:
+        original_settings_init(self, settings_module)
+    finally:
+        if hasattr(self, 'is_overridden'):
+            del self.is_overridden
+
+    # Ensure these are populated on django.conf.settings
+    if hasattr(self, 'STORAGES'):
+        if 'staticfiles' in self.STORAGES:
+            self.STATICFILES_STORAGE = self.STORAGES['staticfiles']['BACKEND']
+        if 'default' in self.STORAGES:
+            self.DEFAULT_FILE_STORAGE = self.STORAGES['default']['BACKEND']
+
+django.conf.Settings.__init__ = patched_settings_init
