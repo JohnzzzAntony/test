@@ -736,9 +736,16 @@ Theme styles (Flower District
                     {% endfor %}
                 </nav>
 
-                <!-- Mobile: Brands, Collections, Extra links -->
+                <!-- Mobile: Navigation Menu -->
                 <nav style="display:flex;flex-direction:column;gap:8px;">
-                  <p style="font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;padding-left:8px;">More</p>
+                  <p style="font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;padding-left:8px;">Navigation</p>
+                  
+                  <!-- Home -->
+                  <a href="{% url 'core:home' %}" style="display:flex;align-items:center;gap:10px;padding:14px 16px;border:1px solid var(--border);background:var(--surface);font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;">
+                    <i class="fa-solid fa-house" style="color:var(--primary);"></i> Home
+                  </a>
+
+                  <!-- Brands -->
                   {% if nav_brands %}
                   <div class="mobile-accordion-item" style="border:1px solid var(--border);background:var(--surface);overflow:hidden;">
                     <div class="mobile-accordion-header" style="display:flex;align-items:center;padding:14px 16px;gap:12px;cursor:pointer;">
@@ -751,7 +758,13 @@ Theme styles (Flower District
                       {% endfor %}
                     </div>
                   </div>
+                  {% else %}
+                  <a href="{% url 'products:brand_list' %}" style="display:flex;align-items:center;gap:10px;padding:14px 16px;border:1px solid var(--border);background:var(--surface);font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;">
+                    <i class="fa-solid fa-copyright" style="color:var(--primary);"></i> Brands
+                  </a>
                   {% endif %}
+
+                  <!-- Collections -->
                   {% if nav_collections %}
                   <div class="mobile-accordion-item" style="border:1px solid var(--border);background:var(--surface);overflow:hidden;">
                     <div class="mobile-accordion-header" style="display:flex;align-items:center;padding:14px 16px;gap:12px;cursor:pointer;">
@@ -764,15 +777,30 @@ Theme styles (Flower District
                       {% endfor %}
                     </div>
                   </div>
+                  {% else %}
+                  <a href="{% url 'products:collection_list' %}" style="display:flex;align-items:center;gap:10px;padding:14px 16px;border:1px solid var(--border);background:var(--surface);font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;">
+                    <i class="fa-solid fa-layer-group" style="color:var(--primary);"></i> Collections
+                  </a>
                   {% endif %}
+
+                  <!-- Offers -->
+                  <a href="{% url 'products:product_list' %}?on_sale=1" style="display:flex;align-items:center;gap:10px;padding:14px 16px;border:1px solid var(--border);background:var(--surface);font-size:13px;font-weight:700;color:var(--error);text-decoration:none;">
+                    <i class="fa-solid fa-tags" style="color:var(--error);"></i> Offers
+                  </a>
+
+                  <!-- Blog -->
                   <a href="{% url 'blog:post_list' %}" style="display:flex;align-items:center;gap:10px;padding:14px 16px;border:1px solid var(--border);background:var(--surface);font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;">
-                    <i class="far fa-newspaper" style="color:var(--primary);"></i> Blog
+                    <i class="fa-solid fa-newspaper" style="color:var(--primary);"></i> Blog
                   </a>
+
+                  <!-- About -->
                   <a href="{% url 'core:about_us' %}" style="display:flex;align-items:center;gap:10px;padding:14px 16px;border:1px solid var(--border);background:var(--surface);font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;">
-                    <i class="far fa-info-circle" style="color:var(--primary);"></i> About Us
+                    <i class="fa-solid fa-circle-info" style="color:var(--primary);"></i> About
                   </a>
+
+                  <!-- Contact -->
                   <a href="{% url 'contact:contact' %}" style="display:flex;align-items:center;gap:10px;padding:14px 16px;border:1px solid var(--border);background:var(--surface);font-size:13px;font-weight:700;color:var(--text-secondary);text-decoration:none;">
-                    <i class="far fa-envelope" style="color:var(--primary);"></i> Contact
+                    <i class="fa-solid fa-envelope" style="color:var(--primary);"></i> Contact
                   </a>
                 </nav>
 
