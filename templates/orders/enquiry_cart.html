@@ -20,7 +20,7 @@
 
         <!-- Page Title -->
         <div class="mb-12">
-            <h1 class="text-4xl lg:text-7xl font-black text-slate-900 tracking-tighter">{{ design_settings.cart_page_title|safe|default:'Your <span class="italic text-primary">Cart</span>' }}</h1>
+            <h1 class="text-4xl lg:text-7xl font-black text-slate-900 tracking-tighter">{{ design_settings.cart_page_title|default:'Your <span class="italic text-primary">Cart</span>'|safe }}</h1>
             <p class="text-slate-500 mt-4 font-medium">Review your selections and proceed to secure checkout.</p>
         </div>
 

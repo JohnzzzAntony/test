@@ -86,10 +86,14 @@ document.addEventListener('DOMContentLoaded', function () {
 {% endif %}
 
 
-{# ── 3. PROMO BANNER GRID (Admin: Visibility > Promo Banner Grid) ───── #}
-{% if design_settings.show_hp_promo_banners != False %}
-{% include 'partials/_fd_promo_grid.html' %}
-{% endif %}
+{# ── 3. PROMO BANNER SECTIONS (Dynamic Promo Sections from Admin) ───── #}
+{% for section in promo_sections %}
+    {% include 'partials/_banner_section.html' with section=section %}
+{% empty %}
+    {% if design_settings.show_hp_promo_banners != False %}
+        {% include 'partials/_fd_promo_grid.html' %}
+    {% endif %}
+{% endfor %}
 
 
 {# ── 4. LATEST PRODUCTS ─────────────────────────────────────── #}
@@ -124,7 +128,11 @@ document.addEventListener('DOMContentLoaded', function () {
 {% endif %}
 
 
-{# ── 9. BLOG GRID ───────────────────────────────────────────── #}
+{# ── 9. CLIENTS AUTOSLIDER ──────────────────────────────────── #}
+{% include 'partials/_clients_strip.html' %}
+
+
+{# ── 10. BLOG GRID ───────────────────────────────────────────── #}
 {% include 'partials/_blog_grid.html' %}
 
 

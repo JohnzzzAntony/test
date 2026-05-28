@@ -3,7 +3,7 @@
 <section class="fd-collections-section">
   <div class="container">
     <div class="fd-section-header">
-      <h2 class="fd-section-title">{{ design_settings.hp_collections_title|safe|default:"Shop Collections" }}</h2>
+      <h2 class="fd-section-title">{{ design_settings.hp_collections_title|default:"Shop Collections"|safe }}</h2>
       {% if design_settings.hp_collections_subtitle %}
       <p class="fd-section-subtitle">{{ design_settings.hp_collections_subtitle|safe }}</p>
       {% endif %}

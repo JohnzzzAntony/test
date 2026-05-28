@@ -485,13 +485,19 @@ Theme styles (Flower District
                 <div class="flex items-center gap-2 truncate">
                     <span class="font-bold text-[var(--primary)] uppercase tracking-wider">Enjoy Free Shipping!</span>
                     <span class="text-[var(--border-hover)]">|</span>
-                    <span class="truncate text-gray-500">
+                    <div class="relative h-4 overflow-hidden w-64 md:w-80 lg:w-96 text-gray-500" id="announcement-ticker" style="display: inline-block; vertical-align: middle;">
                         {% if announcement_bar_list %}
-                        {% for bar in announcement_bar_list %}{% if forloop.first %}{{ bar.text }}{% endif %}{% endfor %}
+                            {% for bar in announcement_bar_list %}
+                            <span class="announcement-item absolute left-0 top-0 w-full truncate transition-all duration-500 ease-in-out opacity-0" data-index="{{ forloop.counter0 }}">
+                                {{ bar.text }}
+                            </span>
+                            {% endfor %}
                         {% else %}
-                        Free UAE Delivery on Purchases Above AED 2000
+                            <span class="announcement-item absolute left-0 top-0 w-full truncate transition-all duration-500 ease-in-out opacity-0" data-index="0">
+                                Free UAE Delivery on Purchases Above AED 2000
+                            </span>
                         {% endif %}
-                    </span>
+                    </div>
                 </div>
                 <div class="flex items-center gap-5 flex-shrink-0">
                     <div class="flex items-center gap-2">
@@ -1239,6 +1245,39 @@ Theme styles (Flower District
 
     <!-- Real-Time Theme Updates -->
     <script src="{% static 'js/theme-live-update.js' %}"></script>
+
+    <!-- Announcement Bar Ticker script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const items = document.querySelectorAll('#announcement-ticker .announcement-item');
+            if (items.length > 0) {
+                let currentIndex = 0;
+                
+                // Show the first one
+                items[currentIndex].style.opacity = '1';
+                items[currentIndex].style.position = 'relative';
+                
+                if (items.length > 1) {
+                    setInterval(() => {
+                        // Fade out current
+                        items[currentIndex].style.opacity = '0';
+                        const prevIndex = currentIndex;
+                        
+                        setTimeout(() => {
+                            items[prevIndex].style.position = 'absolute';
+                            currentIndex = (currentIndex + 1) % items.length;
+                            items[currentIndex].style.position = 'relative';
+                            
+                            // Trigger reflow/repaint so position takes effect before opacity transition
+                            items[currentIndex].offsetHeight; 
+                            
+                            items[currentIndex].style.opacity = '1';
+                        }, 500); // Wait for fade out transition (500ms)
+                    }, 5000); // Transition every 5 seconds
+                }
+            }
+        });
+    </script>
 
 </body>
 

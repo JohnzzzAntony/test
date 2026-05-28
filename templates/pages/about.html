@@ -117,7 +117,7 @@
         <div class="about-block-content">
           <span class="about-block-eyebrow">{{ about_us.title|default:"Our Philosophy" }}</span>
           <h2 class="about-block-title">
-            {{ about_us.heading|safe|default:"Precision in Every <em>Device</em>" }}
+            {{ about_us.heading|default:"Precision in Every <em>Device</em>"|safe }}
           </h2>
           <div class="about-block-text prose max-w-none text-slate-600">
             {% if about_us.content %}

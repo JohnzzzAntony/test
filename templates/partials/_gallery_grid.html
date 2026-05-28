@@ -1,8 +1,8 @@
-﻿{% load static %}
+{% load static %}
 {% if gallery %}
 <section class="fd-gallery-section">
   <div class="container">
-    <h2 class="fd-section-title text-center">{{ design_settings.hp_gallery_title|safe|default:"Our Gallery" }}</h2>
+    <h2 class="fd-section-title text-center">{{ design_settings.hp_gallery_title|default:"Our Gallery"|safe }}</h2>
     <div class="fd-gallery-grid">
       {% for item in gallery|slice:":8" %}
       <a href="{{ item.get_image_url }}" class="fd-gallery-item {% if forloop.counter == 1 or forloop.counter == 6 %}fd-gallery-wide{% endif %}"
