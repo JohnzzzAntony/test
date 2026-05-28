@@ -487,7 +487,13 @@ Theme styles (Flower District
         <div class="border-b border-[var(--border-light)] bg-gray-50">
             <div class="container h-9 flex items-center justify-between text-[11px] font-medium text-[var(--text-secondary)]">
                 <div class="flex items-center gap-6 truncate">
-                    <span class="text-gray-700">Free Shipping on orders above 100 AED</span>
+                    {% if announcement_bar_list %}
+                        {% for bar in announcement_bar_list %}
+                            <span class="text-gray-700 announcement-item {% if not forloop.first %}hidden{% endif %}">{{ bar.text }}</span>
+                        {% endfor %}
+                    {% else %}
+                        <span class="text-gray-700">Free UAE Delivery on Purchases Above AED 2000</span>
+                    {% endif %}
                     <div class="flex items-center gap-2">
                         <a href="#" id="lang-en" class="hover:text-[var(--primary)] transition-colors text-[var(--text-primary)] font-bold">En</a>
                         <span class="text-[var(--border-hover)]">|</span>
@@ -1131,32 +1137,32 @@ Theme styles (Flower District
     <!-- Announcement Bar Ticker script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const items = document.querySelectorAll('#announcement-ticker .announcement-item');
-            if (items.length > 0) {
+            const items = document.querySelectorAll('.announcement-item');
+            if (items.length > 1) {
                 let currentIndex = 0;
-                
-                // Show the first one
-                items[currentIndex].style.opacity = '1';
-                items[currentIndex].style.position = 'relative';
-                
-                if (items.length > 1) {
-                    setInterval(() => {
-                        // Fade out current
-                        items[currentIndex].style.opacity = '0';
-                        const prevIndex = currentIndex;
-                        
-                        setTimeout(() => {
-                            items[prevIndex].style.position = 'absolute';
-                            currentIndex = (currentIndex + 1) % items.length;
-                            items[currentIndex].style.position = 'relative';
-                            
-                            // Trigger reflow/repaint so position takes effect before opacity transition
-                            items[currentIndex].offsetHeight; 
-                            
-                            items[currentIndex].style.opacity = '1';
-                        }, 500); // Wait for fade out transition (500ms)
-                    }, 5000); // Transition every 5 seconds
-                }
+                items.forEach((item, idx) => {
+                    if (idx === 0) {
+                        item.classList.remove('hidden');
+                        item.style.opacity = '1';
+                    } else {
+                        item.classList.add('hidden');
+                        item.style.opacity = '0';
+                    }
+                    item.style.transition = 'opacity 0.5s ease-in-out';
+                });
+
+                setInterval(() => {
+                    items[currentIndex].style.opacity = '0';
+                    const prevIndex = currentIndex;
+                    
+                    setTimeout(() => {
+                        items[prevIndex].classList.add('hidden');
+                        currentIndex = (currentIndex + 1) % items.length;
+                        items[currentIndex].classList.remove('hidden');
+                        items[currentIndex].offsetHeight; // Reflow
+                        items[currentIndex].style.opacity = '1';
+                    }, 500);
+                }, 5000);
             }
         });
     </script>
