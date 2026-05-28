@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Q, Min, Max
+from django.db.models import Q, Min, Max, F
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse
 from django.contrib.admin.views.decorators import staff_member_required
@@ -123,7 +123,7 @@ def product_list(request):
     if on_sale == '1':
         products = products.filter(
             Q(offers__start_date__lte=now, offers__end_date__gte=now) |
-            Q(sale_price__isnull=False, sale_price__lt=models.F('regular_price'))
+            Q(sale_price__isnull=False, sale_price__lt=F('regular_price'))
         ).distinct()
     
     # Calculate global price bounds for the filter UI
