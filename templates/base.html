@@ -112,6 +112,9 @@
     <!-- Compiled Utility CSS -->
     <link rel="stylesheet" href="{% static 'css/main.min.css' %}?v=1.2">
 
+    <!-- Mobile Responsiveness Overrides -->
+    <link rel="stylesheet" href="{% static 'css/mobile-responsive.css' %}?v=2.4">
+
     <!-- Modern UI Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -416,10 +419,6 @@
                 line-height: 1.1 !important;
             }
 
-            h3 {
-                font-size: 1.75rem !important;
-            }
-
             .premium-toast {
                 right: 1rem;
                 left: 1rem;
@@ -689,46 +688,7 @@ Theme styles (Flower District
                     </button>
                 </form>
 
-                <!-- Navigation Accordion -->
-                <nav style="display:flex;flex-direction:column;gap:8px;">
-                    <p
-                        style="font-size:10px;font-family:var(--font-heading);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;padding-left:8px;">
-                        Shop Categories</p>
-                    {% for cat in categories %}
-                    <div class="mobile-accordion-item"
-                        style="border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);overflow:hidden;">
-                        <div class="mobile-accordion-header" style="display:flex;align-items:center;padding:16px;gap:12px;cursor:pointer;">
-                            <a href="{{ cat.get_absolute_url }}"
-                                style="flex:1;font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--txt-main);text-decoration:none;">{{
-                                cat.name }}</a>
-                            {% if cat.active_subcategories %}
-                            <button class="accordion-trigger"
-                                style="background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                <i class="fas fa-chevron-down text-[10px] chevron"
-                                    style="transition:transform 0.25s;"></i>
-                            </button>
-                            {% endif %}
-                        </div>
-                        {% if cat.active_subcategories %}
-                        <div class="mobile-sub"
-                            style="display:none;padding:0 16px 16px;border-top:1px solid var(--border);">
-                            {% for sub in cat.active_subcategories %}
-                            <a href="{{ sub.get_absolute_url }}"
-                                style="display:block;padding:8px 0;font-size:12px;font-weight:600;color:var(--text-secondary);border-left:2px solid var(--border);padding-left:12px;margin-top:8px;transition:all 0.15s;text-decoration:none;"
-                                onmouseover="this.style.color='var(--primary)';this.style.borderLeftColor='var(--primary)'"
-                                onmouseout="this.style.color='var(--text-secondary)';this.style.borderLeftColor='var(--border)'">
-                                {{ sub.name }}
-                            </a>
-                            {% endfor %}
-                            <a href="{{ cat.get_absolute_url }}"
-                                style="display:block;padding:10px 0 0;font-size:10px;font-family:var(--font-heading);font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--primary);text-decoration:none;">
-                                View All {{ cat.name }} →
-                            </a>
-                        </div>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </nav>
+
 
                 <!-- Mobile: Navigation Menu -->
                 <nav style="display:flex;flex-direction:column;gap:8px;">

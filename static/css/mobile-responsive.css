@@ -821,3 +821,112 @@ a, button, [role="button"], input[type="submit"], input[type="button"] {
   outline: 2px solid var(--color-primary-400);
   outline-offset: 2px;
 }
+
+/* ===================================================
+   HOMEPAGE HERO SLIDER BANNER & PROMO BANNERS (Default Theme)
+   =================================================== */
+
+@media (max-width: 767px) {
+  /* Hero Slider Banner on mobile */
+  .hero-section {
+    min-height: 320px !important;
+    margin: 12px auto 24px !important;
+  }
+
+  .hero-content {
+    margin-left: 0 !important;
+    padding: 32px 16px !important;
+    text-align: center !important;
+    max-width: 100% !important;
+  }
+
+  .hero-title {
+    font-size: clamp(24px, 6vw, 36px) !important;
+    margin-bottom: 12px !important;
+  }
+
+  .hero-subtitle {
+    font-size: 13px !important;
+    margin-bottom: 24px !important;
+    max-width: 100% !important;
+  }
+
+  .hero-ctas {
+    justify-content: center !important;
+    gap: 12px !important;
+  }
+
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    padding: 10px 20px !important;
+    font-size: 11px !important;
+    justify-content: center;
+    width: 100% !important;
+    max-width: 240px;
+  }
+
+  /* USP / Why Us Grid scaling */
+  .fd-why-us-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Dynamic promo banner overrides */
+  .promo-banner-item,
+  a.promo-banner-item[style*="height"],
+  div[style*="height"] > a.promo-banner-item {
+    height: 180px !important;
+  }
+  
+  /* Mosaic custom overrides */
+  .col-lg-7 a.promo-banner-item[style*="height"] {
+    height: 220px !important;
+  }
+  div[style*="height: 250px"] {
+    height: 150px !important;
+  }
+  div[style*="height: 150px"] {
+    height: 100px !important;
+  }
+  
+  /* Column and grid resets for standard layouts */
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -10px;
+    margin-left: -10px;
+  }
+  
+  .col-12, .col-md-6, .col-md-4, .col-lg-7, .col-lg-5, .col-4 {
+    position: relative;
+    width: 100%;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  
+  .col-md-6, .col-md-4, .col-lg-7, .col-lg-5 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .col-4 {
+    flex: 0 0 33.3333% !important;
+    max-width: 33.3333% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section {
+    min-height: 250px !important;
+  }
+  .hero-content {
+    padding: 24px 12px !important;
+  }
+  .hero-title {
+    font-size: 22px !important;
+  }
+  .hero-subtitle {
+    font-size: 12px !important;
+    margin-bottom: 16px !important;
+  }
+}
