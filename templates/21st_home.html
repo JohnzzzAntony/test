@@ -15,6 +15,12 @@
         background: var(--color-primary-900);
         overflow: hidden;
     }
+    @media (max-width: 767px) {
+        .hero-21st { min-height: 70vh; }
+    }
+    @media (max-width: 480px) {
+        .hero-21st { min-height: 60vh; }
+    }
     .hero-21st-bg {
         position: absolute;
         inset: 0;
@@ -93,24 +99,35 @@
         letter-spacing: 0.08em;
     }
 
-    /* Products Grid */
     .section-21st-header {
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
-        margin-bottom: 48px;
+        margin-bottom: 32px;
     }
     .section-21st-title {
         font-family: var(--font-display);
-        font-size: var(--text-36);
+        font-size: clamp(1.5rem, 5vw, 2.25rem);
         font-weight: 600;
         color: var(--color-primary-900);
         line-height: 1.15;
     }
     .section-21st-subtitle {
-        font-size: var(--text-16);
+        font-size: clamp(0.85rem, 2.5vw, 1rem);
         color: var(--color-surface-medium);
-        margin-top: 8px;
+        margin-top: 6px;
+    }
+    @media (max-width: 640px) {
+        .section-21st-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .section-21st-header a.btn-21st {
+            display: inline-flex !important;
+            font-size: 12px;
+        }
     }
 
     .product-card-21st {
@@ -273,18 +290,24 @@
         bottom: 0;
         left: 0;
         right: 0;
-        padding: 32px;
+        padding: 24px;
     }
     .category-card-21st-name {
         font-family: var(--font-display);
-        font-size: var(--text-24);
+        font-size: clamp(1rem, 3vw, 1.5rem);
         font-weight: 600;
         color: white;
-        margin-bottom: 8px;
+        margin-bottom: 4px;
     }
     .category-card-21st-count {
-        font-size: var(--text-14);
+        font-size: var(--text-13);
         color: rgba(255,255,255,0.6);
+    }
+    @media (max-width: 640px) {
+        .category-card-21st { aspect-ratio: 3/2; border-radius: var(--radius-xl); }
+        .category-card-21st-content { padding: 14px 16px; }
+        .category-card-21st-name { font-size: 0.9rem; margin-bottom: 2px; }
+        .category-card-21st-count { font-size: 11px; }
     }
 
     /* Features Strip */
@@ -296,7 +319,7 @@
         border-bottom: 1px solid var(--color-surface-lighter);
     }
     .feature-strip-item {
-        padding: 40px 32px;
+        padding: 32px 20px;
         text-align: center;
         border-right: 1px solid var(--color-surface-lighter);
     }
@@ -309,7 +332,7 @@
             grid-template-columns: repeat(2, 1fr);
         }
         .feature-strip-item {
-            padding: 24px 16px;
+            padding: 20px 12px;
             border-right: 1px solid var(--color-surface-lighter);
             border-bottom: 1px solid var(--color-surface-lighter);
         }
@@ -413,8 +436,8 @@
 <section class="hero-21st">
     <div class="hero-21st-bg"></div>
     <div class="container-21st w-full">
-        <div class="hero-21st-content py-20 lg:py-24">
-            <div class="max-w-2xl">
+        <div class="hero-21st-content py-12 sm:py-16 lg:py-24">
+            <div class="max-w-xl">
                 <div class="hero-21st-badge">
                     <i class="fas fa-shield-alt"></i>
                     Trusted by 500+ Healthcare Providers
@@ -481,18 +504,18 @@
 </section>
 
 <!-- ===== CATEGORIES ===== -->
-<section class="py-24 bg-white" id="categories-section">
+<section class="py-12 sm:py-16 lg:py-24 bg-white" id="categories-section">
     <div class="container-21st">
         <div class="section-21st-header">
             <div>
                 <h2 class="section-21st-title">Shop by Category</h2>
                 <p class="section-21st-subtitle">Explore our comprehensive range of healthcare supplies</p>
             </div>
-            <a href="{% url 'products:category_index' %}" class="btn-21st btn-21st-secondary btn-21st-sm hidden sm:inline-flex">
+            <a href="{% url 'products:category_index' %}" class="btn-21st btn-21st-secondary btn-21st-sm">
                 View All <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {% for cat in categories|slice:":4" %}
             <div class="category-card-21st" onclick="window.location.href='{{ cat.get_absolute_url }}'">
                 {% if cat.image %}

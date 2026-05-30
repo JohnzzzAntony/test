@@ -173,28 +173,76 @@
         </nav>
     </header>
 
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="fixed inset-0 z-[290] bg-white hidden lg:hidden flex-col">
-        <div class="p-6 flex items-center justify-between border-b border-[#f0f0f0]">
-            <span class="font-display text-xl font-semibold text-primary-900">Menu</span>
-            <button id="mobile-menu-close" class="p-2 rounded-lg hover:bg-[#f6f8fa]"><i class="fas fa-times text-lg"></i></button>
-        </div>
-        <div class="flex-1 overflow-y-auto p-6 space-y-2">
-            <form action="{% url 'products:product_list' %}" method="GET" class="mb-6">
-                <div class="relative">
-                    <input type="text" name="q" placeholder="Search..." class="w-full h-12 pl-12 pr-4 bg-[#f6f8fa] border border-transparent rounded-xl text-[14px] focus:outline-none focus:border-primary-300">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-[#9ca3af]"></i>
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-[290] hidden lg:hidden" style="background:rgba(10,22,40,0.5);backdrop-filter:blur(4px);">
+        <div id="mobile-menu-panel" class="absolute top-0 right-0 h-full w-[85vw] max-w-[320px] bg-white flex flex-col shadow-2xl" style="transform:translateX(100%);transition:transform 0.32s cubic-bezier(0.16,1,0.3,1);">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between px-5 py-4 border-b border-[#f0f0f0]">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-md bg-primary-900 flex items-center justify-center text-white text-xs font-bold font-display">21</div>
+                    <span class="font-display text-[14px] font-semibold text-primary-900">21st Century Healthcare</span>
                 </div>
-            </form>
-            <p class="text-[10px] font-body font-bold uppercase tracking-[0.15em] text-[#9ca3af] mb-3 px-2">Categories</p>
-            {% for cat in categories %}
-            <a href="{{ cat.get_absolute_url }}" class="block px-4 py-3 text-[14px] font-body font-semibold text-primary-800 hover:bg-primary-50 rounded-xl transition-colors">{{ cat.name }}</a>
-            {% endfor %}
-            <div class="border-t border-[#f0f0f0] pt-4 mt-4">
-                <a href="{% url 'blog:post_list' %}" class="block px-4 py-3 text-[14px] font-body font-semibold text-primary-800 hover:bg-primary-50 rounded-xl transition-colors">Blog</a>
-                <a href="{% url 'core:about_us' %}" class="block px-4 py-3 text-[14px] font-body font-semibold text-primary-800 hover:bg-primary-50 rounded-xl transition-colors">About Us</a>
-                <a href="{% url 'contact:contact' %}" class="block px-4 py-3 text-[14px] font-body font-semibold text-primary-800 hover:bg-primary-50 rounded-xl transition-colors">Contact</a>
+                <button id="mobile-menu-close" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#f6f8fa] text-primary-700 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
+
+            <!-- Search -->
+            <div class="px-4 py-3 border-b border-[#f0f0f0]">
+                <form action="{% url 'products:product_list' %}" method="GET">
+                    <div class="relative">
+                        <input type="text" name="q" placeholder="Search products..." class="w-full h-11 pl-10 pr-4 bg-[#f6f8fa] border border-[#e5e7eb] rounded-xl text-[13px] text-primary-900 placeholder-[#9ca3af] focus:outline-none focus:border-primary-300 focus:bg-white transition-all">
+                        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-xs"></i>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Nav Links -->
+            <div class="flex-1 overflow-y-auto py-3 px-3">
+                <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-[#b0b8c8] px-3 pb-2 pt-1">Shop</p>
+                <a href="{% url 'products:category_index' %}" class="flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] font-semibold text-primary-800 hover:bg-primary-50 transition-colors">
+                    <span class="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 flex-shrink-0 text-xs"><i class="fas fa-th-large"></i></span>
+                    All Products
+                </a>
+                <a href="{% url 'products:product_list' %}?sort=newest" class="flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] font-semibold text-primary-800 hover:bg-primary-50 transition-colors">
+                    <span class="w-8 h-8 rounded-lg bg-[#fef3c7] flex items-center justify-center text-[#d97706] flex-shrink-0 text-xs"><i class="fas fa-star"></i></span>
+                    New Arrivals
+                </a>
+                <a href="{% url 'products:product_list' %}?on_sale=1" class="flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] font-semibold text-primary-800 hover:bg-primary-50 transition-colors">
+                    <span class="w-8 h-8 rounded-lg bg-[#fef3c7] flex items-center justify-center text-[#d97706] flex-shrink-0 text-xs"><i class="fas fa-tag"></i></span>
+                    Sale Items
+                </a>
+
+                <div class="mt-2 pt-3 border-t border-[#f0f0f0]">
+                    <p class="text-[10px] font-bold uppercase tracking-[0.15em] text-[#b0b8c8] px-3 pb-2">Company</p>
+                    <a href="{% url 'blog:post_list' %}" class="flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] font-semibold text-primary-800 hover:bg-primary-50 transition-colors">
+                        <span class="w-8 h-8 rounded-lg bg-[#f0fdf4] flex items-center justify-center text-[#16a34a] flex-shrink-0 text-xs"><i class="fas fa-newspaper"></i></span>
+                        Blog
+                    </a>
+                    <a href="{% url 'core:about_us' %}" class="flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] font-semibold text-primary-800 hover:bg-primary-50 transition-colors">
+                        <span class="w-8 h-8 rounded-lg bg-[#eff6ff] flex items-center justify-center text-[#2563eb] flex-shrink-0 text-xs"><i class="fas fa-info"></i></span>
+                        About Us
+                    </a>
+                    <a href="{% url 'contact:contact' %}" class="flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] font-semibold text-primary-800 hover:bg-primary-50 transition-colors">
+                        <span class="w-8 h-8 rounded-lg bg-[#fdf4ff] flex items-center justify-center text-[#9333ea] flex-shrink-0 text-xs"><i class="fas fa-envelope"></i></span>
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom: Account + Cart -->
+            <div class="border-t border-[#f0f0f0] p-4 space-y-2">
+                <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary-900 text-white text-[13px] font-semibold hover:bg-primary-800 transition-colors">
+                    <i class="far fa-user text-sm"></i>
+                    {% if user.is_authenticated %}My Account{% else %}Sign In / Register{% endif %}
+                </a>
+                <a href="{% url 'orders:enquiry_cart' %}" class="flex items-center justify-between px-4 py-3 rounded-xl border border-[#e5e7eb] text-[13px] font-semibold text-primary-800 hover:bg-[#f6f8fa] transition-colors">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-primary-600"></i> My Cart</span>
+                    {% if cart_count %}<span class="bg-accent-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ cart_count }}</span>{% endif %}
+                </a>
+            </div>
+
         </div>
     </div>
 
@@ -284,14 +332,34 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
     <script>
-    // Mobile Menu
+    // Mobile Menu — slide-in drawer
     const mobileToggle = document.getElementById('mobile-menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileClose = document.getElementById('mobile-menu-close');
-    if(mobileToggle && mobileMenu) {
-        mobileToggle.addEventListener('click', () => mobileMenu.classList.replace('hidden','flex'));
-        if(mobileClose) mobileClose.addEventListener('click', () => mobileMenu.classList.replace('flex','hidden'));
+    const mobileMenu   = document.getElementById('mobile-menu');
+    const mobilePanel  = document.getElementById('mobile-menu-panel');
+    const mobileClose  = document.getElementById('mobile-menu-close');
+
+    function openMenu() {
+        mobileMenu.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                if (mobilePanel) mobilePanel.style.transform = 'translateX(0)';
+            });
+        });
     }
+    function closeMenu() {
+        if (mobilePanel) mobilePanel.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = '';
+        }, 320);
+    }
+    if (mobileToggle) mobileToggle.addEventListener('click', openMenu);
+    if (mobileClose)  mobileClose.addEventListener('click', closeMenu);
+    // Close on overlay click (not on panel itself)
+    if (mobileMenu) mobileMenu.addEventListener('click', (e) => {
+        if (e.target === mobileMenu) closeMenu();
+    });
 
     // Toast
     function showToast(message, type='success') {
