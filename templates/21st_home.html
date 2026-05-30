@@ -61,10 +61,18 @@
     }
     .hero-21st-stats {
         display: flex;
-        gap: 40px;
+        flex-wrap: wrap;
+        gap: 24px 40px;
         padding-top: 48px;
         border-top: 1px solid rgba(255,255,255,0.08);
         margin-top: auto;
+    }
+
+    @media (max-width: 640px) {
+        .hero-21st-stats {
+            padding-top: 32px;
+            gap: 16px 28px;
+        }
     }
     .hero-21st-stat {
         display: flex;
@@ -282,7 +290,7 @@
     /* Features Strip */
     .feature-strip {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        grid-template-columns: repeat(4, 1fr);
         gap: 0;
         border-top: 1px solid var(--color-surface-lighter);
         border-bottom: 1px solid var(--color-surface-lighter);
@@ -294,6 +302,23 @@
     }
     .feature-strip-item:last-child {
         border-right: none;
+    }
+    /* Mobile: 2-column grid */
+    @media (max-width: 767px) {
+        .feature-strip {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .feature-strip-item {
+            padding: 24px 16px;
+            border-right: 1px solid var(--color-surface-lighter);
+            border-bottom: 1px solid var(--color-surface-lighter);
+        }
+        .feature-strip-item:nth-child(2n) {
+            border-right: none;
+        }
+        .feature-strip-item:nth-last-child(-n+2) {
+            border-bottom: none;
+        }
     }
     .feature-strip-icon {
         width: 48px;
@@ -400,11 +425,11 @@
                 <p>
                     Cutting-edge medical equipment and supplies, curated for hospitals, clinics, and practices worldwide. Precision, reliability, and care in every product.
                 </p>
-                <div class="flex items-center gap-4">
-                    <a href="{% url 'products:category_index' %}" class="btn-21st btn-21st-accent btn-21st-lg">
+                <div class="flex flex-wrap items-center gap-4">
+                    <a href="{% url 'products:category_index' %}" class="btn-21st btn-21st-accent btn-21st-lg" style="min-width:180px;justify-content:center;">
                         Browse Catalog <i class="fas fa-arrow-right text-sm"></i>
                     </a>
-                    <a href="{% url 'contact:contact' %}" class="btn-21st btn-21st-ghost text-white/80 hover:text-white">
+                    <a href="{% url 'contact:contact' %}" class="btn-21st btn-21st-ghost text-white/80 hover:text-white" style="min-width:140px;justify-content:center;">
                         Request Quote
                     </a>
                 </div>
@@ -456,7 +481,7 @@
 </section>
 
 <!-- ===== CATEGORIES ===== -->
-<section class="py-24 bg-white">
+<section class="py-24 bg-white" id="categories-section">
     <div class="container-21st">
         <div class="section-21st-header">
             <div>
@@ -596,16 +621,16 @@
 <!-- ===== CTA SECTION ===== -->
 <section class="py-24 bg-white">
     <div class="container-21st">
-        <div class="relative bg-primary-900 rounded-3xl overflow-hidden p-12 lg:p-16 text-center">
+        <div class="relative bg-primary-900 rounded-3xl overflow-hidden p-8 md:p-12 lg:p-16 text-center">
             <div class="absolute inset-0 opacity-20" style="background: radial-gradient(circle at 50% 50%, var(--color-teal-500), transparent 70%)"></div>
             <div class="relative z-10 max-w-2xl mx-auto">
-                <h2 class="font-display text-3xl lg:text-5xl font-semibold text-white mb-6 leading-tight">Need Bulk Orders or Custom Quotes?</h2>
-                <p class="text-white/60 mb-8 text-lg">Our dedicated team is ready to help you find the right solutions for your facility.</p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="{% url 'contact:contact' %}" class="btn-21st btn-21st-accent btn-21st-lg">
+                <h2 class="font-display text-2xl md:text-3xl lg:text-5xl font-semibold text-white mb-4 md:mb-6 leading-tight">Need Bulk Orders or Custom Quotes?</h2>
+                <p class="text-white/60 mb-6 md:mb-8 text-base md:text-lg">Our dedicated team is ready to help you find the right solutions for your facility.</p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+                    <a href="{% url 'contact:contact' %}" class="btn-21st btn-21st-accent btn-21st-lg w-full sm:w-auto justify-center">
                         <i class="fas fa-paper-plane"></i> Get a Quote
                     </a>
-                    <a href="tel:{{ site_settings.phone }}" class="btn-21st btn-21st-outline text-white border-white/20 hover:bg-white/10">
+                    <a href="tel:{{ site_settings.phone }}" class="btn-21st btn-21st-outline text-white border-white/20 hover:bg-white/10 w-full sm:w-auto justify-center">
                         <i class="fas fa-phone"></i> {{ site_settings.phone|default:"Call Us" }}
                     </a>
                 </div>

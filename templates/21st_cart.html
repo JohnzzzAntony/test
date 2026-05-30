@@ -26,8 +26,28 @@
     .cart-empty-icon { width: 96px; height: 96px; background: var(--color-surface-lightest); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--color-surface-light); font-size: 40px; }
 
     @media (max-width: 768px) {
-        .cart-item { grid-template-columns: 80px 1fr; grid-template-rows: auto auto; gap: 12px; }
-        .cart-item-price, .cart-item-qty, .cart-item-remove { justify-self: start; }
+        .cart-item {
+            display: flex !important;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px 0 !important;
+        }
+        .cart-item-image { width: 72px !important; height: 72px !important; flex-shrink: 0; }
+        .cart-item-details { flex: 1 1 calc(100% - 90px); }
+        .cart-item-details h3 { font-size: 1rem !important; }
+        /* Show inline price inside details on mobile */
+        .cart-item-details .cart-item-price-row { display: flex !important; margin-top: 6px; gap: 8px; align-items: center; }
+        /* Qty row + total + remove: span full width below image & details */
+        .cart-item > form.cart-item-qty { order: 3; }
+        .cart-item > div:nth-child(4) { order: 4; flex: 1; justify-content: flex-end; }
+        /* Hide the standalone price column on mobile */
+        .cart-item > div.hidden.md\:block { display: none !important; }
+        .cart-item-remove { padding: 8px; }
+    }
+    @media (max-width: 480px) {
+        .cart-title { font-size: 1.5rem !important; }
+        .cart-summary-card { padding: 20px 16px !important; }
     }
 </style>
 {% endblock %}
@@ -64,15 +84,19 @@
                 </div>
                 <div>
                     {% for item in cart_items %}
-                    <div class="cart-item" style="grid-template-columns: 100px 1fr auto auto auto; display: grid;">
+                    <div class="cart-item" style="display: grid; grid-template-columns: 100px 1fr auto auto auto;">
                         <div class="cart-item-image">
                             <img src="{{ item.product.get_image_url }}" alt="{{ item.product.name }}">
                         </div>
                         <div class="cart-item-details">
                             <h3>{{ item.product.name }}</h3>
                             <p>{{ item.product.category.name|default:"" }}</p>
+                            <!-- Mobile price row (visible on small screens inside details) -->
+                            <div class="cart-item-price-row" style="display:none;">
+                                <span class="text-[#0a1628] font-semibold text-sm">{{ item.unit_price }} AED</span>
+                            </div>
                         </div>
-                        <div class="text-right">
+                        <div class="text-right hidden md:block">
                             <span id="unit-price-{{ item.id }}" class="text-[#0a1628] font-semibold text-sm">{{ item.unit_price }} AED</span>
                         </div>
                         <form method="POST" action="{% url 'orders:update_cart' %}" class="cart-item-qty" data-item-id="{{ item.id }}">

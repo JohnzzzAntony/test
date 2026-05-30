@@ -33,6 +33,7 @@
     <!-- 21st Design System -->
     <link rel="stylesheet" href="{% static 'css/21st-design-system.css' %}?v=2.0">
     <link rel="stylesheet" href="{% static 'css/21st-components.css' %}?v=2.0">
+    <link rel="stylesheet" href="{% static 'css/mobile-responsive.css' %}?v=1.0">
 
     <!-- Swiper -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
@@ -198,16 +199,16 @@
     </div>
 
     <!-- Main Content -->
-    <main class="min-h-[70vh] pt-4 lg:pt-8">
+    <main class="min-h-[70vh] pt-2 lg:pt-6">
         {% block content %}{% endblock %}
     </main>
 
     <!-- ===== PREMIUM FOOTER ===== -->
     <footer class="bg-[#0a1628] text-white pt-20 pb-8">
         <div class="container-21st">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-16">
                 <!-- Brand -->
-                <div>
+                <div class="sm:col-span-2 lg:col-span-1">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white font-display text-xl font-bold">21</div>
                         <div>
@@ -265,7 +266,7 @@
                 </div>
             </div>
 
-            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <p class="text-xs text-[#6b7280]">&copy; {% now "Y" %} 21st Century Healthcare. All rights reserved.</p>
                 <div class="flex items-center gap-6 text-xs text-[#6b7280]">
                     <a href="{% url 'core:terms' %}" class="hover:text-white transition-colors">Terms</a>

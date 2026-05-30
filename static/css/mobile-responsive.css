@@ -1,0 +1,823 @@
+/**
+ * ============================================================================
+ * 21ST CENTURY HEALTHCARE — MOBILE RESPONSIVENESS
+ * ============================================================================
+ * Comprehensive mobile-first responsive fixes for all storefront pages.
+ * Breakpoints:
+ *   xs:   < 480px  (small phones)
+ *   sm:   < 640px  (phones)
+ *   md:   < 768px  (tablets portrait)
+ *   lg:   < 1024px (tablets landscape / small laptops)
+ * ============================================================================
+ */
+
+/* ===================================================
+   GLOBAL / BASE
+   =================================================== */
+
+/* Prevent ANY horizontal scroll */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Touch-friendly minimum tap targets */
+a, button, [role="button"], input[type="submit"], input[type="button"] {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Ensure all inline elements don't break layout */
+.container-21st {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* ===================================================
+   HEADER & NAVIGATION
+   =================================================== */
+
+/* Top bar: hide language switcher completely on very small screens */
+@media (max-width: 480px) {
+  .bg-primary-900 > .container-21st > div:first-child span.font-body {
+    font-size: 10px;
+  }
+}
+
+/* Main header: tighter spacing on mobile */
+@media (max-width: 1023px) {
+  #main-header .container-21st {
+    height: 60px;
+  }
+
+  /* Logo image */
+  #main-header .logo-img {
+    height: 36px !important;
+  }
+
+  /* Right action icons spacing */
+  #main-header .flex.items-center.gap-2.lg\:gap-4 {
+    gap: 4px;
+  }
+}
+
+/* Mobile menu full-screen overlay improvements */
+@media (max-width: 1023px) {
+  #mobile-menu {
+    overflow-y: auto;
+  }
+  
+  #mobile-menu .flex-1.overflow-y-auto {
+    padding-bottom: 40px;
+  }
+}
+
+/* ===================================================
+   HERO SECTION (Home Page)
+   =================================================== */
+
+.hero-21st {
+  min-height: auto;
+}
+
+@media (max-width: 1023px) {
+  .hero-21st {
+    min-height: 70vh;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-21st {
+    min-height: 60vh;
+    padding: 0;
+  }
+
+  .hero-21st-content {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+
+  .hero-21st h1 {
+    font-size: clamp(2rem, 8vw, 3rem) !important;
+    margin-bottom: 16px !important;
+  }
+
+  .hero-21st p {
+    font-size: 1rem !important;
+    margin-bottom: 24px !important;
+    max-width: 100% !important;
+  }
+
+  /* CTA buttons — stack on mobile */
+  .hero-21st .flex.items-center.gap-4 {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .hero-21st .flex.items-center.gap-4 a {
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Stats strip — scroll horizontally or stack */
+  .hero-21st-stats {
+    flex-wrap: wrap;
+    gap: 20px 32px;
+    padding-top: 32px;
+    margin-top: 32px;
+  }
+
+  .hero-21st-stat-number {
+    font-size: 2rem !important;
+  }
+}
+
+@media (max-width: 479px) {
+  .hero-21st h1 {
+    font-size: clamp(1.75rem, 9vw, 2.5rem) !important;
+  }
+
+  .hero-21st-stats {
+    gap: 16px 24px;
+  }
+
+  .hero-21st-stat-number {
+    font-size: 1.75rem !important;
+  }
+}
+
+/* ===================================================
+   FEATURES STRIP (Home Page)
+   =================================================== */
+
+.feature-strip {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+
+@media (max-width: 767px) {
+  .feature-strip {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0;
+  }
+
+  .feature-strip-item {
+    padding: 24px 16px !important;
+    border-right: 1px solid var(--color-surface-lighter);
+    border-bottom: 1px solid var(--color-surface-lighter);
+  }
+
+  /* Remove border from right column items */
+  .feature-strip-item:nth-child(2n) {
+    border-right: none;
+  }
+
+  /* Remove bottom border from last two items */
+  .feature-strip-item:nth-last-child(-n+2) {
+    border-bottom: none;
+  }
+
+  .feature-strip-title {
+    font-size: 1rem !important;
+  }
+
+  .feature-strip-desc {
+    font-size: 0.8rem !important;
+  }
+
+  .feature-strip-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 16px !important;
+    margin-bottom: 10px !important;
+  }
+}
+
+@media (max-width: 479px) {
+  .feature-strip {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .feature-strip-item {
+    padding: 16px 12px !important;
+  }
+}
+
+/* ===================================================
+   SECTION HEADERS
+   =================================================== */
+
+@media (max-width: 767px) {
+  .section-21st-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .section-21st-title {
+    font-size: 1.75rem !important;
+  }
+
+  .section-21st-subtitle {
+    font-size: 0.9rem !important;
+  }
+}
+
+/* ===================================================
+   CATEGORIES SECTION (Home Page)
+   =================================================== */
+
+@media (max-width: 767px) {
+  /* Already has sm:grid-cols-2 — enhance small mobile */
+  .py-24.bg-white:has(.category-card-21st) {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+}
+
+@media (max-width: 479px) {
+  .category-card-21st-name {
+    font-size: 1.1rem !important;
+  }
+
+  .category-card-21st-count {
+    font-size: 0.8rem !important;
+  }
+
+  .category-card-21st-content {
+    padding: 20px !important;
+  }
+}
+
+/* ===================================================
+   PRODUCTS SECTION (Home Page)
+   =================================================== */
+
+/* Product cards on very small screens */
+@media (max-width: 479px) {
+  .product-card-21st-name {
+    font-size: 1rem !important;
+  }
+
+  .product-card-21st-price {
+    font-size: 1.1rem !important;
+  }
+
+  .product-card-21st-body {
+    padding: 14px 16px 16px !important;
+  }
+
+  .product-card-21st-image {
+    padding: 16px !important;
+  }
+
+  .product-card-21st-btn {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* ===================================================
+   TESTIMONIAL SECTION (Home Page)
+   =================================================== */
+
+@media (max-width: 767px) {
+  .testimonial-21st {
+    padding: 48px 0 !important;
+  }
+
+  .testimonial-21st-card {
+    padding: 28px 20px !important;
+  }
+
+  .testimonial-21st-quote {
+    font-size: 1.1rem !important;
+    margin-bottom: 20px !important;
+  }
+
+  .testimonial-21st-author {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .testimonial-21st-author .text-left {
+    text-align: center;
+  }
+}
+
+/* ===================================================
+   CTA SECTION (Home Page)
+   =================================================== */
+
+@media (max-width: 767px) {
+  .relative.bg-primary-900.rounded-3xl {
+    padding: 40px 24px !important;
+    border-radius: 16px !important;
+  }
+
+  .relative.bg-primary-900.rounded-3xl h2 {
+    font-size: 1.75rem !important;
+    margin-bottom: 16px !important;
+  }
+
+  .relative.bg-primary-900.rounded-3xl p {
+    font-size: 1rem !important;
+    margin-bottom: 24px !important;
+  }
+}
+
+@media (max-width: 479px) {
+  .relative.bg-primary-900.rounded-3xl {
+    padding: 28px 16px !important;
+  }
+
+  /* Force flex-col on very small phones */
+  .flex.flex-col.sm\:flex-row.items-center.justify-center.gap-4 {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px;
+  }
+
+  .flex.flex-col.sm\:flex-row.items-center.justify-center.gap-4 a {
+    justify-content: center;
+  }
+}
+
+/* ===================================================
+   FOOTER
+   =================================================== */
+
+@media (max-width: 767px) {
+  footer.bg-\[\#0a1628\] {
+    padding-top: 48px !important;
+  }
+
+  /* Footer grid always single column on small mobile */
+  footer .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 32px !important;
+  }
+
+  /* Brand column full width on mobile */
+  footer .grid > div:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 479px) {
+  footer .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    margin-bottom: 32px !important;
+  }
+
+  footer .border-t.border-white\/10.pt-8 {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center;
+    gap: 12px !important;
+  }
+}
+
+/* ===================================================
+   PRODUCT LISTING PAGE (PLP)
+   =================================================== */
+
+/* Ensure toolbar wraps nicely */
+@media (max-width: 767px) {
+  .plp-toolbar {
+    padding: 12px 16px !important;
+  }
+
+  .plp-sort label {
+    display: none;
+  }
+
+  .plp-toolbar > div:first-child {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 479px) {
+  .plp-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  /* Slim down toolbar on tiny screens */
+  .plp-toolbar {
+    flex-wrap: wrap;
+    gap: 8px !important;
+  }
+
+  /* Sort dropdown smaller */
+  .plp-select {
+    font-size: 12px !important;
+    padding: 8px 10px !important;
+  }
+
+  /* Breadcrumb wraps on tiny screens */
+  nav.flex.items-center.gap-2 {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+}
+
+/* ===================================================
+   PRODUCT DETAIL PAGE (PDP)
+   =================================================== */
+
+/* Gallery: not sticky on mobile */
+@media (max-width: 1023px) {
+  .pdp-gallery {
+    position: static !important;
+    top: auto !important;
+  }
+}
+
+/* Tabs: reduce horizontal padding on mobile */
+@media (max-width: 767px) {
+  .bg-white.rounded-2xl.border.border-\[\#f0f0f0\] > .px-8 {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .pdp-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    gap: 0;
+  }
+
+  .pdp-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pdp-tab {
+    padding: 12px 16px !important;
+    font-size: 13px !important;
+    flex-shrink: 0;
+  }
+
+  .pdp-tab-content {
+    padding: 20px 0 !important;
+  }
+}
+
+/* Specs grid: stack on mobile */
+@media (max-width: 767px) {
+  .pdp-specs {
+    grid-template-columns: 1fr !important;
+  }
+
+  .pdp-specs dt {
+    padding: 12px 16px 4px !important;
+    border-bottom: none !important;
+    font-size: 11px !important;
+  }
+
+  .pdp-specs dd {
+    padding: 4px 16px 12px !important;
+    border-bottom: 1px solid var(--color-surface-lightest) !important;
+  }
+
+  .pdp-specs dt:last-of-type {
+    border-bottom: none !important;
+  }
+
+  .pdp-specs dd:last-of-type {
+    border-bottom: none !important;
+  }
+}
+
+/* Product detail quantity + action row */
+@media (max-width: 639px) {
+  /* Qty + action — stack vertically */
+  .pdp-form > .flex.items-center.gap-6 {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 16px !important;
+  }
+
+  .pdp-form > .flex.items-center.gap-6 > div:first-child {
+    width: 100%;
+  }
+
+  .pdp-qty {
+    width: 100% !important;
+    justify-content: center;
+  }
+
+  .pdp-qty button {
+    flex: 1;
+  }
+
+  .pdp-qty input {
+    flex: 0 0 60px;
+  }
+
+  .pdp-form > .flex.items-center.gap-6 > div:last-child {
+    flex: 1;
+  }
+}
+
+/* Product meta icons (Shipping, Returns, Warranty) — 3-col to 1-col */
+@media (max-width: 767px) {
+  .mt-8.pt-8.border-t.border-\[\#f0f0f0\].grid.grid-cols-3 {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}
+
+@media (max-width: 479px) {
+  /* Price on PDP */
+  .price-large {
+    font-size: 2rem !important;
+  }
+
+  /* Related products grid */
+  .pdp-related-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+
+/* ===================================================
+   CART PAGE
+   =================================================== */
+
+@media (max-width: 767px) {
+  /* Cart item: stack product info below image */
+  .cart-item {
+    grid-template-columns: 80px 1fr !important;
+    grid-template-rows: auto auto auto !important;
+    gap: 12px 16px !important;
+    padding: 20px 0 !important;
+  }
+
+  /* Price, Qty and Remove go into bottom row spanning full width */
+  .cart-item > div:nth-child(3),
+  .cart-item > form.cart-item-qty,
+  .cart-item > div:nth-child(5) {
+    grid-column: 1 / -1;
+    justify-self: auto;
+  }
+
+  /* Bottom row: show price, qty, total, remove inline */
+  .cart-item > div:nth-child(3) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .cart-item > div:nth-child(5) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  /* Hide table-header on mobile (already hidden with md:grid class) */
+  .hidden.md\:grid {
+    display: none !important;
+  }
+
+  /* Cart action row */
+  .mt-6.flex.items-center.justify-between {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 479px) {
+  .cart-item-image {
+    width: 72px !important;
+    height: 72px !important;
+  }
+
+  .cart-item-details h3 {
+    font-size: 1rem !important;
+  }
+
+  .cart-summary-card {
+    padding: 24px 16px !important;
+  }
+
+  .cart-title {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* ===================================================
+   CHECKOUT PAGE
+   =================================================== */
+
+@media (max-width: 767px) {
+  /* Checkout form layout: collapse columns */
+  .grid.grid-cols-1.lg\:grid-cols-12.gap-12 {
+    gap: 32px;
+  }
+
+  /* Checkout steps indicator */
+  .flex.items-center.justify-center.mb-8 {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 8px;
+    gap: 8px;
+  }
+}
+
+/* ===================================================
+   GENERAL SECTIONS VERTICAL SPACING
+   =================================================== */
+
+/* Reduce large py-24 sections on mobile */
+@media (max-width: 767px) {
+  section.py-24 {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+
+  section.py-16 {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+  }
+
+  section.py-12 {
+    padding-top: 32px !important;
+    padding-bottom: 32px !important;
+  }
+}
+
+/* ===================================================
+   BREADCRUMB
+   =================================================== */
+
+@media (max-width: 479px) {
+  nav.flex.items-center.gap-2.text-\[13px\] {
+    font-size: 12px;
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+}
+
+/* ===================================================
+   PAGINATION
+   =================================================== */
+
+@media (max-width: 479px) {
+  .pagination-21st {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .pagination-21st-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* ===================================================
+   TOAST NOTIFICATION
+   =================================================== */
+
+@media (max-width: 767px) {
+  #toast-container {
+    bottom: 16px !important;
+    right: 16px !important;
+    left: 16px !important;
+  }
+
+  .toast-21st {
+    max-width: 100% !important;
+    right: 0 !important;
+    left: 0 !important;
+  }
+}
+
+/* ===================================================
+   MODAL
+   =================================================== */
+
+@media (max-width: 767px) {
+  .modal-21st-backdrop {
+    padding: 16px !important;
+    align-items: flex-end;
+  }
+
+  .modal-21st {
+    max-height: 85vh !important;
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0 !important;
+  }
+
+  .modal-21st-header,
+  .modal-21st-footer {
+    padding: 20px !important;
+  }
+
+  .modal-21st-body {
+    padding: 20px !important;
+  }
+}
+
+/* ===================================================
+   TABLES (Responsive wrapping)
+   =================================================== */
+
+@media (max-width: 767px) {
+  .table-21st-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ===================================================
+   FORMS (Stack on mobile)
+   =================================================== */
+
+@media (max-width: 479px) {
+  .form-21st-input,
+  .form-21st-select,
+  .form-21st-textarea {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+
+  /* Inline form groups become column */
+  .flex.gap-3 > .form-21st-group {
+    width: 100%;
+  }
+}
+
+/* ===================================================
+   ACCOUNT / AUTH PAGES
+   =================================================== */
+
+@media (max-width: 767px) {
+  /* Auth card shouldn't have too much padding */
+  .auth-card,
+  .card-21st.max-w-md,
+  .card-21st.max-w-lg {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+}
+
+/* ===================================================
+   UTILITY: HIDDEN / SHOWN ON MOBILE
+   =================================================== */
+
+/* These utilities can be used directly in templates */
+.mobile-only {
+  display: block;
+}
+
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none !important;
+  }
+
+  .desktop-only {
+    display: block !important;
+  }
+}
+
+/* ===================================================
+   SMOOTH SCROLLING & ACCESSIBILITY
+   =================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-primary-400);
+  outline-offset: 2px;
+}
