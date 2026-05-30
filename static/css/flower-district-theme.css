@@ -146,7 +146,7 @@ img { max-width: 100%; height: auto; display: block; }
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: var(--radius-full);
+  border-radius: 0;
   text-decoration: none;
   border: 2px solid transparent;
   white-space: nowrap;

@@ -16,7 +16,7 @@
         --font-heading: 'Outfit', sans-serif;
         --radius-container: 40px;
         --radius-card: 24px;
-        --radius-btn: 9999px;
+        --radius-btn: 0;
         --radius-img: 20px;
     }
 
@@ -203,3 +203,45 @@
 }
 
 .premium-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+
+/* ===== GLOBAL SHARP-EDGE BUTTON OVERRIDE ===== */
+/* Forces all buttons site-wide to have zero border-radius (sharp edges) */
+button:not(.product-card-wishlist):not(.swiper-button-next):not(.swiper-button-prev):not(.card-action-btn):not(.header-icon-btn),
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[role="button"]:not(.product-card-wishlist):not(.swiper-button-next):not(.swiper-button-prev),
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-outline,
+.btn-ghost,
+.btn-accent,
+.btn-sm,
+.btn-lg,
+.btn-full,
+.btn-pill,
+.btn-rounded,
+.btn-luxury,
+.btn-luxury-primary,
+.btn-21st,
+.btn-rose {
+    border-radius: 0 !important;
+}
+
+/* ===== CIRCLE RESTORE — UI elements that must stay round ===== */
+/* Swiper navigation arrows, wishlist hearts, icon-only buttons */
+.swiper-button-next,
+.swiper-button-prev,
+.product-card-wishlist,
+.card-action-btn,
+.header-cart-badge,
+.wishlist-count-badge,
+.cart-count-badge,
+.status-dot,
+.header-icon-btn,
+.custom-cursor,
+.custom-cursor-dot {
+    border-radius: 50% !important;
+}
+

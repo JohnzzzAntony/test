@@ -976,8 +976,105 @@ Theme styles (Flower District
                 </div>
             </div>
 
+            <!-- Payment Options + Social Media Bar -->
+            <div class="mt-12 pt-8 border-t border-white/8">
+                <div class="bg-[#f3f3f3] rounded-sm px-8 py-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
+
+                    <!-- Payment Options -->
+                    <div>
+                        <p class="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 mb-4">Payment Options</p>
+                        <div class="flex items-center gap-4 flex-wrap">
+                            <!-- Tabby -->
+                            <div class="bg-white rounded-lg px-3 py-2 shadow-sm border border-gray-100 flex items-center justify-center" style="min-width:72px;height:38px;">
+                                <svg viewBox="0 0 80 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:20px;width:auto;">
+                                    <rect width="80" height="28" rx="6" fill="url(#tabby-grad)"/>
+                                    <defs>
+                                        <linearGradient id="tabby-grad" x1="0" y1="0" x2="80" y2="28" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#3DEBB4"/>
+                                            <stop offset="1" stop-color="#00C49A"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <text x="50%" y="19" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="800" fill="white" letter-spacing="0.5">tabby</text>
+                                </svg>
+                            </div>
+                            <!-- Tamara -->
+                            <div class="bg-white rounded-lg px-3 py-2 shadow-sm border border-gray-100 flex items-center justify-center" style="min-width:80px;height:38px;">
+                                <svg viewBox="0 0 90 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:20px;width:auto;">
+                                    <rect width="90" height="28" rx="6" fill="url(#tamara-grad)"/>
+                                    <defs>
+                                        <linearGradient id="tamara-grad" x1="0" y1="0" x2="90" y2="28" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#FFA94D"/>
+                                            <stop offset="1" stop-color="#FF7A1A"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <text x="50%" y="19" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="800" fill="white" letter-spacing="0.3">tamara</text>
+                                </svg>
+                            </div>
+                            <!-- Network International -->
+                            <div class="bg-white rounded-lg px-3 py-2 shadow-sm border border-gray-100 flex items-center gap-1.5" style="min-width:130px;height:38px;">
+                                <span style="font-family:Arial,sans-serif;font-size:12px;font-weight:900;color:#003087;letter-spacing:-0.5px;line-height:1;">Network</span>
+                                <span style="font-family:Arial,sans-serif;font-size:14px;font-weight:900;color:#E31837;line-height:1;">›</span>
+                                <div style="display:flex;flex-direction:column;line-height:1.1;">
+                                    <span style="font-family:Arial,sans-serif;font-size:7px;font-weight:700;color:#003087;letter-spacing:0.02em;">International</span>
+                                    <span style="font-family:Arial,sans-serif;font-size:6px;color:#555;letter-spacing:0.01em;">Payment Solutions</span>
+                                </div>
+                            </div>
+                            <!-- Cash on Delivery -->
+                            <div class="bg-white rounded-lg px-3 py-2 shadow-sm border border-gray-100 flex items-center gap-2" style="min-width:100px;height:38px;background:linear-gradient(135deg,#1a3a6e 0%,#0d2550 100%) !important;">
+                                <div style="width:26px;height:26px;background:rgba(255,255,255,0.15);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <i class="fas fa-truck" style="color:white;font-size:11px;"></i>
+                                </div>
+                                <div style="display:flex;flex-direction:column;line-height:1.2;">
+                                    <span style="font-family:Arial,sans-serif;font-size:9px;font-weight:900;color:white;text-transform:uppercase;letter-spacing:0.05em;">Cash On</span>
+                                    <span style="font-family:Arial,sans-serif;font-size:9px;font-weight:900;color:#FFD700;text-transform:uppercase;letter-spacing:0.05em;">Delivery</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div>
+                        <p class="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 mb-4">Social Media</p>
+                        <div class="flex items-center gap-5">
+                            {% if site_settings.instagram %}
+                            <a href="{{ site_settings.instagram }}" target="_blank" aria-label="Instagram"
+                               style="color:#1a1a1a;font-size:28px;transition:color 0.2s;text-decoration:none;"
+                               onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color='#1a1a1a'">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            {% else %}
+                            <a href="#" aria-label="Instagram"
+                               style="color:#1a1a1a;font-size:28px;transition:color 0.2s;text-decoration:none;"
+                               onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color='#1a1a1a'">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            {% endif %}
+                            {% if site_settings.whatsapp or site_settings.phone %}
+                            <a href="https://wa.me/{{ site_settings.whatsapp|default:site_settings.phone }}" target="_blank" aria-label="WhatsApp"
+                               style="color:#1a1a1a;font-size:28px;transition:color 0.2s;text-decoration:none;"
+                               onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='#1a1a1a'">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            {% else %}
+                            <a href="#" aria-label="WhatsApp"
+                               style="color:#1a1a1a;font-size:28px;transition:color 0.2s;text-decoration:none;"
+                               onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='#1a1a1a'">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            {% endif %}
+                            <a href="#" aria-label="TikTok"
+                               style="color:#1a1a1a;font-size:26px;transition:color 0.2s;text-decoration:none;"
+                               onmouseover="this.style.color='#010101'" onmouseout="this.style.color='#1a1a1a'">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
             <!-- Bottom Bar -->
-            <div class="pt-8 border-t border-white/8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p class="text-[11px] text-white/30 font-bold uppercase tracking-widest">
                     © 2026 {{ site_settings.site_name|default:"JKR International" }}. All rights reserved.
                 </p>
@@ -991,6 +1088,7 @@ Theme styles (Flower District
             </div>
         </div>
     </footer>
+
 
     <!-- Floating WhatsApp Button -->
     {% if site_settings.whatsapp or site_settings.phone %}
