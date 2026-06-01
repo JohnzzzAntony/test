@@ -567,9 +567,7 @@ Theme styles (Flower District
                     <a href="{% url 'products:wishlist' %}" class="relative flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center text-gray-700 block py-1" aria-label="Wishlist">
                         <div class="relative">
                             <i class="far fa-heart text-xl"></i>
-                            <span class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm {% if not wishlist_count %}hidden{% endif %}">
-                                {{ wishlist_count|default:"0" }}
-                            </span>
+                            <span class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm {% if not wishlist_count %}hidden{% endif %}">{{ wishlist_count|default:"0" }}</span>
                         </div>
                         <span class="text-[10px] font-bold tracking-wide uppercase mt-1">Wishlist</span>
                     </a>
@@ -580,11 +578,7 @@ Theme styles (Flower District
                     <a href="{% url 'orders:enquiry_cart' %}" class="relative flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center text-gray-700 block py-1" aria-label="Cart">
                         <div class="relative">
                             <i class="fa-solid fa-cart-shopping text-xl"></i>
-                            {% if cart_count %}
-                            <span class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm">
-                                {{ cart_count }}
-                            </span>
-                            {% endif %}
+                            <span class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm {% if not cart_count %}hidden{% endif %}">{{ cart_count|default:"0" }}</span>
                         </div>
                         <span class="text-[10px] font-bold tracking-wide uppercase mt-1">Shopping</span>
                     </a>
