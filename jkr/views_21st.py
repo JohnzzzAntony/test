@@ -26,7 +26,6 @@ def home_21st(request):
         'featured_products': Product.objects.filter(is_active=True, is_featured=True).select_related('category')[:8],
         'latest_products': Product.objects.filter(is_active=True).order_by('-created_at').select_related('category')[:8],
         'cart_count': request.session.get('cart_count', 0),
-        'wishlist_count': 0,
     }
     return render(request, '21st_home.html', context)
 

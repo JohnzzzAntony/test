@@ -241,7 +241,7 @@ window.toggleWishlist = async function (productId, btn) {
 
         if (data.status === 'added' || data.status === 'removed') {
             var icon = btn ? btn.querySelector('i') : null;
-            var wishCountBadge = document.querySelector('.wishlist-count-badge');
+            var wishCountBadges = document.querySelectorAll('.wishlist-count-badge');
 
             if (data.status === 'added') {
                 if (icon) { icon.classList.remove('far'); icon.classList.add('fas'); }
@@ -268,13 +268,15 @@ window.toggleWishlist = async function (productId, btn) {
                 }
             }
 
-            if (wishCountBadge) {
-                if (data.count > 0) {
-                    wishCountBadge.classList.remove('hidden');
-                    wishCountBadge.innerText = data.count;
-                } else {
-                    wishCountBadge.classList.add('hidden');
-                }
+            if (wishCountBadges.length > 0) {
+                wishCountBadges.forEach(function (badge) {
+                    if (data.count > 0) {
+                        badge.classList.remove('hidden');
+                        badge.innerText = data.count;
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                });
             }
         }
     } catch (err) {
