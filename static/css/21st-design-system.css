@@ -52,7 +52,7 @@
   --color-surface-light: #9ca3af;
   --color-surface-lighter: #d1d5db;
   --color-surface-lightest: #f3f4f6;
-  --color-background: #fafbfc;
+  --color-background: #ffffff;
   --color-pure-white: #ffffff;
 
   /* Semantics */
@@ -163,7 +163,7 @@ body {
   font-weight: var(--weight-regular);
   line-height: 1.65;
   color: var(--color-primary-900);
-  background-color: var(--color-background);
+  background-color: #ffffff !important;
   min-height: 100vh;
   overflow-x: hidden;
 }

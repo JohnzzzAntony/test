@@ -8,7 +8,7 @@
         --primary: #114084;
         --secondary: #1E293B;
         --accent: #0081ff;
-        --surface: #f8fafc;
+        --surface: #ffffff;
         --card: #ffffff;
         --border-custom: #e2e8f0;
         --txt-main: #1e293b;
@@ -22,7 +22,7 @@
 
     body {
         font-family: var(--font-sans), 'Inter', sans-serif;
-        background-color: var(--surface);
+        background-color: #ffffff !important;
         color: var(--txt-main);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
