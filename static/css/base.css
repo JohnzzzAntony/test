@@ -234,6 +234,8 @@ input[type="reset"],
 .swiper-button-next,
 .swiper-button-prev,
 .product-card-wishlist,
+.product-card-21st-wishlist,
+.wishlist-ref,
 .card-action-btn,
 .header-cart-badge,
 .wishlist-count-badge,
@@ -243,5 +245,40 @@ input[type="reset"],
 .custom-cursor,
 .custom-cursor-dot {
     border-radius: 50% !important;
+    aspect-ratio: 1 / 1 !important;
+    box-sizing: border-box !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
 }
+
+/* Enforce specific dimensions for count badges to prevent squashing */
+.wishlist-count-badge,
+.cart-count-badge {
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    max-width: 14px !important;
+    max-height: 14px !important;
+    padding: 0 !important;
+    font-size: 8px !important;
+    line-height: 1 !important;
+    text-align: center !important;
+}
+
+/* Enforce specific dimensions for product card wishlist buttons */
+.product-card-wishlist,
+.product-card-21st-wishlist,
+.wishlist-ref {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    max-width: 36px !important;
+    max-height: 36px !important;
+    padding: 0 !important;
+}
+
 
