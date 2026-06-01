@@ -426,8 +426,12 @@
                             <button type="submit" class="btn-21st btn-21st-primary btn-21st-sm flex-1">
                                 <i class="fas fa-plus text-xs"></i> Add to Cart
                             </button>
-                            <button type="button" class="btn-21st btn-21st-secondary btn-21st-icon border-0" title="Add to Wishlist">
-                                <i class="far fa-heart"></i>
+                            <button type="button"
+                                    class="btn-21st btn-21st-secondary btn-21st-icon border-0 wishlist-btn {% if product.id in wishlist_ids %}active{% endif %}"
+                                    data-product-id="{{ product.id }}"
+                                    onclick="window.toggleWishlist('{{ product.id }}', this); event.stopPropagation(); event.preventDefault();"
+                                    title="Add to Wishlist">
+                                <i class="{% if product.id in wishlist_ids %}fas{% else %}far{% endif %} fa-heart"></i>
                             </button>
                         </form>
                     </div>

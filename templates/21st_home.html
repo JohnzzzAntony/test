@@ -596,8 +596,11 @@
                         </div>
                         {% endif %}
                         {% if product.is_new or forloop.counter <= 4 %}<span class="product-card-21st-badge">New</span>{% endif %}
-                        <button class="product-card-21st-wishlist" onclick="event.stopPropagation(); event.preventDefault();">
-                            <i class="far fa-heart text-sm"></i>
+                        <button class="product-card-21st-wishlist wishlist-btn {% if product.id in wishlist_ids %}active{% endif %}"
+                                data-product-id="{{ product.id }}"
+                                onclick="window.toggleWishlist('{{ product.id }}', this); event.stopPropagation(); event.preventDefault();"
+                                title="Add to Wishlist">
+                            <i class="{% if product.id in wishlist_ids %}fas{% else %}far{% endif %} fa-heart text-sm"></i>
                         </button>
                     </div>
                     <div class="product-card-21st-body">

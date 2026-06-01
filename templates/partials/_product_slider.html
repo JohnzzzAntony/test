@@ -55,11 +55,12 @@
               {% endif %}
 
               {# Wishlist #}
-              <button class="product-card-wishlist"
-                      onclick="event.stopPropagation(); window.location.href='{% url 'products:toggle_wishlist' product.id %}';"
+              <button class="product-card-wishlist wishlist-btn {% if product.id in wishlist_ids %}active{% endif %}"
+                      data-product-id="{{ product.id }}"
+                      onclick="window.toggleWishlist('{{ product.id }}', this); event.stopPropagation(); event.preventDefault();"
                       aria-label="Add {{ product.name }} to wishlist"
                       title="Add to Wishlist">
-                <i class="far fa-heart" aria-hidden="true"></i>
+                <i class="{% if product.id in wishlist_ids %}fas{% else %}far{% endif %} fa-heart" aria-hidden="true"></i>
               </button>
 
               {# Product image #}

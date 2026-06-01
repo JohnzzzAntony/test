@@ -40,8 +40,11 @@
                 </div>
                 {% endif %}
 
-                <div class="product-card-wishlist" onclick="event.stopPropagation(); window.location.href='{% url 'products:toggle_wishlist' product.id %}'" title="Add to Wishlist">
-                  <i class="far fa-heart"></i>
+                <div class="product-card-wishlist wishlist-btn {% if product.id in wishlist_ids %}active{% endif %}"
+                     data-product-id="{{ product.id }}"
+                     onclick="window.toggleWishlist('{{ product.id }}', this); event.stopPropagation(); event.preventDefault();"
+                     title="Add to Wishlist">
+                  <i class="{% if product.id in wishlist_ids %}fas{% else %}far{% endif %} fa-heart"></i>
                 </div>
 
                 <img src="{{ product.get_image_url }}" alt="{{ product.name }}" loading="lazy">
