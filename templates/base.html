@@ -139,7 +139,7 @@
                 glass: true,
                 glow: true,
                 animations: {{ design_settings.enable_animations|yesno:"true,false" }},
-                threejs: "{{ design_settings.hero_3d_effect|default:'fluid' }}",
+                threejs: "none",
                 cursor: {{ design_settings.enable_custom_cursor|yesno:"true,false" }},
             },
         };
@@ -540,6 +540,11 @@ Theme styles (Flower District
         /* Solid white background for middle tier to prevent WebGL canvas bleed-through */
         .middle-tier-bg {
             background-color: #ffffff !important;
+        }
+
+        /* Completely disable the background ThreeJS WebGL canvas container */
+        #hero-canvas {
+            display: none !important;
         }
     </style>
     <!-- ===== FLOWER DISTRICT STYLE HEADER ===== -->
