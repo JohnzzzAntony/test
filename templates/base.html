@@ -473,6 +473,75 @@ Theme styles (Flower District
     <!-- CSRF Helper -->
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
+    <style>
+        /* Explicitly force the desktop middle tier layout to prevent vertical stacking */
+        @media (min-width: 1024px) {
+            .header-container-custom {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 32px !important;
+                width: 100% !important;
+            }
+            .search-bar-custom {
+                display: block !important;
+                flex-grow: 1 !important;
+                max-width: 576px !important;
+                margin: 0 auto !important;
+            }
+            .utilities-custom {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 32px !important;
+            }
+            .mobile-utilities-custom {
+                display: none !important;
+            }
+        }
+        
+        @media (max-width: 1023px) {
+            .header-container-custom {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 16px !important;
+                width: 100% !important;
+            }
+            .search-bar-custom {
+                display: none !important;
+            }
+            .utilities-custom {
+                display: none !important;
+            }
+            .mobile-utilities-custom {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 12px !important;
+            }
+        }
+
+        /* Fix display conflict with mobile-responsive.css global anchor tag overrides */
+        #main-header a {
+            display: flex !important;
+            min-height: auto !important;
+        }
+
+        #main-header .utilities-custom a {
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+        }
+
+        /* Solid white background for middle tier to prevent WebGL canvas bleed-through */
+        .middle-tier-bg {
+            background-color: #ffffff !important;
+        }
+    </style>
     <!-- ===== FLOWER DISTRICT STYLE HEADER ===== -->
     <header id="main-header"
         class="bg-white border-b border-[var(--border-custom)] transition-all duration-300" style="position: relative; z-index: 2000;">
@@ -506,8 +575,8 @@ Theme styles (Flower District
             </div>
         </div>
               <!-- Premium Main Header (Logo, Search, Utilities) -->
-        <div class="border-b border-[var(--border-light)] bg-white sticky top-0 z-50">
-            <div class="container py-4 flex items-center justify-between gap-8">
+        <div class="border-b border-[var(--border-light)] bg-white middle-tier-bg sticky top-0 z-50">
+            <div class="container py-4 flex items-center justify-between gap-8 header-container-custom">
                 
                 <!-- Left: Logo -->
                 <div class="flex-shrink-0">
@@ -524,7 +593,7 @@ Theme styles (Flower District
                 </div>
 
                 <!-- Center: Large Search Bar -->
-                <div class="hidden lg:block flex-grow max-w-lg mx-auto">
+                <div class="hidden lg:block flex-grow max-w-lg mx-auto search-bar-custom">
                     <form action="{% url 'products:product_list' %}" method="GET" class="relative">
                         <input type="text" name="q" placeholder="What are you looking for?"
                             class="h-11 w-full pl-4 pr-12 bg-white border border-gray-300 rounded text-sm text-[var(--text-primary)] placeholder-gray-400 focus:outline-none focus:border-[var(--primary)] transition-all">
@@ -535,12 +604,12 @@ Theme styles (Flower District
                 </div>
 
                 <!-- Right: Vertical Icon Buttons (Desktop) -->
-                <div class="hidden lg:flex items-center gap-8 text-gray-700">
+                <div class="hidden lg:flex items-center gap-8 text-gray-700 utilities-custom">
                     
                     <!-- User Account -->
                     {% if design_settings.show_header_account %}
                     <div class="group relative">
-                        <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center block py-1" aria-label="Account">
+                        <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center py-1" aria-label="Account">
                             <i class="far fa-user text-xl"></i>
                             <span class="text-[10px] font-bold tracking-wide uppercase mt-1">Account</span>
                         </a>
@@ -564,7 +633,7 @@ Theme styles (Flower District
 
                     <!-- Wishlist -->
                     {% if design_settings.show_header_wishlist %}
-                    <a href="{% url 'products:wishlist' %}" class="relative flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center text-gray-700 block py-1" aria-label="Wishlist">
+                    <a href="{% url 'products:wishlist' %}" class="relative flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center text-gray-700 py-1" aria-label="Wishlist">
                         <div class="relative">
                             <i class="far fa-heart text-xl"></i>
                             <span class="wishlist-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm {% if not wishlist_count %}hidden{% endif %}">{{ wishlist_count|default:"0" }}</span>
@@ -575,7 +644,7 @@ Theme styles (Flower District
 
                     <!-- Shopping Cart -->
                     {% if design_settings.show_header_cart %}
-                    <a href="{% url 'orders:enquiry_cart' %}" class="relative flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center text-gray-700 block py-1" aria-label="Cart">
+                    <a href="{% url 'orders:enquiry_cart' %}" class="relative flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center text-gray-700 py-1" aria-label="Cart">
                         <div class="relative">
                             <i class="fa-solid fa-cart-shopping text-xl"></i>
                             <span class="cart-count-badge absolute -top-1.5 -right-2 bg-[var(--error)] text-white rounded-full text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center shadow-sm {% if not cart_count %}hidden{% endif %}">{{ cart_count|default:"0" }}</span>
@@ -585,14 +654,14 @@ Theme styles (Flower District
                     {% endif %}
 
                     <!-- Store Locations -->
-                    <a href="{% url 'core:store_locations' %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center text-gray-700 block py-1" aria-label="Store Locations">
+                    <a href="{% url 'core:store_locations' %}" class="flex flex-col items-center gap-1 hover:text-[var(--primary)] transition-colors text-center text-gray-700 py-1" aria-label="Store Locations">
                         <i class="fa-solid fa-location-dot text-xl"></i>
                         <span class="text-[10px] font-bold tracking-wide uppercase mt-1">Store Locations</span>
                     </a>
                 </div>
 
                 <!-- Mobile Header Utilities -->
-                <div class="flex lg:hidden items-center gap-3 text-gray-700">
+                <div class="flex lg:hidden items-center gap-3 text-gray-700 mobile-utilities-custom">
                     <!-- Mobile Search toggle or simple text -->
                     {% if design_settings.show_header_cart %}
                     <a href="{% url 'orders:enquiry_cart' %}" class="relative p-2 text-gray-700">
