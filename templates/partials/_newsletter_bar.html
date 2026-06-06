@@ -1,10 +1,10 @@
-{% load static %}
+﻿{% load static %}
 <section class="fd-newsletter-section">
   <div class="container">
     <div class="fd-newsletter-inner">
       <div class="fd-newsletter-text">
-        <h2 class="fd-newsletter-title">{{ hp_settings.newsletter_title|default:"Stay in the Loop" }}</h2>
-        <p class="fd-newsletter-subtitle">{{ hp_settings.newsletter_subtitle|default:"Subscribe for exclusive offers, new arrivals, and more — straight to your inbox." }}</p>
+        <h2 class="fd-newsletter-title">Stay in the Loop</h2>
+        <p class="fd-newsletter-subtitle">Subscribe for exclusive offers, new arrivals, and more — straight to your inbox.</p>
       </div>
       <form class="fd-newsletter-form" action="{% url 'core:newsletter_subscribe' %}" method="POST" id="newsletter-form">
         {% csrf_token %}
@@ -13,7 +13,7 @@
                  class="fd-newsletter-input" id="newsletter-email"
                  autocomplete="email">
           <button type="submit" class="fd-newsletter-btn">
-            <span class="btn-text">{{ hp_settings.newsletter_btn_text|default:"Subscribe" }}</span>
+            <span class="btn-text">Subscribe</span>
             <i class="fas fa-paper-plane btn-icon"></i>
           </button>
         </div>

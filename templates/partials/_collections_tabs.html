@@ -3,9 +3,9 @@
 <section class="fd-collections-section">
   <div class="container">
     <div class="fd-section-header">
-      <h2 class="fd-section-title">{{ hp_settings.collections_title|default:"Shop Collections"|safe }}</h2>
-      {% if hp_settings.collections_subtitle %}
-      <p class="fd-section-subtitle">{{ hp_settings.collections_subtitle|safe }}</p>
+      <h2 class="fd-section-title">{{ design_settings.hp_collections_title|default:"Shop Collections"|safe }}</h2>
+      {% if design_settings.hp_collections_subtitle %}
+      <p class="fd-section-subtitle">{{ design_settings.hp_collections_subtitle|safe }}</p>
       {% endif %}
     </div>
     {# Tab Buttons #}

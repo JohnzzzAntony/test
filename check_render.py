@@ -10,5 +10,3 @@ import re
 matches = re.findall(r'<img[^>]+>', html, re.IGNORECASE)
 for img in matches[:20]:
     print(img)
-
-

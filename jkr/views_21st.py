@@ -21,11 +21,7 @@ from core.models import NewsletterSubscription, SocialPost, Testimonial, StoreLo
 
 def home_21st(request):
     """Premium homepage view"""
-    from pages.models import HomepageSettings
-    homepage_settings = HomepageSettings.get_settings()
-    
     context = {
-        'homepage_settings': homepage_settings,
         'categories': Category.objects.filter(is_active=True),
         'featured_products': Product.objects.filter(is_active=True, is_featured=True).select_related('category')[:8],
         'latest_products': Product.objects.filter(is_active=True).order_by('-created_at').select_related('category')[:8],

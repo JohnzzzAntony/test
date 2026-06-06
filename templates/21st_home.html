@@ -440,35 +440,35 @@
             <div class="max-w-xl">
                 <div class="hero-21st-badge">
                     <i class="fas fa-shield-alt"></i>
-                    {{ homepage_settings.hero_badge_text|default:"Trusted by 500+ Healthcare Providers" }}
+                    Trusted by 500+ Healthcare Providers
                 </div>
                 <h1>
-                    {{ homepage_settings.hero_title_html|default:"Equipping Healthcare<br>for the <em>Modern Era</em>"|safe }}
+                    Equipping Healthcare<br>for the <em>Modern Era</em>
                 </h1>
                 <p>
-                    {{ homepage_settings.hero_subtitle|default:"Cutting-edge medical equipment and supplies, curated for hospitals, clinics, and practices worldwide. Precision, reliability, and care in every product." }}
+                    Cutting-edge medical equipment and supplies, curated for hospitals, clinics, and practices worldwide. Precision, reliability, and care in every product.
                 </p>
                 <div class="flex flex-wrap items-center gap-4">
-                    <a href="{{ homepage_settings.hero_btn1_link|default:'/products/categories/' }}" class="btn-21st btn-21st-accent btn-21st-lg" style="min-width:180px;justify-content:center;">
-                        {{ homepage_settings.hero_btn1_text|default:"Browse Catalog" }} <i class="fas fa-arrow-right text-sm"></i>
+                    <a href="{% url 'products:category_index' %}" class="btn-21st btn-21st-accent btn-21st-lg" style="min-width:180px;justify-content:center;">
+                        Browse Catalog <i class="fas fa-arrow-right text-sm"></i>
                     </a>
-                    <a href="{{ homepage_settings.hero_btn2_link|default:'/contact/' }}" class="btn-21st btn-21st-ghost text-white/80 hover:text-white" style="min-width:140px;justify-content:center;">
-                        {{ homepage_settings.hero_btn2_text|default:"Request Quote" }}
+                    <a href="{% url 'contact:contact' %}" class="btn-21st btn-21st-ghost text-white/80 hover:text-white" style="min-width:140px;justify-content:center;">
+                        Request Quote
                     </a>
                 </div>
             </div>
             <div class="hero-21st-stats">
                 <div class="hero-21st-stat">
-                    <span class="hero-21st-stat-number">{{ homepage_settings.hero_stat_1_number|default:"2,500+" }}</span>
-                    <span class="hero-21st-stat-label">{{ homepage_settings.hero_stat_1_label|default:"Products" }}</span>
+                    <span class="hero-21st-stat-number">2,500+</span>
+                    <span class="hero-21st-stat-label">Products</span>
                 </div>
                 <div class="hero-21st-stat">
-                    <span class="hero-21st-stat-number">{{ homepage_settings.hero_stat_2_number|default:"150+" }}</span>
-                    <span class="hero-21st-stat-label">{{ homepage_settings.hero_stat_2_label|default:"Brands" }}</span>
+                    <span class="hero-21st-stat-number">150+</span>
+                    <span class="hero-21st-stat-label">Brands</span>
                 </div>
                 <div class="hero-21st-stat">
-                    <span class="hero-21st-stat-number">{{ homepage_settings.hero_stat_3_number|default:"98%" }}</span>
-                    <span class="hero-21st-stat-label">{{ homepage_settings.hero_stat_3_label|default:"Satisfaction" }}</span>
+                    <span class="hero-21st-stat-number">98%</span>
+                    <span class="hero-21st-stat-label">Satisfaction</span>
                 </div>
             </div>
         </div>
@@ -476,46 +476,43 @@
 </section>
 
 <!-- ===== FEATURES STRIP ===== -->
-{% if homepage_settings.show_features_strip %}
 <section class="bg-white">
     <div class="container-21st">
         <div class="feature-strip">
             <div class="feature-strip-item">
-                <div class="feature-strip-icon"><i class="{{ homepage_settings.feature_1_icon|default:'fas fa-shipping-fast' }}"></i></div>
-                <div class="feature-strip-title">{{ homepage_settings.feature_1_title|default:"Fast Shipping" }}</div>
-                <div class="feature-strip-desc">{{ homepage_settings.feature_1_desc|default:"Next-day delivery on orders" }}</div>
+                <div class="feature-strip-icon"><i class="fas fa-shipping-fast"></i></div>
+                <div class="feature-strip-title">Fast Shipping</div>
+                <div class="feature-strip-desc">Next-day delivery on orders</div>
             </div>
             <div class="feature-strip-item">
-                <div class="feature-strip-icon"><i class="{{ homepage_settings.feature_2_icon|default:'fas fa-award' }}"></i></div>
-                <div class="feature-strip-title">{{ homepage_settings.feature_2_title|default:"Certified Quality" }}</div>
-                <div class="feature-strip-desc">{{ homepage_settings.feature_2_desc|default:"ISO, FDA compliant" }}</div>
+                <div class="feature-strip-icon"><i class="fas fa-award"></i></div>
+                <div class="feature-strip-title">Certified Quality</div>
+                <div class="feature-strip-desc">ISO, FDA compliant</div>
             </div>
             <div class="feature-strip-item">
-                <div class="feature-strip-icon"><i class="{{ homepage_settings.feature_3_icon|default:'fas fa-headset' }}"></i></div>
-                <div class="feature-strip-title">{{ homepage_settings.feature_3_title|default:"24/7 Support" }}</div>
-                <div class="feature-strip-desc">{{ homepage_settings.feature_3_desc|default:"Expert assistance always" }}</div>
+                <div class="feature-strip-icon"><i class="fas fa-headset"></i></div>
+                <div class="feature-strip-title">24/7 Support</div>
+                <div class="feature-strip-desc">Expert assistance always</div>
             </div>
             <div class="feature-strip-item">
-                <div class="feature-strip-icon"><i class="{{ homepage_settings.feature_4_icon|default:'fas fa-undo-alt' }}"></i></div>
-                <div class="feature-strip-title">{{ homepage_settings.feature_4_title|default:"Easy Returns" }}</div>
-                <div class="feature-strip-desc">{{ homepage_settings.feature_4_desc|default:"30-day return policy" }}</div>
+                <div class="feature-strip-icon"><i class="fas fa-undo-alt"></i></div>
+                <div class="feature-strip-title">Easy Returns</div>
+                <div class="feature-strip-desc">30-day return policy</div>
             </div>
         </div>
     </div>
 </section>
-{% endif %}
 
 <!-- ===== CATEGORIES ===== -->
-{% if homepage_settings.show_categories_section %}
 <section class="py-12 sm:py-16 lg:py-24 bg-white" id="categories-section">
     <div class="container-21st">
         <div class="section-21st-header">
             <div>
-                <h2 class="section-21st-title">{{ homepage_settings.categories_title|default:"Shop by Category" }}</h2>
-                <p class="section-21st-subtitle">{{ homepage_settings.categories_subtitle|default:"Explore our comprehensive range of healthcare supplies" }}</p>
+                <h2 class="section-21st-title">Shop by Category</h2>
+                <p class="section-21st-subtitle">Explore our comprehensive range of healthcare supplies</p>
             </div>
-            <a href="{{ homepage_settings.categories_btn_link|default:'/products/categories/' }}" class="btn-21st btn-21st-secondary btn-21st-sm">
-                {{ homepage_settings.categories_btn_text|default:"View All" }} <i class="fas fa-arrow-right text-xs"></i>
+            <a href="{% url 'products:category_index' %}" class="btn-21st btn-21st-secondary btn-21st-sm">
+                View All <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
@@ -565,23 +562,30 @@
         </div>
     </div>
 </section>
-{% endif %}
 
 <!-- ===== FEATURED PRODUCTS ===== -->
-{% if homepage_settings.show_featured_section %}
 <section class="py-24 bg-[#ffffff]">
     <div class="container-21st">
         <div class="section-21st-header">
             <div>
-                <h2 class="section-21st-title">{{ homepage_settings.featured_title|default:"Featured Products" }}</h2>
-                <p class="section-21st-subtitle">{{ homepage_settings.featured_subtitle|default:"Handpicked essentials for your practice" }}</p>
+                <h2 class="section-21st-title">Featured Products</h2>
+                <p class="section-21st-subtitle">Handpicked essentials for your practice</p>
             </div>
-            <a href="{{ homepage_settings.featured_btn_link|default:'/products/' }}" class="btn-21st btn-21st-secondary btn-21st-sm hidden sm:inline-flex">
-                {{ homepage_settings.featured_btn_text|default:"View All" }} <i class="fas fa-arrow-right text-xs"></i>
+            <a href="{% url 'products:product_list' %}" class="btn-21st btn-21st-secondary btn-21st-sm hidden sm:inline-flex">
+                View All <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {% for product in featured_products %}
+            {% for product in featured_products|default:"
+                [{name:'Premium Digital Thermometer',price:'299',category:'Diagnostic',img:'/static/images/placeholder.jpg'},
+                 {name:'Surgical Scalpel Set',price:'189',category:'Surgical',img:'/static/images/placeholder.jpg'},
+                 {name:'Pulse Oximeter Pro',price:'459',category:'Diagnostic',img:'/static/images/placeholder.jpg'},
+                 {name:'Stethoscope Cardiology',price:'349',category:'Examination',img:'/static/images/placeholder.jpg'},
+                 {name:'Blood Pressure Monitor',price:'599',category:'Diagnostic',img:'/static/images/placeholder.jpg'},
+                 {name:'Oxygen Concentrator',price:'2499',category:'Respiratory',img:'/static/images/placeholder.jpg'},
+                 {name:'Infusion Pump Smart',price:'1899',category:'Infusion',img:'/static/images/placeholder.jpg'},
+                 {name:'Patient Monitor',price:'4599',category:'Monitoring',img:'/static/images/placeholder.jpg'}]" %}
+                {% if forloop.counter <= 8 %}
                 <div class="product-card-21st">
                     <div class="product-card-21st-image">
                         {% if product.image %}
@@ -603,15 +607,7 @@
                         <div class="product-card-21st-category">{{ product.category.name|default:product.category }}</div>
                         <h3 class="product-card-21st-name">{{ product.name }}</h3>
                         <div class="product-card-21st-price-row">
-                            {% with price_info=product.get_best_price_info %}
-                            <span class="product-card-21st-price">
-                                {% if price_info.has_offer %}
-                                <span class="line-through text-xs text-gray-400 mr-2">{{ price_info.regular_price }}</span>
-                                {% endif %}
-                                {{ price_info.final_price }}
-                                <span class="currency">AED</span>
-                            </span>
-                            {% endwith %}
+                            <span class="product-card-21st-price">{{ product.price|default:product.get_price_display }} <span class="currency">AED</span></span>
                             <form action="{% url 'orders:add_to_cart' %}" method="POST" class="inline">
                                 {% csrf_token %}
                                 <input type="hidden" name="product_id" value="{{ product.id }}">
@@ -623,203 +619,50 @@
                         </div>
                     </div>
                 </div>
-            {% empty %}
-                <!-- Mock Product 1 -->
-                <div class="product-card-21st">
-                    <div class="product-card-21st-image">
-                        <div class="w-full h-full flex items-center justify-center text-[#d1d5db] bg-gray-50">
-                            <i class="fas fa-image text-4xl"></i>
-                        </div>
-                        <span class="product-card-21st-badge">New</span>
-                    </div>
-                    <div class="product-card-21st-body">
-                        <div class="product-card-21st-category">Diagnostic</div>
-                        <h3 class="product-card-21st-name">Premium Digital Thermometer</h3>
-                        <div class="product-card-21st-price-row">
-                            <span class="product-card-21st-price">299 <span class="currency">AED</span></span>
-                            <button type="button" class="product-card-21st-btn" disabled>
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Mock Product 2 -->
-                <div class="product-card-21st">
-                    <div class="product-card-21st-image">
-                        <div class="w-full h-full flex items-center justify-center text-[#d1d5db] bg-gray-50">
-                            <i class="fas fa-image text-4xl"></i>
-                        </div>
-                        <span class="product-card-21st-badge">New</span>
-                    </div>
-                    <div class="product-card-21st-body">
-                        <div class="product-card-21st-category">Surgical</div>
-                        <h3 class="product-card-21st-name">Surgical Scalpel Set</h3>
-                        <div class="product-card-21st-price-row">
-                            <span class="product-card-21st-price">189 <span class="currency">AED</span></span>
-                            <button type="button" class="product-card-21st-btn" disabled>
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Mock Product 3 -->
-                <div class="product-card-21st">
-                    <div class="product-card-21st-image">
-                        <div class="w-full h-full flex items-center justify-center text-[#d1d5db] bg-gray-50">
-                            <i class="fas fa-image text-4xl"></i>
-                        </div>
-                        <span class="product-card-21st-badge">New</span>
-                    </div>
-                    <div class="product-card-21st-body">
-                        <div class="product-card-21st-category">Diagnostic</div>
-                        <h3 class="product-card-21st-name">Pulse Oximeter Pro</h3>
-                        <div class="product-card-21st-price-row">
-                            <span class="product-card-21st-price">459 <span class="currency">AED</span></span>
-                            <button type="button" class="product-card-21st-btn" disabled>
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Mock Product 4 -->
-                <div class="product-card-21st">
-                    <div class="product-card-21st-image">
-                        <div class="w-full h-full flex items-center justify-center text-[#d1d5db] bg-gray-50">
-                            <i class="fas fa-image text-4xl"></i>
-                        </div>
-                        <span class="product-card-21st-badge">New</span>
-                    </div>
-                    <div class="product-card-21st-body">
-                        <div class="product-card-21st-category">Examination</div>
-                        <h3 class="product-card-21st-name">Stethoscope Cardiology</h3>
-                        <div class="product-card-21st-price-row">
-                            <span class="product-card-21st-price">349 <span class="currency">AED</span></span>
-                            <button type="button" class="product-card-21st-btn" disabled>
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Mock Product 5 -->
-                <div class="product-card-21st">
-                    <div class="product-card-21st-image">
-                        <div class="w-full h-full flex items-center justify-center text-[#d1d5db] bg-gray-50">
-                            <i class="fas fa-image text-4xl"></i>
-                        </div>
-                    </div>
-                    <div class="product-card-21st-body">
-                        <div class="product-card-21st-category">Diagnostic</div>
-                        <h3 class="product-card-21st-name">Blood Pressure Monitor</h3>
-                        <div class="product-card-21st-price-row">
-                            <span class="product-card-21st-price">599 <span class="currency">AED</span></span>
-                            <button type="button" class="product-card-21st-btn" disabled>
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Mock Product 6 -->
-                <div class="product-card-21st">
-                    <div class="product-card-21st-image">
-                        <div class="w-full h-full flex items-center justify-center text-[#d1d5db] bg-gray-50">
-                            <i class="fas fa-image text-4xl"></i>
-                        </div>
-                    </div>
-                    <div class="product-card-21st-body">
-                        <div class="product-card-21st-category">Respiratory</div>
-                        <h3 class="product-card-21st-name">Oxygen Concentrator</h3>
-                        <div class="product-card-21st-price-row">
-                            <span class="product-card-21st-price">2499 <span class="currency">AED</span></span>
-                            <button type="button" class="product-card-21st-btn" disabled>
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Mock Product 7 -->
-                <div class="product-card-21st">
-                    <div class="product-card-21st-image">
-                        <div class="w-full h-full flex items-center justify-center text-[#d1d5db] bg-gray-50">
-                            <i class="fas fa-image text-4xl"></i>
-                        </div>
-                    </div>
-                    <div class="product-card-21st-body">
-                        <div class="product-card-21st-category">Infusion</div>
-                        <h3 class="product-card-21st-name">Infusion Pump Smart</h3>
-                        <div class="product-card-21st-price-row">
-                            <span class="product-card-21st-price">1899 <span class="currency">AED</span></span>
-                            <button type="button" class="product-card-21st-btn" disabled>
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Mock Product 8 -->
-                <div class="product-card-21st">
-                    <div class="product-card-21st-image">
-                        <div class="w-full h-full flex items-center justify-center text-[#d1d5db] bg-gray-50">
-                            <i class="fas fa-image text-4xl"></i>
-                        </div>
-                    </div>
-                    <div class="product-card-21st-body">
-                        <div class="product-card-21st-category">Monitoring</div>
-                        <h3 class="product-card-21st-name">Patient Monitor</h3>
-                        <div class="product-card-21st-price-row">
-                            <span class="product-card-21st-price">4599 <span class="currency">AED</span></span>
-                            <button type="button" class="product-card-21st-btn" disabled>
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>
 </section>
-{% endif %}
 
 <!-- ===== TESTIMONIAL ===== -->
-{% if homepage_settings.show_testimonial_section %}
 <section class="testimonial-21st">
     <div class="container-21st relative">
         <div class="testimonial-21st-card max-w-3xl mx-auto text-center">
             <div class="text-[60px] text-[#b8860b]/30 leading-none mb-6 font-display">"</div>
             <p class="testimonial-21st-quote">
-                {{ homepage_settings.testimonial_text|default:"Working with 21st Century Healthcare has transformed how we source medical equipment. Their product range, competitive pricing, and exceptional support are unmatched in the industry." }}
+                Working with 21st Century Healthcare has transformed how we source medical equipment. Their product range, competitive pricing, and exceptional support are unmatched in the industry.
             </p>
             <div class="testimonial-21st-author justify-center">
-                <div class="testimonial-21st-avatar">{{ homepage_settings.testimonial_author_avatar_initials|default:"JD" }}</div>
+                <div class="testimonial-21st-avatar">JD</div>
                 <div class="text-left">
-                    <div class="testimonial-21st-name">{{ homepage_settings.testimonial_author_name|default:"Dr. James Davidson" }}</div>
-                    <div class="testimonial-21st-role">{{ homepage_settings.testimonial_author_role|default:"Chief of Medicine, Emirates Hospital" }}</div>
+                    <div class="testimonial-21st-name">Dr. James Davidson</div>
+                    <div class="testimonial-21st-role">Chief of Medicine, Emirates Hospital</div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-{% endif %}
 
 <!-- ===== CTA SECTION ===== -->
-{% if homepage_settings.show_cta_section %}
 <section class="py-24 bg-white">
     <div class="container-21st">
         <div class="relative bg-primary-900 rounded-3xl overflow-hidden p-8 md:p-12 lg:p-16 text-center">
             <div class="absolute inset-0 opacity-20" style="background: radial-gradient(circle at 50% 50%, var(--color-teal-500), transparent 70%)"></div>
             <div class="relative z-10 max-w-2xl mx-auto">
-                <h2 class="font-display text-2xl md:text-3xl lg:text-5xl font-semibold text-white mb-4 md:mb-6 leading-tight">{{ homepage_settings.cta_title|default:"Need Bulk Orders or Custom Quotes?" }}</h2>
-                <p class="text-white/60 mb-6 md:mb-8 text-base md:text-lg">{{ homepage_settings.cta_subtitle|default:"Our dedicated team is ready to help you find the right solutions for your facility." }}</p>
+                <h2 class="font-display text-2xl md:text-3xl lg:text-5xl font-semibold text-white mb-4 md:mb-6 leading-tight">Need Bulk Orders or Custom Quotes?</h2>
+                <p class="text-white/60 mb-6 md:mb-8 text-base md:text-lg">Our dedicated team is ready to help you find the right solutions for your facility.</p>
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-                    <a href="{{ homepage_settings.cta_primary_btn_link|default:'/contact/' }}" class="btn-21st btn-21st-accent btn-21st-lg w-full sm:w-auto justify-center">
-                        <i class="fas fa-paper-plane"></i> {{ homepage_settings.cta_primary_btn_text|default:"Get a Quote" }}
+                    <a href="{% url 'contact:contact' %}" class="btn-21st btn-21st-accent btn-21st-lg w-full sm:w-auto justify-center">
+                        <i class="fas fa-paper-plane"></i> Get a Quote
                     </a>
-                    <a href="{% if homepage_settings.cta_secondary_btn_link %}{{ homepage_settings.cta_secondary_btn_link }}{% else %}tel:{{ site_settings.phone }}{% endif %}" class="btn-21st btn-21st-outline text-white border-white/20 hover:bg-white/10 w-full sm:w-auto justify-center">
-                        <i class="fas fa-phone"></i> {% if homepage_settings.cta_secondary_btn_text %}{{ homepage_settings.cta_secondary_btn_text }}{% elif site_settings.phone %}{{ site_settings.phone }}{% else %}Call Us{% endif %}
+                    <a href="tel:{{ site_settings.phone }}" class="btn-21st btn-21st-outline text-white border-white/20 hover:bg-white/10 w-full sm:w-auto justify-center">
+                        <i class="fas fa-phone"></i> {{ site_settings.phone|default:"Call Us" }}
                     </a>
                 </div>
             </div>
         </div>
     </div>
 </section>
-{% endif %}
 
 {% endblock %}

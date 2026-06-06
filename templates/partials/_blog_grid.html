@@ -1,11 +1,11 @@
-{% load static %}
+﻿{% load static %}
 {% with posts=latest_blog_posts %}
 {% if posts %}
 <section class="fd-blog-section">
   <div class="container">
     <div class="fd-section-header">
       <div>
-        <h2 class="fd-section-title">{{ hp_settings.blog_section_title|default:"From Our Blog" }}</h2>
+        <h2 class="fd-section-title">From Our Blog</h2>
       </div>
       <a href="{% url 'blog:post_list' %}" class="fd-view-all">View All Posts <i class="fas fa-arrow-right"></i></a>
     </div>
