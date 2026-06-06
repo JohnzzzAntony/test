@@ -419,7 +419,7 @@
                             <span class="product-card-21st-price">{{ product.get_price_display|default:"Call for Price" }}</span>
                             {% if product.compare_at_price %}<span class="text-[13px] text-[#9ca3af] line-through">{{ product.compare_at_price }}</span>{% endif %}
                         </div>
-                        <form action="{% url 'orders:add_to_cart' %}" method="POST" class="flex gap-2">
+                        <form action="{% url 'orders:add_to_cart' product_id=product.id %}" method="POST" class="flex gap-2">
                             {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ product.id }}">
                             <input type="hidden" name="quantity" value="1">
