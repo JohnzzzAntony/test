@@ -6,6 +6,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
+    import core.monkeypatch_django
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'jkr.settings')
     try:
         from django.core.management import execute_from_command_line

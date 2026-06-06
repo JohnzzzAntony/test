@@ -534,54 +534,81 @@ class HeroSlideAdmin(admin.ModelAdmin):
 @admin.register(HomepageSettings)
 class HomepageSettingsAdmin(admin.ModelAdmin):
     """
-    Singleton admin — only one record is allowed.
-    The admin hides the Add button when a record already exists.
+    Singleton admin — controls every section of the homepage.
+    One record, no Add/Delete buttons.
     """
-    filter_horizontal = ('exclusive_products', 'onsale_products')
-
     fieldsets = (
-        ('📢 Announcement Bar', {
-            'fields': ('show_announcement_bar', 'announcement_text'),
-            'description': 'Controls the slim dark bar at the top of the page.',
-        }),
-        ('🌸 Hero — Text & CTAs', {
+        # ── 1. HERO SECTION ──────────────────────────────────────────────────
+        ('🚀 1 · Hero Section', {
             'fields': (
-                'hero_eyebrow',
-                'hero_title_line1', 'hero_title_em', 'hero_title_line2',
+                'hero_badge_text',
+                'hero_title_html',
                 'hero_subtitle',
                 ('hero_btn1_text', 'hero_btn1_link'),
                 ('hero_btn2_text', 'hero_btn2_link'),
+                ('hero_stat_1_number', 'hero_stat_1_label'),
+                ('hero_stat_2_number', 'hero_stat_2_label'),
+                ('hero_stat_3_number', 'hero_stat_3_label'),
             ),
-            'description': (
-                'Controls the text on the LEFT side of the hero. '
-                'Add images on the RIGHT via <b>Hero Slides</b> above.'
-            ),
+            'description': 'Main display area at the top of the homepage.',
         }),
-        ('🏷️ Hero — Floating Tag', {
-            'fields': ('show_hero_tag', 'hero_tag_label', 'hero_tag_value'),
-            'description': 'The small glass card overlaid on the hero image.',
-        }),
-        ('🎯 Custom Homepage Products', {
-            'fields': ('exclusive_products', 'onsale_products'),
-            'description': 'Choose specific products to manually display in the Exclusive Products / Latest Arrivals and On Sale Now sections.',
-        }),
-        ('📋 Section Labels', {
+
+        # ── 2. FEATURES STRIP ─────────────────────────────────────────────────
+        ('✅ 2 · Features Strip', {
             'fields': (
-                ('featured_eyebrow', 'featured_title'),
+                'show_features_strip',
+                ('feature_1_title', 'feature_1_desc', 'feature_1_icon'),
+                ('feature_2_title', 'feature_2_desc', 'feature_2_icon'),
+                ('feature_3_title', 'feature_3_desc', 'feature_3_icon'),
+                ('feature_4_title', 'feature_4_desc', 'feature_4_icon'),
+            ),
+            'description': 'Four-pillar horizontal highlight strip (e.g. Shipping, Quality, Support, Returns).',
+        }),
+
+        # ── 3. SHOP BY CATEGORY ──────────────────────────────────────────────
+        ('🗂️ 3 · Shop by Category Section', {
+            'fields': (
+                'show_categories_section',
+                'categories_title',
+                'categories_subtitle',
+                ('categories_btn_text', 'categories_btn_link'),
+            ),
+            'description': 'Configuration for the categories grid section.',
+        }),
+
+        # ── 4. FEATURED PRODUCTS ─────────────────────────────────────────────
+        ('🆕 4 · Featured Products Section', {
+            'fields': (
+                'show_featured_section',
+                'featured_title',
                 'featured_subtitle',
-                ('bestsellers_eyebrow', 'bestsellers_title'),
-                ('testimonials_eyebrow', 'testimonials_title'),
+                ('featured_btn_text', 'featured_btn_link'),
             ),
+            'description': 'Configuration for the featured products grid section.',
         }),
-        ('👁️ Section Visibility', {
+
+        # ── 5. TESTIMONIAL ───────────────────────────────────────────────────
+        ('⭐ 5 · Testimonial Section', {
             'fields': (
-                'show_category_pills',
-                'show_featured_products',
-                'show_why_strip',
-                'show_best_sellers',
-                'show_testimonials',
+                'show_testimonial_section',
+                'testimonial_text',
+                'testimonial_author_name',
+                'testimonial_author_role',
+                'testimonial_author_avatar_initials',
             ),
-            'description': 'Toggle individual sections on or off without deleting content.',
+            'description': 'A highlight customer/client testimonial block.',
+        }),
+
+        # ── 6. CTA SECTION ───────────────────────────────────────────────────
+        ('✉️ 6 · CTA Section', {
+            'fields': (
+                'show_cta_section',
+                'cta_title',
+                'cta_subtitle',
+                ('cta_primary_btn_text', 'cta_primary_btn_link'),
+                ('cta_secondary_btn_text', 'cta_secondary_btn_link'),
+            ),
+            'description': 'Call-to-action banner at the bottom of the page.',
         }),
     )
 
@@ -592,6 +619,15 @@ class HomepageSettingsAdmin(admin.ModelAdmin):
         return False
 
     def get_object(self, request, object_id, from_field=None):
-        # Auto-create the singleton if it doesn't exist yet
         HomepageSettings.get_settings()
         return super().get_object(request, object_id, from_field)
+
+    def changelist_view(self, request, extra_context=None):
+        """Redirect the changelist directly to the single record's edit page."""
+        from django.http import HttpResponseRedirect
+        from django.urls import reverse
+        obj = HomepageSettings.get_settings()
+        return HttpResponseRedirect(
+            reverse('admin:pages_homepagesettings_change', args=[obj.pk])
+        )
+

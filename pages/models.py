@@ -370,131 +370,140 @@ class HeroSlide(models.Model):
 
 class HomepageSettings(models.Model):
     """
-    Singleton model — exactly ONE record controls every text label,
-    toggle, and the hero floating-tag on the homepage.
+    Singleton model — ONE record controls every section of the homepage.
+    Covers: Hero, Features Strip, Shop by Category, Featured Products,
+    Testimonial, CTA Section.
     """
-    # ── Hero Text ───────────────────────────────────────────
-    hero_eyebrow = models.CharField(
-        max_length=120,
-        default="Dubai's Premier Florist",
-        help_text="Small uppercase label above the hero title."
+
+    # ── 1 · HERO SECTION ──────────────────────────────────────────────────────
+    hero_badge_text = models.CharField(
+        max_length=200, 
+        default="Trusted by 500+ Healthcare Providers",
+        help_text="Small label above the main title."
     )
-    hero_title_line1 = models.CharField(
-        max_length=120,
-        default="Flowers that",
-        help_text="First line of the large hero title."
-    )
-    hero_title_em = models.CharField(
-        max_length=80,
-        default="speak",
-        help_text="Italic/rose-coloured word in the middle of the hero title."
-    )
-    hero_title_line2 = models.CharField(
-        max_length=120,
-        default="your heart",
-        help_text="Third line of the large hero title."
+    hero_title_html = models.CharField(
+        max_length=512, 
+        default="Equipping Healthcare<br>for the <em>Modern Era</em>",
+        help_text="Main heading of the homepage hero. Supports HTML like <br> and <em>."
     )
     hero_subtitle = models.TextField(
-        default=(
-            "Handcrafted arrangements for every occasion — from intimate gestures "
-            "to grand celebrations. Delivered fresh across Dubai."
-        ),
-        help_text="Paragraph below the hero title."
+        default="Cutting-edge medical equipment and supplies, curated for hospitals, clinics, and practices worldwide. Precision, reliability, and care in every product."
     )
-
-    # ── Hero CTAs ────────────────────────────────────────────
-    hero_btn1_text = models.CharField(max_length=80, default="Shop Collection")
+    hero_btn1_text = models.CharField(
+        max_length=100, 
+        default="Browse Catalog", 
+        verbose_name="Primary Button Text"
+    )
     hero_btn1_link = models.CharField(
-        max_length=255,
-        default="/products/",
-        help_text="URL or path for the primary hero button."
+        max_length=255, 
+        default="/products/categories/", 
+        verbose_name="Primary Button Link"
     )
-    hero_btn2_text = models.CharField(max_length=80, default="Explore Occasions")
+    hero_btn2_text = models.CharField(
+        max_length=100, 
+        default="Request Quote", 
+        verbose_name="Secondary Button Text"
+    )
     hero_btn2_link = models.CharField(
-        max_length=255,
-        default="/products/",
-        help_text="URL or path for the secondary hero button."
+        max_length=255, 
+        default="/contact/", 
+        verbose_name="Secondary Button Link"
     )
+    
+    # Hero Stats
+    hero_stat_1_number = models.CharField(max_length=50, default="2,500+")
+    hero_stat_1_label = models.CharField(max_length=100, default="Products")
+    hero_stat_2_number = models.CharField(max_length=50, default="150+")
+    hero_stat_2_label = models.CharField(max_length=100, default="Brands")
+    hero_stat_3_number = models.CharField(max_length=50, default="98%")
+    hero_stat_3_label = models.CharField(max_length=100, default="Satisfaction")
 
-    # ── Hero Floating Tag ───────────────────────────────────
-    hero_tag_label = models.CharField(
-        max_length=80,
-        default="Today's Pick",
-        help_text="Small label in the floating card on the hero image panel."
-    )
-    hero_tag_value = models.CharField(
-        max_length=120,
-        default="Blush Cascade",
-        help_text="Main text in the floating card on the hero image panel."
-    )
-    show_hero_tag = models.BooleanField(
-        default=True,
-        verbose_name="Show Hero Tag",
+    # ── 2 · FEATURES STRIP ─────────────────────────────────────────────────────
+    show_features_strip = models.BooleanField(
+        default=True, 
+        verbose_name="Features Strip",
         choices=((True, 'Show'), (False, 'Hide'))
     )
+    feature_1_title = models.CharField(max_length=100, default="Fast Shipping")
+    feature_1_desc = models.CharField(max_length=200, default="Next-day delivery on orders")
+    feature_1_icon = models.CharField(max_length=100, default="fas fa-shipping-fast", help_text="FontAwesome icon class.")
+    
+    feature_2_title = models.CharField(max_length=100, default="Certified Quality")
+    feature_2_desc = models.CharField(max_length=200, default="ISO, FDA compliant")
+    feature_2_icon = models.CharField(max_length=100, default="fas fa-award", help_text="FontAwesome icon class.")
+    
+    feature_3_title = models.CharField(max_length=100, default="24/7 Support")
+    feature_3_desc = models.CharField(max_length=200, default="Expert assistance always")
+    feature_3_icon = models.CharField(max_length=100, default="fas fa-headset", help_text="FontAwesome icon class.")
+    
+    feature_4_title = models.CharField(max_length=100, default="Easy Returns")
+    feature_4_desc = models.CharField(max_length=200, default="30-day return policy")
+    feature_4_icon = models.CharField(max_length=100, default="fas fa-undo-alt", help_text="FontAwesome icon class.")
 
-    # ── Section Labels ───────────────────────────────────────
-    featured_eyebrow = models.CharField(max_length=100, default="Curated Selection")
-    featured_title = models.CharField(max_length=200, default="Latest Arrivals")
-    featured_subtitle = models.TextField(
-        default="Each arrangement is crafted by our expert florists using only the freshest blooms",
+    # ── 3 · SHOP BY CATEGORY ──────────────────────────────────────────────────
+    show_categories_section = models.BooleanField(
+        default=True, 
+        verbose_name="Categories Section",
+        choices=((True, 'Show'), (False, 'Hide'))
+    )
+    categories_title = models.CharField(max_length=200, default="Shop by Category")
+    categories_subtitle = models.TextField(
+        default="Explore our comprehensive range of healthcare supplies", 
         blank=True
     )
-    bestsellers_eyebrow = models.CharField(max_length=100, default="Most Loved")
-    bestsellers_title = models.CharField(max_length=200, default="Best Sellers")
-    testimonials_eyebrow = models.CharField(max_length=100, default="Happy Customers")
-    testimonials_title = models.CharField(max_length=200, default="What they say")
+    categories_btn_text = models.CharField(max_length=100, default="View All")
+    categories_btn_link = models.CharField(max_length=255, default="/products/categories/")
 
-    # ── Section Visibility ────────────────────────────────────
-    show_category_pills = models.BooleanField(
-        default=True,
-        verbose_name="Category Pills Strip",
+    # ── 4 · FEATURED PRODUCTS ─────────────────────────────────────────────────
+    show_featured_section = models.BooleanField(
+        default=True, 
+        verbose_name="Featured Section",
         choices=((True, 'Show'), (False, 'Hide'))
     )
-    show_featured_products = models.BooleanField(
-        default=True,
-        verbose_name="Latest Arrivals Section",
-        choices=((True, 'Show'), (False, 'Hide'))
+    featured_title = models.CharField(max_length=200, default="Featured Products")
+    featured_subtitle = models.TextField(
+        default="Handpicked essentials for your practice", 
+        blank=True
     )
-    show_why_strip = models.BooleanField(
-        default=True,
-        verbose_name="Why Us Strip",
-        choices=((True, 'Show'), (False, 'Hide'))
-    )
-    show_best_sellers = models.BooleanField(
-        default=True,
-        verbose_name="Best Sellers Section",
-        choices=((True, 'Show'), (False, 'Hide'))
-    )
-    show_testimonials = models.BooleanField(
-        default=True,
-        verbose_name="Testimonials Section",
-        choices=((True, 'Show'), (False, 'Hide'))
-    )
+    featured_btn_text = models.CharField(max_length=100, default="View All")
+    featured_btn_link = models.CharField(max_length=255, default="/products/")
 
-    # ── Announcement Bar ─────────────────────────────────────
-    announcement_text = models.CharField(
-        max_length=400,
-        default="🌸 \u00a0 Free delivery on orders over 200 AED \u00a0|\u00a0 Same-day delivery available \u00a0🌸",
-        help_text="Text shown in the top announcement bar. Leave blank to use the dynamic Announcement Bar records."
-    )
-    show_announcement_bar = models.BooleanField(
-        default=True,
-        verbose_name="Announcement Bar",
+    # ── 5 · TESTIMONIAL SECTION ───────────────────────────────────────────────
+    show_testimonial_section = models.BooleanField(
+        default=True, 
+        verbose_name="Testimonial Section",
         choices=((True, 'Show'), (False, 'Hide'))
+    )
+    testimonial_text = models.TextField(
+        default="Working with 21st Century Healthcare has transformed how we source medical equipment. Their product range, competitive pricing, and exceptional support are unmatched in the industry."
+    )
+    testimonial_author_name = models.CharField(max_length=200, default="Dr. James Davidson")
+    testimonial_author_role = models.CharField(max_length=200, default="Chief of Medicine, Emirates Hospital")
+    testimonial_author_avatar_initials = models.CharField(
+        max_length=10, 
+        default="JD",
+        help_text="Initials to display in the circular avatar."
     )
 
-    exclusive_products = models.ManyToManyField(
-        'products.Product',
+    # ── 6 · CTA SECTION ───────────────────────────────────────────────────────
+    show_cta_section = models.BooleanField(
+        default=True, 
+        verbose_name="CTA Section",
+        choices=((True, 'Show'), (False, 'Hide'))
+    )
+    cta_title = models.CharField(max_length=250, default="Need Bulk Orders or Custom Quotes?")
+    cta_subtitle = models.TextField(
+        default="Our dedicated team is ready to help you find the right solutions for your facility.",
+        blank=True
+    )
+    cta_primary_btn_text = models.CharField(max_length=100, default="Get a Quote")
+    cta_primary_btn_link = models.CharField(max_length=255, default="/contact/")
+    cta_secondary_btn_text = models.CharField(max_length=100, default="Call Us")
+    cta_secondary_btn_link = models.CharField(
+        max_length=255, 
+        default="",
         blank=True,
-        related_name='homepage_exclusive_settings',
-        help_text="Select products to manually showcase in the Exclusive Products / Latest Arrivals section."
-    )
-    onsale_products = models.ManyToManyField(
-        'products.Product',
-        blank=True,
-        related_name='homepage_onsale_settings',
-        help_text="Select products to manually showcase in the On Sale Now section."
+        help_text="Leave blank to use the global site settings phone number automatically."
     )
 
     class Meta:
@@ -509,6 +518,8 @@ class HomepageSettings(models.Model):
         """Always returns the single settings instance, creating it if needed."""
         obj, _ = cls.objects.get_or_create(pk=1)
         return obj
+
+
 
 
 class ContactPage(models.Model):

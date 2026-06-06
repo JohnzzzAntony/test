@@ -1,8 +1,8 @@
 {% load static %}
-{% if social_posts and design_settings.show_hp_social %}
+{% if social_posts %}
 <section class="fd-social-section">
   <div class="container">
-    <h2 class="fd-section-title text-center">{{ design_settings.hp_social_title|default:"Follow Us on Instagram"|safe }}</h2>
+    <h2 class="fd-section-title text-center">{{ hp_settings.social_grid_title|default:"Follow Us on Instagram"|safe }}</h2>
     {% if site_settings.instagram %}
     <p class="fd-social-handle text-center">
       <a href="{{ site_settings.instagram }}" target="_blank" rel="noopener">
