@@ -5,7 +5,7 @@
  */
 
 /* ===== GOOGLE FONTS ===== */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+/* Cormorant Garamond import removed in favor of Lexend */
 
 /* ===== DESIGN TOKENS ===== */
 :root {
@@ -60,9 +60,9 @@
   --info-bg: rgba(17, 64, 132, 0.06);
 
   /* Typography */
-  --font-main: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
-  --font-heading: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
-  --font-accent: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+  --font-main: 'Lexend', sans-serif;
+  --font-heading: 'Lexend', sans-serif;
+  --font-accent: 'Lexend', sans-serif;
 
   /* Spacing */
   --space-1: 4px;
@@ -123,7 +123,7 @@ html {
 }
 
 body {
-  font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+  font-family: 'Lexend', sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.65;
@@ -157,7 +157,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+  font-family: 'Lexend', sans-serif;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1.2;

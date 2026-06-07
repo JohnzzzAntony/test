@@ -79,36 +79,22 @@ def home(request):
     private_clients = Client.objects.filter(category='Private', is_active=True).order_by('order')
     social_posts = SocialPost.objects.all().order_by('order')[:6]
     
-    # Optimized latest_products (fallback or manual selection)
-    if hp_settings.exclusive_products.exists():
-        latest_products = list(hp_settings.exclusive_products.filter(is_active=True).select_related('category', 'brand').prefetch_related('offers', 'images'))
-    else:
-        latest_products = list(Product.objects.filter(
-            quantity__gt=0,
-            is_active=True
-        ).select_related('category', 'brand').prefetch_related('offers', 'images').order_by('-id')[:8])
-
-    # Fetch Products with active offers (either via Offer model or manual sale_price, or manual selection)
-    now = timezone.now()
-    if hp_settings.onsale_products.exists():
-        active_offers_products = list(hp_settings.onsale_products.filter(is_active=True).select_related('category', 'brand').prefetch_related('offers', 'images'))
-    else:
-        active_offers_products = list(Product.objects.filter(
-            is_active=True,
-            quantity__gt=0,
-        ).filter(
-            models.Q(offers__start_date__lte=now, offers__end_date__gte=now) |
-            models.Q(sale_price__isnull=False, sale_price__lt=models.F('regular_price'))
-        ).distinct().select_related('category', 'brand').prefetch_related('offers', 'images'))
-
-    # Featured Products - Only products explicitly marked as featured via admin
-    featured_products = Product.objects.filter(
-        is_featured=True,
+    # Fetch Exclusive Products based on the new admin checkboxes
+    exclusive_products = list(Product.objects.filter(
+        exclusive_products=True,
         is_active=True,
         quantity__gt=0
-    ).select_related('category', 'brand').prefetch_related('offers', 'images').order_by('-id')
+    ).select_related('category', 'brand').prefetch_related('offers', 'images').order_by('-id'))
+
+    # Fetch On Sale Now Products based on the new admin checkboxes
+    on_sale_products = list(Product.objects.filter(
+        on_sale_now=True,
+        is_active=True,
+        quantity__gt=0
+    ).select_related('category', 'brand').prefetch_related('offers', 'images').order_by('-id'))
     
     # Pre-fetch all active offers for price calculation optimization
+    now = timezone.now()
     all_active_offers = list(Offer.objects.filter(
         start_date__lte=now,
         end_date__gte=now
@@ -119,18 +105,12 @@ def home(request):
         for p in product_list:
             p.price_info = p.get_best_price_info(prefetched_offers=all_active_offers)
             
-    # Ensure no duplicates between the lists and limit them to max 5 items (one row)
-    latest_products = list(latest_products)[:5]
-    latest_ids = {p.id for p in latest_products}
-    
-    featured_products = [p for p in featured_products if p.id not in latest_ids][:5]
-    featured_ids = {p.id for p in featured_products}
-    
-    active_offers_products = [p for p in active_offers_products if p.id not in latest_ids and p.id not in featured_ids][:5]
+    # Limit to max 12 items for horizontal scrolling sliders
+    exclusive_products = list(exclusive_products)[:12]
+    on_sale_products = list(on_sale_products)[:12]
 
-    attach_price_info(latest_products)
-    attach_price_info(featured_products)
-    attach_price_info(active_offers_products)
+    attach_price_info(exclusive_products)
+    attach_price_info(on_sale_products)
 
     # Homepage Collections: Filter active ones and prefetch related Products.
     collections = Collection.objects.filter(is_active=True).prefetch_related(
@@ -153,7 +133,6 @@ def home(request):
         'categories': categories,
         'shop_by_categories': shop_by_categories,
         'collections': collections,
-        'active_offers_products': active_offers_products,
         'about_us': about_us,
         'mission_vision': [mv for mv in [mission, vision] if mv],
         'services': services,
@@ -165,8 +144,8 @@ def home(request):
         'public_clients': public_clients,
         'private_clients': private_clients,
         'social_posts': social_posts,
-        'latest_products': latest_products,
-        'featured_products': featured_products,
+        'exclusive_products': exclusive_products,
+        'on_sale_products': on_sale_products,
         'brands': brands,
     }
     return render(request, 'index.html', context)

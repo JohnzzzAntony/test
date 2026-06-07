@@ -35,10 +35,10 @@ class SubCategoryInline(admin.TabularInline):
 class ProductAdmin(ImportExportModelAdmin):
     form = ProductAdminForm
     resource_class = ProductResource
-    list_display = ('name', 'category_display', 'brand', 'regular_price', 'sale_price', 'quantity', 'is_featured', 'show_on_homepage', 'stock_status', 'preview')
-    list_editable = ('show_on_homepage', 'brand', 'is_featured')
+    list_display = ('name', 'category_display', 'brand', 'regular_price', 'sale_price', 'quantity', 'exclusive_products', 'on_sale_now', 'stock_status', 'preview')
+    list_editable = ('on_sale_now', 'brand', 'exclusive_products')
     search_fields = ('name', 'slug', 'sku_id', 'brand__name')
-    list_filter = ('brand', 'category', 'is_featured', 'show_on_homepage', 'is_active')
+    list_filter = ('brand', 'category', 'exclusive_products', 'on_sale_now', 'is_active')
     readonly_fields = ('sku_id', 'preview', 'badge_management')
     inlines = [ProductImageInline]
     # change_list_template = "admin/products/product/change_list.html"
@@ -100,8 +100,8 @@ class ProductAdmin(ImportExportModelAdmin):
             120, # review_count
             "NEW", # badge
             "blue", # badge_color
-            True, # is_featured
-            True, # show_on_homepage
+            True, # exclusive_products
+            True, # on_sale_now
             True, # is_active
             "2024-01-01 10:00:00", # created_at
             "Best Stethoscope UAE", # meta_title
@@ -141,8 +141,8 @@ class ProductAdmin(ImportExportModelAdmin):
             45, # review_count
             "TRENDING", # badge
             "red", # badge_color
-            False, # is_featured
-            True, # show_on_homepage
+            False, # exclusive_products
+            True, # on_sale_now
             True, # is_active
             "2024-01-01 11:00:00", # created_at
             "Digital BP Monitor Dubai", # meta_title
@@ -239,8 +239,8 @@ class ProductAdmin(ImportExportModelAdmin):
                 'badge', 
                 'badge_color',
                 'slug', 
-                'show_on_homepage', 
-                'is_featured'
+                'exclusive_products', 
+                'on_sale_now'
             ),
             'description': 'Core identity and stock availability. Choose a parent category to see subcategories.'
         }),
@@ -270,7 +270,6 @@ class ProductAdmin(ImportExportModelAdmin):
     radio_fields = {
         "shipping_status": admin.HORIZONTAL,
         "free_shipping": admin.HORIZONTAL,
-        "show_on_homepage": admin.HORIZONTAL,
     }
     autocomplete_fields = ('brand',)
 

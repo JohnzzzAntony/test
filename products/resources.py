@@ -33,7 +33,7 @@ class ProductResource(resources.ModelResource):
             'additional_shipping_charge', 'delivery_time', 'tax_percentage', 
             'weight', 'length', 'width', 'height', 'features', 'overview',
             'technical_info', 'shipping_returns', 'avg_rating', 'review_count', 'badge', 'badge_color',
-            'is_featured', 'show_on_homepage', 'is_active', 'created_at',
+            'exclusive_products', 'on_sale_now', 'is_active', 'created_at',
             'meta_title', 'meta_description', 'meta_keywords',
             'gallery_image_urls', 'category_image_url'
         )

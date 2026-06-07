@@ -23,7 +23,7 @@ def home_21st(request):
     """Premium homepage view"""
     context = {
         'categories': Category.objects.filter(is_active=True),
-        'featured_products': Product.objects.filter(is_active=True, is_featured=True).select_related('category')[:8],
+        'featured_products': Product.objects.filter(is_active=True, exclusive_products=True).select_related('category')[:8],
         'latest_products': Product.objects.filter(is_active=True).order_by('-created_at').select_related('category')[:8],
         'cart_count': request.session.get('cart_count', 0),
     }

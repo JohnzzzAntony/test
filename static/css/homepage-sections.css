@@ -335,7 +335,7 @@
 
 .hero-swiper .swiper-pagination-bullet-active {
   background: #fff !important;
-  transform: scale(1.4) !important;
+  transform: none !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -832,15 +832,19 @@
 }
 
 .swiper-pagination-bullet {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
   background: var(--hp-gray-200) !important;
   opacity: 1 !important;
   transition: background var(--hp-transition), transform var(--hp-transition) !important;
   margin: 0 4px !important;
+  transform: none !important;
 }
 
 .swiper-pagination-bullet-active {
   background: var(--hp-blue) !important;
-  transform: scale(1.25) !important;
+  transform: none !important;
 }
 
 .btn { display: inline-flex; align-items: center; gap: 6px; padding: 12px 24px; font-family: var(--font-display, 'Montserrat', sans-serif); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; border-radius: var(--hp-radius); transition: all var(--hp-transition); cursor: pointer; border: 2px solid transparent; }

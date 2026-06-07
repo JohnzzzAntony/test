@@ -1,5 +1,154 @@
-{% load static %}
+{% load static custom_filters %}
 {% if collections %}
+<style>
+  /* Scoped styles for the Collections Tabs redesigned product card */
+  .fd-collections-section {
+    background-color: #ffffff !important;
+  }
+  .fd-collections-section .product-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 0px !important; /* rectangular box */
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.15) !important; /* black shadow emanating outward */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease !important;
+    display: flex;
+    flex-direction: column;
+    width: 255px !important;
+    height: 338.32px !important;
+    margin: 0 auto !important;
+    padding: 12px !important;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    box-sizing: border-box !important;
+  }
+  .fd-collections-section .product-card:hover {
+    border-color: #114084 !important; /* elegant brand highlight on hover */
+    box-shadow: 0 0 22px rgba(0, 0, 0, 0.28) !important;
+  }
+  .fd-collections-section .product-card-image {
+    position: relative;
+    width: 100%;
+    height: 140px !important;
+    background: #ffffff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px !important;
+    overflow: hidden;
+  }
+  .fd-collections-section .product-card-image img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    padding: 4px;
+    transition: transform 400ms ease;
+  }
+  .fd-collections-section .product-card:hover .product-card-image img {
+    transform: scale(1.03);
+  }
+  .fd-collections-section .product-card-wishlist {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent !important;
+    border: none !important;
+    color: #1a1a1a !important;
+    font-size: 16px !important;
+    z-index: 15;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border-radius: 50% !important;
+  }
+  .fd-collections-section .product-card-wishlist:hover {
+    color: #ef4444 !important;
+    transform: scale(1.1);
+  }
+  .fd-collections-section .product-card-body {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex-grow: 1;
+    gap: 6px;
+  }
+  .fd-collections-section .product-card-name {
+    font-family: 'Lexend', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: #111111 !important;
+    line-height: 1.3;
+    margin: 0;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 34px !important; /* fixed height to keep alignment perfect */
+    width: 100%;
+  }
+  .fd-collections-section .product-card-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: #f59e0b !important; /* gold star color */
+    font-size: 10px !important;
+    margin-top: 2px;
+  }
+  .fd-collections-section .product-card-rating i {
+    font-size: 10px;
+  }
+  .fd-collections-section .rating-count {
+    color: #9ca3af !important;
+    font-family: 'Lexend', sans-serif !important;
+    font-size: 10px !important;
+    font-weight: 500;
+  }
+  .fd-collections-section .product-card-price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: auto;
+    width: 100%;
+    padding-top: 4px;
+  }
+  .fd-collections-section .price-current {
+    font-family: 'Lexend', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #111111 !important;
+  }
+  .fd-collections-section .price-original {
+    font-family: 'Lexend', sans-serif !important;
+    font-size: 11px !important;
+    color: #a0aec0 !important;
+    text-decoration: line-through !important;
+  }
+  .fd-collections-section .product-card-shop-now {
+    font-family: 'Lexend', sans-serif !important;
+    font-size: 11px !important;
+    color: #718096 !important;
+    margin-top: 4px;
+    transition: color 0.3s;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .fd-collections-section .product-card:hover .product-card-shop-now {
+    color: #114084 !important;
+    text-decoration: underline;
+  }
+</style>
 <section class="fd-collections-section">
   <div class="container">
     <div class="fd-section-header">
@@ -30,16 +179,8 @@
           <div class="swiper-slide">
             <div class="product-card" onclick="window.location.href='{{ product.get_absolute_url }}'" style="cursor:pointer;">
               <div class="product-card-image">
-                {% if product.price_info.has_offer %}
-                <div class="product-card-badges">
-                  <span class="product-badge product-badge-sale">{{ product.price_info.discount_display|default:"SALE" }}</span>
-                </div>
-                {% elif product.badge %}
-                <div class="product-card-badges">
-                  <span class="product-badge product-badge-new" style="background-color: var(--{{ product.badge_color|default:'accent' }});">{{ product.badge }}</span>
-                </div>
-                {% endif %}
-
+                
+                {# Wishlist #}
                 <div class="product-card-wishlist wishlist-btn {% if product.id in wishlist_ids %}active{% endif %}"
                      data-product-id="{{ product.id }}"
                      onclick="window.toggleWishlist('{{ product.id }}', this); event.stopPropagation(); event.preventDefault();"
@@ -47,35 +188,63 @@
                   <i class="{% if product.id in wishlist_ids %}fas{% else %}far{% endif %} fa-heart"></i>
                 </div>
 
+                {# Offer Badge #}
+                {% if product.price_info.has_offer %}
+                <div class="product-card-badge-offer" style="position: absolute; top: 10px; left: 10px; z-index: 15; background: #ef4444; color: #ffffff; font-family: 'Lexend', sans-serif; font-size: 8px; font-weight: 700; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.15); transition: opacity 0.3s ease;">
+                  {{ product.price_info.discount_display|default:"SAVE" }}
+                </div>
+                {% elif product.badge %}
+                <div class="product-card-badge-offer" style="position: absolute; top: 10px; left: 10px; z-index: 15; background: var(--{{ product.badge_color|default:'accent' }}); color: #ffffff; font-family: 'Lexend', sans-serif; font-size: 8px; font-weight: 700; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">
+                  {{ product.badge }}
+                </div>
+                {% endif %}
+
                 <img src="{{ product.get_image_url }}" alt="{{ product.name }}" loading="lazy">
+
+                {# Countdown Timer #}
+                {% if product.price_info.has_offer and product.price_info.offer.end_date %}
+                <div class="offer-countdown-timer" 
+                     data-end-date="{{ product.price_info.offer.end_date|date:'Y-m-d\TH:i:s\Z' }}"
+                     style="position: absolute; bottom: 0; left: 0; right: 0; z-index: 15; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border-top: 1px solid rgba(0,0,0,0.05); padding: 6px 4px; display: flex; justify-content: center; align-items: center; gap: 4px; transition: opacity 0.3s ease, transform 0.3s ease;">
+                  <div style="font-family: 'Lexend', sans-serif; font-size: 10px; font-weight: 700; color: #111111; letter-spacing: 0.02em; display: flex; align-items: center; gap: 3px;">
+                    <i class="far fa-clock" style="color: #ef4444; font-size: 9px; margin-right: 2px;"></i>
+                    <span class="days-val">00</span><span style="font-weight:400; font-size:8px; color:#666;">d</span> :
+                    <span class="hours-val">00</span><span style="font-weight:400; font-size:8px; color:#666;">h</span> :
+                    <span class="mins-val">00</span><span style="font-weight:400; font-size:8px; color:#666;">m</span> :
+                    <span class="secs-val">00</span><span style="font-weight:400; font-size:8px; color:#666;">s</span>
+                  </div>
+                </div>
+                {% endif %}
               </div>
 
-              <div class="product-card-body" style="display:flex; flex-direction:column; gap:8px;">
-                <h3 class="product-card-name">{{ product.name|truncatechars:55 }}</h3>
+              <div class="product-card-body">
+                <h3 class="product-card-name">{{ product.name }}</h3>
                 
-                <div class="product-card-rating" aria-label="5 stars" style="display:flex; align-items:center; gap:4px; margin-bottom:4px;">
-                  <div class="rating-stars" aria-hidden="true" style="color:#f59e0b; font-size:11px; display:flex; gap:2px;">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                <div class="product-card-rating" aria-label="{{ product.avg_rating }} stars">
+                  <div class="rating-stars" aria-hidden="true">
+                    {{ product.avg_rating|render_stars }}
                   </div>
-                  <span class="rating-count" style="font-size:11px; color:#9ca3af; font-weight:600;">(5.0)</span>
+                  <span class="rating-count">({{ product.review_count|default:0 }})</span>
                 </div>
 
-                <div class="product-card-price" style="display:flex; align-items:baseline; gap:8px; margin-top:auto;">
+                <div class="product-card-price">
                   {% if product.price_info.has_offer %}
-                    <span class="price-current" style="font-size:16px; font-weight:800; color:#ef4444;" aria-label="Price: {{ product.price_info.final_price }} AED">
-                      {{ product.price_info.final_price }} <span class="price-currency" style="font-size:10px; font-weight:700;">AED</span>
-                    </span>
-                    <span class="price-original" style="font-size:12px; text-decoration:line-through; color:#9ca3af;" aria-label="Original: {{ product.price_info.regular_price }} AED">
+                    <span class="price-original" aria-label="Original price: {{ product.price_info.regular_price }} AED">
                       {{ product.price_info.regular_price }} AED
                     </span>
+                    <span class="price-current" aria-label="Current price: {{ product.price_info.final_price }} AED">
+                      {{ product.price_info.final_price }} AED
+                    </span>
                   {% elif product.price_info.regular_price %}
-                    <span class="price-current" style="font-size:16px; font-weight:800; color:var(--primary);" aria-label="Price: {{ product.price_info.regular_price }} AED">
-                      {{ product.price_info.regular_price }} <span class="price-currency" style="font-size:10px; font-weight:700;">AED</span>
+                    <span class="price-current" aria-label="Price: {{ product.price_info.regular_price }} AED">
+                      {{ product.price_info.regular_price }} AED
                     </span>
                   {% else %}
                     <span class="price-current" style="font-size:12px; font-style:italic; color:#6b7280;">Price on Request</span>
                   {% endif %}
                 </div>
+                
+                <div class="product-card-shop-now">Shop Now</div>
               </div>
             </div>
           </div>
@@ -135,6 +304,67 @@ document.addEventListener('DOMContentLoaded', function () {
 
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => activateTab(btn.dataset.tab));
+  });
+
+  // Initialize countdown timers for collections
+  const timers = document.querySelectorAll('.fd-collections-section .offer-countdown-timer');
+  timers.forEach(function (timer) {
+    const endDateStr = timer.getAttribute('data-end-date');
+    if (!endDateStr) return;
+
+    const endDate = new Date(endDateStr).getTime();
+    const daysEl = timer.querySelector('.days-val');
+    const hoursEl = timer.querySelector('.hours-val');
+    const minsEl = timer.querySelector('.mins-val');
+    const secsEl = timer.querySelector('.secs-val');
+    const card = timer.closest('.product-card') || timer.closest('.product-card-ref') || timer.closest('.product-card-21st');
+
+    function updateTimer() {
+      const now = new Date().getTime();
+      const distance = endDate - now;
+
+      if (distance < 0) {
+        clearInterval(timerInterval);
+        
+        timer.style.opacity = '0';
+        setTimeout(function() {
+          timer.style.display = 'none';
+        }, 300);
+
+        if (card) {
+          const badge = card.querySelector('.product-card-badge-offer') || card.querySelector('.product-card-badges') || card.querySelector('.product-card-21st-badge');
+          if (badge) {
+            badge.style.opacity = '0';
+            setTimeout(function() {
+              badge.style.display = 'none';
+            }, 300);
+          }
+
+          const originalPriceEl = card.querySelector('.price-original');
+          const currentPriceEl = card.querySelector('.price-current');
+          
+          if (originalPriceEl && currentPriceEl) {
+            const regularPrice = originalPriceEl.textContent.trim();
+            currentPriceEl.textContent = regularPrice;
+            originalPriceEl.style.display = 'none';
+          }
+        }
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+      if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+      if (minsEl) minsEl.textContent = String(minutes).padStart(2, '0');
+      if (secsEl) secsEl.textContent = String(seconds).padStart(2, '0');
+    }
+
+    updateTimer();
+    const timerInterval = setInterval(updateTimer, 1000);
   });
 });
 </script>

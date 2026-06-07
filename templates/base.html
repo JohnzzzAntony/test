@@ -94,9 +94,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -173,9 +171,9 @@
             --txt-inverse: #ffffff;
             --text-inverse: #ffffff;
 
-            --font-ui: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
-            --font-display: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
-            --font-accent: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+            --font-ui: 'Lexend', sans-serif;
+            --font-display: 'Lexend', sans-serif;
+            --font-accent: 'Lexend', sans-serif;
             --font-main: var(--font-ui);
 
             /* Fallbacks for older references */
@@ -430,6 +428,52 @@
                 padding: 0.85rem 1.5rem !important;
                 font-size: 11px !important;
             }
+        }
+
+        /* sliding indicator: change to a small circle everywhere in the entire site */
+        .swiper-pagination-bullet,
+        .swiper-pagination-bullet-active,
+        .hero-slider-pagination .swiper-pagination-bullet,
+        .hero-slider-pagination .swiper-pagination-bullet-active,
+        .product-swiper .swiper-pagination-bullet,
+        .product-swiper .swiper-pagination-bullet-active,
+        .fd-swiper-pagination .swiper-pagination-bullet,
+        .fd-swiper-pagination .swiper-pagination-bullet-active,
+        .fd-testimonials-pagination .swiper-pagination-bullet,
+        .fd-testimonials-pagination .swiper-pagination-bullet-active,
+        .hero-swiper .swiper-pagination-bullet,
+        .hero-swiper .swiper-pagination-bullet-active {
+            width: 8px !important;
+            height: 8px !important;
+            border-radius: 50% !important;
+            transform: none !important;
+            opacity: 1 !important;
+            background: #cbd5e1 !important; /* light gray fallback */
+        }
+        .swiper-pagination-bullet-active,
+        .hero-slider-pagination .swiper-pagination-bullet-active,
+        .product-swiper .swiper-pagination-bullet-active,
+        .fd-swiper-pagination .swiper-pagination-bullet-active,
+        .fd-testimonials-pagination .swiper-pagination-bullet-active,
+        .hero-swiper .swiper-pagination-bullet-active {
+            background: #114084 !important; /* main primary brand color */
+        }
+
+        /* shadow effects: black shadow that emanates from the borders of elements */
+        .product-card,
+        .product-card-ref,
+        .product-card-21st,
+        .premium-card {
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.15) !important;
+            border: 1px solid #e5e5e5 !important;
+            transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease !important;
+        }
+        .product-card:hover,
+        .product-card-ref:hover,
+        .product-card-21st:hover,
+        .premium-card:hover {
+            box-shadow: 0 0 22px rgba(0, 0, 0, 0.28) !important;
+            border-color: #114084 !important;
         }
     </style>
 
@@ -1395,6 +1439,67 @@ Theme styles (Flower District
                     setLanguage(savedLang, true);
                 }, 1200);
             }
+
+            // Global initialization for countdown timers on the entire site
+            const timers = document.querySelectorAll('.offer-countdown-timer');
+            timers.forEach(function (timer) {
+                const endDateStr = timer.getAttribute('data-end-date');
+                if (!endDateStr) return;
+
+                const endDate = new Date(endDateStr).getTime();
+                const daysEl = timer.querySelector('.days-val');
+                const hoursEl = timer.querySelector('.hours-val');
+                const minsEl = timer.querySelector('.mins-val');
+                const secsEl = timer.querySelector('.secs-val');
+                const card = timer.closest('.product-card') || timer.closest('.product-card-ref') || timer.closest('.product-card-21st');
+
+                function updateTimer() {
+                    const now = new Date().getTime();
+                    const distance = endDate - now;
+
+                    if (distance < 0) {
+                        clearInterval(timerInterval);
+                        
+                        timer.style.opacity = '0';
+                        setTimeout(function() {
+                            timer.style.display = 'none';
+                        }, 300);
+
+                        if (card) {
+                            const badge = card.querySelector('.product-card-badge-offer') || card.querySelector('.product-card-badges') || card.querySelector('.product-card-21st-badge');
+                            if (badge) {
+                                badge.style.opacity = '0';
+                                setTimeout(function() {
+                                    badge.style.display = 'none';
+                                }, 300);
+                            }
+
+                            const originalPriceEl = card.querySelector('.price-original') || card.querySelector('span[style*="text-decoration: line-through"]');
+                            const currentPriceEl = card.querySelector('.price-current') || card.querySelector('.product-card-price span:last-child') || card.querySelector('div[style*="font-weight: 700"] span:last-child');
+                            
+                            if (originalPriceEl && currentPriceEl) {
+                                const regularPrice = originalPriceEl.textContent.trim();
+                                currentPriceEl.textContent = regularPrice;
+                                originalPriceEl.style.display = 'none';
+                            }
+                        }
+                        return;
+                    }
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+                    if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+                    if (minsEl) minsEl.textContent = String(minutes).padStart(2, '0');
+                    if (secsEl) secsEl.textContent = String(seconds).padStart(2, '0');
+                }
+
+                updateTimer();
+                const timerInterval = setInterval(updateTimer, 1000);
+            });
         });
     </script>
 </body>

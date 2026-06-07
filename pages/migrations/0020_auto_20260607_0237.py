@@ -3,6 +3,29 @@
 from django.db import migrations, models
 
 
+def drop_columns_if_exists(apps, schema_editor):
+    if schema_editor.connection.vendor == 'postgresql':
+        columns_to_drop = [
+            'hero_eyebrow', 'hero_title_html', 'hero_badge_text', 'hero_stat_1_number',
+            'hero_stat_1_label', 'hero_stat_2_number', 'hero_stat_2_label',
+            'hero_stat_3_number', 'hero_stat_3_label', 'show_features_strip',
+            'feature_1_title', 'feature_1_desc', 'feature_1_icon',
+            'feature_2_title', 'feature_2_desc', 'feature_2_icon',
+            'feature_3_title', 'feature_3_desc', 'feature_3_icon',
+            'feature_4_title', 'feature_4_desc', 'feature_4_icon',
+            'show_categories_section', 'categories_title', 'categories_subtitle',
+            'categories_btn_text', 'categories_btn_link', 'show_featured_section',
+            'featured_btn_text', 'featured_btn_link', 'show_testimonial_section',
+            'testimonial_text', 'testimonial_author_name', 'testimonial_author_role',
+            'testimonial_author_avatar_initials', 'show_cta_section', 'cta_title',
+            'cta_subtitle', 'cta_primary_btn_text', 'cta_primary_btn_link',
+            'cta_secondary_btn_text', 'cta_secondary_btn_link'
+        ]
+        with schema_editor.connection.cursor() as cursor:
+            for col in columns_to_drop:
+                cursor.execute(f'ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS {col} CASCADE;')
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -10,176 +33,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # Drop columns added in 0020_homepage_settings_modernize
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS hero_eyebrow CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS hero_title_html CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS hero_badge_text CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS hero_stat_1_number CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS hero_stat_1_label CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS hero_stat_2_number CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS hero_stat_2_label CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS hero_stat_3_number CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS hero_stat_3_label CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS show_features_strip CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS feature_1_title CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS feature_1_desc CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS feature_1_icon CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS feature_2_title CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS feature_2_desc CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS feature_2_icon CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS feature_3_title CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS feature_3_desc CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS feature_3_icon CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS feature_4_title CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS feature_4_desc CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS feature_4_icon CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS show_categories_section CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS categories_title CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS categories_subtitle CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS categories_btn_text CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS categories_btn_link CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS show_featured_section CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS featured_btn_text CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS featured_btn_link CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS show_testimonial_section CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS testimonial_text CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS testimonial_author_name CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS testimonial_author_role CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS testimonial_author_avatar_initials CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS show_cta_section CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS cta_title CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS cta_subtitle CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS cta_primary_btn_text CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS cta_primary_btn_link CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS cta_secondary_btn_text CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-        migrations.RunSQL(
-            sql='ALTER TABLE pages_homepagesettings DROP COLUMN IF EXISTS cta_secondary_btn_link CASCADE;',
-            reverse_sql=migrations.RunSQL.noop
-        ),
-
+        # Drop columns added in 0020_homepage_settings_modernize conditionally
+        migrations.RunPython(drop_columns_if_exists, reverse_code=migrations.RunPython.noop),
         # Add the old fields
         migrations.AddField(
             model_name='homepagesettings',

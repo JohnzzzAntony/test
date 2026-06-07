@@ -151,6 +151,181 @@
     }
 
     /* ─────────────────────────────────────────────
+       3. SIDEBAR REORGANIZATION
+       ───────────────────────────────────────────── */
+    function setupSidebar() {
+        const nav = document.getElementById("jazzy-navigation");
+        if (!nav) return;
+
+        // Hide navigation to prevent layout flash during reorganization
+        nav.style.opacity = "0";
+
+        const originalItems = Array.from(nav.children);
+        const dashboardItem = originalItems.find(item => item.querySelector('a[href="/admin/"]') || item.querySelector('a[href$="/admin/"]'));
+
+        // Map selectors to their original list item elements
+        const itemMap = {};
+        originalItems.forEach(item => {
+            const link = item.querySelector('a[href]');
+            if (link) {
+                const href = link.getAttribute('href');
+                itemMap[href] = item;
+            }
+        });
+
+        // Define the new navigation structure
+        const structure = [
+            {
+                name: "Sales",
+                models: [
+                    "orders/customerorder/",
+                    "orders/quoteenquiry/",
+                    "products/wishlist/"
+                ]
+            },
+            {
+                name: "Catalog",
+                models: [
+                    "products/product/",
+                    "products/category/",
+                    "products/brand/",
+                    "products/collection/",
+                    "products/offer/",
+                    "products/trustbadge/"
+                ]
+            },
+            {
+                name: "Customers",
+                models: [
+                    "core/client/"
+                ]
+            },
+            {
+                name: "Marketing",
+                models: [
+                    "sliders/promobanner/",
+                    "sliders/heroslider/",
+                    "contact/newslettersubscriber/",
+                    "core/newslettersubscription/",
+                    "core/socialpost/",
+                    "core/announcementbar/",
+                    "core/searchindex/",
+                    "core/storelocation/"
+                ]
+            },
+            {
+                name: "Content",
+                models: [
+                    "pages/homepagesettings/",
+                    "pages/aboutus/",
+                    "pages/contactpage/",
+                    "blog/post/",
+                    "core/testimonial/",
+                    "pages/partner/"
+                ]
+            },
+            {
+                name: "Appearance",
+                models: [
+                    "core/designsettings/",
+                    "core/sitesettings/"
+                ]
+            },
+            {
+                name: "System",
+                models: [
+                    "accounts/notification/"
+                ]
+            },
+            {
+                name: "Authentication and Authorization",
+                models: [
+                    "auth/group/",
+                    "auth/user/"
+                ]
+            },
+            {
+                name: "Subscriptions",
+                models: [
+                    "subscriptions/usersubscription/",
+                    "subscriptions/subscriptionplan/"
+                ]
+            }
+        ];
+
+        // Rebuild the navigation
+        nav.innerHTML = "";
+        if (dashboardItem) {
+            nav.appendChild(dashboardItem);
+        }
+
+        const usedHrefs = new Set();
+        if (dashboardItem) {
+            const dbLink = dashboardItem.querySelector('a[href]');
+            if (dbLink) usedHrefs.add(dbLink.getAttribute('href'));
+        }
+
+        structure.forEach(group => {
+            const availableItems = [];
+            group.models.forEach(path => {
+                let item = null;
+                let matchedHref = null;
+                for (const href in itemMap) {
+                    if (href.replace(/\/$/, "").endsWith(path.replace(/\/$/, ""))) {
+                        item = itemMap[href];
+                        matchedHref = href;
+                        break;
+                    }
+                }
+                if (item) {
+                    availableItems.push(item);
+                    usedHrefs.add(matchedHref);
+                }
+            });
+
+            if (availableItems.length > 0) {
+                const header = document.createElement("li");
+                header.className = "nav-header";
+                header.textContent = group.name;
+                nav.appendChild(header);
+
+                availableItems.forEach(item => {
+                    if (item.parentNode) {
+                        item.parentNode.removeChild(item);
+                    }
+                    nav.appendChild(item);
+                });
+            }
+        });
+
+        // Append any leftover items to prevent losing newly added apps
+        const leftoverItems = [];
+        for (const href in itemMap) {
+            if (!usedHrefs.has(href)) {
+                leftoverItems.push(itemMap[href]);
+            }
+        }
+
+        if (leftoverItems.length > 0) {
+            const header = document.createElement("li");
+            header.className = "nav-header";
+            header.textContent = "Other";
+            nav.appendChild(header);
+
+            leftoverItems.forEach(item => {
+                if (item.parentNode) {
+                    item.parentNode.removeChild(item);
+                }
+                nav.appendChild(item);
+            });
+        }
+
+        // Fade in the reorganized navigation
+        nav.style.transition = "opacity 0.15s ease-in-out";
+        nav.style.opacity = "1";
+    }
+
+    /* ─────────────────────────────────────────────
        4. ORCHESTRATE
        ───────────────────────────────────────────── */
     function initialize(root = document) {
@@ -163,6 +338,7 @@
 
     function init() {
         initialize();
+        setupSidebar();
 
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mut) => {

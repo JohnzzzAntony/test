@@ -9,7 +9,7 @@
 
 body,
 input, button, select, textarea {
-    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-family: 'Lexend', sans-serif;
     font-size: 16px;
     font-weight: 400;
     line-height: 1.65;
@@ -24,7 +24,7 @@ h1, h2, h3, h4, h5, h6,
 .section-title, .hp-section-title, .fd-promo-title,
 .hero-title, .product-card-name, .fd-nav-link,
 [class*="heading"], [class*="title"] {
-    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-family: 'Lexend', sans-serif;
     font-weight: 700;
     line-height: 1.2;
     letter-spacing: 0.01em;
@@ -35,7 +35,7 @@ h1, h2, h3, h4, h5, h6,
 .hp-section-label,
 .product-badge,
 .announcement-bar-content {
-    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-family: 'Lexend', sans-serif;
     font-weight: 600;
 }
 
@@ -68,7 +68,7 @@ h1, h2, h3, h4, h5, h6,
 
 /* Nav link base style */
 .fd-nav-link {
-    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-family: 'Lexend', sans-serif;
     font-size: 12.5px;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -194,7 +194,7 @@ h1, h2, h3, h4, h5, h6,
 /* ── 9. HEADER SEARCH BAR ───────────────────────────────────────────────── */
 .search-input-wrapper input,
 #main-header input[type="text"] {
-    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-family: 'Lexend', sans-serif;
     font-size: 14px;
     border: 1px solid #d1d5db !important;
     border-radius: 6px !important;
@@ -272,16 +272,13 @@ h1, h2, h3, h4, h5, h6,
 
 /* ── 17. ANNOUNCEMENT BAR ───────────────────────────────────────────────── */
 .announcement-bar-content {
-    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-family: 'Lexend', sans-serif;
     font-size: 12px;
 }
 
 /* ── 18. FOOTER FONT UNIFICATION ────────────────────────────────────────── */
 footer {
-    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
-}
-footer h4 {
-    font-family: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+    font-family: 'Lexend', sans-serif;
     font-weight: 700;
 }
 

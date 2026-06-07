@@ -255,7 +255,8 @@ class Product(models.Model):
     badge_color = models.CharField(max_length=20, default="blue", choices=[
         ("blue", "Blue"), ("red", "Red"), ("green", "Green"), ("dark", "Dark"), ("gold", "Gold")
     ])
-    is_featured = models.BooleanField(default=False, verbose_name="Featured Product", db_index=True)
+    exclusive_products = models.BooleanField(default=False, verbose_name="Exclusive Product", db_index=True)
+    on_sale_now = models.BooleanField(default=False, verbose_name="On Sale Now", db_index=True)
 
     overview = RichTextField(blank=True, null=True)
     technical_info = RichTextField(blank=True, null=True, verbose_name="Product Characteristics & Specifications")
@@ -264,7 +265,6 @@ class Product(models.Model):
     trust_badges = models.ManyToManyField(TrustBadge, blank=True, related_name="products")
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    show_on_homepage = models.BooleanField(default=False, verbose_name="Homepage Display", choices=((True, 'Enabled'), (False, 'Disabled')), db_index=True)
     is_active = models.BooleanField(default=True, verbose_name="Status", choices=((True, 'Active'), (False, 'Remove')), db_index=True)
 
     meta_title = models.CharField(max_length=255, blank=True, null=True, verbose_name="Meta Title")
@@ -274,7 +274,8 @@ class Product(models.Model):
     class Meta:
         indexes = [
             models.Index(fields=['is_active', 'quantity', 'shipping_status'], name='product_active_qty_status'),
-            models.Index(fields=['is_active', 'show_on_homepage'], name='product_active_homepage'),
+            models.Index(fields=['is_active', 'exclusive_products'], name='product_active_excl'),
+            models.Index(fields=['is_active', 'on_sale_now'], name='product_active_onsale'),
             models.Index(fields=['category', 'is_active', 'quantity'], name='product_cat_active_qty'),
         ]
 

@@ -34,7 +34,7 @@
     {% endif %}
 
     {% if slide.title %}
-    <h1 class="hero-title" style="font-family:'Cormorant Garamond', serif;font-size:clamp(36px, 5.5vw, 64px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;margin-bottom:20px;color:#ffffff;text-transform:capitalize;">
+    <h1 class="hero-title" style="font-family:'Lexend', sans-serif;font-size:clamp(36px, 5.5vw, 64px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;margin-bottom:20px;color:#ffffff;text-transform:capitalize;">
         {{ slide.title|safe }}
     </h1>
     {% endif %}
@@ -70,7 +70,7 @@
   <div class="container">
     <div class="text-center mb-12">
       <span class="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--primary)] mb-2 block">Our Categories</span>
-      <h2 class="text-3xl lg:text-4xl font-light text-gray-900 tracking-tight" style="font-family:'Cormorant Garamond', serif;">
+      <h2 class="text-3xl lg:text-4xl font-light text-gray-900 tracking-tight" style="font-family:'Lexend', sans-serif;">
         Shop by <span class="font-bold italic">Categories</span>
       </h2>
       <div class="w-12 h-0.5 bg-[var(--primary)] mx-auto mt-4 opacity-30"></div>
@@ -113,10 +113,12 @@
 {% endif %}
 
 
-{# ── 4. LATEST PRODUCTS ─────────────────────────────────────── #}
-{% with section_title=design_settings.hp_latest_products_title|default:"Latest Products" section_subtitle=design_settings.hp_latest_products_subtitle products=latest_products slider_id="latest" section_link="/products/" %}
+{# ── 4. EXCLUSIVE PRODUCTS ───────────────────────────────────── #}
+{% if exclusive_products %}
+{% with section_title="Exclusive Products" section_subtitle="Our premier healthcare selections" products=exclusive_products slider_id="exclusive" section_link="/products/" %}
 {% include 'partials/_product_slider.html' %}
 {% endwith %}
+{% endif %}
 
 {% if promo_sections.0 %}
     {% include 'partials/_banner_section.html' with section=promo_sections.0 %}
@@ -131,13 +133,9 @@
 {% endif %}
 
 
-{# ── 6. BEST SELLERS / OFFERS ───────────────────────────────── #}
-{% if active_offers_products %}
-{% with section_title="On Sale Now" section_subtitle="Limited-time offers on our top products" products=active_offers_products slider_id="offers" section_link="/products/" %}
-{% include 'partials/_product_slider.html' %}
-{% endwith %}
-{% elif featured_products %}
-{% with section_title=design_settings.hp_bestsellers_title|default:"Our Best Sellers" section_subtitle="Crafted with precision, loved by all" products=featured_products slider_id="featured" section_link="/products/" %}
+{# ── 6. ON SALE NOW ─────────────────────────────────────────── #}
+{% if on_sale_products %}
+{% with section_title="On Sale Now" section_subtitle="Limited-time offers on our top products" products=on_sale_products slider_id="onsale" section_link="/products/" %}
 {% include 'partials/_product_slider.html' %}
 {% endwith %}
 {% endif %}

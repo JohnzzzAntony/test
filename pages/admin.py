@@ -531,8 +531,10 @@ class HeroSlideAdmin(admin.ModelAdmin):
 
 # ── Homepage Settings ────────────────────────────────────────────────────────
 
+
 @admin.register(HomepageSettings)
 class HomepageSettingsAdmin(admin.ModelAdmin):
+
     """
     Singleton admin — only one record is allowed.
     The admin hides the Add button when a record already exists.
@@ -542,9 +544,86 @@ class HomepageSettingsAdmin(admin.ModelAdmin):
     fieldsets = (
         ('📢 Announcement Bar', {
             'fields': ('show_announcement_bar', 'announcement_text'),
-            'description': 'Controls the slim dark bar at the top of the page.',
+            'description': (
+                'Controls the slim dark bar at the very top of every page. '
+                'For scheduled / multi-message bars, use <b>Core → Announcement Bars</b> instead.'
+            ),
         }),
-        ('🌸 Hero — Text & CTAs', {
+        ('🎞️ Hero Banner — Images & Text', {
+            'fields': (),
+            'description': (
+                '<div style="padding:12px 0 4px;">'
+                '<strong>ℹ️ Hero banners are managed in <a href="/admin/sliders/heroslider/">Sliders → Banners</a>.</strong><br>'
+                'Each banner record controls the image, title, subtitle, badge, and CTA buttons that appear '
+                'in the full-width hero at the top of the homepage.'
+                '</div>'
+            ),
+        }),
+        ('🛒 Section 1B — Shop by Category', {
+            'fields': ('show_category_pills',),
+            'description': (
+                'The row of 8 category icons (Wheelchairs, Walking Aids, Seating, etc.) '
+                'that appears directly below the hero banner. '
+                'Category images are managed in <b>Products → Categories</b>.'
+            ),
+        }),
+        ('📦 Section 4 — Latest Products', {
+            'fields': (
+                'show_featured_products',
+                ('featured_eyebrow', 'featured_title'),
+                'featured_subtitle',
+            ),
+            'description': (
+                'The slider showing newly added products. '
+                'Products are pulled automatically by newest ID, '
+                'or you can pin specific products using the <em>Custom Product Selections</em> section below.'
+            ),
+        }),
+        ('🏆 Section 6 — Best Sellers / On Sale Now', {
+            'fields': (
+                'show_best_sellers',
+                ('bestsellers_eyebrow', 'bestsellers_title'),
+            ),
+            'description': (
+                'Shows either "On Sale Now" products (if active offers exist) '
+                'or the general Best Sellers slider. '
+                'Section title is used when no live offer products are found.'
+            ),
+        }),
+        ('⚙️ Section 7 — Why Us Strip', {
+            'fields': ('show_why_strip',),
+            'description': (
+                'The "Why Choose Us" feature cards row. '
+                'Card content is managed in <b>Pages → About Us → Why Us Cards</b>.'
+            ),
+        }),
+        ('💬 Section 8 — Testimonials', {
+            'fields': (
+                'show_testimonials',
+                ('testimonials_eyebrow', 'testimonials_title'),
+            ),
+            'description': (
+                'The customer testimonials carousel. '
+                'Individual testimonial content is managed in <b>Core → Testimonials</b>.'
+            ),
+        }),
+        ('🎯 Custom Product Selections', {
+            'fields': ('exclusive_products', 'onsale_products'),
+            'description': (
+                'Pin specific products to the <em>Latest Products</em> (Section 4) '
+                'and <em>On Sale Now</em> (Section 6) sliders. '
+                'Leave empty to use automatic selection (newest / products with active offers).'
+            ),
+        }),
+        ('🏷️ Legacy — Hero Floating Tag (Not in use)', {
+            'fields': ('show_hero_tag', 'hero_tag_label', 'hero_tag_value'),
+            'classes': ('collapse',),
+            'description': (
+                'These fields are <strong>not rendered</strong> in the current homepage layout. '
+                'Retained for backward compatibility only.'
+            ),
+        }),
+        ('📝 Legacy — Hero Text Fields (Not in use)', {
             'fields': (
                 'hero_eyebrow',
                 'hero_title_line1', 'hero_title_em', 'hero_title_line2',
@@ -552,38 +631,15 @@ class HomepageSettingsAdmin(admin.ModelAdmin):
                 ('hero_btn1_text', 'hero_btn1_link'),
                 ('hero_btn2_text', 'hero_btn2_link'),
             ),
+            'classes': ('collapse',),
             'description': (
-                'Controls the text on the LEFT side of the hero. '
-                'Add images on the RIGHT via <b>Hero Slides</b> above.'
+                'These text fields are <strong>not rendered</strong> in the current homepage. '
+                'Hero content is controlled via <a href="/admin/sliders/heroslider/">Sliders → Banners</a>.'
             ),
-        }),
-        ('🏷️ Hero — Floating Tag', {
-            'fields': ('show_hero_tag', 'hero_tag_label', 'hero_tag_value'),
-            'description': 'The small glass card overlaid on the hero image.',
-        }),
-        ('🎯 Custom Homepage Products', {
-            'fields': ('exclusive_products', 'onsale_products'),
-            'description': 'Choose specific products to manually display in the Exclusive Products / Latest Arrivals and On Sale Now sections.',
-        }),
-        ('📋 Section Labels', {
-            'fields': (
-                ('featured_eyebrow', 'featured_title'),
-                'featured_subtitle',
-                ('bestsellers_eyebrow', 'bestsellers_title'),
-                ('testimonials_eyebrow', 'testimonials_title'),
-            ),
-        }),
-        ('👁️ Section Visibility', {
-            'fields': (
-                'show_category_pills',
-                'show_featured_products',
-                'show_why_strip',
-                'show_best_sellers',
-                'show_testimonials',
-            ),
-            'description': 'Toggle individual sections on or off without deleting content.',
         }),
     )
+
+
 
     def has_add_permission(self, request):
         return False if self.model.objects.count() > 0 else super().has_add_permission(request)
