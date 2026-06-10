@@ -20,6 +20,9 @@ from sliders.models import HeroSlider, PromoBanner
 from pages.models import AboutUs, MissionVision, Service, Counter, WhyUsCard, Partner, GalleryItem, HomepageSettings, HeroSlide
 from core.views import MockCategory
 
+class DummySession(dict):
+    pass
+
 @override_settings(CACHES={
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
@@ -121,7 +124,7 @@ def run_diagnostic():
     
     start = time.time()
     print("13. Querying Product (featured_products)...")
-    featured_products = list(Product.objects.filter(is_featured=True, is_active=True, quantity__gt=0).select_related('category', 'brand').prefetch_related('offers', 'images').order_by('-id'))
+    featured_products = list(Product.objects.filter(exclusive_products=True, is_active=True, quantity__gt=0).select_related('category', 'brand').prefetch_related('offers', 'images').order_by('-id'))
     print(f"    Done: {len(featured_products)} in {time.time() - start:.2f}s")
     
     start = time.time()
